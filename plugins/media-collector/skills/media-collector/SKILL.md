@@ -1,22 +1,42 @@
 ---
 name: media-collector
-description: Universal Film, TV Show & Anime Curator. Interactively clarifies user download preferences (film/subtitles & target languages), maps franchise censuses with direct TVDB/TMDb/IMDb links, creates standardized Plex & Jellyfin library hierarchies, handles subtitle acquisition/engineering (1080p styling, timecode syncing), explicitly labels Muxed vs External Subtitles, executes intelligent fallback protocols for non-direct video links (Torrent file downloading, Magnet links, yt-dlp streaming extraction), and generates comprehensive download blueprints.
+description: Universal Film, TV Show & Anime Curator. Supports instant 1-turn execution via inline parameters (e.g. --sub vi,en,zh --links-only) or interactive clarification, maps franchise censuses with direct TVDB/TMDb/IMDb links, creates standardized Plex & Jellyfin library hierarchies, handles subtitle acquisition/engineering (1080p styling, timecode syncing), explicitly labels Muxed vs External Subtitles, executes intelligent fallback protocols for non-direct video links (Torrent file downloading, Magnet links, yt-dlp streaming extraction), and generates comprehensive download blueprints.
 ---
 
-# Universal Media Collector Skill (Interactive & Quality-Rated Curation)
+# Universal Media Collector Skill (Instant & Interactive Curation)
 
 This skill guides agents in discovering, structuring, and curating complete media collections for **ANY** entertainment franchise—including Hollywood Cinema, Western TV Series, Anime, Tokusatsu, Asian Dramas, and Documentaries.
 
 ---
 
-## 🚦 Step 0: User Preference Clarification (REQUIRED FIRST STEP)
+## ⚡ Step 0: Parameter Parsing & Execution Mode
 
-Before generating final assets, the agent **MUST** proactively ask the user two essential questions:
+The agent **MUST** first inspect the user's prompt for inline options, flags, or natural language preferences to execute in **1 SINGLE TURN** without unnecessary back-and-forth questions.
 
-1. **Subtitle Preferences**:
-   - *"Bạn có muốn tải phụ đề sẵn về máy không? Ngôn ngữ bạn muốn ưu tiên tìm là gì? (Ví dụ: Tiếng Việt, Tiếng Trung, Tiếng Anh, Tiếng Nhật...)"*
-2. **Video Download Preferences**:
-   - *"Bạn có muốn tải các file video phim về máy không, hay chỉ cần tạo cấu trúc thư mục Plex/Jellyfin và file tổng hợp link tải (DOWNLOAD_LINKS.txt)?"*
+### 1. Supported Command Patterns & Inline Options:
+- **Flag syntax**:
+  - `media-collector <franchise_name> --sub <vi,en,zh,ja,all,none> --video <links|download>`
+  - Short flags: `-s <langs>`, `--links-only` (Option A), `--download-video` (Option B)
+- **Natural language syntax**:
+  - *"media-collector Cậu bé 3 mắt sub vi,en chỉ lấy link"*
+  - *"media-collector Transformers RiD tải sub tiếng anh, video chỉ lấy link"*
+  - *"media-collector Lord of the Rings full 4K kèm sub việt"*
+
+### 2. Execution Logic:
+- **Scenario A (Parameters Provided)**:
+  - If the user specifies their preferences in the command, **DO NOT ASK ANY QUESTIONS**. Execute the complete 5-step pipeline immediately in **1 TURN**!
+- **Scenario B (Parameters Omitted - Bare Title)**:
+  - If the user only enters a bare title (e.g. `media-collector Naruto`), politely ask the 2 clarification questions or apply the sensible default (Download multi-language subs + Option A Links-only).
+
+---
+
+## 🏷️ Subtitle Distribution Badging (MANDATORY TO AVOID CONFUSION)
+
+The agent **MUST** clearly label the delivery format of subtitles for every release:
+
+- `[📦 MUXED SOFTSUB]`: Subtitles are embedded directly inside the `.mkv` container. Explain to the user: *"File video đã tích hợp sẵn phụ đề bên trong, không cần file sub rời bên ngoài."*
+- `[📄 STANDALONE SUB]`: Subtitles are separate external `.ass` or `.srt` files downloaded into the `Season XX/` directory.
+- `[🔥 HARDSUB]`: Subtitles are permanently burned into the video stream.
 
 ---
 
@@ -38,16 +58,6 @@ If the user chooses **Option B (Download Video)**, but the source is NOT a direc
 
 4. **DRM / Paid Exclusive Platforms (Netflix, Disney+, Max, Apple TV+)**:
    - **Action**: Inform the user transparently that the title is an exclusive streaming license, provide the official title link, and search for community WEBRip releases.
-
----
-
-## 🏷️ Subtitle Distribution Badging (MANDATORY TO AVOID CONFUSION)
-
-The agent **MUST** clearly label the delivery format of subtitles for every release:
-
-- `[📦 MUXED SOFTSUB]`: Subtitles are embedded directly inside the `.mkv` container. Explain to the user: *"File video đã tích hợp sẵn phụ đề bên trong, không cần file sub rời bên ngoài."*
-- `[📄 STANDALONE SUB]`: Subtitles are separate external `.ass` or `.srt` files downloaded into the `Season XX/` directory.
-- `[🔥 HARDSUB]`: Subtitles are permanently burned into the video stream.
 
 ---
 
