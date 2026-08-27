@@ -1,6 +1,6 @@
 ---
 name: media-collector
-description: Universal Film, TV Show & Anime Curator. Interactively clarifies user download preferences (film/subtitles & target languages), maps franchise censuses with direct TVDB/TMDb/IMDb links, creates standardized Plex & Jellyfin library hierarchies, handles subtitle acquisition/engineering (1080p styling, timecode syncing), and generates comprehensive download blueprints containing video quality ratings, codecs, resolutions, and subtitle accuracy evaluations for each source.
+description: Universal Film, TV Show & Anime Curator. Interactively clarifies user download preferences (film/subtitles & target languages), maps franchise censuses with direct TVDB/TMDb/IMDb links, creates standardized Plex & Jellyfin library hierarchies, handles subtitle acquisition/engineering (1080p styling, timecode syncing), explicitly labels Muxed vs External Subtitles, and generates comprehensive download blueprints containing video quality ratings, codecs, resolutions, and subtitle accuracy evaluations.
 ---
 
 # Universal Media Collector Skill (Interactive & Quality-Rated Curation)
@@ -18,9 +18,15 @@ Before generating final assets, the agent **MUST** proactively ask the user two 
 2. **Video Download Preferences**:
    - *"Bạn có muốn tải các file video phim về máy không, hay chỉ cần tạo cấu trúc thư mục Plex/Jellyfin và file tổng hợp link tải (DOWNLOAD_LINKS.txt)?"*
 
-> [!IMPORTANT]
-> **CRITICAL EXECUTION MANDATE FOR SUBTITLES**:
-> - If the user responds **YES** to downloading subtitles: The agent **MUST ACTIVELY DOWNLOAD** and extract the subtitle files into the corresponding `Season XX/` folders (e.g. `.eng.ass`, `.vie.srt`, `.chi.ass`). The agent **MUST NOT** only provide links when the user explicitly asked to download subtitles!
+---
+
+## 🏷️ Subtitle Distribution Badging (MANDATORY TO AVOID CONFUSION)
+
+The agent **MUST** clearly label the delivery format of subtitles for every release:
+
+- `[📦 MUXED SOFTSUB]`: Subtitles are embedded directly inside the `.mkv` container. Explain to the user: *"File video đã tích hợp sẵn phụ đề bên trong, không cần file sub rời bên ngoài."*
+- `[📄 STANDALONE SUB]`: Subtitles are separate external `.ass` or `.srt` files downloaded into the `Season XX/` directory.
+- `[🔥 HARDSUB]`: Subtitles are permanently burned into the video stream.
 
 ---
 
@@ -57,4 +63,4 @@ Build a zero-guesswork folder hierarchy:
 
 ### Step 5: Comprehensive Verified Blueprint with Quality Ratings (`DOWNLOAD_LINKS.txt`)
 
-Every show/movie directory **MUST** contain a comprehensive `DOWNLOAD_LINKS.txt` enriched with **Quality Badges, Codecs, Resolution, and Source Ratings**.
+Every show/movie directory **MUST** contain a comprehensive `DOWNLOAD_LINKS.txt` enriched with **Quality Badges, Codecs, Resolution, Subtitle Delivery Format ([📦 MUXED] vs [📄 FILE RỜI]), and Source Ratings**.
