@@ -11,12 +11,16 @@ This skill guides agents in discovering, structuring, and curating complete medi
 
 ## 🚦 Step 0: User Preference Clarification (REQUIRED FIRST STEP)
 
-Before downloading any files or generating final assets, the agent **MUST** proactively ask the user two essential questions:
+Before generating final assets, the agent **MUST** proactively ask the user two essential questions:
 
 1. **Subtitle Preferences**:
    - *"Bạn có muốn tải phụ đề sẵn về máy không? Ngôn ngữ bạn muốn ưu tiên tìm là gì? (Ví dụ: Tiếng Việt, Tiếng Trung, Tiếng Anh, Tiếng Nhật...)"*
 2. **Video Download Preferences**:
    - *"Bạn có muốn tải các file video phim về máy không, hay chỉ cần tạo cấu trúc thư mục Plex/Jellyfin và file tổng hợp link tải (DOWNLOAD_LINKS.txt)?"*
+
+> [!IMPORTANT]
+> **CRITICAL EXECUTION MANDATE FOR SUBTITLES**:
+> - If the user responds **YES** to downloading subtitles: The agent **MUST ACTIVELY DOWNLOAD** and extract the subtitle files into the corresponding `Season XX/` folders (e.g. `.eng.ass`, `.vie.srt`, `.chi.ass`). The agent **MUST NOT** only provide links when the user explicitly asked to download subtitles!
 
 ---
 
@@ -53,47 +57,4 @@ Build a zero-guesswork folder hierarchy:
 
 ### Step 5: Comprehensive Verified Blueprint with Quality Ratings (`DOWNLOAD_LINKS.txt`)
 
-Every show/movie directory **MUST** contain a comprehensive `DOWNLOAD_LINKS.txt` enriched with **Quality Badges, Codecs, Resolution, and Source Ratings**:
-
-```text
-================================================================================
-{SHOW / MOVIE NAME} ({YEAR}) - TỔNG HỢP LINK TẢI PHIM & PHỤ ĐỀ
-================================================================================
-Tên gốc / Quốc tế: {Original Title}
-TheTVDB: https://thetvdb.com/series/... {tvdb-XXXXX}
-TMDb: https://www.themoviedb.org/... {tmdb-XXXXX}
-IMDb: https://www.imdb.com/title/... (ttXXXXXXX)
-Số tập: {Season / Episode Count}
-
---------------------------------------------------------------------------------
-1. LINK TẢI VIDEO PHIM (KÈM ĐÁNH GIÁ CHẤT LƯỢNG & CODEC):
-   • [⭐ ⭐ ⭐ ⭐ ⭐] [1080p BDRip / HEVC 10-bit / FLAC Audio] - Bản đẹp nhất:
-     Nhóm phát hành: [Nhóm Sub / Encoder]
-     Đặc điểm: Master sắc nét, màu sắc chuẩn, âm thanh gốc không nén.
-     Link tải (Nyaa / Torrent): https://...
-
-   • [⭐ ⭐ ⭐ ⭐] [1080p WEB-DL / x264 / AAC Dual Audio] - Bản tiện lợi:
-     Nhóm phát hành: [Nhóm]
-     Link tải (Anime Tosho / DDL): https://...
-
-   • [⭐ ⭐ ⭐] [480p DVDRip / DDL Trọn bộ]:
-     Link tải (Internet Archive): https://...
-
---------------------------------------------------------------------------------
-2. LINK TẢI PHỤ ĐỀ (KÈM ĐÁNH GIÁ ĐỘ CHUẨN XÁC & ĐỊNH DẠNG):
-   • [⭐ ⭐ ⭐ ⭐ ⭐] [Định dạng .ASS 1080p có Styles & Hiệu ứng] - Dịch trực tiếp từ tiếng gốc:
-     Nhóm dịch: [Nhóm Fansub]
-     Độ khớp: 100% timecode với bản BDRip [Tên nhóm encode].
-     Link tải: https://...
-
-   • [⭐ ⭐ ⭐ ⭐] [Định dạng .SRT UTF-8 Chuẩn] - Phụ đề quốc tế:
-     Nguồn: SubDL / OpenSubtitles
-     Link tải: https://...
-================================================================================
-```
-
----
-
-## 🛠️ Included Tools & Scripts
-
-- `scripts/srt_to_ass.py`: Converts SRT files to styled 1080p ASS subtitles.
+Every show/movie directory **MUST** contain a comprehensive `DOWNLOAD_LINKS.txt` enriched with **Quality Badges, Codecs, Resolution, and Source Ratings**.
