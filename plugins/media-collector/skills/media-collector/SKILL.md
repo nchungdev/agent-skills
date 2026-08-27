@@ -1,6 +1,6 @@
 ---
 name: media-collector
-description: Universal Film, TV Show & Anime Curator. Interactively clarifies user download preferences (film/subtitles & target languages), maps franchise censuses with direct TVDB/TMDb/IMDb links, creates standardized Plex & Jellyfin library hierarchies, handles subtitle acquisition/engineering (1080p styling, timecode syncing), explicitly labels Muxed vs External Subtitles, and generates comprehensive download blueprints containing video quality ratings, codecs, resolutions, and subtitle accuracy evaluations.
+description: Universal Film, TV Show & Anime Curator. Interactively clarifies user download preferences (film/subtitles & target languages), maps franchise censuses with direct TVDB/TMDb/IMDb links, creates standardized Plex & Jellyfin library hierarchies, handles subtitle acquisition/engineering (1080p styling, timecode syncing), explicitly labels Muxed vs External Subtitles, executes intelligent fallback protocols for non-direct video links (Torrent file downloading, Magnet links, yt-dlp streaming extraction), and generates comprehensive download blueprints.
 ---
 
 # Universal Media Collector Skill (Interactive & Quality-Rated Curation)
@@ -17,6 +17,27 @@ Before generating final assets, the agent **MUST** proactively ask the user two 
    - *"Bạn có muốn tải phụ đề sẵn về máy không? Ngôn ngữ bạn muốn ưu tiên tìm là gì? (Ví dụ: Tiếng Việt, Tiếng Trung, Tiếng Anh, Tiếng Nhật...)"*
 2. **Video Download Preferences**:
    - *"Bạn có muốn tải các file video phim về máy không, hay chỉ cần tạo cấu trúc thư mục Plex/Jellyfin và file tổng hợp link tải (DOWNLOAD_LINKS.txt)?"*
+
+---
+
+## ⚡ Non-Direct Download Fallback Protocol (WHEN USER CHOOSES VIDEO DOWNLOAD)
+
+If the user chooses **Option B (Download Video)**, but the source is NOT a direct HTTP link (e.g. Torrent, Streaming, Cyberlocker):
+
+1. **P2P Torrent / Magnet Sources (Nyaa, 1337x, TorrentGalaxy)**:
+   - **Action**: The agent **MUST download the `.torrent` file directly** and save it into the target show/season folder (e.g. `Season 01/Season_01_1080p.torrent`).
+   - **Action**: Provide the clickable **Magnet Link** in `DOWNLOAD_LINKS.txt` so the user can open it with their BitTorrent client (qBittorrent/Transmission) in 1 click.
+   - **Action**: Search for mirror DDLs (Anime Tosho direct mirror, Archive.org DDL).
+
+2. **Official Streaming Platforms (YouTube, Muse Asia, Ani-One, Vimeo)**:
+   - **Action**: Use `yt-dlp` / `ffmpeg` to rip and download the 1080p stream into standard `.mp4`/`.mkv` format if available without DRM.
+   - If DRM-protected: Provide the direct streaming link and official app recommendations.
+
+3. **Cloud Lockers (Google Drive, Mega, Mediafire, 1Fichier)**:
+   - **Action**: Label clearly as `[⚡ CLOUD LOCKER]` with direct browser access links in `DOWNLOAD_LINKS.txt`.
+
+4. **DRM / Paid Exclusive Platforms (Netflix, Disney+, Max, Apple TV+)**:
+   - **Action**: Inform the user transparently that the title is an exclusive streaming license, provide the official title link, and search for community WEBRip releases.
 
 ---
 
