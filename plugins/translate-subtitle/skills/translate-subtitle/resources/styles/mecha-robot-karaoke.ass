@@ -1,0 +1,6 @@
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Arial,20,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,2.2,1,2,20,20,20,1
+Style: summon-romaji,Arial Black,24,&H0000FFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,3,2,2,20,20,68,1
+Style: summon-hanviet,Arial,18,&H00E0E0E0,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,2,1,2,20,20,40,1
+Style: atk-shout,Arial Black,22,&H000000FF,&H000000FF,&H00FFFFFF,&H80000000,-1,0,0,0,100,100,0,0,1,3,2,2,20,20,20,1

@@ -1,0 +1,5 @@
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Trebuchet MS,21,&H00F0F0F0,&H000000FF,&H00101010,&H80000000,0,0,0,0,100,100,0,0,1,2,1,2,25,25,22,1
+Style: Deduction,Trebuchet MS,20,&H00E0FFFF,&H000000FF,&H00202020,&H80000000,0,1,0,0,100,100,0,0,1,2,1,2,25,25,22,1
+Style: Top,Trebuchet MS,18,&H00F0F0F0,&H000000FF,&H00101010,&H80000000,0,0,0,0,100,100,0,0,1,2,1,8,25,25,20,1
