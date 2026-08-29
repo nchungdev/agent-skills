@@ -1,56 +1,75 @@
 ---
 name: translate-subtitle
-description: Dịch phụ đề phim chuyên sâu. Hỗ trợ đa cơ sở dữ liệu định danh (TMDb ID, TheTVDB ID, IMDb ID). Tích hợp kho glossary dài hạn, quy tắc theo thể loại phim (Genres), và lệnh fetch tự động từ kho cộng đồng GitHub nchungdev/subtitle-glossary-hub.
+description: Dịch phụ đề phim chuyên sâu. Hỗ trợ đa CSDL định danh (TMDb ID, TheTVDB ID). Kiến trúc 2 tầng (Two-Tier Architecture): Workspace cục bộ tự quản lý tiến độ, độ mơ hồ và override style; Kho Skill tập trung chỉ lưu trữ tri thức đã chốt (Confirmed Knowledge) và bồi đắp lên GitHub nchungdev/subtitle-glossary-hub.
 ---
 
 # Translate Subtitle Skill
 
-Kỹ năng dịch phụ đề chuyên nghiệp, tích hợp kho trí tuệ thuật ngữ cộng đồng mở (Open-Source Community Hub).
+Kỹ năng dịch phụ đề chuyên nghiệp, vận hành theo **Kiến Trúc Phân Tách Hai Tầng (Two-Tier Architecture)**:
 
-## 🚀 Kích Hoạt & Lệnh Fetch Kho Cộng Đồng
-
-### 1. Dịch Phim:
-`translate-subtitle <tên_phim/tmdbid/tvdbid/imdbid> <đường_dẫn_subtitle> <ngôn_ngữ_đích>`
-
-### 2. Tự Động Cập Nhật Kho Thuật Ngữ Cộng Đồng:
-`python3 <skill_dir>/scripts/fetch_hub.py --all`
-* Kéo toàn bộ **Quy tắc Thể loại (Genres)** và **Glossary từng phim (Franchises)** từ kho mở:
-  👉 [github.com/nchungdev/subtitle-glossary-hub](https://github.com/nchungdev/subtitle-glossary-hub)
-
----
-
-## 🏛️ CẤU TRÚC KHO TẬP TRUNG (COMMUNITY HUB ARCHITECTURE)
-
-```text
-resources/
-├── MASTER_INDEX.json                  # Bộ giải mã ID đa năng (TMDb / TheTVDB / Aliases)
-├── genres/                            # 1. QUY TẮC & STYLE THEO THỂ LOẠI
-│   ├── mecha-robot/                   # Anime Mecha / Siêu Robot (Karaoke 2 lớp, Romaji)
-│   ├── detective-mystery/             # Trinh thám / Hình sự (Pháp y, chứng cứ ngoại phạm)
-│   ├── medical-drama/                 # Y khoa / Phẫu thuật (Giải phẫu, phẫu thuật)
-│   ├── xianxia-wuxia-historical/      # Cổ trang / Tiên hiệp (Xưng hô Hán-Việt, pháp bảo)
-│   └── slice-of-life-folklore/        # Đời thường / Huyền bí (Văn phong triết lý)
-│
-└── glossaries/                        # 2. BẢNG THUẬT NGỮ THEO TỪNG TÁC PHẨM
-    ├── Black_Jack_{tvdb-78864}/       # TV Series
-    ├── Black_Jack_The_Movie_1996_{tmdb-54378}/ # Movie
-    └── Mashin_Hero_Wataru_{tvdb-227501}/
-        ├── glossary.json              # Bộ nhớ dài hạn nhân vật, xưng hô
-        ├── ERRORS_AND_PITFALLS.md     # Nhật ký cạm bẫy thực chiến đã sửa
-        ├── AUDIT_REPORT.md            # Báo cáo kiểm định toàn vẹn
-        ├── WORKFLOW.md                # Quy trình dịch chi tiết
-        └── metadata.json
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. WORKSPACE CỤC BỘ DỰ ÁN (<Tên_Phim>_Curation/ hoặc Translation Workspace) │
+│    ├── PROGRESS.md          -> Tiến độ từng tập (Dịch/Audit/Xuất bản)       │
+│    ├── AMBIGUITY_LOG.md     -> Các đoạn thoại mờ nghĩa, nghi vấn cần chốt   │
+│    ├── _style/              -> Style ASS riêng của người dịch (OVERRIDE)   │
+│    ├── _work/               -> Dữ liệu nháp & script bóc tách               │
+│    └── output/ (translated) -> Thành phẩm phụ đề .vi.ass & .vi.srt          │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │ (Chỉ đẩy dữ liệu ĐÃ CONFIRM)
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 2. KHO TẬP TRUNG TRONG SKILL & GITHUB HUB (CONFIRMED KNOWLEDGE ONLY)        │
+│    ├── glossary.json        -> Thuật ngữ, ma trận xưng hô ĐÃ CHỐT 100%      │
+│    ├── ERRORS_AND_PITFALLS.md -> Cạm bẫy & bài học thực chiến đã kiểm chứng  │
+│    ├── resources/genres/    -> Quy tắc & style mặc định theo thể loại phim  │
+│    └── resources/glossaries/ -> Kho lưu trữ dài hạn theo TMDb / TheTVDB ID  │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-# PHẦN A — LÕI CHUNG & QUY CHUẨN DỊCH THUẬT
+## 🚀 Kích Hoạt & Cơ Chế Override
 
-1. **Khởi tạo & Nạp Dữ Liệu:**
-   * Tự động tra cứu ID và nạp `glossary.json` + `ERRORS_AND_PITFALLS.md` của phim.
-   * Nạp tiếp quy tắc thể loại tương ứng từ `genres/<the_loai>/rules.md`.
-2. **Kiểm Định Toàn Vẹn & Xuất Bản:**
-   * Đối chiếu 3 chiều: `Gốc ↔ Trung gian ↔ Tiếng Việt`.
-   * Đặt tên chuẩn Plex/Jellyfin: `<Tên Phim> - S01E01.vi.ass` & `.vi.srt`.
-3. **Bồi Đắp Vĩnh Viễn:**
-   * Ghi nhận lỗi mới vào `ERRORS_AND_PITFALLS.md` để đóng góp ngược lại kho cộng đồng.
+### 1. Dịch Phim:
+`translate-subtitle <tên_phim/tmdbid/tvdbid/imdbid> <đường_dẫn_subtitle> <ngôn_ngữ_đích>`
+
+### 2. Thứ Tự Ưu Tiên Nạp Style (Style Hierarchy & Override):
+1. **Ưu tiên 1 (Cao nhất - Override):** File style trong thư mục cục bộ `_style/*.ass` do người dịch tùy biến.
+2. **Ưu tiên 2 (Mặc định):** Style chuẩn theo thể loại trong `resources/genres/<the_loai>/styles.ass`.
+3. **Ưu tiên 3 (Cơ bản):** Style mặc định của file phụ đề gốc.
+
+---
+
+## 🏛️ CHI TIẾT CẤU TRÚC 2 TẦNG
+
+### TẦNG 1: THƯ MỤC CỤC BỘ MỖI DỰ ÁN (PROJECT WORKSPACE)
+* 📄 **`PROGRESS.md`:** Bảng checklist trạng thái từng tập (Đang dịch / Đã dịch / Đã đối chiếu 3 chiều / Đã lên Plex).
+* ❓ **`AMBIGUITY_LOG.md`:** Ghi nhận các đoạn thoại chơi chữ, tiếng lóng, ngữ cảnh mờ nghĩa (`do_chac: thap`) để người dịch thảo luận hoặc tham vấn trước khi chốt.
+* 🎨 **`_style/custom_style.ass`:** Nơi chứa font chữ, màu sắc, bóng chữ do người dịch thiết kế riêng cho bộ phim để override style mặc định.
+* 🛠️ **`_work/`:** Lưu file thoại bóc tách, script Python đối chiếu.
+* 📦 **`output/` (hoặc `translated/`):** Chứa các file phụ đề `.vi.ass` và `.vi.srt` hoàn thiện.
+
+---
+
+### TẦNG 2: KHO TRI THỨC ĐÃ CONFIRM TRONG SKILL (CONFIRMED REPOSITORY)
+*Chỉ tiếp nhận những mục đã được kiểm duyệt và xác nhận chắc chắn 100%:*
+* 📑 **`glossary.json`:** Bảng từ điển chính thức (Nhân vật, ma trận xưng hô, chiêu thức, bối cảnh) có độ chắc chắn cao (`do_chac: cao`).
+* 🚨 **`ERRORS_AND_PITFALLS.md`:** Nhật ký các lỗi sai đã trả giá và phương án sửa chuẩn xác để tái sử dụng vĩnh viễn cho cộng đồng.
+* 🏷️ **`metadata.json`:** Thông tin định danh TheTVDB `{tvdb-ID}` và TMDb `{tmdb-ID}`.
+* 🌐 **Đồng bộ mở:** Tự động fetch từ kho cộng đồng: [github.com/nchungdev/subtitle-glossary-hub](https://github.com/nchungdev/subtitle-glossary-hub).
+
+---
+
+# PHẦN A — QUY TRÌNH DỊCH THUẬT CHUẨN
+
+1. **Khởi Tạo:**
+   * Nạp `glossary.json` đã chốt từ kho Skill.
+   * Tạo `PROGRESS.md` và `AMBIGUITY_LOG.md` trong thư mục dự án.
+   * Kiểm tra xem dự án có `_style/` để override không; nếu không, lấy style thể loại từ `resources/genres/`.
+2. **Xử Lý Thoại:**
+   * Gặp câu mờ nghĩa ➜ Ghi vào `AMBIGUITY_LOG.md`.
+   * Gặp lỗi sai qua trung gian ➜ Đối chiếu 3 chiều và sửa.
+3. **Đóng Gói & Bồi Đắp:**
+   * Xuất bản phụ đề vào thư mục `output/` theo tên chuẩn Plex/Jellyfin.
+   * Bồi đắp các thuật ngữ đã chốt và lỗi đã sửa ngược lại vào kho Skill `resources/glossaries/<id_glossary>/`.
