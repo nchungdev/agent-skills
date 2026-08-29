@@ -191,6 +191,17 @@ def init_workspace(context, output_dir):
             f.write("| Tập | Timecode | Thoại Gốc (Source) | Phương Án Dịch Tạm Thời | Trạng Thái |\n")
             f.write("|:---:|:---:|:---|:---|:---:|\n")
 
+    
+    # 5. AUDIT_REPORT.md (Tầng Riêng)
+    audit_path = os.path.join(output_dir, "AUDIT_REPORT.md")
+    if not os.path.exists(audit_path):
+        with open(audit_path, "w", encoding="utf-8") as f:
+            f.write(f"# 📊 BÁO CÁO KIỂM ĐỊNH TOÀN VẸN (AUDIT REPORT) — {context['title']}\n\n")
+            f.write(f"> **TMDb ID:** `{context['tmdb_id']}` | **TVDB ID:** `{context['tvdb_id']}`\n\n")
+            f.write("## 🔍 Bảng Thống Kê Kiểm Định Kỹ Thuật Từng Tập:\n\n")
+            f.write("| Tập | Dòng Gốc | Dòng Dịch | Khớp Số Dòng | Sót Tiếng Nguồn | UTF-8 / Styling | Kết Luận |\n")
+            f.write("|:---:|:---:|:---:|:---:|:---:|:---:|:---:|\n")
+
     print(f"\n🎉 Đã khởi tạo hoàn chỉnh Workspace 2 tầng tại: {output_dir}")
     print(f"  • Title: {context['title']} ({context['year']})")
     print(f"  • Thể loại: {', '.join(context['genres'])}")
