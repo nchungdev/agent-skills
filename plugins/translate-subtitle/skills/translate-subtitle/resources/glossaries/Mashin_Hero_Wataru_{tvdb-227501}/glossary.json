@@ -1,0 +1,3334 @@
+{
+  "_muc_dich": "GLOSSARY CHUNG cho cả 3 phần Mashin Eiyuuden Wataru. ĐỌC FILE NÀY TRƯỚC, sau đó đọc file wataru-part-context.json trong thư mục của phần đang dịch. File này quy định tên riêng, thuật ngữ và xưng hô — áp dụng đồng nhất cho cả 3 phần, KHÔNG được đổi giữa chừng.",
+  "pham_vi": [
+    "Mashin Eiyuuden Wataru (1988) — Phần 1, 45 tập",
+    "Mashin Eiyuuden Wataru 2 (1990) — Phần 2, 46 tập",
+    "Chou Mashin Eiyuuden Wataru (1997) — Phần 3, 51 tập"
+  ],
+  "quy_uoc_dat_ten": {
+    "nguyen_tac": "Tên riêng GIỮ NGUYÊN romaji tiếng Nhật, chữ Latin không dấu. KHÔNG Việt hoá, KHÔNG dịch nghĩa.",
+    "co_chu_han_viet": "CHỈ chú Hán-Việt cho: tên Mashin, tên chiêu thức, địa danh, sự vật/bảo vật, biệt danh.",
+    "khong_chu_han_viet": "TÊN NGƯỜI KHÔNG BAO GIỜ chú Hán-Việt — chỉ viết romaji. Ví dụ: 'Ikusabe Wataru', KHÔNG viết 'Ikusabe Wataru (Chiến Bộ Wataru)'.",
+    "khi_nao_chu": {
+      "co_chu": "Khi TRIỆU HỒI Mashin hoặc TUNG CHIÊU THỨC — thêm MỘT DÒNG nghĩa Hán-Việt ngay dưới, dùng ký tự xuống dòng \\N của ASS.",
+      "khong_chu": "Khi nói chuyện bình thường (nhắc tên Mashin/chiêu trong câu thoại thông thường) — CHỈ viết romaji, KHÔNG chú.",
+      "vi_du_co_chu": "Ryujinmaru!\\N(Long Thần Hoàn)",
+      "vi_du_chieu": "Kouryuuken!\\N(Quang Long Kiếm)",
+      "vi_du_khong_chu": "Ryujinmaru bị thương nặng rồi!   <- câu kể, KHÔNG chú"
+    },
+    "luu_y_quan_trong": "Sub tiếng Anh dịch qua tiếng Trung nên NHIỀU TÊN BỊ PHIÊN ÂM SAI. Luôn tra bảng 'nhan_vat' / 'mashin' / 'dia_danh' để quy về romaji Nhật chuẩn, KHÔNG bê nguyên cách viết trong sub.",
+    "luu_y_mashin": "Mashin ĐỔI TÊN theo từng phần (Phần 2 gắn tiền tố Shinsei). Tra đúng mục P1/P2/P3.",
+    "BAT_BUOC_100_PHAN_TRAM_TIENG_NHAT": "MỌI tên riêng PHẢI là tên tiếng Nhật (romaji). TUYỆT ĐỐI KHÔNG dùng tên phiên âm từ tiếng Trung, và KHÔNG giữ tên đã bị dịch nghĩa sang tiếng Anh. Sub này dịch qua tiếng Trung nên có ba loại lỗi phải sửa: (1) tên Trung bản địa hoá -> trả về tên Nhật; (2) tên bị dịch nghĩa sang tiếng Anh -> trả về romaji Nhật; (3) phiên âm romaji sai chính tả -> sửa về romaji chuẩn. Ngoại lệ DUY NHẤT: quy tắc 'ten_theo_moc_cot_truyen' — danh tính theo mốc cốt truyện thì vẫn giữ theo mốc."
+  },
+  "nhan_vat": [
+    {
+      "romaji": "Ikusabe Wataru",
+      "kanji": "戦部ワタル",
+      "trong_sub": "Wataru / Saviour Wataru",
+      "vai_tro": "Nhân vật chính, Cứu Thế Chủ",
+      "xuat_hien": [
+        "P1",
+        "P2",
+        "P3"
+      ]
+    },
+    {
+      "romaji": "Shinobibe Himiko",
+      "kanji": "忍部ヒミコ",
+      "trong_sub": "Himiko",
+      "vai_tro": "Nữ ninja, truyền nhân đời 13 gia tộc Shinobibe",
+      "xuat_hien": [
+        "P1",
+        "P2",
+        "P3"
+      ],
+      "sua_loi": "Bản JSON cũ ghi 'Himiko Shinobibe' (tên trước họ) — SAI thứ tự. Họ Shinobibe đứng trước, đồng bộ với Ikusabe / Tsurugibe."
+    },
+    {
+      "romaji": "Tsurugibe Shibaraku",
+      "kanji": "剣部シバラク",
+      "trong_sub": "Shibaraku / Master / Teacher",
+      "vai_tro": "Kiếm sĩ nhị đao lưu, sư phụ của Wataru",
+      "xuat_hien": [
+        "P1",
+        "P2",
+        "P3"
+      ],
+      "bay_dich": "'Master' và 'Teacher' trong sub đều chỉ Shibaraku, KHÔNG phải hai nhân vật khác nhau. Dịch là 'Sư phụ'.",
+      "ghi_chu_them": "Kiếm sĩ nhị đao lưu, môn phái 野牛シバラク流 (Yagyuu Shibaraku-ryuu). Hai thanh kiếm bên hông tên là Senjinmaru (戦神丸) và Senoumaru (戦王丸) — TRÙNG TÊN với Mashin, do thợ rèn Raikonshinshin làm. Nguyên tắc: không sát sinh, chỉ chém đứt vũ khí/trang bị của địch."
+    },
+    {
+      "romaji": "Toraoh",
+      "kanji": "虎王",
+      "trong_sub": "Tiger / Tiger Prince / Sir Tiger / King-Tiger",
+      "vai_tro": "Danh nghĩa là con trai Doakudar, đối thủ của Wataru. Thân phận thật: Shouryuushi.",
+      "xuat_hien": [
+        "P1",
+        "P2 (từ tập 39)",
+        "P3"
+      ],
+      "bay_dich": "Sub KHÔNG BAO GIỜ viết 'Toraoh'. Khi sub dùng như TÊN -> 'Toraoh' (romaji, không chú Hán-Việt). Khi sub dùng như CHỨC DANH ('Tiger Prince', 'Lord King-Tiger', 'Sir Tiger') -> dịch 'Hổ Vương' — xem mục 'chuc_danh_biet_danh'. Riêng 'Tigermaru' là tên Mashin (Jakomaru), không phải người."
+    },
+    {
+      "romaji": "Watabe Kurama",
+      "kanji": "渡部クラマ",
+      "trong_sub": "Gunamun / DuguGunamun / Dubugunamun (KHÔNG bao giờ 'Kurama')",
+      "vai_tro": "Người làng Wataribe (魔神山ワタリベ村), 20 tuổi. Ban đầu là GIÁN ĐIỆP của Doakudar, sau được nhóm Wataru cảm hoá thành đồng đội. Biến được thành chim. Lái Kuujinmaru.",
+      "xuat_hien": [
+        "P1",
+        "P2"
+      ],
+      "bay_dich": "Gunamun CHÍNH LÀ Watabe Kurama, nhưng KHÔNG phải do sub phiên âm sai — 'Gunamun' bắt nguồn từ TÊN TRUNG 古拿玛 (Gǔnámǎ). Sub tiếng Anh dịch từ bản Trung nên mang theo tên này. Tên đầy đủ 'DuguGunamun' = 渡部古拿玛 (họ Nhật 渡部 đọc âm Hán + tên Trung). Thống kê: 'Gunamun' 242 lần (P1:144, P2:96, P3:2); 'Kurama' 0 lần. Bằng chứng cùng nhân vật: gián điệp của Doakudar, 'Mr. Bird-man' (biến thành chim), lái Soujinmaru = 空神丸. QUYẾT ĐỊNH DỊCH: xem 'nguon_goc_ban_sub' — đây là tên bản địa hoá, KHÁC loại với lỗi phiên âm kiểu Zanjinmaru/Doakadar."
+    },
+    {
+      "romaji": "Doakudar",
+      "kanji": "ドアクダー",
+      "trong_sub": "Doakudar / Dokudar",
+      "vai_tro": "Ma Vương, trùm chính Phần 1",
+      "xuat_hien": [
+        "P1",
+        "P2 (chỉ nhắc lại + lộ diện ở tập 45-46)"
+      ]
+    },
+    {
+      "romaji": "Dowarudar",
+      "kanji": "ドワルダー",
+      "trong_sub": "Doakadar",
+      "vai_tro": "Em trai Doakudar, trùm chính Phần 2, chiếm Seikaizan",
+      "xuat_hien": [
+        "P2"
+      ],
+      "bay_dich": "CỰC KỲ QUAN TRỌNG: sub viết 'Doakadar' (151 lần) — đây là Dowarudar, KHÔNG PHẢI Doakudar. Sub cũng có 'Doakudar' (10 lần, ở tập 1/6/10/45/46) và đó mới là trùm Phần 1. TUYỆT ĐỐI KHÔNG gộp hai tên: cú lật cuối Phần 2 chính là việc lộ ra Dowarudar thật sự là Doakudar. Gộp sớm là phá twist."
+    },
+    {
+      "romaji": "Ankokudar",
+      "kanji": "アンコクダー",
+      "trong_sub": "Darkedar",
+      "vai_tro": "Ma Vương Bóng Tối, trùm chính Phần 3",
+      "xuat_hien": [
+        "P3"
+      ],
+      "bay_dich": "Sub viết 'Darkedar' vì dịch 暗黒 (ankoku = bóng tối) thành 'Dark'. Romaji Nhật chuẩn là Ankokudar."
+    },
+    {
+      "romaji": "Umihiko",
+      "kanji": "海火子",
+      "trong_sub": "Umihiko",
+      "vai_tro": "Thiếu niên sinh ra từ Đệ Tứ Tinh của Seikaizan, thu thập linh hồn Mashin để giải phong ấn cho cha. Lái Natsukimaru.",
+      "xuat_hien": [
+        "P2"
+      ],
+      "bay_dich": "Kanji 海火子, đọc うみひこ Umihiko — ĐÃ XÁC MINH. (Wikipedia tiếng Trung ghi 'Kaihiko' là sai.) Sub viết đúng."
+    },
+    {
+      "romaji": "Suzume",
+      "kanji": "雀",
+      "trong_sub": "Sparrow",
+      "vai_tro": "Thợ săn tiền thưởng, bạn đồng hành Phần 3. Lái Choujinmaru.",
+      "xuat_hien": [
+        "P3"
+      ],
+      "bay_dich": "'Sparrow' là tên đi qua hai lần dịch: スズメ -> 麻雀 (Trung) -> 'Sparrow' (Anh). Phải trả về Suzume, TUYỆT ĐỐI KHÔNG dịch 'Chim Sẻ'."
+    },
+    {
+      "romaji": "Doruku",
+      "kanji": "ドルク",
+      "trong_sub": "Doru / Lord Doru",
+      "vai_tro": "Con trai thứ BA của Donalkami",
+      "xuat_hien": [
+        "P3"
+      ],
+      "bay_dich": "SỬA LỖI: bản JSON cũ ghi 'Doru là NỮ' — SAI. Sub dùng đại từ nam nhất quán: 'Lord Doru? l've not seen HIM yet', 'Doru has put in HIS heart and soul'. Dùng đại từ NAM ('hắn', 'y')."
+    },
+    {
+      "romaji": "Dodo",
+      "kanji": "ドード",
+      "trong_sub": "Dodo",
+      "vai_tro": "Con trai thứ TƯ (út) của Donalkami. Kẻ đánh cắp Trái tim Thiện lương của Wataru",
+      "xuat_hien": [
+        "P3"
+      ],
+      "bay_dich": "Sub: 'Dodo, is that how you speak to your senior brother?' — em út."
+    },
+    {
+      "romaji": "Doran",
+      "kanji": "ドラン",
+      "trong_sub": "Dolan",
+      "vai_tro": "Con trai thứ HAI của Donalkami, anh của Dodo",
+      "xuat_hien": [
+        "P3"
+      ],
+      "bay_dich": "Sub: \"l'm Dolan, this fool's elder brother\" — xác nhận là anh."
+    },
+    {
+      "romaji": "Donalkami",
+      "kanji": "ドナルカミ",
+      "trong_sub": "Dorogami / King Dorogami / Lord Dorogami",
+      "vai_tro": "Đại Vương Donalkami — cha của Doran, Doruku, Dodo",
+      "xuat_hien": [
+        "P3"
+      ],
+      "bay_dich": "Sub phiên sai thành 'Dorogami'. Là tộc trưởng; sub xác nhận qua thoại 'My son, brother Dorogami' và 'Lord Dorogami's son'."
+    },
+    {
+      "romaji": "Shouryuushi",
+      "kanji": "翔龍子",
+      "trong_sub": "(cần đối chiếu)",
+      "vai_tro": "Thân phận THẬT của Toraoh — hoàng tử Soukaizan, con của Seiryuuhi. Bị Doakudar biến hình và cấy ký ức giả thành 'con trai' Toraoh. Cuối Phần 1 được giải cứu, khôi phục nguyên hình nhưng MẤT ký ức thời làm Toraoh.",
+      "xuat_hien": [
+        "P1 (cuối phần)"
+      ],
+      "bay_dich": "Đây là cú lật cuối Phần 1 — KHÔNG được để lộ sớm. Trước khi lộ, mọi cách gọi vẫn phải là Toraoh / Hổ Vương."
+    },
+    {
+      "romaji": "Seiryuuhi",
+      "kanji": "聖龍妃",
+      "trong_sub": "(cần đối chiếu)",
+      "vai_tro": "Thánh Long Phi — nữ hoàng cai quản Soukaizan, mẹ của Shouryuushi.",
+      "xuat_hien": [
+        "P1"
+      ],
+      "bay_dich": "Là NỮ. Chức danh 'Thánh Long Phi' thuộc nhóm chức danh -> có thể dùng Hán-Việt."
+    }
+  ],
+  "mashin": {
+    "_ghi_chu": "Mashin ĐỔI TÊN VÀ TIẾN HOÁ theo từng phần — tra đúng phần đang dịch. Phần 2 gắn tiền tố 新星 Shinsei cho hầu hết Mashin.",
+    "P1": [
+      {
+        "trong_sub": "Ryujinmaru",
+        "romaji": "Ryujinmaru",
+        "kanji": "龍神丸",
+        "han_viet": "Long Thần Hoàn",
+        "lai": "Ikusabe Wataru"
+      },
+      {
+        "trong_sub": "Ryukingmaru",
+        "romaji": "Ryuoumaru",
+        "kanji": "龍王丸",
+        "han_viet": "Long Vương Hoàn",
+        "lai": "Ikusabe Wataru",
+        "ghi_chu": "Dạng tiến hoá của Ryujinmaru sau khi hợp nhất linh hồn Kuujinmaru. Sub dịch 王 thành 'King'."
+      },
+      {
+        "trong_sub": "Zanjinmaru",
+        "romaji": "Senjinmaru",
+        "kanji": "戦神丸",
+        "han_viet": "Chiến Thần Hoàn",
+        "lai": "Tsurugibe Shibaraku",
+        "ghi_chu": "Sub phiên 戦 theo âm Hán 'zhàn' -> 'Zan'."
+      },
+      {
+        "trong_sub": "Soujinmaru",
+        "romaji": "Kujinmaru",
+        "kanji": "空神丸",
+        "han_viet": "Không Thần Hoàn",
+        "lai": "Watabe Kurama (sub gọi 'Gunamun')",
+        "ghi_chu": "ĐÃ KIỂM CHỨNG XONG: Soujinmaru trong sub = 空神丸 Kuujinmaru. Người lái là Gunamun, tức Watabe Kurama. Xác nhận qua thoại: 'Gunamun, you could ask for Soujinmaru' (ep21), 'my Soujinmaru has been destroyed' + 'Gunamun! Soujinmaru is not destroyed yet' (P2 ep23), và 'It's Ryujinmaru & Soujinmaru combined' (ep19) khớp với việc Ryuoumaru sinh ra từ Ryujinmaru hợp nhất linh hồn Kuujinmaru."
+      },
+      {
+        "trong_sub": "Tigermaru",
+        "romaji": "Jyakomaru",
+        "kanji": "邪虎丸",
+        "han_viet": "Tà Hổ Hoàn",
+        "lai": "Toraoh"
+      },
+      {
+        "trong_sub": "Houjinmaru / Hurojinmaru",
+        "romaji": "Genjinmaru",
+        "kanji": "幻神丸",
+        "han_viet": "Ảo Thần Hoàn",
+        "lai": "Shinobibe Himiko / Genryuusai",
+        "ghi_chu": "ĐÃ XÁC MINH trong sub: 'Himiko, summon Houjinmaru!'. Tiến hoá: Genoumaru (幻王丸, Ảo Vương Hoàn)."
+      },
+      {
+        "trong_sub": "(cần đối chiếu)",
+        "romaji": "Kuoumaru",
+        "kanji": "空王丸",
+        "han_viet": "Không Vương Hoàn",
+        "lai": "Watabe Kurama (sub: 'Gunamun')",
+        "ghi_chu": "Dạng tiến hoá của Kuujinmaru. Wikipedia tiếng Trung xác nhận 古拿玛 điều khiển cả 空神丸 lẫn 空王丸."
+      }
+    ],
+    "P2": [
+      {
+        "trong_sub": "Ryujinmaru",
+        "romaji": "Shinsei Ryujinmaru",
+        "kanji": "新星龍神丸",
+        "han_viet": "Tân Tinh Long Thần Hoàn",
+        "lai": "Ikusabe Wataru",
+        "ghi_chu": "Ở Phần 2 Ryujinmaru mang tên đầy đủ Shinsei Ryujinmaru."
+      },
+      {
+        "trong_sub": "RyuSeimaru",
+        "romaji": "Ryuseimaru",
+        "kanji": "龍星丸",
+        "han_viet": "Long Tinh Hoàn",
+        "lai": "Ikusabe Wataru",
+        "ghi_chu": "Tiến hoá từ Shinsei Ryujinmaru nhờ Kouryuuken (光龍剣, Quang Long Kiếm)."
+      },
+      {
+        "trong_sub": "Zanjinmaru",
+        "romaji": "Shinsei Senjinmaru",
+        "kanji": "新星戦神丸",
+        "han_viet": "Tân Tinh Chiến Thần Hoàn",
+        "lai": "Tsurugibe Shibaraku"
+      },
+      {
+        "trong_sub": "Tigermaru",
+        "romaji": "Shinsei Jakomaru",
+        "kanji": "新星邪虎丸",
+        "han_viet": "Tân Tinh Tà Hổ Hoàn",
+        "lai": "Toraoh",
+        "ghi_chu": "Chỉ từ tập 39."
+      },
+      {
+        "trong_sub": "(cần đối chiếu — sub có thể phiên khác)",
+        "romaji": "Natsukimaru",
+        "kanji": "夏鬼丸",
+        "han_viet": "Hạ Quỷ Hoàn",
+        "lai": "Umihiko",
+        "ghi_chu": "ĐÃ KIỂM CHỨNG XONG: đọc là なつきまる Natsukimaru. Dạng thật: Shin Natsukimaru (真・夏鬼丸, Chân Hạ Quỷ Hoàn). Là ma thần có linh hồn làm lõi, khát khao mặt trời và cai quản ban ngày."
+      }
+    ],
+    "P3": [
+      {
+        "trong_sub": "Ryujinmaru",
+        "romaji": "Ryujinmaru",
+        "kanji": "龍神丸",
+        "han_viet": "Long Thần Hoàn",
+        "lai": "Ikusabe Wataru",
+        "bien_the": [
+          {
+            "romaji": "Shishi Ryujinmaru",
+            "kanji": "獅子龍神丸",
+            "han_viet": "Sư Tử Long Thần Hoàn"
+          },
+          {
+            "romaji": "Houou Ryujinmaru",
+            "kanji": "鳳凰龍神丸",
+            "han_viet": "Phượng Hoàng Long Thần Hoàn"
+          },
+          {
+            "romaji": "Kennou Ryujinmaru",
+            "kanji": "剣王龍神丸",
+            "han_viet": "Kiếm Vương Long Thần Hoàn"
+          },
+          {
+            "romaji": "Gekkou Ryujinmaru",
+            "kanji": "月光龍神丸",
+            "han_viet": "Nguyệt Quang Long Thần Hoàn"
+          },
+          {
+            "romaji": "Byakko Ryujinmaru",
+            "kanji": "白虎龍神丸",
+            "han_viet": "Bạch Hổ Long Thần Hoàn"
+          }
+        ],
+        "ghi_chu": "Phần 3 Ryujinmaru có NHIỀU dạng biến hình — mỗi dạng là một tên riêng, chú Hán-Việt lần đầu."
+      },
+      {
+        "trong_sub": "Zanjinmaru",
+        "romaji": "Senjinmaru",
+        "kanji": "戦神丸",
+        "han_viet": "Chiến Thần Hoàn",
+        "lai": "Tsurugibe Shibaraku",
+        "ghi_chu": "P3 bỏ tiền tố Shinsei, quay về tên gốc như P1."
+      },
+      {
+        "trong_sub": "(cần đối chiếu)",
+        "romaji": "Choujinmaru",
+        "kanji": "鳥神丸",
+        "han_viet": "Điểu Thần Hoàn",
+        "lai": "Suzume",
+        "ghi_chu": "Mashin dạng chim."
+      },
+      {
+        "trong_sub": "Tigermaru",
+        "romaji": "Jyakomaru",
+        "kanji": "邪虎丸",
+        "han_viet": "Tà Hổ Hoàn",
+        "lai": "Toraoh"
+      }
+    ]
+  },
+  "dia_danh": [
+    {
+      "romaji": "Soukaizan",
+      "kanji": "創界山",
+      "han_viet": "Sáng Giới Sơn",
+      "trong_sub": "Mt Soukai / Mt. Sokai",
+      "ghi_chu": "ĐỔI: dùng Hán-Việt 'Sáng Giới Sơn' thay romaji — địa danh thuộc nhóm phải dịch.",
+      "vi": "Sáng Giới Sơn"
+    },
+    {
+      "romaji": "Seikaizan",
+      "kanji": "星界山",
+      "han_viet": "Tinh Giới Sơn",
+      "trong_sub": "Star Mountain",
+      "ghi_chu": "Dùng Hán-Việt. Bối cảnh Phần 2, KHÁC Sáng Giới Sơn.",
+      "vi": "Tinh Giới Sơn"
+    },
+    {
+      "romaji": "Ryujin Pond",
+      "kanji": "龍神池",
+      "han_viet": "Long Thần Trì",
+      "trong_sub": "Dragon Pool / Ryujin Pond",
+      "vi": "Ao Long Thần",
+      "ghi_chu": "Cổng nối thế giới thực với Soukaizan. Đây là địa danh DỊCH NGHĨA (ngoại lệ), vì sub dùng dạng mô tả."
+    }
+  ],
+  "glossary": [
+    {
+      "en": "Saviour / Savior",
+      "ja": "救世主 Kyuuseishu",
+      "vi": "Cứu Thế Chủ",
+      "note": "KHÔNG dịch 'Đấng cứu thế' (nặng màu Kitô giáo) hay 'Vị anh hùng' (mất nghĩa). Khi nhân vật nói nhịu, dùng 'Cứu Thế Chuối'."
+    },
+    {
+      "en": "Mashin",
+      "ja": "魔神",
+      "vi": "Mashin",
+      "note": "Giữ nguyên romaji. Chú '(Ma Thần)' ở lần đầu mỗi tập."
+    },
+    {
+      "en": "Dragon God",
+      "ja": "龍神 Ryujin",
+      "vi": "Ryujin",
+      "note": "Tên riêng — chỉ romaji. Chú '(Long Thần)' CHỈ khi dùng như danh xưng lúc triệu hồi."
+    },
+    {
+      "en": "Sacred Tree",
+      "ja": "神木 Shinboku",
+      "vi": "Shinboku",
+      "note": "Sự vật — chú '(Thần Mộc)' ở lần đầu xuất hiện trong bối cảnh trang trọng."
+    },
+    {
+      "en": "Ninjitsu / Ninja Arts",
+      "ja": "忍術 Ninjutsu",
+      "vi": "Nhẫn thuật",
+      "note": "Thuật ngữ chung, không phải tên riêng — giữ Hán-Việt."
+    },
+    {
+      "en": "Killer attack / Finishing move",
+      "ja": "必殺技 Hissatsuwaza",
+      "vi": "Tuyệt chiêu",
+      "note": "Thuật ngữ chung — giữ Hán-Việt."
+    },
+    {
+      "en": "Transform",
+      "ja": "変身 Henshin",
+      "vi": "Biến hình",
+      "note": "Thuật ngữ chung."
+    },
+    {
+      "en": "Excuse me! (câu cửa miệng Himiko)",
+      "ja": "—",
+      "vi": "Thất lễ quá đi mất!",
+      "note": "Câu cửa miệng — giữ CỐ ĐỊNH để khán giả nhận ra nhân vật."
+    },
+    {
+      "en": "Hippo (biệt danh trêu Shibaraku)",
+      "ja": "—",
+      "vi": "Hà Mã",
+      "note": "Giữ cố định."
+    },
+    {
+      "en": "<X> Dragon Sword",
+      "ja": "◯龍剣",
+      "vi": "<Romaji>",
+      "note": "Tên chiêu — khi TUNG CHIÊU thêm dòng Hán-Việt. VD: 'Kouryuuken!\\N(Quang Long Kiếm)'. Thoại thường chỉ viết 'Kouryuuken'."
+    }
+  ],
+  "translation_rules": [
+    "Ưu tiên giữ đúng sắc thái nhân vật hơn là bám sát từng chữ tiếng Anh.",
+    "TÊN NGƯỜI: chỉ romaji, KHÔNG chú Hán-Việt, không Việt hoá.",
+    "TÊN THEO MỐC CỐT TRUYỆN: giữ đúng tên nhân vật/Mashin TẠI THỜI ĐIỂM ĐÓ, không quy hết về một tên. Sửa phiên âm sai thì được, hợp nhất danh tính thì KHÔNG. Xem 'ten_theo_moc_cot_truyen'.",
+    "TÊN MASHIN / ĐỊA DANH / SỰ VẬT / BIỆT DANH: quy về ROMAJI NHẬT 100%. TÊN CHIÊU: chiêu phe chính -> romaji Nhật + Hán-Việt; chiêu boss tuần -> CHỈ Hán-Việt, khỏi tra tên Nhật. Xem 'ten_chieu_thuc._QUY_TAC_PHAN_LOAI'.",
+    "CHỨC DANH / BIỆT DANH (Hổ Vương, Cứu Thế Chủ, Sư phụ, Hà Mã): dịch sang Hán-Việt/tiếng Việt, KHÔNG giữ romaji — khác với tên người. Xem 'chuc_danh_biet_danh'.",
+    "Chú Hán-Việt CHỈ khi triệu hồi Mashin hoặc tung chiêu — thêm một dòng riêng bằng \\N. Thoại thường thì không chú.",
+    "Sub tiếng Anh dịch qua tiếng Trung nên phiên âm tên sai nhiều — tra bảng để sửa CÁCH VIẾT về romaji chuẩn. Lưu ý: đây CHỈ là sửa chính tả, KHÔNG phải gộp danh tính — xem 'ten_theo_moc_cot_truyen'.",
+    "Thuật ngữ chung (nhẫn thuật, tuyệt chiêu, biến hình) dùng Hán-Việt bình thường — đây không phải tên riêng.",
+    "Bảng 'address_matrix' là bắt buộc — không đổi xưng hô giữa chừng, giữ nhất quán xuyên suốt cả 3 phần.",
+    "Câu cửa miệng trong 'glossary' phải giữ cố định.",
+    "Lời bài hát OP/ED: BỎ QUA, không dịch. Nhận diện bằng VỊ TRÍ (đầu/cuối file), không bằng tên Style.",
+    "Giữ nguyên timestamp và SỐ DÒNG của file gốc; chỉ thay phần lời thoại. Dòng chú Hán-Việt dùng \\N trong CÙNG một dòng Dialogue, KHÔNG tạo dòng Dialogue mới.",
+    "Lời đe doạ của phản diện giữ giọng kiêu ngạo, không làm mềm đi.",
+    "Wataru là trẻ con — lời thoại đời thường phải tự nhiên, KHÔNG dùng văn phong người lớn."
+  ],
+  "address_matrix": [
+    {
+      "character_a": "Ikusabe Wataru",
+      "character_b": "Ryujinmaru",
+      "a_calls_b": {
+        "tu_goi": "Ryujinmaru",
+        "tu_xung": "tôi",
+        "moi_quan_he": "Cứu Thế Chủ và Linh thần hộ mệnh",
+        "sac_thai": "Tôn trọng, tin cậy, gắn kết sinh tử"
+      },
+      "b_calls_a": {
+        "tu_goi": "Wataru",
+        "tu_xung": "ta",
+        "moi_quan_he": "Linh thần hộ mệnh và Cứu Thế Chủ",
+        "sac_thai": "Trang nghiêm, bảo hộ, hướng dẫn. Gọi thẳng tên, TRÁNH dùng 'ngươi'"
+      }
+    },
+    {
+      "character_a": "Ikusabe Wataru",
+      "character_b": "Tsurugibe Shibaraku",
+      "a_calls_b": {
+        "tu_goi": "Sư phụ",
+        "tu_xung": "con",
+        "moi_quan_he": "Thầy trò / Đồng đội chiến đấu",
+        "sac_thai": "Kính trọng, thân thiết, vâng lời"
+      },
+      "b_calls_a": {
+        "tu_goi": "Wataru",
+        "tu_xung": "thầy",
+        "moi_quan_he": "Thầy trò / Người bảo hộ",
+        "sac_thai": "Hào sảng, khích lệ, chỉ bảo ân cần"
+      }
+    },
+    {
+      "character_a": "Ikusabe Wataru",
+      "character_b": "Shinobibe Himiko",
+      "a_calls_b": {
+        "tu_goi": "Himiko",
+        "tu_xung": "tớ",
+        "moi_quan_he": "Bạn thân / Đồng đội",
+        "sac_thai": "Tự nhiên, bình đẳng, đôi lúc cằn nhằn vì cậu ấy nghịch"
+      },
+      "b_calls_a": {
+        "tu_goi": "Wataru",
+        "tu_xung": "tớ",
+        "moi_quan_he": "Bạn thân / Đồng đội",
+        "sac_thai": "Vô tư, nhí nhảnh, cổ vũ nhiệt tình"
+      }
+    },
+    {
+      "character_a": "Shinobibe Himiko",
+      "character_b": "Tsurugibe Shibaraku",
+      "a_calls_b": {
+        "tu_goi": "Sư phụ",
+        "tu_xung": "cháu",
+        "moi_quan_he": "Tiền bối - Hậu bối / Đồng đội",
+        "sac_thai": "Tinh nghịch, trêu đùa nhưng quý mến. Hay gọi trêu 'Sư phụ Hà Mã'"
+      },
+      "b_calls_a": {
+        "tu_goi": "Himiko",
+        "tu_xung": "ta",
+        "moi_quan_he": "Tiền bối - Hậu bối / Bảo bọc",
+        "sac_thai": "Chiều chuộng, dễ bất lực trước trò nghịch"
+      }
+    },
+    {
+      "character_a": "Ikusabe Wataru",
+      "character_b": "Toraoh (Tiger Prince)",
+      "a_calls_b": {
+        "tu_goi": "Toraoh",
+        "tu_xung": "tớ",
+        "moi_quan_he": "Bạn bè / Đối thủ thân thiết",
+        "sac_thai": "Thân mật, đôi khi bực vì tính ngang tàng của cậu ấy"
+      },
+      "b_calls_a": {
+        "tu_goi": "Wataru",
+        "tu_xung": "tớ",
+        "moi_quan_he": "Bạn bè / Đối thủ thân thiết",
+        "sac_thai": "Ngang tàng, kiêu, hay ra vẻ nhưng thực chất quan tâm"
+      }
+    },
+    {
+      "character_a": "Ikusabe Wataru",
+      "character_b": "Suzume (Sparrow)",
+      "a_calls_b": {
+        "tu_goi": "chị",
+        "tu_xung": "em",
+        "moi_quan_he": "Đồng đội / Chị em đồng hành",
+        "sac_thai": "Lễ phép, phối hợp ăn ý"
+      },
+      "b_calls_a": {
+        "tu_goi": "nhóc",
+        "tu_xung": "chị",
+        "moi_quan_he": "Đồng đội / Chị em đồng hành",
+        "sac_thai": "Cá tính, thực tế, ra dáng đàn chị"
+      }
+    },
+    {
+      "character_a": "Ikusabe Wataru",
+      "character_b": "Dodo",
+      "a_calls_b": {
+        "tu_goi": "ngươi",
+        "tu_xung": "ta",
+        "moi_quan_he": "Kẻ thù",
+        "sac_thai": "Quyết liệt, phẫn nộ, đối đầu chính tà"
+      },
+      "b_calls_a": {
+        "tu_goi": "ngươi",
+        "tu_xung": "ta",
+        "moi_quan_he": "Kẻ thù",
+        "sac_thai": "Kiêu ngạo, tà ác, áp chế"
+      }
+    },
+    {
+      "character_a": "Ikusabe Wataru",
+      "character_b": "Dolan",
+      "a_calls_b": {
+        "tu_goi": "ngươi",
+        "tu_xung": "ta",
+        "moi_quan_he": "Kẻ thù",
+        "sac_thai": "Quyết liệt, phẫn nộ, đối đầu chính tà"
+      },
+      "b_calls_a": {
+        "tu_goi": "ngươi",
+        "tu_xung": "ta",
+        "moi_quan_he": "Kẻ thù",
+        "sac_thai": "Hợm hĩnh, mỉa mai, trịch thượng"
+      }
+    },
+    {
+      "character_a": "Ikusabe Wataru",
+      "character_b": "Darkedar",
+      "a_calls_b": {
+        "tu_goi": "ngươi",
+        "tu_xung": "ta",
+        "moi_quan_he": "Kẻ thù",
+        "sac_thai": "Quyết liệt, phẫn nộ, đối đầu chính tà"
+      },
+      "b_calls_a": {
+        "tu_goi": "ngươi",
+        "tu_xung": "ta",
+        "moi_quan_he": "Kẻ thù",
+        "sac_thai": "Uy áp, lạnh lẽo, coi thường vạn vật"
+      }
+    },
+    {
+      "character_a": "Ikusabe Wataru",
+      "character_b": "Thần Mộc (Sacred Tree)",
+      "a_calls_b": {
+        "tu_goi": "Thần Mộc",
+        "tu_xung": "con",
+        "moi_quan_he": "Người dẫn đường / Bậc trưởng thượng",
+        "sac_thai": "Kính cẩn, tin tưởng"
+      },
+      "b_calls_a": {
+        "tu_goi": "Wataru",
+        "tu_xung": "ta",
+        "moi_quan_he": "Bậc trưởng thượng / Người dẫn đường",
+        "sac_thai": "Hiền từ, che chở, giọng cổ kính"
+      }
+    }
+  ],
+  "_nguon_tham_khao": [
+    "ja.wikipedia.org — 魔神英雄伝ワタル / ワタル2 / 超魔神英雄伝ワタル",
+    "tvtropes.org — Characters/MashinHeroWataru, MashinHeroWataru2",
+    "mashin-hero-wataru.fandom.com",
+    "Đối chiếu trực tiếp với thoại trong 142 file .ass",
+    "Đối chiếu chéo tên nhân vật/Mashin với thoại thực tế trong sub để xác minh danh tính (26/08/2026)",
+    "zh.wikipedia.org — 魔神英雄传系列角色列表 (đối chiếu tên Trung <-> Nhật)"
+  ],
+  "nhan_vat_ghi_chu": "Trường 'kanji' chỉ để tra cứu/đối chiếu, KHÔNG hiển thị trong phụ đề. Tên người luôn chỉ viết romaji.",
+  "chuc_danh_biet_danh": {
+    "_ghi_chu": "Chức danh / biệt danh — KHÁC tên người. Nhóm này CÓ chú Hán-Việt và thường dịch thẳng sang Hán-Việt thay vì giữ romaji, vì chúng là cách gọi chứ không phải tên gọi.",
+    "muc": [
+      {
+        "trong_sub": "Tiger Prince / Lord King-Tiger / Sir Tiger / King-Tiger",
+        "kanji": "虎王",
+        "vi": "Hổ Vương",
+        "ap_dung": "Khi sub dùng như CHỨC DANH/cách xưng hô -> dịch 'Hổ Vương'.",
+        "phan_biet": "Khi sub gọi thẳng như TÊN NGƯỜI -> viết 'Toraoh' (romaji, không chú). Cùng một chữ 虎王 nhưng hai vai trò khác nhau — đọc ngữ cảnh để chọn."
+      },
+      {
+        "trong_sub": "Saviour / Savior",
+        "kanji": "救世主",
+        "vi": "Cứu Thế Chủ",
+        "ap_dung": "Chức danh của Wataru. Luôn dùng 'Cứu Thế Chủ'.",
+        "phan_biet": "KHÔNG dịch 'Đấng cứu thế' (màu Kitô giáo). Khi nhân vật nói nhịu: 'Cứu Thế Chuối'."
+      },
+      {
+        "trong_sub": "Hippo",
+        "kanji": "—",
+        "vi": "Hà Mã",
+        "ap_dung": "Biệt danh trêu Shibaraku. Giữ cố định.",
+        "phan_biet": "—"
+      },
+      {
+        "trong_sub": "Master / Teacher",
+        "kanji": "師匠",
+        "vi": "Sư phụ",
+        "ap_dung": "Chức danh của Shibaraku.",
+        "phan_biet": "Cả 'Master' lẫn 'Teacher' đều chỉ Shibaraku, KHÔNG phải hai người."
+      }
+    ]
+  },
+  "ten_theo_moc_cot_truyen": {
+    "_nguyen_tac_cot_loi": "PHÂN BIỆT HAI VIỆC KHÁC NHAU — đây là chỗ dễ sai nhất:",
+    "duoc_phep": "SỬA PHIÊN ÂM SAI: sub viết sai chính tả romaji thì quy về romaji Nhật chuẩn. VD 'Zanjinmaru' -> 'Senjinmaru', 'Doakadar' -> 'Dowarudar'. Đây chỉ là sửa cách VIẾT của cùng một thực thể.",
+    "cam": "KHÔNG ĐƯỢC HỢP NHẤT DANH TÍNH: tại mỗi thời điểm trong cốt truyện, nhân vật/Mashin đang mang tên gì thì giữ nguyên tên đó. TUYỆT ĐỐI không đổi hết về một tên 'chuẩn' duy nhất, vì làm vậy là tiết lộ trước các cú lật.",
+    "cac_moc_phai_theo": [
+      {
+        "doi_tuong": "Toraoh / Shouryuushi",
+        "phan": "P1",
+        "truoc_moc": "Toraoh (hoặc chức danh 'Hổ Vương') — dùng xuyên suốt gần hết phần.",
+        "moc": "Cuối Phần 1, khi được Wataru và Seiryuuhi giải cứu, biến trở lại nguyên hình.",
+        "sau_moc": "Shouryuushi.",
+        "canh_bao": "Trước mốc TUYỆT ĐỐI không được gọi Shouryuushi, kể cả trong câu của người đã biết sự thật."
+      },
+      {
+        "doi_tuong": "Dowarudar / Doakudar",
+        "phan": "P2",
+        "truoc_moc": "Dowarudar — trùm Phần 2 (sub viết 'Doakadar', 151 lần, ở 42 tập).",
+        "moc": "Tập 45-46, lộ ra Dowarudar thật sự chính là Doakudar.",
+        "sau_moc": "Doakudar.",
+        "canh_bao": "Sub có SẴN cả hai tên và phân bố đúng theo cốt truyện: 'Doakudar' chỉ xuất hiện ở tập 1, 6, 10 (nhắc lại chuyện Phần 1 — đây là nhân vật quá khứ, hợp lệ) và tập 45, 46 (lúc lộ diện). GIỮ NGUYÊN phân bố này, đừng gộp."
+      },
+      {
+        "doi_tuong": "Ryujinmaru / Ryuoumaru",
+        "phan": "P1",
+        "truoc_moc": "Ryujinmaru.",
+        "moc": "Khi hợp nhất với linh hồn Kujinmaru và tiến hoá.",
+        "sau_moc": "Ryuoumaru (sub viết 'Ryukingmaru').",
+        "canh_bao": "Sau mốc, sub vẫn có lúc gọi 'Ryujinmaru' — theo đúng sub, đừng tự đổi hết thành Ryuoumaru."
+      },
+      {
+        "doi_tuong": "Shinsei Ryujinmaru / Ryuseimaru",
+        "phan": "P2",
+        "truoc_moc": "Shinsei Ryujinmaru (sub gọi tắt 'Ryujinmaru').",
+        "moc": "Khi Wataru có được Kouryuuken (光龍剣).",
+        "sau_moc": "Ryuseimaru (sub viết 'RyuSeimaru').",
+        "canh_bao": "Sub xác nhận mốc: 'Ryujinmaru has also transformed into RyuSeimaru.'"
+      },
+      {
+        "doi_tuong": "Các dạng biến hình của Ryujinmaru",
+        "phan": "P3",
+        "truoc_moc": "Ryujinmaru.",
+        "moc": "Mỗi lần biến hình sang dạng mới trong trận.",
+        "sau_moc": "Shishi / Houou / Kennou / Gekkou / Byakko Ryujinmaru — theo đúng dạng đang dùng lúc đó.",
+        "canh_bao": "Đây là biến hình tạm thời trong trận, không phải tiến hoá vĩnh viễn — hết trận quay về Ryujinmaru."
+      },
+      {
+        "doi_tuong": "Ikusabe Wataru",
+        "phan": "P3",
+        "truoc_moc": "Wataru bình thường.",
+        "moc": "Dodo đánh cắp Trái tim Thiện lương (đầu Phần 3).",
+        "sau_moc": "Vẫn tên Wataru, NHƯNG sắc thái lời thoại lạnh lùng/cộc cằn — giữ đúng, đây là trục chính của phần 3.",
+        "canh_bao": "Tên không đổi, chỉ giọng điệu đổi. Đừng 'làm mềm' lời thoại về như Phần 1-2."
+      }
+    ],
+    "quy_tac_thuc_hanh": "Khi gặp một tên, hỏi hai câu: (1) Sub có viết sai chính tả romaji không? -> sửa. (2) Đây có phải danh tính khác ở mốc khác của cốt truyện không? -> GIỮ NGUYÊN theo mốc, không quy đổi."
+  },
+  "nguon_goc_ban_sub": {
+    "_tom_tat": "Sub tiếng Anh dịch TỪ BẢN TIẾNG TRUNG. Vì vậy tên riêng trong sub là HỖN HỢP: phần lớn giữ phiên âm Nhật, một số ít dùng TÊN TRUNG đã bản địa hoá.",
+    "ten_giu_phien_am_nhat": [
+      "Wataru",
+      "Himiko",
+      "Shibaraku",
+      "Doakudar",
+      "Umihiko",
+      "Ryujinmaru",
+      "Toraoh (dưới dạng 'Tiger…')"
+    ],
+    "ten_dung_ban_dich_trung": [
+      {
+        "trong_sub": "Gunamun / DuguGunamun / Dubugunamun",
+        "tieng_trung": "古拿玛 (Gǔnámǎ)",
+        "tieng_nhat": "渡部クラマ Watabe Kurama",
+        "giai_thich": "KHÔNG phải phiên âm hỏng mà là TÊN TRUNG. Wikipedia tiếng Trung ghi 古拿玛 là người điều khiển 空神丸 và 空王丸 — khớp với Soujinmaru trong sub. Bản Đài Loan cũ dùng 库拉莫 (Kùlāmò), gần Kurama hơn. 'Dugu/Dubu' là họ 渡部 đọc âm Hán."
+      },
+      {
+        "trong_sub": "Sparrow",
+        "tieng_trung": "麻雀",
+        "tieng_nhat": "スズメ Suzume",
+        "giai_thich": "Bản Trung dịch nghĩa スズメ thành 麻雀 (chim sẻ), sub tiếng Anh dịch tiếp thành 'Sparrow'."
+      }
+    ],
+    "canh_bao": "Khi gặp một tên lạ trong sub, kiểm tra xem có phải tên Trung không trước khi kết luận là phiên âm sai.",
+    "QUYET_DINH": {
+      "chot": "100% dùng tên tiếng Nhật. Mọi tên gốc Trung đều phải quy đổi.",
+      "bang_quy_doi_bat_buoc": [
+        {
+          "trong_sub": "Gunamun / DuguGunamun / Dubugunamun",
+          "phai_dich_thanh": "Kurama (họ đầy đủ: Watabe Kurama)",
+          "so_lan": "242 (P1:144, P2:96, P3:2)",
+          "goc": "tên Trung 古拿玛"
+        },
+        {
+          "trong_sub": "Sparrow",
+          "phai_dich_thanh": "Suzume",
+          "so_lan": "176 (P2:2, P3:174)",
+          "goc": "tên Trung 麻雀. Sub P2 tự chú: 'su . . . Sparrow ( suzume )'"
+        },
+        {
+          "trong_sub": "Star Mountain",
+          "phai_dich_thanh": "Seikaizan",
+          "so_lan": "56 (P2)",
+          "goc": "dịch nghĩa 星界山"
+        },
+        {
+          "trong_sub": "Mt Soukai / Mt. Sokai",
+          "phai_dich_thanh": "Soukaizan",
+          "so_lan": "210",
+          "goc": "dịch nghĩa 創界山"
+        },
+        {
+          "trong_sub": "Sacred Tree",
+          "phai_dich_thanh": "Shinboku",
+          "so_lan": "178",
+          "goc": "dịch nghĩa 神木"
+        },
+        {
+          "trong_sub": "Dragon God",
+          "phai_dich_thanh": "Ryujin",
+          "so_lan": "—",
+          "goc": "dịch nghĩa 龍神"
+        },
+        {
+          "trong_sub": "Tiger / Tiger Prince / Sir Tiger",
+          "phai_dich_thanh": "Toraoh (tên) hoặc 'Hổ Vương' (chức danh)",
+          "so_lan": "577",
+          "goc": "dịch nghĩa 虎王"
+        },
+        {
+          "trong_sub": "Zanjinmaru",
+          "phai_dich_thanh": "Senjinmaru",
+          "so_lan": "97",
+          "goc": "phiên âm sai 戦神丸"
+        },
+        {
+          "trong_sub": "Doakadar",
+          "phai_dich_thanh": "Dowarudar",
+          "so_lan": "151 (P2)",
+          "goc": "phiên âm sai ドワルダー"
+        },
+        {
+          "trong_sub": "Soujinmaru",
+          "phai_dich_thanh": "Kujinmaru",
+          "so_lan": "42",
+          "goc": "phiên âm sai 空神丸"
+        },
+        {
+          "trong_sub": "Ryukingmaru",
+          "phai_dich_thanh": "Ryuoumaru",
+          "so_lan": "39",
+          "goc": "dịch lai 龍王丸"
+        },
+        {
+          "trong_sub": "Tigermaru",
+          "phai_dich_thanh": "Jyakomaru",
+          "so_lan": "31",
+          "goc": "dịch nghĩa 邪虎丸"
+        },
+        {
+          "trong_sub": "Darkedar",
+          "phai_dich_thanh": "Ankokudar",
+          "so_lan": "118",
+          "goc": "dịch nghĩa 暗黒 trong アンコクダー"
+        },
+        {
+          "trong_sub": "Dorogami",
+          "phai_dich_thanh": "Donalkami",
+          "so_lan": "64",
+          "goc": "phiên âm sai ドナルカミ"
+        },
+        {
+          "trong_sub": "Dolan",
+          "phai_dich_thanh": "Doran",
+          "so_lan": "83",
+          "goc": "phiên âm sai ドラン"
+        },
+        {
+          "trong_sub": "Doru",
+          "phai_dich_thanh": "Doruku",
+          "so_lan": "149",
+          "goc": "phiên âm sai ドルク"
+        },
+        {
+          "trong_sub": "Majin",
+          "phai_dich_thanh": "Mashin",
+          "so_lan": "43 (35 tập)",
+          "goc": "魔神 — trong bộ này đọc là マシン Mashin (ja.wikipedia ghi rõ '魔神（マシン）'), KHÔNG phải Majin."
+        },
+        {
+          "trong_sub": "Level 1..7",
+          "phai_dich_thanh": "kaisou (界層) — dịch 'tầng giới'",
+          "so_lan": "17 (11 tập)",
+          "goc": "界層 kaisou = 7 tầng của Soukaizan. Wiki lưu ý: hay bị viết nhầm 階層, nghĩa đúng là '世界の大層'."
+        },
+        {
+          "trong_sub": "Dou-Ryu Sword",
+          "phai_dich_thanh": "Touryuuken",
+          "so_lan": "56 (56 tập)",
+          "goc": "登龍剣 — sub phiên âm nửa vời"
+        },
+        {
+          "trong_sub": "Dragon Queen",
+          "phai_dich_thanh": "Seiryuuhi",
+          "kanji": "聖龍妃",
+          "han_viet": "Thánh Long Phi",
+          "can_cu": "P1: 'save Dragon Queen and Dragon Prince' — nữ hoàng Soukaizan, mẹ Shouryuushi. Wiki: 聖龍妃 = Holy Dragon Empress."
+        },
+        {
+          "trong_sub": "Dragon Prince",
+          "phai_dich_thanh": "Shouryuushi",
+          "kanji": "翔龍子",
+          "han_viet": "Tường Long Tử",
+          "can_cu": "P1: đi kèm Dragon Queen. Wiki: 翔龍子 là con của 聖龍妃, hoàng tử Soukaizan — chính là thân phận thật của Toraoh."
+        },
+        {
+          "trong_sub": "Dragon Wing",
+          "phai_dich_thanh": "Shouryuushi",
+          "kanji": "翔龍子",
+          "han_viet": "Tường Long Tử",
+          "can_cu": "P3ep30: 'Tiger Prince and Dragon Wing are one person?' — xác nhận cùng một người với Toraoh. 翔 = bay lượn, sub dịch thành 'Wing'."
+        },
+        {
+          "trong_sub": "Sword King / Swords King",
+          "phai_dich_thanh": "Kennou",
+          "kanji": "剣王",
+          "han_viet": "Kiếm Vương",
+          "can_cu": "P3: 'Ryujinmaru received the Sword King's power' — ứng với dạng Kennou Ryujinmaru (剣王龍神丸)."
+        },
+        {
+          "trong_sub": "White Tiger",
+          "phai_dich_thanh": "Byakko",
+          "kanji": "白虎",
+          "han_viet": "Bạch Hổ",
+          "can_cu": "P3: ứng với dạng Byakko Ryujinmaru (白虎龍神丸)."
+        },
+        {
+          "trong_sub": "Lion (trong tên chiêu/dạng)",
+          "phai_dich_thanh": "Shishi",
+          "kanji": "獅子",
+          "han_viet": "Sư Tử",
+          "can_cu": "P3: ứng với dạng Shishi Ryujinmaru (獅子龍神丸). VD 'Supreme Lion of Light Dragon Fist'."
+        },
+        {
+          "trong_sub": "Phoenix (trong tên chiêu/dạng)",
+          "phai_dich_thanh": "Houou",
+          "kanji": "鳳凰",
+          "han_viet": "Phượng Hoàng",
+          "can_cu": "Ứng với Houou Ryujinmaru (鳳凰龍神丸) và chiêu Houryuuken (鳳龍剣)."
+        },
+        {
+          "trong_sub": "Moonlight (trong tên chiêu/dạng)",
+          "phai_dich_thanh": "Gekkou",
+          "kanji": "月光",
+          "han_viet": "Nguyệt Quang",
+          "can_cu": "Ứng với Gekkou Ryujinmaru (月光龍神丸)."
+        },
+        {
+          "trong_sub": "Evil Tigermaru",
+          "phai_dich_thanh": "Jyakomaru",
+          "kanji": "邪虎丸",
+          "han_viet": "Tà Hổ Hoàn",
+          "can_cu": "邪 = tà/evil, 虎 = hổ/tiger. Cùng một Mashin với 'Tigermaru'."
+        },
+        {
+          "trong_sub": "Light Dragon Fist",
+          "phai_dich_thanh": "Kouryuuken",
+          "kanji": "光龍拳",
+          "han_viet": "Quang Long Quyền",
+          "can_cu": "P3 — dạng QUYỀN (拳), khác Light Dragon Sword là KIẾM (剣). Cùng đọc Kouryuuken, phân biệt bằng Hán-Việt."
+        },
+        {
+          "trong_sub": "Star Dragon (sword)",
+          "phai_dich_thanh": "Seiryuuken",
+          "kanji": "星龍剣",
+          "han_viet": "Tinh Long Kiếm",
+          "can_cu": "P2 — bộ đôi với Kouryuuken 光龍剣, ứng với Ryuseimaru 龍星丸. ĐỘ CHẮC: cao nhưng chưa thấy nguồn ghi thẳng kanji."
+        },
+        {
+          "trong_sub": "Houjinmaru / Hurojinmaru",
+          "phai_dich_thanh": "Genjinmaru",
+          "kanji": "幻神丸",
+          "han_viet": "Ảo Thần Hoàn",
+          "can_cu": "Mashin của Himiko. Sub: 'Himiko, summon Houjinmaru!' (P1 ep28,29). 幻 tiếng Trung đọc 'huàn' -> sub phiên 'Hou'/'Huro'. KHÔNG phải lỗi chính tả của Soujinmaru — hai Mashin khác nhau."
+        },
+        {
+          "trong_sub": "Lion Ryujinmaru",
+          "phai_dich_thanh": "Shishi Ryujinmaru",
+          "kanji": "獅子龍神丸",
+          "han_viet": "Sư Tử Long Thần Hoàn",
+          "can_cu": "P3 — sub dịch nghĩa 獅子 thành 'Lion'. VD 'Super Transformation! Lion Ryujinmaru!'"
+        },
+        {
+          "trong_sub": "Phoenix Ryujinmaru",
+          "phai_dich_thanh": "Houou Ryujinmaru",
+          "kanji": "鳳凰龍神丸",
+          "han_viet": "Phượng Hoàng Long Thần Hoàn",
+          "can_cu": "P3 — sub dịch nghĩa 鳳凰 thành 'Phoenix'. VD 'Fire Transformation! Phoenix Ryujinmaru!'"
+        },
+        {
+          "trong_sub": "Empress Sacred Dragon / Sacred Dragon Empress",
+          "phai_dich_thanh": "Seiryuuhi",
+          "kanji": "聖龍妃",
+          "han_viet": "Thánh Long Phi",
+          "can_cu": "P3ep31: 'Your mother is Empress Sacred Dragon' — mẹ của Shouryuushi. Cùng nhân vật với 'Dragon Queen' ở P1."
+        },
+        {
+          "trong_sub": "Shinobu clan / Ninja Clan",
+          "phai_dich_thanh": "gia tộc Shinobibe",
+          "kanji": "忍部",
+          "han_viet": "Nhẫn Bộ",
+          "can_cu": "P1ep01: 'Himiko is the leader of the Shinobu clan'; P2ep12: 'l'm Himiko, the 13th leader of Ninja Clan'. Chính là họ của Himiko."
+        },
+        {
+          "trong_sub": "Doukadar",
+          "phai_dich_thanh": "Dowarudar",
+          "kanji": "ドワルダー",
+          "han_viet": "—",
+          "can_cu": "Biến thể chính tả THỨ BA của Doakadar (P2ep10, ep26: 'Doukadar who rule Star Mountain'). Gộp chung với Doakadar."
+        },
+        {
+          "trong_sub": "Savior",
+          "phai_dich_thanh": "Cứu Thế Chủ",
+          "kanji": "救世主",
+          "han_viet": "—",
+          "can_cu": "Chỉ là chính tả Anh-Mỹ của 'Saviour' (11 lần vs 118 lần). Cùng một chức danh."
+        },
+        {
+          "trong_sub": "Bull Shibaraku / Wild Bull Shibaraku",
+          "phai_dich_thanh": "Yagyuu Shibaraku-ryuu",
+          "kanji": "野牛シバラク流",
+          "han_viet": "Dã Ngưu Shibaraku Lưu",
+          "can_cu": "Tên LƯU PHÁI kiếm của Shibaraku (野牛 = dã ngưu/bò rừng), không phải biệt danh."
+        },
+        {
+          "trong_sub": "Blue Lightning",
+          "phai_dich_thanh": "Thunder Blue",
+          "kanji": "サンダーブルー",
+          "han_viet": "—",
+          "so_lan": "~20 (P1 ep03-05)",
+          "can_cu": "Sub ĐẢO NGƯỢC và dịch nghĩa: Thunder->Lightning, rồi đổi thứ tự thành 'Blue Lightning'. Nhân vật tự si, ám ảnh nhan sắc, luôn soi gương cầm tay tìm nếp nhăn — khớp thoại 'Ta đẹp quá đi mất!' và 'Gương kia ngự ở trên tường'. Lái Mashin ヘルコプター (dạng trực thăng lai người), chiêu デスプレサイトプロペラ Death Plate Propeller = 'Death Rotor' trong sub."
+        },
+        {
+          "trong_sub": "Guruzitam",
+          "phai_dich_thanh": "Guruzitam (GIỮ NGUYÊN)",
+          "kanji": "クルージング・トム",
+          "han_viet": "—",
+          "so_lan": "~15 (P1 ep01-05)",
+          "can_cu": "User đã chốt 27/08: giữ romaji Guruzitam, KHÔNG đổi về Cruising Tom. Dòng này chỉ để tra cứu."
+        },
+        {
+          "trong_sub": "Cruelty / General Cruelty / Lord Cruelty",
+          "phai_dich_thanh": "Zan Kokku",
+          "kanji": "ザン・コック",
+          "can_cu": "Anh cả 魔界ザン三兄弟. Tên chơi chữ từ 残酷 zankoku = tàn khốc -> sub dịch nghĩa thành 'Cruelty'."
+        },
+        {
+          "trong_sub": "Brutal",
+          "phai_dich_thanh": "Zan Gyakku",
+          "kanji": "ザン・ギャック",
+          "can_cu": "Em út. Chơi chữ từ 残虐 zangyaku = tàn ngược. ĐỘ CHẮC: cao (khớp nghĩa), chưa thấy nguồn ghi thẳng."
+        },
+        {
+          "trong_sub": "Heartless",
+          "phai_dich_thanh": "Zan Gorotsukii",
+          "kanji": "ザン・ゴロツキー",
+          "can_cu": "Anh thứ hai. ĐỘ CHẮC: trung bình — suy bằng loại trừ sau khi ghép hai người kia."
+        },
+        {
+          "trong_sub": "Savage Brothers",
+          "phai_dich_thanh": "Makai Zan Sankyoudai",
+          "kanji": "魔界ザン三兄弟",
+          "han_viet": "Ma Giới Zan Tam Huynh Đệ",
+          "can_cu": "Ba trong Tứ Thiên Vương của Doakudar."
+        },
+        {
+          "trong_sub": "Amalgamator",
+          "phai_dich_thanh": "Gattaidar",
+          "kanji": "ガッタイダー",
+          "can_cu": "Mashin hợp thể của ba anh em Zan (合体 gattai = hợp thể). Ghép từ ba thân Body/Lefter/Righter."
+        },
+        {
+          "trong_sub": "Dongoro",
+          "phai_dich_thanh": "Don Goro",
+          "kanji": "ドン・ゴロ",
+          "can_cu": "Một trong Tứ Thiên Vương, thầy dạy của Toraoh."
+        },
+        {
+          "trong_sub": "Fighter Monkey / Fighter Monkey 2",
+          "phai_dich_thanh": "Battle Gorilla / Battle Gorilla 2",
+          "kanji": "バトルゴリラ",
+          "can_cu": "Mashin của Shuwal Vinegar, thuộc hạ Cruising Tom. Sub dịch nghĩa ゴリラ thành 'Monkey'."
+        },
+        {
+          "trong_sub": "Shuwaslika",
+          "phai_dich_thanh": "Shuwal Vinegar",
+          "kanji": "シュワル・ビネガー",
+          "can_cu": "Tên gốc シュワル・ビネガー (Shuwal Vinegar). Vinegar = giấm -> Hán-Việt 酸醋 Shuwal Vinegar."
+        },
+        {
+          "trong_sub": "Death / God of Death",
+          "phai_dich_thanh": "Tử Thần",
+          "kanji": "デス・ゴッド",
+          "can_cu": "Trùm tầng giới hai. Tên gốc là katakana tiếng Anh 'Death God' nên dùng Hán-Việt cho dễ hiểu."
+        },
+        {
+          "trong_sub": "Lil' Dan",
+          "phai_dich_thanh": "Tiểu Dan",
+          "kanji": "(chưa tra được)",
+          "can_cu": "Quái vật do Hentama tạo ra, Wataru đặt tên. Chưa tra được tên Nhật — dùng Hán-Việt 小 (tiểu) cho khỏi để nguyên tiếng Anh."
+        },
+        {
+          "trong_sub": "Quirky Gerony / Gerony",
+          "phai_dich_thanh": "Quái kiệt Zorori / Zorori",
+          "kanji": "怪傑ゾロリ",
+          "can_cu": "Wikipedia JP. 怪傑=quái kiệt (đúng chữ sub dịch thành 'Quirky'). Nhại 怪傑ゾロ = tên Nhật của Zorro. Nợ 99.999.997 credit, con nợ số một Soukaizan, nghề thật là thợ làm tóc."
+        },
+        {
+          "trong_sub": "Bamboo Panda / Bamboo",
+          "phai_dich_thanh": "Sancho Panda / Sancho",
+          "kanji": "サンチョ・パンダ",
+          "can_cu": "Wikipedia JP. Nhại Sancho Panza (giám mã Đôn Ki-hô-tê). LÀ TÊN NGƯỜI -> giữ romaji, KHÔNG dịch. Theo Zorori chỉ để đòi lại 100 credit, nghề thật là phụ tá tiệm tóc."
+        },
+        {
+          "trong_sub": "dollar / $",
+          "phai_dich_thanh": "credit",
+          "kanji": "クレジット",
+          "can_cu": "Đơn vị tiền của Soukaizan. Sub Anh đổi thành dollar."
+        },
+        {
+          "trong_sub": "Souye Souye / Souya Souya",
+          "phai_dich_thanh": "Soiya Soiya",
+          "kanji": "ソイヤ・ソイヤ",
+          "can_cu": "Wikipedia JP: thủ lĩnh 第3界層."
+        },
+        {
+          "trong_sub": "Black Smoke",
+          "phai_dich_thanh": "Akku Smoggul",
+          "kanji": "アック・スモッグル",
+          "can_cu": "Wikipedia JP: thủ lĩnh 第5界層, bẩn thỉu, thích săn thú và chơi golf (khớp ep27 gag golf). Sub dịch nghĩa スモッグル=smog."
+        },
+        {
+          "trong_sub": "BB Yeba-Bayerbo / Ba-Bayerbo",
+          "phai_dich_thanh": "Bibide Baba Debu",
+          "kanji": "ビビデ・ババ・デブー",
+          "can_cu": "Wikipedia JP: thủ lĩnh 第6界層, NỮ, MẸ của năm anh em. 'BB'=ビビデ."
+        },
+        {
+          "trong_sub": "BB Prince",
+          "phai_dich_thanh": "Bibide Ouji",
+          "kanji": "ビビデ・オージ",
+          "can_cu": "Con cả, phép ngủ (khớp ep28: đàn ông trong làng đều bị yểm cho ngủ)."
+        },
+        {
+          "trong_sub": "BBSskababu / BBdadbabadabu",
+          "phai_dich_thanh": "Bibide Shishi Kababu",
+          "kanji": "ビビデ・シシ・カバブー",
+          "can_cu": "Con thứ hai, phép bẻ cong không gian (khớp ep29: dòng sông không lối ra). Sub ep29 tự nói 'I'm the second son'."
+        },
+        {
+          "trong_sub": "BB Yesarlema / Shilamaje",
+          "phai_dich_thanh": "Bibide Seikima Tsuu",
+          "kanji": "ビビデ・セーキマ・ツー",
+          "can_cu": "Con thứ ba, phép hồi sinh (khớp ep30: nghĩa địa + đội quân âm binh). Tên nhại ban nhạc 聖飢魔II."
+        },
+        {
+          "trong_sub": "BB Yeze-Bimolido",
+          "phai_dich_thanh": "Bibide Chibit Moreteru",
+          "kanji": "ビビデ・チビット・モレーテル",
+          "can_cu": "Con thứ tư, biến người lớn thành trẻ con (khớp ep31-32)."
+        },
+        {
+          "trong_sub": "BB Yeyarin-Biya / Yarin-Biya",
+          "phai_dich_thanh": "Bibide Ara Bian",
+          "kanji": "ビビデ・アラ・ビアン",
+          "can_cu": "Con út, phép dùng khói biến người thành thú. Tên nhại Arabian."
+        },
+        {
+          "trong_sub": "Evil Lion / Evil King",
+          "phai_dich_thanh": "Jareon",
+          "kanji": "ジャレオン",
+          "can_cu": "Vật cưỡi của Toraoh trong cuộc đua ep24. 邪+レオン = 'sư tử tà' -> sub dịch nghĩa. Vật cưỡi của Wataru là タマンゴ Tamango."
+        },
+        {
+          "trong_sub": "Water of Life",
+          "phai_dich_thanh": "nước thánh phục sinh",
+          "kanji": "復活の聖水",
+          "can_cu": "Nước hồi sinh Ryujinmaru thành Ryuoumaru cùng với hồn Kujinmaru."
+        }
+      ],
+      "_luu_y_them": "Sub không chỉ phiên âm sai mà còn ĐẢO THỨ TỰ và DỊCH NGHĨA MỘT PHẦN tên riêng (Thunder Blue -> 'Blue Lightning'). Khi gặp tên tiếng Anh nghe 'quá xuôi', hãy nghi ngờ và tra."
+    }
+  },
+  "ten_chieu_thuc": {
+    "_canh_bao": "Sub chứa 122 TÊN CHIÊU KHÁC NHAU, TẤT CẢ đều bị dịch nghĩa sang tiếng Anh. Theo quy tắc 100% tiếng Nhật, mỗi tên phải quy về romaji Nhật + chú Hán-Việt khi tung chiêu.",
+    "_cach_lam": "Chiêu của Wataru đa số có dạng ◯龍剣 (…ryuuken) hoặc ◯龍拳 (…ryuuken/…ryuuken). Tra tên gốc trên dic.pixiv.net hoặc ja.wikipedia trước khi dịch. Nếu không tra được, GIỮ NGUYÊN tiếng Anh và ghi chú lại để rà sau — KHÔNG tự bịa romaji.",
+    "da_xac_minh": [
+      {
+        "trong_sub": "Dou-Ryu Sword",
+        "romaji": "Touryuuken",
+        "kanji": "登龍剣",
+        "han_viet": "Đăng Long Kiếm",
+        "so_lan": 68,
+        "ghi_chu": "Chiêu chủ lực của Ryujinmaru. Sub phiên âm một nửa: 'Dou-Ryu' = Tou-Ryuu."
+      },
+      {
+        "trong_sub": "Dragon Phoenix Sword",
+        "romaji": "Houryuuken",
+        "kanji": "鳳龍剣",
+        "han_viet": "Phượng Long Kiếm",
+        "so_lan": 6,
+        "ghi_chu": "Mạnh hơn Touryuuken, tạo sóng năng lượng hình phượng hoàng."
+      },
+      {
+        "trong_sub": "Light Dragon Sword",
+        "romaji": "Kouryuuken",
+        "kanji": "光龍剣",
+        "han_viet": "Quang Long Kiếm",
+        "so_lan": 15,
+        "ghi_chu": "Phần 2 — chính thanh kiếm giúp Shinsei Ryujinmaru tiến hoá thành Ryuseimaru."
+      },
+      {
+        "trong_sub": "Moonlight Dou-Ryu Sword",
+        "romaji": "Gekkou Touryuuken",
+        "kanji": "月光登龍剣",
+        "han_viet": "Nguyệt Quang Đăng Long Kiếm",
+        "so_lan": 3,
+        "ghi_chu": "Phần 3 — ứng với dạng Gekkou Ryujinmaru."
+      },
+      {
+        "trong_sub": "Light Dragon Fist",
+        "romaji": "Kouryuuken",
+        "kanji": "光龍拳",
+        "han_viet": "Quang Long Quyền",
+        "so_lan": 6
+      },
+      {
+        "trong_sub": "Star Dragon Sword / Seiryu Sword",
+        "romaji": "Seiryuuken",
+        "kanji": "星龍剣",
+        "han_viet": "Tinh Long Kiếm",
+        "so_lan": 28,
+        "ghi_chu": "XÁC NHẬN KÉP: sub thường dịch nghĩa thành 'Star Dragon Sword' (26 lần) nhưng ở P2ep03 và ep21 lại PHIÊN ÂM thành 'Seiryu Sword'. Cả hai đứng sau cùng câu hô 'Super skill!' -> cùng một chiêu. Đây là chiêu chủ lực của Shinsei Ryujinmaru suốt Phần 2."
+      },
+      {
+        "trong_sub": "Dragon Thunder Punch / Dragon Thunder Fist",
+        "romaji": "Ryuuraiken",
+        "kanji": "龍雷拳",
+        "han_viet": "Long Lôi Quyền",
+        "so_lan": 19,
+        "phan": "P1,P2",
+        "ghi_chu": "Phóng sét từ hai vai."
+      },
+      {
+        "trong_sub": "Dragon Teeth Punch / Dragon Teeth Fist",
+        "romaji": "Ryuugaken",
+        "kanji": "龍牙拳",
+        "han_viet": "Long Nha Quyền",
+        "so_lan": 11,
+        "phan": "P1,P2",
+        "ghi_chu": "Bắn móng vuốt (龍爪) ở hai vai. 牙 = nanh/răng -> sub dịch 'Teeth'."
+      },
+      {
+        "trong_sub": "Fire Dragon Punch / Fiery Dragon Fist / Fiery Dragon Punch / Blazing Dragon Punch",
+        "romaji": "Enryuuken",
+        "kanji": "炎龍拳",
+        "han_viet": "Viêm Long Quyền",
+        "so_lan": 13,
+        "phan": "P1,P2",
+        "ghi_chu": "Phun lửa từ phần bụng."
+      },
+      {
+        "trong_sub": "Flying Dragon Fist / Flying Dragon Light Punch",
+        "romaji": "Hiryuuken",
+        "kanji": "飛龍拳",
+        "han_viet": "Phi Long Quyền",
+        "so_lan": 6,
+        "phan": "P1,P2",
+        "ghi_chu": "Bắn chuỳ xích từ lỗ ngực."
+      },
+      {
+        "trong_sub": "Phoenix Thunder Blast",
+        "romaji": "Houraiha",
+        "kanji": "鳳雷波",
+        "han_viet": "Phượng Lôi Ba",
+        "so_lan": 6,
+        "phan": "P1",
+        "ghi_chu": "Đạn năng lượng bắn từ miệng khi ở dạng phượng hoàng."
+      },
+      {
+        "trong_sub": "Dragon Phoenix Sword / Phoenix Dragon Sword / Phoenix Dragon Slash",
+        "romaji": "Houryuuken",
+        "kanji": "鳳龍剣",
+        "han_viet": "Phượng Long Kiếm",
+        "so_lan": 12,
+        "phan": "P1",
+        "ghi_chu": "Kiếm mạnh hơn Touryuuken, tạo sóng hình phượng hoàng."
+      },
+      {
+        "trong_sub": "Star Dragon Sword / Seiryu Sword",
+        "romaji": "Seiryuuken",
+        "kanji": "星龍剣",
+        "han_viet": "Tinh Long Kiếm",
+        "so_lan": 28,
+        "phan": "P2",
+        "ghi_chu": "XÁC NHẬN KÉP: sub thường dịch nghĩa thành 'Star Dragon Sword' (26 lần) nhưng ở P2ep03 và ep21 lại PHIÊN ÂM thành 'Seiryu Sword'. Cả hai đứng sau cùng câu hô 'Super skill!' -> cùng một chiêu. Đây là chiêu chủ lực của Shinsei Ryujinmaru suốt Phần 2."
+      },
+      {
+        "trong_sub": "Galactic Dragon Teeth Punch / Galactic Dragon Fang Fist / Galactic Fang Fist",
+        "romaji": "Ginga Ryuugaken",
+        "kanji": "銀河龍牙拳",
+        "han_viet": "Ngân Hà Long Nha Quyền",
+        "so_lan": 3,
+        "phan": "P2",
+        "ghi_chu": "Bản 銀河 của 龍牙拳."
+      },
+      {
+        "trong_sub": "Phoenix Dou-Ryu Sword",
+        "romaji": "Houou Touryuuken",
+        "kanji": "鳳凰登龍剣",
+        "han_viet": "Phượng Hoàng Đăng Long Kiếm",
+        "so_lan": 5,
+        "phan": "P3",
+        "ghi_chu": "Touryuuken ở dạng Houou Ryujinmaru."
+      },
+      {
+        "trong_sub": "Bull Shibaraku Cross Slash / Wild Bull Shibaraku Galactic Criss-Cross Slash / Cross Slash",
+        "romaji": "Yagyuu Shibaraku-ryuu — Batsu no Ji Giri",
+        "kanji": "野牛シバラク流・×の字斬り",
+        "han_viet": "Dã Ngưu Shibaraku Lưu — Thập Tự Trảm",
+        "so_lan": 7,
+        "phan": "P1,P2,P3",
+        "ghi_chu": "Chiêu ký danh của Tsurugibe Shibaraku, dùng cả khi lái Senjinmaru. Hai kiếm chém chéo đồng thời (袈裟斬り + chém chéo trái), vừa công vừa thủ. Bản Phần 2 có tiền tố 銀河 (Ginga) -> sub dịch 'Galactic'. Sub rút gọn thành 'Cross Slash' ở P2/P3 — cùng một chiêu."
+      },
+      {
+        "trong_sub": "The Sword of the Dragon-King / DragonKing Sword / The Sword",
+        "romaji": "Ryuou no Ken",
+        "kanji": "龍王の剣",
+        "han_viet": "Long Vương Chi Kiếm",
+        "so_lan": 3,
+        "phan": "P1",
+        "ghi_chu": "P1ep44: 'Draw the DragonKing Sword, and you'll become the true Avatar!'. Có trong danh sách vũ khí của Ryuoumaru trên srw.wiki."
+      },
+      {
+        "trong_sub": "Sword King Dou-Ryu Sword",
+        "romaji": "Kennou Touryuuken",
+        "kanji": "剣王登龍剣",
+        "han_viet": "Kiếm Vương Đăng Long Kiếm",
+        "so_lan": 2,
+        "phan": "P3",
+        "ghi_chu": "Touryuuken ở dạng Kennou Ryujinmaru (剣王龍神丸). Ghép từ hai mục đã xác minh: Kennou 剣王 + Touryuuken 登龍剣."
+      },
+      {
+        "trong_sub": "Super Flying Dragon Punch",
+        "romaji": "Chou Hiryuuken",
+        "kanji": "超飛龍拳",
+        "han_viet": "Siêu Phi Long Quyền",
+        "so_lan": 2,
+        "phan": "P2",
+        "ghi_chu": "Bản 超 (Chou/Siêu) của Hiryuuken 飛龍拳."
+      },
+      {
+        "trong_sub": "Permafrost Sword / The Permafrost Sword",
+        "romaji": "Gokkan Touryuuken",
+        "kanji": "極寒登龍剣",
+        "han_viet": "Cực Hàn Đăng Long Kiếm",
+        "so_lan": 38,
+        "phan": "P1",
+        "ghi_chu": "Ryujinmaru. 極寒 = cực lạnh -> sub dịch 'Permafrost'. KHÔNG phải chiêu boss tuần như tôi xếp lúc đầu."
+      },
+      {
+        "trong_sub": "Fire Sword",
+        "romaji": "Kaen Touryuuken",
+        "kanji": "火炎登龍剣",
+        "han_viet": "Hoả Viêm Đăng Long Kiếm",
+        "so_lan": 20,
+        "phan": "P1",
+        "ghi_chu": "Ryujinmaru. Cặp đối với 極寒登龍剣. Cũng KHÔNG phải chiêu boss tuần."
+      },
+      {
+        "trong_sub": "Icy Lightning Dragon Punch",
+        "romaji": "Byakko Hyouraiken",
+        "kanji": "白虎氷雷拳",
+        "han_viet": "Bạch Hổ Băng Lôi Quyền",
+        "so_lan": 2,
+        "phan": "P3",
+        "ghi_chu": "Chiêu của Byakko Ryujinmaru (白虎龍神丸). 氷=băng, 雷=lôi -> khớp 'Icy Lightning'. 'Thunderbolt Twist' chính là lệnh biến hình sang dạng Byakko."
+      },
+      {
+        "trong_sub": "Light Dragon Fist / Supreme Lion of Light Dragon Fist",
+        "romaji": "Shishi Kouryuuken",
+        "kanji": "獅子光龍拳",
+        "han_viet": "Sư Tử Quang Long Quyền",
+        "so_lan": 6,
+        "phan": "P3",
+        "ghi_chu": "Chiêu của Shishi Ryujinmaru (獅子龍神丸)."
+      },
+      {
+        "trong_sub": "Galactic Dragon Bullet Fist",
+        "romaji": "Ginga Ryuudanken",
+        "kanji": "銀河龍弾拳",
+        "han_viet": "Ngân Hà Long Đạn Quyền",
+        "so_lan": 2,
+        "phan": "P2",
+        "ghi_chu": "弾 = đạn -> khớp chính xác 'Bullet'. Bản quyền của 銀河嵐龍剣, tung liên hoàn quyền chứa năng lượng."
+      },
+      {
+        "trong_sub": "Galactic Dragon Punch",
+        "romaji": "Ginga Enryuuken",
+        "kanji": "銀河炎龍拳",
+        "han_viet": "Ngân Hà Viêm Long Quyền",
+        "so_lan": 3,
+        "phan": "P2",
+        "ghi_chu": "Một trong bộ chiêu 銀河 của Shinsei Ryujinmaru dạng Uchuukai."
+      },
+      {
+        "trong_sub": "Flying Dragon Shining Fist",
+        "romaji": "Hiryuu Kougekiken",
+        "kanji": "飛龍光撃拳",
+        "han_viet": "Phi Long Quang Kích Quyền",
+        "so_lan": 2,
+        "phan": "P2",
+        "ghi_chu": "Chiêu của Ryuseimaru dạng Hiryuu (飛龍形態). 光 = quang/shining."
+      },
+      {
+        "trong_sub": "Sky Dragonball / Sky Dragonball Energy Ball / Super Sky Dragon Energy Ball / Super Sky Dragon Fireball",
+        "romaji": "Tenryuuha",
+        "kanji": "天龍波",
+        "han_viet": "Thiên Long Ba",
+        "so_lan": 8,
+        "phan": "P2",
+        "ghi_chu": "Chiêu của Ryuseimaru. 天龍 = thiên long -> sub dịch 'Sky Dragon'; 波 = sóng -> 'Energy Ball/Fireball'. MỘT chiêu, sub viết 4 kiểu — phải thống nhất."
+      },
+      {
+        "trong_sub": "Tiger Sword / Tiger Sword Attack",
+        "romaji": "Tiger Sword Storm",
+        "kanji": "タイガーソードストーム",
+        "han_viet": "—",
+        "so_lan": 2,
+        "phan": "P2",
+        "ghi_chu": "Chiêu của Jyakomaru (邪虎丸). Tên gốc vốn đã là katakana tiếng Anh, giữ nguyên romaji."
+      },
+      {
+        "trong_sub": "The Dragon Shield",
+        "romaji": "Ryuou Shield",
+        "kanji": "龍王シールド",
+        "han_viet": "Long Vương Thuẫn",
+        "so_lan": 11,
+        "phan": "P1",
+        "ghi_chu": "Khiên của Ryuoumaru. Phân biệt với 鞘盾 (Sheath Shield) cũng của Ryuoumaru."
+      },
+      {
+        "trong_sub": "Sonic Cannon",
+        "romaji": "Youhajuu",
+        "kanji": "鷹波銃",
+        "han_viet": "Ưng Ba Thương",
+        "so_lan": 1,
+        "phan": "P1",
+        "ghi_chu": "Chiêu của Kujinmaru (空神丸) — tên đầy đủ スーパーソニックウェーブガン. Bản của Kuoumaru là 超鷹波銃 Chou Youhajuu."
+      },
+      {
+        "trong_sub": "Super Dragon Fist",
+        "romaji": "Chou Ryuuraiken",
+        "kanji": "超龍雷拳",
+        "han_viet": "Siêu Long Lôi Quyền",
+        "so_lan": 2,
+        "phan": "P2",
+        "ghi_chu": "Chiêu của Ryuseimaru. Ứng viên khác: 超嵐龍拳 Chou Ranryuuken — xem hình ep30 để chốt."
+      },
+      {
+        "trong_sub": "Galactic Dragon Throw",
+        "romaji": "Ginga Ranryuuken",
+        "kanji": "銀河嵐龍剣",
+        "han_viet": "Ngân Hà Lam Long Kiếm",
+        "so_lan": 2,
+        "phan": "P2 ep20",
+        "do_chac": "suy ra bằng loại trừ",
+        "ghi_chu": "Bộ 銀河 có ĐÚNG BỐN chiêu: 炎龍拳/嵐龍剣/龍牙拳/龍弾拳. Ba cái kia đã ghép chắc, còn lại 嵐龍剣. Từ điển mô tả: 'デスクラッシャー戦で使用した剣戟。無数の刀剣で切り刻む' — chém bằng vô số lưỡi kiếm. Sub dịch 'Throw' hơi lệch nhưng không còn ứng viên nào khác."
+      },
+      {
+        "trong_sub": "Dragon Wave",
+        "romaji": "Reppuuha",
+        "kanji": "烈風波",
+        "han_viet": "Liệt Phong Ba",
+        "so_lan": 2,
+        "phan": "P2 ep30",
+        "do_chac": "trung bình",
+        "ghi_chu": "Ryuseimaru. Từ điển: '胸穴から台風クラスの突風を放つ。熱風、寒風思いのまま' — phóng cuồng phong cấp bão từ lỗ ngực. 波 khớp 'Wave'."
+      },
+      {
+        "trong_sub": "Dragon Fist",
+        "romaji": "Bakuryuuken",
+        "kanji": "爆龍拳",
+        "han_viet": "Bạo Long Quyền",
+        "so_lan": 2,
+        "phan": "P2 ep24",
+        "do_chac": "trung bình",
+        "ghi_chu": "Ryuseimaru. Từ điển: '両肩の龍印から龍を掴み、投げつける。衝突した瞬間に大爆発' — nắm rồng từ ấn hai vai ném ra, chạm là nổ lớn."
+      }
+    ],
+    "chua_tra_duoc": [
+      "Permafrost Sword (36)",
+      "Fire Sword (20)",
+      "Star Dragon Sword (13)",
+      "Dragon Thunder Punch (11)",
+      "Dragon Teeth Punch (8)",
+      "Dragon Thunder Fist (8)",
+      "Phoenix Thunder Blast (6)",
+      "Light Dragon Fist (6)",
+      "Fiery Dragon Fist (5)",
+      "Phoenix Dou-Ryu Sword (5)",
+      "… và ~108 tên khác"
+    ],
+    "_nguon_tra": [
+      "dic.pixiv.net (chi tiết nhất về chiêu thức)",
+      "ja.wikipedia — danh sách tập có ghi Mashin địch từng tập",
+      "mashin-eiyuuden-wataru.net (trang chính thức)"
+    ],
+    "_QUY_TAC_PHAN_LOAI": {
+      "nhom_A_phe_chinh": "Chiêu của Mashin phe chính (Ryujinmaru và các dạng biến hình, Senjinmaru, Genjinmaru, Kuujinmaru, Ryuseimaru, Jakomaru, Natsukimaru, Choujinmaru): PHẢI tra romaji Nhật, chú Hán-Việt khi tung chiêu.",
+      "nhom_B_boss_tuan": "Chiêu của boss/địch xuất hiện một vài tập: CHỈ CẦN DỊCH HÁN-VIỆT, KHÔNG cần giữ tên Nhật, KHÔNG cần tra. Dịch sát nghĩa tiếng Anh sang Hán-Việt cho hợp tông tác phẩm.",
+      "cach_phan_biet": "Chiêu nhóm A hầu hết có chữ 'Dragon'/'Ryu'/'Dou-Ryu' (龍) hoặc tên dạng biến hình (Phoenix/Lion/Moonlight/White Tiger). Chiêu nhóm B thường chỉ xuất hiện 1-3 lần trong toàn bộ.",
+      "vi_du_A": "Dou-Ryu Sword -> 'Touryuuken!\\N(Đăng Long Kiếm)'",
+      "vi_du_B": "Permafrost Sword -> 'Hàn Băng Kiếm' (khỏi romaji)"
+    },
+    "nhom_B_han_viet_goi_y": [
+      {
+        "en": "Black Ball",
+        "vi": "Hắc Cầu",
+        "so_lan": 10,
+        "phan": "P2"
+      },
+      {
+        "en": "Black Horn / Black Dragon Horn",
+        "vi": "Hắc Long Giác",
+        "so_lan": 13,
+        "phan": "P2"
+      },
+      {
+        "en": "Dark Horn / Dark Dragon Horn",
+        "vi": "Ám Long Giác",
+        "so_lan": 6,
+        "phan": "P2"
+      },
+      {
+        "en": "Evil Ball",
+        "vi": "Tà Cầu",
+        "so_lan": 3,
+        "phan": "P3"
+      },
+      {
+        "en": "King Sword",
+        "vi": "Vương Kiếm",
+        "so_lan": 3,
+        "phan": "P3"
+      },
+      {
+        "en": "Scorching Heat Shield",
+        "vi": "Xích Nhiệt Thuẫn",
+        "so_lan": 3,
+        "phan": "P1"
+      },
+      {
+        "en": "Death Meteor Sword",
+        "vi": "Tử Vẫn Thạch Kiếm",
+        "so_lan": 1,
+        "phan": "P1"
+      },
+      {
+        "en": "Thunder Sword",
+        "vi": "Lôi Kiếm",
+        "so_lan": 1,
+        "phan": "P1"
+      },
+      {
+        "en": "Demon Sword",
+        "vi": "Ma Kiếm",
+        "so_lan": 1,
+        "phan": "P1"
+      },
+      {
+        "en": "Invisible Sword",
+        "vi": "Vô Hình Kiếm",
+        "so_lan": 1,
+        "phan": "P1"
+      },
+      {
+        "en": "Thousand Sword",
+        "vi": "Thiên Kiếm",
+        "so_lan": 1,
+        "phan": "P2"
+      },
+      {
+        "en": "Thunder Fist",
+        "vi": "Lôi Quyền",
+        "so_lan": 1,
+        "phan": "P2"
+      },
+      {
+        "en": "Sonic Cannon",
+        "vi": "Âm Tốc Pháo",
+        "so_lan": 1,
+        "phan": "P1"
+      },
+      {
+        "en": "Power Ball",
+        "vi": "Lực Cầu",
+        "so_lan": 1,
+        "phan": "P2"
+      }
+    ],
+    "_luu_y": "Các tên KHÔNG phải chiêu dù trông giống: 'Dragon Wing' = Shouryuushi (người), 'Dragon Shield' = bảo vật P1, 'Black/Dark Dragon Horn' = vật phẩm P2 chứ không phải chiêu. Đọc ngữ cảnh trước khi xếp nhóm.",
+    "con_mo_ho": [],
+    "_nguon_da_dung": [
+      "srw.wiki.cre.jp/wiki/龍王丸 — danh sách vũ khí/chiêu đầy đủ nhất tìm được",
+      "ja.wikipedia — 魔神英雄伝ワタル2 (chiêu dạng Uchuukai)",
+      "dic.pixiv.net — CHẶN 403, không truy cập được"
+    ],
+    "_tu_dien_goc": {
+      "nguon": "https://hissatuwaza.kill.jp/setume/mwataru.htm — 必殺技辞典 toàn series",
+      "file_luu": "_work/waza-tudien-goc.json",
+      "so_chieu": 268,
+      "ghi_chu": "Trang dùng Shift-JIS, WebFetch đọc hỏng — phải tải bằng curl rồi iconv sang UTF-8. Đây là nguồn đầy đủ nhất tìm được, có cả chiêu của nhân vật phụ và Mashin địch."
+    },
+    "bang_han_viet_day_du": {
+      "_ghi_chu": "Hán-Việt cho MỌI chiêu trong từ điển gốc, kể cả chiêu chưa thấy trong sub — để tra ngược khi gặp.",
+      "ryujinmaru_va_bien_the": [
+        {
+          "ja": "登龍剣",
+          "romaji": "Touryuuken",
+          "hv": "Đăng Long Kiếm"
+        },
+        {
+          "ja": "火炎登龍剣",
+          "romaji": "Kaen Touryuuken",
+          "hv": "Hoả Viêm Đăng Long Kiếm"
+        },
+        {
+          "ja": "極寒登龍剣",
+          "romaji": "Gokkan Touryuuken",
+          "hv": "Cực Hàn Đăng Long Kiếm"
+        },
+        {
+          "ja": "鳳龍剣",
+          "romaji": "Houryuuken",
+          "hv": "Phượng Long Kiếm"
+        },
+        {
+          "ja": "鳳龍氷河剣",
+          "romaji": "Houryuu Hyougaken",
+          "hv": "Phượng Long Băng Hà Kiếm"
+        },
+        {
+          "ja": "龍王の剣",
+          "romaji": "Ryuou no Ken",
+          "hv": "Long Vương Chi Kiếm"
+        },
+        {
+          "ja": "龍王シールド",
+          "romaji": "Ryuou Shield",
+          "hv": "Long Vương Thuẫn"
+        },
+        {
+          "ja": "飛龍拳",
+          "romaji": "Hiryuuken",
+          "hv": "Phi Long Quyền"
+        },
+        {
+          "ja": "龍牙拳",
+          "romaji": "Ryuugaken",
+          "hv": "Long Nha Quyền"
+        },
+        {
+          "ja": "龍雷拳",
+          "romaji": "Ryuuraiken",
+          "hv": "Long Lôi Quyền"
+        },
+        {
+          "ja": "炎龍拳",
+          "romaji": "Enryuuken",
+          "hv": "Viêm Long Quyền"
+        },
+        {
+          "ja": "拝覇炎龍拳",
+          "romaji": "Haipaa Enryuuken",
+          "hv": "Bái Bá Viêm Long Quyền"
+        },
+        {
+          "ja": "天空龍牙拳",
+          "romaji": "Tenkuu Ryuugaken",
+          "hv": "Thiên Không Long Nha Quyền"
+        },
+        {
+          "ja": "天空幻龍波",
+          "romaji": "Tenkuu Genryuuha",
+          "hv": "Thiên Không Ảo Long Ba"
+        },
+        {
+          "ja": "鳳雷波",
+          "romaji": "Houraiha",
+          "hv": "Phượng Lôi Ba"
+        },
+        {
+          "ja": "鳳牙弾",
+          "romaji": "Hougadan",
+          "hv": "Phượng Nha Đạn"
+        },
+        {
+          "ja": "必殺弾丸返し",
+          "romaji": "Hissatsu Tamagaeshi",
+          "hv": "Tất Sát Đạn Hoàn Phản"
+        }
+      ],
+      "phan_2_ryuseimaru": [
+        {
+          "ja": "光龍剣",
+          "romaji": "Kouryuuken",
+          "hv": "Quang Long Kiếm"
+        },
+        {
+          "ja": "星龍剣",
+          "romaji": "Seiryuuken",
+          "hv": "Tinh Long Kiếm"
+        },
+        {
+          "ja": "超飛龍拳",
+          "romaji": "Chou Hiryuuken",
+          "hv": "Siêu Phi Long Quyền"
+        },
+        {
+          "ja": "超嵐龍拳",
+          "romaji": "Chou Ranryuuken",
+          "hv": "Siêu Lam Long Quyền"
+        },
+        {
+          "ja": "超龍雷拳",
+          "romaji": "Chou Ryuuraiken",
+          "hv": "Siêu Long Lôi Quyền"
+        },
+        {
+          "ja": "爆龍拳",
+          "romaji": "Bakuryuuken",
+          "hv": "Bạo Long Quyền"
+        },
+        {
+          "ja": "烈風波",
+          "romaji": "Reppuuha",
+          "hv": "Liệt Phong Ba"
+        },
+        {
+          "ja": "天龍波",
+          "romaji": "Tenryuuha",
+          "hv": "Thiên Long Ba"
+        },
+        {
+          "ja": "飛雷迅",
+          "romaji": "Hiraijin",
+          "hv": "Phi Lôi Tấn"
+        },
+        {
+          "ja": "星斬爪",
+          "romaji": "Seizansou",
+          "hv": "Tinh Trảm Trảo"
+        },
+        {
+          "ja": "龍星翼",
+          "romaji": "Ryuuseiyoku",
+          "hv": "Long Tinh Dực"
+        },
+        {
+          "ja": "飛龍光撃拳",
+          "romaji": "Hiryuu Kougekiken",
+          "hv": "Phi Long Quang Kích Quyền"
+        },
+        {
+          "ja": "銀河炎龍拳",
+          "romaji": "Ginga Enryuuken",
+          "hv": "Ngân Hà Viêm Long Quyền"
+        },
+        {
+          "ja": "銀河嵐龍剣",
+          "romaji": "Ginga Ranryuuken",
+          "hv": "Ngân Hà Lam Long Kiếm"
+        },
+        {
+          "ja": "銀河龍牙拳",
+          "romaji": "Ginga Ryuugaken",
+          "hv": "Ngân Hà Long Nha Quyền"
+        },
+        {
+          "ja": "銀河龍弾拳",
+          "romaji": "Ginga Ryuudanken",
+          "hv": "Ngân Hà Long Đạn Quyền"
+        }
+      ],
+      "phan_3_cac_dang": [
+        {
+          "ja": "獅子光龍拳",
+          "romaji": "Shishi Kouryuuken",
+          "hv": "Sư Tử Quang Long Quyền"
+        },
+        {
+          "ja": "鳳凰登龍剣",
+          "romaji": "Houou Touryuuken",
+          "hv": "Phượng Hoàng Đăng Long Kiếm"
+        },
+        {
+          "ja": "鳳凰炎龍拳",
+          "romaji": "Houou Enryuuken",
+          "hv": "Phượng Hoàng Viêm Long Quyền"
+        },
+        {
+          "ja": "剣王登龍剣",
+          "romaji": "Kennou Touryuuken",
+          "hv": "Kiếm Vương Đăng Long Kiếm"
+        },
+        {
+          "ja": "月光登龍剣",
+          "romaji": "Gekkou Touryuuken",
+          "hv": "Nguyệt Quang Đăng Long Kiếm"
+        },
+        {
+          "ja": "白虎登龍剣",
+          "romaji": "Byakko Touryuuken",
+          "hv": "Bạch Hổ Đăng Long Kiếm"
+        },
+        {
+          "ja": "白虎氷雷拳",
+          "romaji": "Byakko Hyouraiken",
+          "hv": "Bạch Hổ Băng Lôi Quyền"
+        },
+        {
+          "ja": "白虎龍撃鞭",
+          "romaji": "Byakko Ryuugekiben",
+          "hv": "Bạch Hổ Long Kích Tiên"
+        }
+      ],
+      "mashin_dong_doi": [
+        {
+          "ja": "野牛シバラク流 バツの字切り",
+          "romaji": "Yagyuu Shibaraku-ryuu Batsu no Ji Giri",
+          "hv": "Dã Ngưu Shibaraku Lưu — Thập Tự Trảm",
+          "ai": "Shibaraku / Senjinmaru"
+        },
+        {
+          "ja": "野牛シバラク流 銀河バツの字斬り",
+          "romaji": "… Ginga Batsu no Ji Giri",
+          "hv": "… Ngân Hà Thập Tự Trảm",
+          "ai": "Shibaraku"
+        },
+        {
+          "ja": "野牛シバラク流 剣の舞",
+          "romaji": "… Ken no Mai",
+          "hv": "… Kiếm Chi Vũ",
+          "ai": "Shinsei Senjinmaru"
+        },
+        {
+          "ja": "魔界シバラク流 バツの字切り",
+          "romaji": "Makai Shibaraku-ryuu …",
+          "hv": "Ma Giới Shibaraku Lưu — Thập Tự Trảm",
+          "ai": "Shibaraku bị khống chế (P2)"
+        },
+        {
+          "ja": "幻龍刀",
+          "romaji": "Genryuutou",
+          "hv": "Ảo Long Đao",
+          "ai": "Genjinmaru / Himiko"
+        },
+        {
+          "ja": "幻部手裏剣",
+          "romaji": "Genbu Shuriken",
+          "hv": "Ảo Bộ Thủ Lý Kiếm",
+          "ai": "Genjinmaru"
+        },
+        {
+          "ja": "忍部流電光手裏剣",
+          "romaji": "Shinobibe-ryuu Denkou Shuriken",
+          "hv": "Nhẫn Bộ Lưu Điện Quang Thủ Lý Kiếm",
+          "ai": "Genoumaru"
+        },
+        {
+          "ja": "鷹波銃",
+          "romaji": "Youhajuu",
+          "hv": "Ưng Ba Thương",
+          "ai": "Kujinmaru / Kurama"
+        },
+        {
+          "ja": "超鷹波銃",
+          "romaji": "Chou Youhajuu",
+          "hv": "Siêu Ưng Ba Thương",
+          "ai": "Kuoumaru"
+        },
+        {
+          "ja": "一角獣剣",
+          "romaji": "Ikkakujuuken",
+          "hv": "Nhất Giác Thú Kiếm",
+          "ai": "Kuoumaru"
+        },
+        {
+          "ja": "海流創怒",
+          "romaji": "Kairyuu Soudo",
+          "hv": "Hải Lưu Sáng Nộ",
+          "ai": "Natsukimaru / Umihiko"
+        },
+        {
+          "ja": "鬼虹拳",
+          "romaji": "Kikouken",
+          "hv": "Quỷ Hồng Quyền",
+          "ai": "Natsukimaru"
+        },
+        {
+          "ja": "双牙拳",
+          "romaji": "Sougaken",
+          "hv": "Song Nha Quyền",
+          "ai": "Natsukimaru"
+        },
+        {
+          "ja": "雷撃波",
+          "romaji": "Raigekiha",
+          "hv": "Lôi Kích Ba",
+          "ai": "Natsukimaru"
+        },
+        {
+          "ja": "星裂剣",
+          "romaji": "Seiretsuken",
+          "hv": "Tinh Liệt Kiếm",
+          "ai": "Shin Natsukimaru"
+        },
+        {
+          "ja": "火炎×の字斬り",
+          "romaji": "Kaen Batsu no Ji Giri",
+          "hv": "Hoả Viêm Thập Tự Trảm",
+          "ai": "Senoumaru"
+        },
+        {
+          "ja": "クワトロアロー",
+          "romaji": "Quattro Arrow",
+          "hv": "— (katakana, giữ nguyên)",
+          "ai": "4 Mashin dạng Ou"
+        }
+      ],
+      "mashin_dich": [
+        {
+          "ja": "タイガーソードストーム",
+          "romaji": "Tiger Sword Storm",
+          "hv": "— (katakana)",
+          "ai": "Jyakomaru / Toraoh"
+        },
+        {
+          "ja": "タイガービームアタック",
+          "romaji": "Tiger Beam Attack",
+          "hv": "— (katakana)",
+          "ai": "Jyakomaru"
+        },
+        {
+          "ja": "デビルタイガーミサイル",
+          "romaji": "Devil Tiger Missile",
+          "hv": "— (katakana)",
+          "ai": "Jyakomaru"
+        },
+        {
+          "ja": "暗黒轟雷波",
+          "romaji": "Ankoku Gouraiha",
+          "hv": "Ám Hắc Oanh Lôi Ba",
+          "ai": "Kokuryuukaku (黒龍角)"
+        },
+        {
+          "ja": "轟雷牙",
+          "romaji": "Gouraiga",
+          "hv": "Oanh Lôi Nha",
+          "ai": "Kokuryuukaku"
+        }
+      ],
+      "_luu_y_katakana": "Chiêu tên KATAKANA (gốc là từ tiếng Anh) KHÔNG có âm Hán-Việt thật vì không có chữ Hán. Nhưng vẫn DỊCH NGHĨA sang từ Hán-Việt để đồng bộ với các chiêu khác. Cách viết: giữ romaji + chú nghĩa Hán-Việt, y như chiêu có kanji. VD: 'Tiger Sword Storm!\\N(Hổ Kiếm Bão)'.",
+      "katakana_phe_chinh": [
+        {
+          "ja": "クワトロアロー",
+          "romaji": "Quattro Arrow",
+          "hv": "Tứ Tiễn",
+          "ai": "Ryuoumaru, Senoumaru, Kuuoumaru, Genoumaru"
+        },
+        {
+          "ja": "フェニックスサンダー",
+          "romaji": "Phoenix Thunder",
+          "hv": "Phượng Lôi",
+          "ai": "Raioumaru"
+        },
+        {
+          "ja": "シャークラッシャーアタック",
+          "romaji": "Shark Rusher Attack",
+          "hv": "Giao Kích",
+          "ai": "Kaioumaru"
+        },
+        {
+          "ja": "ダイナミックスクリュー",
+          "romaji": "Dynamic Screw",
+          "hv": "Cường Toàn Kích",
+          "ai": "Kaioumaru"
+        },
+        {
+          "ja": "S・Wガン",
+          "romaji": "Sonic Wave Gun",
+          "hv": "Âm Ba Thương",
+          "ai": "Shinsei Kuujinmaru",
+          "ghi_chu": "Bản katakana của 鷹波銃 Youhajuu."
+        },
+        {
+          "ja": "D・Cクロー",
+          "romaji": "Double Cut Claw",
+          "hv": "Song Đoạn Trảo",
+          "ai": "Shinsei Kuujinmaru"
+        },
+        {
+          "ja": "B・Bガン",
+          "romaji": "Big Blow Gun",
+          "hv": "Cự Kích Thương",
+          "ai": "Shinsei Kuujinmaru"
+        },
+        {
+          "ja": "GTビル",
+          "romaji": "Great Chip Bill",
+          "hv": "Cự Chuỷ Kích",
+          "ai": "Shinsei Kuujinmaru",
+          "ghi_chu": "ビル = bill (mỏ chim), không phải 'building'."
+        },
+        {
+          "ja": "フリフリアタック",
+          "romaji": "Furifuri Attack",
+          "hv": "Toàn Chuyển Kích",
+          "ai": "Wataru",
+          "ghi_chu": "Tên chính thức là 回転龍円盤 (Hồi Chuyển Long Viên Bàn) — đĩa bay do Seiryuuhi ban."
+        },
+        {
+          "ja": "ワタルキック",
+          "romaji": "Wataru Kick",
+          "hv": "Wataru Cước",
+          "ai": "Wataru"
+        },
+        {
+          "ja": "ワタルスペシャルドラゴンキック",
+          "romaji": "Wataru Special Dragon Kick",
+          "hv": "Wataru Đặc Biệt Long Cước",
+          "ai": "Wataru",
+          "ghi_chu": "Tập 13, dùng trong trận đấu vật."
+        }
+      ],
+      "katakana_toraoh": [
+        {
+          "ja": "タイガーソードストーム",
+          "romaji": "Tiger Sword Storm",
+          "hv": "Hổ Kiếm Bão",
+          "ai": "Jyakomaru"
+        },
+        {
+          "ja": "タイガーソードアタック",
+          "romaji": "Tiger Sword Attack",
+          "hv": "Hổ Kiếm Kích",
+          "ai": "Shinsei Jakomaru"
+        },
+        {
+          "ja": "タイガービームアタック",
+          "romaji": "Tiger Beam Attack",
+          "hv": "Hổ Quang Kích",
+          "ai": "Jyakomaru",
+          "ghi_chu": "Dồn năng lượng vào ngạch sức Falcon Head rồi bắn như súng hoa cải."
+        },
+        {
+          "ja": "デビルタイガーミサイル",
+          "romaji": "Devil Tiger Missile",
+          "hv": "Ma Hổ Phi Đạn",
+          "ai": "Jakomaru, Shinsei Jakomaru"
+        },
+        {
+          "ja": "シールドソー",
+          "romaji": "Shield Saw",
+          "hv": "Thuẫn Cứ",
+          "ai": "Jyakomaru"
+        },
+        {
+          "ja": "ジャグショルダーアタック",
+          "romaji": "Jug Shoulder Attack",
+          "hv": "Kiên Kích",
+          "ai": "Jyakomaru"
+        },
+        {
+          "ja": "レントクロー",
+          "romaji": "Rent Claw",
+          "hv": "Liệt Trảo",
+          "ai": "Jyakomaru"
+        }
+      ],
+      "katakana_boss_tuan": {
+        "_quy_tac": "Chiêu của Mashin boss tuần (Battle Gorilla, Hellgun, Skeldevil, Twin Carmen, Black Satan…): CHỈ dịch nghĩa sang Hán-Việt, KHÔNG cần romaji, KHÔNG cần tra. Từ điển gốc có ~100 chiêu loại này, xem _work/waza-tudien-goc.json khi cần.",
+        "vi_du": [
+          {
+            "ja": "ゴリラアーム",
+            "nghia": "Gorilla Arm",
+            "hv": "Tinh Tinh Tí"
+          },
+          {
+            "ja": "ブリザードビーム",
+            "nghia": "Blizzard Beam",
+            "hv": "Bạo Tuyết Quang"
+          },
+          {
+            "ja": "ポイズンコブラ",
+            "nghia": "Poison Cobra",
+            "hv": "Độc Xà"
+          },
+          {
+            "ja": "デスレイザー",
+            "nghia": "Death Razor",
+            "hv": "Tử Nhận"
+          },
+          {
+            "ja": "ブラッディホーン",
+            "nghia": "Bloody Horn",
+            "hv": "Huyết Giác"
+          },
+          {
+            "ja": "スコーピオンクロー",
+            "nghia": "Scorpion Claw",
+            "hv": "Hạt Trảo"
+          },
+          {
+            "ja": "ピラミッドビーム",
+            "nghia": "Pyramid Beam",
+            "hv": "Kim Tự Tháp Quang"
+          },
+          {
+            "ja": "コスモカッター",
+            "nghia": "Cosmo Cutter",
+            "hv": "Vũ Trụ Nhận"
+          }
+        ]
+      }
+    },
+    "can_karaoke": {
+      "_ghi_chu": "Tách sẵn theo TỪNG CHỮ HÁN để karaoke dòng romaji và dòng Hán-Việt sáng ĐỒNG BỘ. Dấu | ngăn cách. Số phần romaji = số chữ Hán = số âm Hán-Việt.",
+      "_luu_y": "KHÔNG tách theo mora — chữ 丸 đọc 'maru' là 2 mora nhưng chỉ 1 chữ Hán, tách theo mora sẽ lệch với dòng Hán-Việt.",
+      "bang": [
+        {
+          "romaji": "Ryu|jin|maru",
+          "kanji": "龍神丸",
+          "han_viet": "Long|Thần|Hoàn"
+        },
+        {
+          "romaji": "Sen|jin|maru",
+          "kanji": "戦神丸",
+          "han_viet": "Chiến|Thần|Hoàn"
+        },
+        {
+          "romaji": "Gen|jin|maru",
+          "kanji": "幻神丸",
+          "han_viet": "Ảo|Thần|Hoàn"
+        },
+        {
+          "romaji": "Ku|jin|maru",
+          "kanji": "空神丸",
+          "han_viet": "Không|Thần|Hoàn"
+        },
+        {
+          "romaji": "Jya|ko|maru",
+          "kanji": "邪虎丸",
+          "han_viet": "Tà|Hổ|Hoàn"
+        },
+        {
+          "romaji": "Ryu|ou|maru",
+          "kanji": "龍王丸",
+          "han_viet": "Long|Vương|Hoàn"
+        },
+        {
+          "romaji": "Ryu|sei|maru",
+          "kanji": "龍星丸",
+          "han_viet": "Long|Tinh|Hoàn"
+        },
+        {
+          "romaji": "Natsu|ki|maru",
+          "kanji": "夏鬼丸",
+          "han_viet": "Hạ|Quỷ|Hoàn"
+        },
+        {
+          "romaji": "Cho|jin|maru",
+          "kanji": "鳥神丸",
+          "han_viet": "Điểu|Thần|Hoàn"
+        },
+        {
+          "romaji": "Tou|ryuu|ken",
+          "kanji": "登龍剣",
+          "han_viet": "Đăng|Long|Kiếm"
+        },
+        {
+          "romaji": "Ka|en|Tou|ryuu|ken",
+          "kanji": "火炎登龍剣",
+          "han_viet": "Hoả|Viêm|Đăng|Long|Kiếm"
+        },
+        {
+          "romaji": "Go|kkan|Tou|ryuu|ken",
+          "kanji": "極寒登龍剣",
+          "han_viet": "Cực|Hàn|Đăng|Long|Kiếm"
+        },
+        {
+          "romaji": "Hou|ryuu|ken",
+          "kanji": "鳳龍剣",
+          "han_viet": "Phượng|Long|Kiếm"
+        },
+        {
+          "romaji": "Kou|ryuu|ken",
+          "kanji": "光龍剣",
+          "han_viet": "Quang|Long|Kiếm"
+        },
+        {
+          "romaji": "Sei|ryuu|ken",
+          "kanji": "星龍剣",
+          "han_viet": "Tinh|Long|Kiếm"
+        },
+        {
+          "romaji": "Ryuu|ga|ken",
+          "kanji": "龍牙拳",
+          "han_viet": "Long|Nha|Quyền"
+        },
+        {
+          "romaji": "Ryuu|rai|ken",
+          "kanji": "龍雷拳",
+          "han_viet": "Long|Lôi|Quyền"
+        },
+        {
+          "romaji": "En|ryuu|ken",
+          "kanji": "炎龍拳",
+          "han_viet": "Viêm|Long|Quyền"
+        },
+        {
+          "romaji": "Hi|ryuu|ken",
+          "kanji": "飛龍拳",
+          "han_viet": "Phi|Long|Quyền"
+        },
+        {
+          "romaji": "Hou|rai|ha",
+          "kanji": "鳳雷波",
+          "han_viet": "Phượng|Lôi|Ba"
+        },
+        {
+          "romaji": "Hou|ga|dan",
+          "kanji": "鳳牙弾",
+          "han_viet": "Phượng|Nha|Đạn"
+        },
+        {
+          "romaji": "Baku|ryuu|ken",
+          "kanji": "爆龍拳",
+          "han_viet": "Bạo|Long|Quyền"
+        },
+        {
+          "romaji": "Rep|puu|ha",
+          "kanji": "烈風波",
+          "han_viet": "Liệt|Phong|Ba"
+        },
+        {
+          "romaji": "Ten|ryuu|ha",
+          "kanji": "天龍波",
+          "han_viet": "Thiên|Long|Ba"
+        },
+        {
+          "romaji": "Hi|rai|jin",
+          "kanji": "飛雷迅",
+          "han_viet": "Phi|Lôi|Tấn"
+        },
+        {
+          "romaji": "Sei|zan|sou",
+          "kanji": "星斬爪",
+          "han_viet": "Tinh|Trảm|Trảo"
+        },
+        {
+          "romaji": "Ryuu|sei|yoku",
+          "kanji": "龍星翼",
+          "han_viet": "Long|Tinh|Dực"
+        },
+        {
+          "romaji": "Shi|shi|Kou|ryuu|ken",
+          "kanji": "獅子光龍拳",
+          "han_viet": "Sư|Tử|Quang|Long|Quyền"
+        },
+        {
+          "romaji": "Hou|ou|Tou|ryuu|ken",
+          "kanji": "鳳凰登龍剣",
+          "han_viet": "Phượng|Hoàng|Đăng|Long|Kiếm"
+        },
+        {
+          "romaji": "Ke|nou|Tou|ryuu|ken",
+          "kanji": "剣王登龍剣",
+          "han_viet": "Kiếm|Vương|Đăng|Long|Kiếm"
+        },
+        {
+          "romaji": "Ge|kkou|Tou|ryuu|ken",
+          "kanji": "月光登龍剣",
+          "han_viet": "Nguyệt|Quang|Đăng|Long|Kiếm"
+        },
+        {
+          "romaji": "Bya|kko|Tou|ryuu|ken",
+          "kanji": "白虎登龍剣",
+          "han_viet": "Bạch|Hổ|Đăng|Long|Kiếm"
+        },
+        {
+          "romaji": "Bya|kko|Hyou|rai|ken",
+          "kanji": "白虎氷雷拳",
+          "han_viet": "Bạch|Hổ|Băng|Lôi|Quyền"
+        },
+        {
+          "romaji": "Gin|ga|En|ryuu|ken",
+          "kanji": "銀河炎龍拳",
+          "han_viet": "Ngân|Hà|Viêm|Long|Quyền"
+        },
+        {
+          "romaji": "Gin|ga|Ran|ryuu|ken",
+          "kanji": "銀河嵐龍剣",
+          "han_viet": "Ngân|Hà|Lam|Long|Kiếm"
+        },
+        {
+          "romaji": "Gin|ga|Ryuu|ga|ken",
+          "kanji": "銀河龍牙拳",
+          "han_viet": "Ngân|Hà|Long|Nha|Quyền"
+        },
+        {
+          "romaji": "Gin|ga|Ryuu|dan|ken",
+          "kanji": "銀河龍弾拳",
+          "han_viet": "Ngân|Hà|Long|Đạn|Quyền"
+        },
+        {
+          "romaji": "Chou|Hi|ryuu|ken",
+          "kanji": "超飛龍拳",
+          "han_viet": "Siêu|Phi|Long|Quyền"
+        },
+        {
+          "romaji": "Chou|Ryuu|rai|ken",
+          "kanji": "超龍雷拳",
+          "han_viet": "Siêu|Long|Lôi|Quyền"
+        },
+        {
+          "romaji": "Hi|ryuu|Kou|geki|ken",
+          "kanji": "飛龍光撃拳",
+          "han_viet": "Phi|Long|Quang|Kích|Quyền"
+        },
+        {
+          "romaji": "Rai|geki|ha",
+          "kanji": "雷撃波",
+          "han_viet": "Lôi|Kích|Ba"
+        },
+        {
+          "romaji": "Sou|ga|ken",
+          "kanji": "双牙拳",
+          "han_viet": "Song|Nha|Quyền"
+        },
+        {
+          "romaji": "Sei|retsu|ken",
+          "kanji": "星裂剣",
+          "han_viet": "Tinh|Liệt|Kiếm"
+        },
+        {
+          "romaji": "You|ha|juu",
+          "kanji": "鷹波銃",
+          "han_viet": "Ưng|Ba|Thương"
+        },
+        {
+          "romaji": "Wataru|Special|Dragon|Kick",
+          "kanji": "ワタルスペシャルドラゴンキック",
+          "han_viet": "Wataru|Đặc Biệt|Long|Cước"
+        },
+        {
+          "romaji": "Death|Ro|tor",
+          "kanji": "デスプレサイトプロペラ",
+          "han_viet": "Tử|Toàn|Kích"
+        },
+        {
+          "romaji": "Death|Me|te|or|Sword",
+          "kanji": "(chiêu của Tử Thần)",
+          "han_viet": "Tử|Thần|Vẫn|Thạch|Kiếm"
+        },
+        {
+          "romaji": "Fi|er|y|Club",
+          "kanji": "(chiêu của Marianna)",
+          "han_viet": "Hoả|Viêm|Thiết|Chuỳ"
+        },
+        {
+          "romaji": "Eigh|ty|first|at|tack",
+          "kanji": "(chiêu của Maesuke)",
+          "han_viet": "Bát|Thập|Nhất|Chi|Kích"
+        },
+        {
+          "romaji": "Mon|ster|can|non",
+          "kanji": "(chiêu của Maesuke)",
+          "han_viet": "Yêu|Quái|Cự|Pháo"
+        },
+        {
+          "romaji": "Fire|Kiss|of|Death",
+          "kanji": "(chiêu Souye Souye)",
+          "han_viet": "Tử|Vong|Hoả|Vẫn"
+        },
+        {
+          "romaji": "Ten|kuu|Ryuu|ga|ken",
+          "kanji": "天空龍牙拳",
+          "han_viet": "Thiên|Không|Long|Nha|Quyền"
+        },
+        {
+          "romaji": "Thun|der|Lord|Fire|Sword",
+          "kanji": "(chiêu Dolunro)",
+          "han_viet": "Lôi|Vương|Viêm|Hoả|Kiếm"
+        },
+        {
+          "romaji": "Ja|ko|maru",
+          "kanji": "邪虎丸",
+          "han_viet": "Tà|Hổ|Hoàn"
+        },
+        {
+          "romaji": "Fi|er|y|Heat",
+          "kanji": "(chiêu Cydorona)",
+          "han_viet": "Hoả|Viêm|Cuồng|Nhiệt"
+        },
+        {
+          "romaji": "Hou|ou",
+          "kanji": "鳳凰",
+          "han_viet": "Phượng|Hoàng"
+        },
+        {
+          "romaji": "Ran|ryuu|ken",
+          "kanji": "嵐龍剣",
+          "han_viet": "Lam|Long|Kiếm"
+        },
+        {
+          "romaji": "Gen|ou|maru",
+          "kanji": "幻王丸",
+          "han_viet": "Ảo|Vương|Hoàn"
+        },
+        {
+          "romaji": "Ku|ou|maru",
+          "kanji": "空王丸",
+          "han_viet": "Không|Vương|Hoàn"
+        },
+        {
+          "romaji": "Sen|ou|maru",
+          "kanji": "戦王丸",
+          "han_viet": "Chiến|Vương|Hoàn"
+        },
+        {
+          "romaji": "Ryuu|ou|ken",
+          "kanji": "龍王剣",
+          "han_viet": "Long|Vương|Kiếm"
+        },
+        {
+          "romaji": "Shin|sei|Ryu|jin|maru",
+          "kanji": "新星龍神丸",
+          "han_viet": "Tân|Tinh|Long|Thần|Hoàn"
+        },
+        {
+          "romaji": "Shin|sei|Sen|jin|maru",
+          "kanji": "新星戦神丸",
+          "han_viet": "Tân|Tinh|Chiến|Thần|Hoàn"
+        },
+        {
+          "romaji": "Shin|sei|Ku|jin|maru",
+          "kanji": "新星空神丸",
+          "han_viet": "Tân|Tinh|Không|Thần|Hoàn"
+        },
+        {
+          "romaji": "Shin|sei|Jya|ko|maru",
+          "kanji": "新星邪虎丸",
+          "han_viet": "Tân|Tinh|Tà|Hổ|Hoàn"
+        },
+        {
+          "romaji": "Shi|shi|Ryu|jin|maru",
+          "kanji": "獅子龍神丸",
+          "han_viet": "Sư|Tử|Long|Thần|Hoàn"
+        },
+        {
+          "romaji": "Hou|ou|Ryu|jin|maru",
+          "kanji": "鳳凰龍神丸",
+          "han_viet": "Phượng|Hoàng|Long|Thần|Hoàn"
+        },
+        {
+          "romaji": "Ke|nou|Ryu|jin|maru",
+          "kanji": "剣王龍神丸",
+          "han_viet": "Kiếm|Vương|Long|Thần|Hoàn"
+        },
+        {
+          "romaji": "Ge|kkou|Ryu|jin|maru",
+          "kanji": "月光龍神丸",
+          "han_viet": "Nguyệt|Quang|Long|Thần|Hoàn"
+        },
+        {
+          "romaji": "Bya|kko|Ryu|jin|maru",
+          "kanji": "白虎龍神丸",
+          "han_viet": "Bạch|Hổ|Long|Thần|Hoàn"
+        },
+        {
+          "romaji": "Chou|Ma|shin|Ryu|jin|maru",
+          "kanji": "超魔神龍神丸",
+          "han_viet": "Siêu|Ma|Thần|Long|Thần|Hoàn"
+        },
+        {
+          "romaji": "Sei|ryuu|hi",
+          "kanji": "聖龍妃",
+          "han_viet": "Thánh|Long|Phi"
+        },
+        {
+          "romaji": "Shou|ryuu|shi",
+          "kanji": "翔龍子",
+          "han_viet": "Tường|Long|Tử"
+        },
+        {
+          "romaji": "Ryu|sou|maru",
+          "kanji": "龍蒼丸",
+          "han_viet": "Long|Thương|Hoàn"
+        },
+        {
+          "romaji": "Ryu|sen|maru",
+          "kanji": "龍戦丸",
+          "han_viet": "Long|Chiến|Hoàn"
+        },
+        {
+          "romaji": "Gen|ryu|maru",
+          "kanji": "幻龍丸",
+          "han_viet": "Ảo|Long|Hoàn"
+        },
+        {
+          "romaji": "Ryu|geki|maru",
+          "kanji": "龍激丸",
+          "han_viet": "Long|Kích|Hoàn"
+        },
+        {
+          "romaji": "Sei|ryu|maru",
+          "kanji": "聖龍丸",
+          "han_viet": "Thánh|Long|Hoàn"
+        },
+        {
+          "romaji": "Ryu|ko|maru",
+          "kanji": "龍虎丸",
+          "han_viet": "Long|Hổ|Hoàn"
+        },
+        {
+          "romaji": "Kou|ryu|maru",
+          "kanji": "煌龍丸",
+          "han_viet": "Hoàng|Long|Hoàn"
+        },
+        {
+          "romaji": "Hou|ryu|maru",
+          "kanji": "鳳龍丸",
+          "han_viet": "Phượng|Long|Hoàn"
+        },
+        {
+          "romaji": "Bya|kko|maru",
+          "kanji": "白虎丸",
+          "han_viet": "Bạch|Hổ|Hoàn"
+        },
+        {
+          "romaji": "Tora|maru",
+          "kanji": "虎丸",
+          "han_viet": "Hổ|Hoàn"
+        },
+        {
+          "romaji": "Sou|ryuu|ken",
+          "kanji": "蒼龍剣",
+          "han_viet": "Thanh|Long|Kiếm"
+        },
+        {
+          "romaji": "To|ga|ken",
+          "kanji": "虎牙剣",
+          "han_viet": "Hổ|Nha|Kiếm"
+        },
+        {
+          "romaji": "Ko|ryu|ken",
+          "kanji": "虎龍剣",
+          "han_viet": "Hổ|Long|Kiếm"
+        },
+        {
+          "romaji": "Shichi|ryuu|ken",
+          "kanji": "七龍剣",
+          "han_viet": "Thất|Long|Kiếm"
+        },
+        {
+          "romaji": "Seki|ryuu|ken",
+          "kanji": "赤龍剣",
+          "han_viet": "Xích|Long|Kiếm"
+        }
+      ],
+      "_bay_1_hard_space": "DÙNG \\h (hard space) giữa các đoạn karaoke, KHÔNG dùng dấu cách thường. ASS cắt dấu cách ở cuối mỗi đoạn \\kf nên 'Long Thần Hoàn' render thành 'LongThầnHoàn'. Viết đúng: {\\kf60}Long\\h{\\kf60}Thần\\h{\\kf59}Hoàn",
+      "_bay_2_hai_dong": "PHẢI tách romaji và Hán-Việt thành HAI dòng Dialogue riêng — cùng mốc thời gian, khác MarginV (68 cho romaji, 40 cho Hán-Việt). Nối bằng \\N trong một dòng thì \\kf cộng dồn, dòng Hán-Việt sẽ sáng SAU khi romaji chạy xong.",
+      "_chieu_katakana_anh": "Chiêu có tên katakana mượn tiếng Anh (Special Dragon Kick, Tiger Sword Storm...) thì KHÔNG làm hai dòng. Chỉ MỘT dòng Hán-Việt, karaoke chạy trên chính dòng đó — vì không có dòng romaji nào đáng giữ."
+    },
+    "CANH_BAO_TRUNG_ROMAJI": [
+      {
+        "romaji": "Seiryuuken",
+        "canh_bao": "MỘT romaji, HAI chữ Hán khác nhau — phải phân biệt theo BỘ PHIM",
+        "P2": "星龍剣 = Tinh Long Kiếm (sub Anh: Star Dragon Sword)",
+        "2022": "聖龍剣 = Thánh Long Kiếm (sub Anh: Holy Dragon Sword)",
+        "he_qua": "Bảng karaoke chỉ chứa được một mục (đang là 星龍剣). Khi dựng bản 2022 phải sửa tay."
+      }
+    ]
+  },
+  "danh_sach_ten_day_du": {
+    "_file": "_work/names-by-tier.json",
+    "_mo_ta": "Toàn bộ tên riêng trích từ 142 file .ass (đã loại lời OP/ED và quảng cáo), chia 3 nhóm theo số tập xuất hiện.",
+    "thuong_truc_>=5_tap": 148,
+    "rai_rac_2-4_tap": 105,
+    "mot_tap": 65,
+    "_luu_y": "Nhóm 'một tập' chủ yếu là nhân vật/Mashin của riêng tập đó (địch tuần) — không có trên wiki, phải tự xử lý theo ngữ cảnh."
+  },
+  "ten_chua_giai_duoc": {
+    "_ghi_chu": "Nhóm thường trực (>=5 tập) nhưng KHÔNG tra được tên Nhật. Đa số là nhân vật/địa danh phụ, phiên âm đã đi qua tiếng Trung nên khó truy ngược. GIỮ NGUYÊN như sub, đánh dấu để rà lại nếu tìm được nguồn.",
+    "nhan_vat": [
+      {
+        "ten": "Doehura",
+        "tap": 10,
+        "phan": "P1,P2",
+        "la": "Mashin/tướng địch, đi kèm Jakomaru"
+      },
+      {
+        "ten": "Guruzitam",
+        "tap": 6,
+        "phan": "P1",
+        "la": "lãnh chúa vùng, xuất hiện từ ep03"
+      },
+      {
+        "ten": "Karmorilus",
+        "tap": 6,
+        "phan": "P2",
+        "la": "nhân vật ở Sacred Heaven"
+      },
+      {
+        "ten": "Kirinban",
+        "tap": 5,
+        "phan": "P2",
+        "la": "thuộc hạ của Lord Wero Romukana, Mt. Shodori Castle"
+      },
+      {
+        "ten": "Karubala",
+        "tap": 5,
+        "phan": "P3",
+        "la": "địch có giáp cứng"
+      },
+      {
+        "ten": "Nimidar",
+        "tap": 5,
+        "phan": "P3",
+        "la": "người giữ tầng giới thứ 3"
+      },
+      {
+        "ten": "Gerony",
+        "tap": 5,
+        "phan": "P1",
+        "la": "thợ săn tiền thưởng"
+      },
+      {
+        "ten": "Yeba-Bayerbo",
+        "tap": 5,
+        "phan": "P1",
+        "la": "giữ 'bangle of light', sub gọi 'BB Yeba-Bayerbo'"
+      },
+      {
+        "ten": "Marcus",
+        "tap": 7,
+        "phan": "P2,P3",
+        "la": "nhân vật phụ, ep03 P2"
+      },
+      {
+        "ten": "Hunala",
+        "tap": 7,
+        "phan": "P1",
+        "la": "nhân vật trong truyền thuyết, cặp với Yasimus"
+      },
+      {
+        "ten": "Yasimus",
+        "tap": 6,
+        "phan": "P1",
+        "la": "nhân vật truyền thuyết, gắn với sức mạnh băng"
+      },
+      {
+        "ten": "Yuki",
+        "tap": 7,
+        "phan": "P1",
+        "la": "cô gái Wataru quen ở ep15-17. LƯU Ý: 'Yuki' 雪 = tuyết, có thể là tên Nhật thật"
+      }
+    ],
+    "dia_danh_khai_niem": [
+      {
+        "ten": "Dimar (star)",
+        "tap": 6,
+        "phan": "P2"
+      },
+      {
+        "ten": "Ginagina (Mt)",
+        "tap": 5,
+        "phan": "P2"
+      },
+      {
+        "ten": "Asoka",
+        "tap": 5,
+        "phan": "P2",
+        "ghi_chu": "vùng đất thiêng bị Dowarudar chiếm"
+      },
+      {
+        "ten": "Sacred Heaven",
+        "tap": 6,
+        "phan": "P2"
+      },
+      {
+        "ten": "Demon Realm",
+        "tap": 5,
+        "phan": "P2",
+        "ghi_chu": "có thể là 魔界 Makai"
+      },
+      {
+        "ten": "Evil World",
+        "tap": 6,
+        "phan": "P3",
+        "ghi_chu": "có thể là 魔界 Makai"
+      },
+      {
+        "ten": "Hell Gate",
+        "tap": 5,
+        "phan": "P1",
+        "ghi_chu": "một trong 4 cổng: Devil Way/Wind/Sky Gate + Hell Gate"
+      },
+      {
+        "ten": "Thousandth Deity",
+        "tap": 6,
+        "phan": "P1",
+        "ghi_chu": "thần xuất hiện 1000 năm một lần"
+      },
+      {
+        "ten": "Savage Brothers",
+        "tap": 6,
+        "phan": "P1",
+        "ghi_chu": "3 trong 'tứ thiên vương' 四天王 của Doakudar"
+      },
+      {
+        "ten": "Death Control",
+        "tap": 5,
+        "phan": "P2"
+      },
+      {
+        "ten": "Dark Dragon",
+        "tap": 9,
+        "phan": "P1,P2"
+      },
+      {
+        "ten": "White Dragon",
+        "tap": 5,
+        "phan": "P1",
+        "ghi_chu": "có đền thờ (White Dragon's Shrine), trao Dragon Shield"
+      },
+      {
+        "ten": "Permafrost Sword / Fire Sword",
+        "tap": 9,
+        "phan": "P1",
+        "ghi_chu": "cặp bảo kiếm băng/lửa ở ep14"
+      },
+      {
+        "ten": "Dragon Shield",
+        "tap": 5,
+        "phan": "P1"
+      },
+      {
+        "ten": "Rainbow (Bud of the Rainbow)",
+        "tap": 9,
+        "phan": "P1,P3"
+      }
+    ]
+  },
+  "bien_the_chinh_ta": {
+    "_ghi_chu": "Các cách viết KHÁC NHAU trong sub cho CÙNG một thực thể — phải gộp về một khi dịch.",
+    "muc": [
+      {
+        "cac_cach_viet": [
+          "Doakadar",
+          "Doukadar"
+        ],
+        "gop_ve": "Dowarudar",
+        "so_lan": "73+6",
+        "canh_bao": "KHÔNG gộp với 'Doakudar' — đó là nhân vật KHÁC (trùm Phần 1)."
+      },
+      {
+        "cac_cach_viet": [
+          "Houjinmaru",
+          "Hurojinmaru"
+        ],
+        "gop_ve": "Genjinmaru",
+        "so_lan": "6+1"
+      },
+      {
+        "cac_cach_viet": [
+          "Saviour",
+          "Savior"
+        ],
+        "gop_ve": "Cứu Thế Chủ",
+        "so_lan": "118+11"
+      },
+      {
+        "cac_cach_viet": [
+          "Sword King",
+          "Swords King"
+        ],
+        "gop_ve": "Kennou",
+        "so_lan": "8+10"
+      },
+      {
+        "cac_cach_viet": [
+          "Wild Snow Bedu",
+          "Wild Snow Bedo"
+        ],
+        "gop_ve": "(chưa tra được tên Nhật) — chọn MỘT cách viết",
+        "so_lan": "5+4",
+        "canh_bao": "P3. Là mẹ nuôi của Toraoh — P3ep31: 'Your mother is Empress Sacred Dragon not Wild Snow Bedo'."
+      },
+      {
+        "cac_cach_viet": [
+          "Shibaraku",
+          "Sinberak"
+        ],
+        "gop_ve": "Shibaraku",
+        "so_lan": "159+1",
+        "canh_bao": "'Sinberak' chỉ xuất hiện 1 lần, ở tiêu đề tập 41 Phần 2. Tên gốc tập là 「魔界シバラクの罠！」 — xác nhận đó là Shibaraku."
+      },
+      {
+        "cac_cach_viet": [
+          "Empress Sacred Dragon",
+          "Sacred Dragon Empress",
+          "Empress Holy Dragon",
+          "Dragon Queen"
+        ],
+        "gop_ve": "Seiryuuhi",
+        "so_lan": "P1+P2+P3",
+        "canh_bao": "P2ep06: 'Empress Holy Dragon gave me [Star Dragon Sword]' — cách viết thứ tư của 聖龍妃."
+      },
+      {
+        "cac_cach_viet": [
+          "Ryukingmaru",
+          "RyuKingmaru",
+          "Ryuomaru",
+          "dragonking maru",
+          "Ryu(Dragon) King Maru"
+        ],
+        "gop_ve": "Ryuoumaru",
+        "so_lan": "~60",
+        "canh_bao": "Sub dùng 5 cách viết cho cùng một Mashin, do dịch lẫn lộn giữa phiên âm (Ryuo-) và dịch nghĩa 王=King."
+      }
+    ]
+  },
+  "the_gioi_va_coi": {
+    "_canh_bao": "KHÔNG GỘP BỪA. Sub dùng nhiều cụm 'World/Realm' nghe giống nhau nhưng chỉ những thứ KHÁC NHAU. Đã đối chiếu ngữ cảnh từng tập.",
+    "muc": [
+      {
+        "trong_sub": [
+          "Demon Realm",
+          "Demon World",
+          "Devil World (P2)"
+        ],
+        "la": "魔界 Makai",
+        "phan": "P2",
+        "mo_ta": "Cõi ma — lãnh địa của Dowarudar, có '3 Lords/3 Brothers'.",
+        "bang_chung": "Tên gốc tập 41 P2 là 「魔界シバラクの罠！」 (Makai Shibaraku no Wana), sub dịch thành 'Ep.41 Demon Realm The trap of Sinberak'. Sub P2ep40: 'Doakadar, King of the Demon Realm'. P2ep26 'my 3 Demon World Lords' = P2ep28 '3 Brothers of Devil World'.",
+        "ket_luan": "BA cụm này CÙNG chỉ 魔界 — gộp được."
+      },
+      {
+        "trong_sub": [
+          "Devil's Realm",
+          "Hallucination Hell"
+        ],
+        "la": "(chưa tra được tên Nhật)",
+        "phan": "P1 ep33-38",
+        "mo_ta": "Cõi ảo giác có BỐN CỔNG mà Wataru phải vượt để tới tầng giới 7: Devil Way Gate (giữ cổng: Sarogan), Devil Wind Gate (Skull), Devil Sky Gate, Hell Gate (Older Mingwang).",
+        "bang_chung": "P1ep34: 'We had to bypass four Hallucination Hell Gates before we can leave'; P1ep38: 'we finally stepped out of Devil's Realm'. Hai tên dùng thay nhau trong cùng arc.",
+        "ket_luan": "KHÔNG PHẢI 魔界. Đây là địa điểm riêng của arc Phần 1. Hai cụm 'Devil's Realm' và 'Hallucination Hell' thì gộp được VỚI NHAU."
+      },
+      {
+        "trong_sub": [
+          "evil world",
+          "Evil World"
+        ],
+        "la": "khái niệm chung, KHÔNG phải địa danh",
+        "phan": "P2,P3",
+        "mo_ta": "Chỉ 'phe ác' nói chung, không phải một cõi cụ thể.",
+        "bang_chung": "P3ep01: 'the evil world is trying to gain control of Soukai again'; P3ep08: 'Darkedar of the evil world'. Đa số viết THƯỜNG (evil world), khác hẳn các địa danh viết hoa.",
+        "ket_luan": "Dịch là 'phe tà ác' / 'thế lực bóng tối', KHÔNG coi là tên riêng, KHÔNG gộp với Makai."
+      },
+      {
+        "trong_sub": [
+          "Devil World (P3 ep45)"
+        ],
+        "la": "có thể là 魔界 Makai",
+        "phan": "P3",
+        "mo_ta": "Quê nhà của một nhân vật nữ: 'l left my parents' Devil World', 'ln the Devil World, everyday is a battle'.",
+        "ket_luan": "CHƯA CHẮC — nhiều khả năng là 魔界 quê của gia tộc Donalkami, nhưng chỉ xuất hiện ở ep45. Xác minh khi dịch tới tập đó."
+      },
+      {
+        "trong_sub": [
+          "Dark World"
+        ],
+        "la": "hiện tượng riêng của Phần 2",
+        "phan": "P2 ep02,31,41",
+        "mo_ta": "P2ep31: 'Silent Coming, the Dark World of 13' — một sự kiện/thế lực đang ập tới, hút người vào.",
+        "ket_luan": "KHÔNG gộp với Makai."
+      },
+      {
+        "trong_sub": [
+          "Dark Zone"
+        ],
+        "la": "cạm bẫy do thế lực bóng tối tạo ra",
+        "phan": "P2 ep27-28",
+        "mo_ta": "P2ep28: 'Ryujinmaru is trapped in Dark Zone', bị Jabarry và Yukiaba niêm phong.",
+        "ket_luan": "KHÔNG gộp với Makai."
+      }
+    ]
+  },
+  "romaji_chinh_thuc": {
+    "_nguon": "Ảnh tên chính thức trên mashin-eiyuuden-wataru.net (assets/img/mashin/name_m01–09.png) — có ghi kèm romaji.",
+    "_ghi_chu": "Đây là cách phiên âm CHÍNH THỨC của nhà sản xuất, ưu tiên hơn mọi suy luận.",
+    "bang": [
+      {
+        "kanji": "龍神丸",
+        "chinh_thuc": "RYUJINMARU"
+      },
+      {
+        "kanji": "戦神丸",
+        "chinh_thuc": "SENJINMARU"
+      },
+      {
+        "kanji": "幻神丸",
+        "chinh_thuc": "GENJINMARU"
+      },
+      {
+        "kanji": "空神丸",
+        "chinh_thuc": "KUJINMARU",
+        "truoc_ghi": "Kuujinmaru — SỬA"
+      },
+      {
+        "kanji": "邪虎丸",
+        "chinh_thuc": "JYAKOMARU",
+        "truoc_ghi": "Jakomaru — SỬA"
+      },
+      {
+        "kanji": "龍王丸",
+        "chinh_thuc": "RYUOUMARU"
+      },
+      {
+        "kanji": "戦王丸",
+        "chinh_thuc": "SENOUMARU"
+      },
+      {
+        "kanji": "空王丸",
+        "chinh_thuc": "KUOUMARU",
+        "truoc_ghi": "Kuuoumaru — SỬA"
+      },
+      {
+        "kanji": "幻王丸",
+        "chinh_thuc": "GENOUMARU"
+      },
+      {
+        "kanji": "鳥神丸",
+        "chinh_thuc": "CHOJINMARU",
+        "truoc_ghi": "Choujinmaru — SỬA"
+      },
+      {
+        "kanji": "剣王龍神丸",
+        "chinh_thuc": "KENOU RYUJINMARU",
+        "truoc_ghi": "Kennou — SỬA"
+      },
+      {
+        "kanji": "獅子龍神丸",
+        "chinh_thuc": "SHISHI RYUJINMARU"
+      },
+      {
+        "kanji": "鳳凰龍神丸",
+        "chinh_thuc": "HOUOU RYUJINMARU"
+      },
+      {
+        "kanji": "月光龍神丸",
+        "chinh_thuc": "GEKKOU RYUJINMARU"
+      },
+      {
+        "kanji": "白虎龍神丸",
+        "chinh_thuc": "BYAKKO RYUJINMARU"
+      },
+      {
+        "kanji": "超魔神龍神丸",
+        "chinh_thuc": "CHO MASHIN RYUJINMARU"
+      },
+      {
+        "kanji": "龍星丸",
+        "chinh_thuc": "RYUSEIMARU"
+      }
+    ]
+  },
+  "cau_ho_bien_hinh": {
+    "_ghi_chu": "93 dòng biến hình trong toàn bộ 142 tập — nhiều hơn cả dòng triệu hồi ở Phần 3. Câu hô LUÔN gọi tên DẠNG ĐÍCH, nên dùng màu của dạng đích.",
+    "theo_phan": [
+      {
+        "phan": "P1",
+        "so_dong": 34,
+        "mau_cau": [
+          "Transform! Ryuomaru",
+          "Transform! Ryukingmaru!",
+          "Ryukingmaru, transform!"
+        ],
+        "y_nghia": "Ryujinmaru -> Ryuoumaru",
+        "dich": "Biến hình! Ryuoumaru"
+      },
+      {
+        "phan": "P2",
+        "so_dong": 6,
+        "mau_cau": [
+          "Ryusei Power, Change, Ryujinmaru",
+          "Go, the power of Dragon Star. Transform, Ryujinmaru!"
+        ],
+        "y_nghia": "Shinsei Ryujinmaru -> Ryuseimaru, kích hoạt bằng sức mạnh Ryusei",
+        "dich": "Sức mạnh Ryusei! Biến hình!"
+      },
+      {
+        "phan": "P3",
+        "so_dong": 53,
+        "mau_cau": [
+          "Super Transformation! Lion Ryujinmaru!",
+          "Ultimate change! Phoenix Ryujinmaru!",
+          "Transform! Moonlight Ryujinmaru."
+        ],
+        "y_nghia": "Đổi giữa 5 dạng: Shishi / Houou / Kenou / Gekkou / Byakko",
+        "dich": "Siêu Biến Hình! Shishi Ryujinmaru!",
+        "ghi_chu": "Tiếng Nhật gốc là 超変身 (Chou Henshin). Sub dịch loạn: 'Super Transformation', 'Super change', 'Ultimate change', 'Superpower transform', 'Supreme transformation' — PHẢI thống nhất một cách dịch."
+      }
+    ],
+    "quy_tac_style": "Dùng style summon-<dạng đích> nhưng đổi hiệu ứng động: triệu hồi = mờ dần + quầng sáng; biến hình = quét sáng ngang + giãn."
+  },
+  "mau_mashin": {
+    "_nguon": "Đọc trực tiếp từ ảnh chính thức trên mashin-eiyuuden-wataru.net (wataru1/wataru2/chowataru → mashin/img/pct_m*.png). Romaji lấy từ ảnh tên name_m*.png cùng trang.",
+    "_do_phu": "P1 9/9 · P2 9/9 · P3 10/10 — ĐỦ.",
+    "P1": [
+      {
+        "romaji": "Ryujinmaru",
+        "kanji": "龍神丸",
+        "mau_than": "navy + trắng, điểm cam vàng, panel đỏ",
+        "mau_style": "FFC83C",
+        "ghi_chu": "Style dùng VÀNG KIM theo 金龍 Kinryuu (hồn Ryujinmaru), không dùng navy vì sẽ chìm trên nền video tối."
+      },
+      {
+        "romaji": "Senjinmaru",
+        "kanji": "戦神丸",
+        "mau_than": "đen navy, NGỰC ĐỎ, sừng vàng",
+        "mau_style": "D8323E"
+      },
+      {
+        "romaji": "Genjinmaru",
+        "kanji": "幻神丸",
+        "mau_than": "XANH NGỌC + viền vàng, điểm đỏ",
+        "mau_style": "34C0A0"
+      },
+      {
+        "romaji": "Kujinmaru",
+        "kanji": "空神丸",
+        "mau_than": "XANH DƯƠNG + trắng, mỏ/móng cam (dạng chim)",
+        "mau_style": "4A90E2"
+      },
+      {
+        "romaji": "Jyakomaru",
+        "kanji": "邪虎丸",
+        "mau_than": "VÀNG KIM + đen navy, điểm đỏ",
+        "mau_style": "E8B830"
+      },
+      {
+        "romaji": "Ryuoumaru",
+        "kanji": "龍王丸",
+        "mau_than": "TRẮNG + cam vàng, panel đỏ",
+        "mau_style": "F0F0F5"
+      },
+      {
+        "romaji": "Senoumaru",
+        "kanji": "戦王丸",
+        "mau_than": "ĐỎ + trắng, vàng/đen",
+        "mau_style": "E04050"
+      },
+      {
+        "romaji": "Kuoumaru",
+        "kanji": "空王丸",
+        "mau_than": "XANH DƯƠNG + trắng, cam",
+        "mau_style": "5AA0E8"
+      },
+      {
+        "romaji": "Genoumaru",
+        "kanji": "幻王丸",
+        "mau_than": "XANH NGỌC + trắng",
+        "mau_style": "48CCA8"
+      }
+    ],
+    "P2": [
+      {
+        "romaji": "Shinsei Ryujinmaru",
+        "kanji": "新星龍神丸",
+        "mau_than": "trắng + navy + cam đỏ",
+        "mau_style": "FFC83C",
+        "ghi_chu": "Dùng chung vàng kim với Ryujinmaru."
+      },
+      {
+        "romaji": "Shinsei Ryujinmaru (Uchuukai)",
+        "kanji": "新星龍神丸(宇宙界)",
+        "mau_than": "trắng + ĐỎ + xanh dương",
+        "mau_style": "FF5A5A"
+      },
+      {
+        "romaji": "Ryuseimaru",
+        "kanji": "龍星丸",
+        "mau_than": "VÀNG KIM + đỏ mận",
+        "mau_style": "FFD24A",
+        "ghi_chu": "Khớp tư liệu 金色の魔神."
+      },
+      {
+        "romaji": "Shinsei Senjinmaru",
+        "kanji": "新星戦神丸",
+        "mau_than": "ĐỎ + đen",
+        "mau_style": "D8323E"
+      },
+      {
+        "romaji": "Shinsei Kujinmaru",
+        "kanji": "新星空神丸",
+        "mau_than": "trắng + cánh xanh tím, điểm cam",
+        "mau_style": "6A8CE8"
+      },
+      {
+        "romaji": "Natsukimaru",
+        "kanji": "夏鬼丸",
+        "mau_than": "XANH LÁ + CAM",
+        "mau_style": "5CC451",
+        "ghi_chu": "SỬA: trước tôi đoán xanh biển theo tên 海火子 — SAI."
+      },
+      {
+        "romaji": "Shinsei Jyakomaru",
+        "kanji": "新星邪虎丸",
+        "mau_than": "đỏ + trắng + vàng",
+        "mau_style": "E8B830"
+      }
+    ],
+    "P3": [
+      {
+        "romaji": "Ryujinmaru",
+        "kanji": "龍神丸",
+        "mau_than": "navy + đỏ + vàng",
+        "mau_style": "FFC83C"
+      },
+      {
+        "romaji": "Shishi Ryujinmaru",
+        "kanji": "獅子龍神丸",
+        "mau_than": "VÀNG KIM",
+        "mau_style": "F5C518"
+      },
+      {
+        "romaji": "Houou Ryujinmaru",
+        "kanji": "鳳凰龍神丸",
+        "mau_than": "ĐỎ CAM LỬA + vàng",
+        "mau_style": "F0602A"
+      },
+      {
+        "romaji": "Kenou Ryujinmaru",
+        "kanji": "剣王龍神丸",
+        "mau_than": "đen + vàng + đỏ",
+        "mau_style": "C9A227"
+      },
+      {
+        "romaji": "Gekkou Ryujinmaru",
+        "kanji": "月光龍神丸",
+        "mau_than": "XANH BẠC HÀ NHẠT + trắng vàng",
+        "mau_style": "A8E6D8",
+        "ghi_chu": "Khớp tư liệu 薄い水色."
+      },
+      {
+        "romaji": "Byakko Ryujinmaru",
+        "kanji": "白虎龍神丸",
+        "mau_than": "navy + TRẮNG + vàng",
+        "mau_style": "E8EEF5"
+      },
+      {
+        "romaji": "Cho Mashin Ryujinmaru",
+        "kanji": "超魔神龍神丸",
+        "mau_than": "trắng + navy + vàng + đỏ",
+        "mau_style": "FFFFFF"
+      },
+      {
+        "romaji": "Chojinmaru",
+        "kanji": "鳥神丸",
+        "mau_than": "XANH LÁ NHẠT + đen",
+        "mau_style": "9BD68C"
+      },
+      {
+        "romaji": "Senjinmaru",
+        "kanji": "戦神丸",
+        "mau_than": "ĐỎ + đen",
+        "mau_style": "D8323E"
+      },
+      {
+        "romaji": "Jyakomaru",
+        "kanji": "邪虎丸",
+        "mau_than": "đen + vàng + đỏ",
+        "mau_style": "E8B830"
+      }
+    ]
+  },
+  "quy_uoc_ten_style": {
+    "_ghi_chu": "Tên style trong file .ass dùng TIẾNG ANH toàn bộ, không trộn tiếng Việt.",
+    "chieu_thuc": "atk-<hệ>  — atk-neutral / atk-fire / atk-ice / atk-thunder / atk-light / atk-dark",
+    "trieu_hoi": "summon-<mashin>  — summon-ryujinmaru, summon-byakko-ryujinmaru, ...",
+    "bien_hinh": "dùng lại style summon-<dạng đích>, chỉ đổi hiệu ứng động",
+    "thoai_thuong": "giữ nguyên style gốc của file (text / Default / *Default)",
+    "_nguyen_tac_ten_nhom": "TÊN NHÓM / TỔ CHỨC (không phải tên một người) phải dịch cho hiểu được, đừng để romaji trần. VD: 魔界ザン三兄弟 -> 'ba anh em nhà Zan' chứ KHÔNG để 'Makai Zan Sankyoudai'. Tên riêng của TỪNG người trong nhóm thì vẫn giữ romaji: Zan Kokku, Zan Gyakku, Zan Gorotsukii.",
+    "_NGUYEN_TAC_CHOT": {
+      "_cau_hoi_duy_nhat": "ĐỌC RA có giống tiếng Anh không? Giống -> dịch Hán-Việt. Không giống -> giữ romaji.",
+      "_luu_y": "Câu hỏi này THẮNG cả phân loại. Kể cả tuyệt chiêu, nếu đọc ra tiếng Anh thì vẫn phải dịch.",
+      "GIU_ROMAJI": {
+        "_vi_sao": "Đọc lên ra âm Nhật, người xem nhận ra ngay là tên riêng.",
+        "vi_du": [
+          "Người: Wataru, Himiko, Shibaraku, Kurama, Toraoh, Doakudar, Zan Kokku, Yuki, Momo",
+          "Mashin: Ryujinmaru, Senjinmaru, Kujinmaru, Genjinmaru, Jyakomaru, Ryuoumaru",
+          "Kiếm / tuyệt chiêu: Touryuuken, Kaen Touryuuken, Gokkan Touryuuken, Ryuugaken, Enryuuken",
+          "Địa danh: Soukaizan, Seikaizan, Ryuuguujou",
+          "Vật: Hentama"
+        ]
+      },
+      "DICH_HAN_VIET": {
+        "_vi_sao": "Gốc là katakana mượn tiếng Anh — để nguyên thì trông như chưa dịch xong.",
+        "vi_du": [
+          "デス・ゴッド Death God -> Tử Thần",
+          "ワタルスペシャルドラゴンキック Wataru Special Dragon Kick -> Wataru Đặc Biệt Long Cước",
+          "バトルゴリラ Battle Gorilla -> Chiến Đấu Đại Tinh Tinh",
+          "サンダーブルー Thunder Blue -> Bích Lôi Đình",
+          "タイガーソードストーム Tiger Sword Storm -> Hổ Kiếm Bão",
+          "デビルタイガーミサイル Devil Tiger Missile -> Ma Hổ Phi Đạn",
+          "クワトロアロー Quattro Arrow -> Tứ Tiễn",
+          "Lil' Dan -> Tiểu Dan",
+          "Mirror of Truth -> Gương Sự Thật",
+          "クルージング・トム Cruising Tom -> Cruising Tom (giữ tên riêng Tom)",
+          "シュワル・ビネガー Shuwal Vinegar -> Shuwal Vinegar"
+        ]
+      },
+      "TEN_NHOM": "Tên nhóm/tổ chức luôn dịch cho hiểu: 魔界ザン三兄弟 -> 'ba anh em nhà Zan'. Tên TỪNG người trong nhóm vẫn giữ romaji.",
+      "_QUY_TRINH_3_BUOC": [
+        "B1. Tên trong sub có phải tên Trung bóp méo không? Có -> tra TÊN GỐC NHẬT, bỏ tên Trung.",
+        "B2. Tên gốc Nhật đó có phải katakana mượn tiếng Anh không?",
+        "B3. Nếu có: THỬ dịch Hán-Việt. NGHE HAY thì dùng. NGHE GƯỢNG thì GIỮ ROMAJI.",
+        "B4. Nếu không phải katakana Anh (đọc ra âm Nhật): giữ romaji."
+      ],
+      "_TRAT_TU_HAN_VIET": "Hán-Việt đặt chữ BỔ NGHĨA TRƯỚC, chữ chính SAU — ngược với tiếng Anh. 碧雷 = Bích Lôi (sét biếc), KHÔNG phải 'Lôi Bích'. Dịch tên katakana-Anh thì phải ĐẢO thứ tự: Thunder Blue -> Bích Lôi, không phải Lôi Lam.",
+      "_DO_DAI": "Ưu tiên 2-3 âm. Tên Mashin/phản diện dài 4 âm nghe lê thê. 戦猩 Chiến Đấu Đại Tinh Tinh (2 âm) hơn 'Chiến Đấu Tinh Tinh' (4 âm).",
+      "_PHEP_THU_NGHE_HAY": "Dịch xong phải ĐỌC TO LÊN. Nghe như tên nhân vật thật thì giữ; nghe như bản dịch máy thì bỏ.\nĐẠT: Bích Lôi (碧雷), Chiến Đấu Đại Tinh Tinh (戦猩), Tử Thần, Hổ Kiếm Bão, Ma Hổ Phi Đạn — đều thuần Hán-Việt, 2-3 âm.\nTRƯỢT: 'Tuần Du Tom' — ghép Hán-Việt với tên riêng phương Tây, hai hệ không ăn nhau. Giữ Cruising Tom.\nTRƯỢT: 'Toan Thố' — dịch sát nghĩa 'giấm chua' nhưng chẳng ra tên người. Giữ Shuwal Vinegar.\nQUY LUẬT: tên có phần là DANH TỪ RIÊNG phương Tây (Tom, Vinegar...) thì đừng dịch — chỉ dịch được khi CẢ TÊN là từ mô tả (Thunder Blue, Battle Gorilla, Death God).",
+      "_KHOP_SO_AM": {
+        "_quy_tac": "Tên katakana mượn tiếng Anh: đếm ÂM TIẾT TIẾNG ANH, dịch ra ĐÚNG bấy nhiêu âm Hán-Việt.",
+        "_vi_sao": "Nhân vật hô từng âm một. Khớp số âm thì karaoke chạy đúng nhịp và nghe cùng độ dài với bản gốc.",
+        "_cach_lam": "Chia tên tiếng Anh thành từng từ, mỗi từ tìm cụm Hán-Việt có đúng số âm tiết của từ đó.",
+        "vi_du": [
+          "Battle Gorilla (5 âm) -> Chiến Đấu Đại Tinh Tinh | Bat-tle=Chiến Đấu(2), Go-ril-la=Đại Tinh Tinh(3)",
+          "Thunder Blue (3 âm) -> Bích Lôi Đình | Blue=Bích(1), Thun-der=Lôi Đình(2), đảo trật tự cho đúng Hán-Việt",
+          "Death God (2 âm) -> Tử Thần | khớp sẵn",
+          "Lil Dan (2 âm) -> Tiểu Dan | khớp sẵn"
+        ],
+        "_luu_y": "Tên có CHỮ HÁN thì tự khớp sẵn (mỗi chữ Hán = 1 âm Hán-Việt), không cần tính."
+      }
+    },
+    "STYLE_HAC_AM": {
+      "_nguyen_tac": "Mashin và chiêu thức của PHE PHẢN DIỆN luôn dùng style hắc ám — kể cả nhân vật sau này quay đầu làm người tốt. Khi còn là phản diện thì vẫn hắc ám.",
+      "summon-dark": "Triệu hồi Mashin phản diện — tím ám #B060E0, viền #1A0028",
+      "atk-dark": "Chiêu thức phản diện — tím nhạt #C0A0F0, viền #300030",
+      "ap_dung_cho": [
+        "Jyakomaru / Shinsei Jyakomaru — Mashin của Toraoh. Toraoh cuối P1 được thanh tẩy thành Shouryuushi, NHƯNG mọi cảnh trước đó vẫn dùng hắc ám.",
+        "Chiến Đấu Đại Tinh Tinh (バトルゴリラ) — Mashin của Shuwal Vinegar",
+        "Mashin của Bích Lôi, Tử Thần, Zan Kokku và toàn bộ boss tuần",
+        "Chiêu: Hổ Kiếm Bão, Ma Hổ Phi Đạn, Tử Vẫn Thạch Kiếm, Xích Nhiệt Thuẫn..."
+      ],
+      "ngoai_le": "Sau khi phản diện CHÍNH THỨC quay đầu (Toraoh -> Shouryuushi cuối P1, Kurama sau khi được cảm hoá), thì từ đó trở đi dùng style thường. Ranh giới là MỐC trong cốt truyện, xem 'ten_theo_moc_cot_truyen'."
+    }
+  },
+  "cau_truc_phe_ac": {
+    "_ghi_chu": "Cấu trúc phe Doakudar ở Phần 1 — hữu ích để nhận diện nhân vật khi dịch.",
+    "doakudar": "Ma Vương, trùm cuối",
+    "tu_thien_vuong": {
+      "_ten": "ドアクダー四天王 Doakudar Shitennou",
+      "phan_cong": "Don Goro phụ trách các tầng giới LẺ; ba anh em Zan phụ trách tầng giới CHẴN.",
+      "thanh_vien": [
+        "Don Goro (ドン・ゴロ) — thầy dạy của Toraoh",
+        "Zan Kokku (ザン・コック) — anh cả",
+        "Zan Gorotsukii (ザン・ゴロツキー) — anh hai",
+        "Zan Gyakku (ザン・ギャック) — em út"
+      ]
+    },
+    "bay_ac_nhan": "'7 bad guys working for Doakudar' trong sub — cấp dưới của Tứ Thiên Vương, mỗi tầng giới một người.",
+    "vi_du": [
+      "Tầng 1: Cruising Tom (trùm), Thunder Blue (thuộc hạ)",
+      "Tầng 2: Death (trùm), Dr Upside Down / Durolala / Zarelle (thuộc hạ)"
+    ]
+  },
+  "ten_ova_majinzan": {
+    "_nguon": "真魔神英雄伝ワタル -魔神山編- (OVA 2 tập). Nguồn dịch: bản Trung phồn thể trong Plex_Jellyfin_Subtitles/.../Season 00.",
+    "_ghi_chu": "Phiên từ chữ Hán bản Trung. Các mục có do_chac=\"thap\" CHƯA đối chiếu được nguồn Nhật chính thức — cần tra lại nếu có dịp.",
+    "bang": [
+      {
+        "tieng_trung": "東卡拉林",
+        "romaji": "Tonkararin",
+        "tieng_nhat": "トンカラリン",
+        "vai_tro": "Thợ rèn Mashin ở Mashinzan, tạo ra mọi Mashin",
+        "do_chac": "cao"
+      },
+      {
+        "tieng_trung": "忒娜麗",
+        "romaji": "Tenari",
+        "tieng_nhat": "(chưa xác minh)",
+        "vai_tro": "Cháu gái Tonkararin",
+        "do_chac": "thap"
+      },
+      {
+        "tieng_trung": "幻龍齋",
+        "romaji": "Genryuusai",
+        "tieng_nhat": "幻龍斎",
+        "vai_tro": "Đương gia đời 13 phái Shinobibe, cha của Himiko",
+        "do_chac": "cao"
+      },
+      {
+        "tieng_trung": "皇帝龍",
+        "romaji": "Kouteiryuu",
+        "han_viet": "Hoàng Đế Long",
+        "vai_tro": "Mashin truyền thuyết, mục tiêu tranh đoạt cả 2 tập",
+        "do_chac": "cao"
+      },
+      {
+        "tieng_trung": "銀卡庫",
+        "romaji": "Ginkaku",
+        "tieng_nhat": "ギンカク / 銀角",
+        "vai_tro": "Tướng Ma Giới",
+        "do_chac": "cao"
+      },
+      {
+        "tieng_trung": "金卡庫",
+        "romaji": "Kinkaku",
+        "tieng_nhat": "キンカク / 金角",
+        "vai_tro": "Tướng Ma Giới, cặp với Ginkaku",
+        "do_chac": "cao"
+      },
+      {
+        "tieng_trung": "鬼弁慶",
+        "romaji": "Oni Benkei",
+        "han_viet": "Quỷ Biện Khánh",
+        "vai_tro": "Mashin địch",
+        "do_chac": "cao"
+      },
+      {
+        "tieng_trung": "地獄阿修羅",
+        "romaji": "Jigoku Ashura",
+        "han_viet": "Địa Ngục A Tu La",
+        "vai_tro": "Mashin địch",
+        "do_chac": "cao"
+      },
+      {
+        "tieng_trung": "劍部武一郎",
+        "romaji": "Kenbu Buichirou",
+        "tieng_nhat": "剣部武一郎",
+        "vai_tro": "TÊN THẬT của Shibaraku. Thoại thường vẫn gọi \"sư phụ\"/Shibaraku",
+        "do_chac": "cao"
+      },
+      {
+        "tieng_trung": "古拿瑪",
+        "romaji": "Kurama",
+        "tieng_nhat": "渡部クラマ",
+        "vai_tro": "ĐÃ CÓ: xem nhan_vat. Bản dịch dùng Kurama (209 lần), KHÔNG dùng Gunamun",
+        "do_chac": "cao"
+      },
+      {
+        "tieng_trung": "龍之岬角",
+        "romaji": "Ryuu no Misaki",
+        "han_viet": "Mũi Long Giáp",
+        "vai_tro": "Địa danh, nơi giấu Kouteiryuu",
+        "do_chac": "trung"
+      }
+    ]
+  }
+}

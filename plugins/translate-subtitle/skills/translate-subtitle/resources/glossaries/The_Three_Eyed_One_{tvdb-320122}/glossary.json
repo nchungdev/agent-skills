@@ -1,0 +1,62 @@
+{
+  "_meta": {
+    "ten_tac_pham": "The Three-Eyed One (三つ目がとおる - Mitsume ga Tooru / Cậu Bé 3 Mắt)",
+    "tac_gia": "Osamu Tezuka (手塚治虫)",
+    "the_loai": "Anime Shounen / Siêu nhiên / Cổ văn minh",
+    "ngon_ngu": {
+      "nguyen_tac": "Nhật",
+      "file_nguon": "Anh (.en.srt)",
+      "ngon_ngu_dich": "Việt",
+      "mo_dun_ap_dung": [
+        "loi_chung",
+        "cjk",
+        "nhat"
+      ]
+    }
+  },
+  "than_chu_chuan_hoa": {
+    "ten_vu_khi": "Xích Ưng Thần Thương",
+    "ten_goc": "赤いコンドル (Akai Kondoru)",
+    "chu_han": "赤鷹神槍",
+    "cau_chu_hoan_chinh": [
+      "Tam Nhãn Thần Tộc, vạn đại huyết truyền!",
+      "Càn khôn quy phục, thiên hạ xưng tôn, chí cao thần uy, giải trừ phong ấn!",
+      "Cùng ta giáng lâm, cùng ta diệt vong!",
+      "Mau xuất hiện điii, Xích Ưng Thần Thương!"
+    ]
+  },
+  "nhan_vat": {
+    "Sharaku Hosuke": {
+      "ten_nhat": "写楽保介",
+      "han_viet": "Tả Lạc Bảo Giới",
+      "ten_viet": "Sharaku Hosuke (Tả Lực)",
+      "tinh_cach_1": "Bình thường (dán băng cá nhân): Cậu bé ngây thơ, khờ khạo, hay sợ hãi, xưng 'cháu/em', gọi Wato là 'chị Wato' (Wato-san).",
+      "tinh_cach_2": "Khi mở mắt thứ ba: Thiên tài cổ đại Tam Nhãn tộc, ngạo nghễ, lạnh lùng, xưng 'ta' (Ore/Watashi), gọi người khác là 'ngươi/lũ sâu bọ'."
+    },
+    "Wato Chiyoko": {
+      "ten_nhat": "和登千代子",
+      "han_viet": "Hòa Đăng Thiên Đại Tử",
+      "ten_viet": "Wato Chiyoko (Hòa Đăng)",
+      "vai_tro": "Bạn học kiêm bảo hộ Sharaku, tính cách tomboy, nghĩa hiệp, luôn giúp Sharaku dán mắt thứ ba.",
+      "xung_ho": "Gọi Sharaku là 'Sharaku/nhóc Sharaku', xưng 'chị/tớ'."
+    },
+    "Kenmochi": {
+      "ten_nhat": "犬持医師",
+      "han_viet": "Khuyển Trì Bác Sĩ",
+      "ten_viet": "Bác sĩ Kenmochi",
+      "vai_tro": "Cha nuôi và là bác sĩ chăm sóc Sharaku."
+    },
+    "Kido": {
+      "ten_nhat": "鬼胴",
+      "han_viet": "Quỷ Đống",
+      "ten_viet": "Kido (Đầu gấu trường học hay bắt nạt Sharaku)"
+    }
+  },
+  "address_matrix": {
+    "Sharaku (ngây thơ) -> Wato": "chị Wato - em/cháu",
+    "Sharaku (tam nhãn) -> Wato": "ngươi/cô ta - ta",
+    "Wato -> Sharaku": "Sharaku/nhóc Sharaku - chị/tớ",
+    "Sharaku -> Kenmochi": "bác Kenmochi - cháu",
+    "Kenmochi -> Sharaku": "Sharaku - bác/ta"
+  }
+}
