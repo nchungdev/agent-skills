@@ -41,3 +41,17 @@ translate-subtitle <tên_phim/tmdbid/tvdbid> <đường_dẫn_subtitle> <ngôn_n
 
 * **TẦNG 1 (CỤC BỘ DỰ ÁN):** Chứa `PROGRESS.md` (tiến độ từng tập), `AMBIGUITY_LOG.md` (đoạn thoại mờ nghĩa), `_style/` (style override cục bộ), `output/` (thành phẩm).
 * **TẦNG 2 (KHO TẬP TRUNG SKILL & GITHUB):** Chỉ lưu tri thức **ĐÃ CONFIRM 100%** (`glossary.json`, `ERRORS_AND_PITFALLS.md`, `metadata.json`).
+
+---
+
+## 🎬 TỰ ĐỘNG KHỞI TẠO BỐI CẢNH & NHÂN VẬT QUA TMDB API
+
+Khi bắt đầu dịch một bộ phim mới, skill có thể tự động gọi `auto_context_resolver.py` để:
+1. **Lấy bối cảnh & cốt truyện chính thức** từ TMDb API.
+2. **Tự động trích xuất danh sách nhân vật chính thức** nạp sẵn vào `glossary.json`.
+3. **Phân tích thể loại & cốt truyện** để tự động gợi ý / áp dụng `--style` chuẩn (`medical-drama`, `detective-mystery`, `mecha-robot-karaoke`...).
+4. **Tự động tạo `PROGRESS.md` và `AMBIGUITY_LOG.md`** cho workspace cục bộ.
+
+```sh
+python3 <skill_dir>/scripts/auto_context_resolver.py "<tên_phim_hoặc_tmdb_id>" --type tv|movie --output-dir "<workspace_path>"
+```
