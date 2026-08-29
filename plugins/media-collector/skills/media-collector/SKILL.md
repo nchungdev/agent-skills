@@ -17,12 +17,15 @@ The agent **MUST** first inspect the user's prompt for inline options, flags, or
 - **Flag syntax**:
   - `media-collector <franchise_name> --sub <vi,en,zh,ja,all,none> --video <links|download>`
   - Short flags: `-s <langs>`, `--links-only` (Option A), `--download-video` (Option B)
-  - New: `--estimate` (dry-run: show disk estimation only, don't download)
-  - New: `--translate` (after curation, ask user to trigger Vietnamese subtitle translation)
+  - `--estimate` — Dry-run: show disk estimation only, don't download
+  - `--translate` — After curation, ask user to trigger Vietnamese subtitle translation
+  - `--nfo` — Generate NFO metadata + poster/fanart for Plex/Jellyfin/Kodi
+  - `--sync <gdrive|nas|both>` — Auto-sync completed output to cloud/NAS after download
+  - `--aria2c` — Use aria2c for accelerated multi-connection downloads
 - **Natural language syntax**:
   - *"media-collector Cậu bé 3 mắt sub vi,en chỉ lấy link"*
   - *"media-collector Transformers RiD tải sub tiếng anh, video chỉ lấy link"*
-  - *"media-collector Lord of the Rings full 4K kèm sub việt"*
+  - *"media-collector Lord of the Rings full 4K kèm sub việt tạo nfo"*
 
 ### 2. Execution Logic:
 - **Scenario A (Parameters Provided)**:
@@ -39,7 +42,7 @@ The agent **MUST** first inspect the user's prompt for inline options, flags, or
 
 ### 1. Estimation Reference Table (Per Episode / Per Movie):
 
-| Resolution & Codec | Typical Size Per Episode (24 min) | Typical Size Per Episode (45 min) | Typical Size Per Movie (90-120 min) |
+| Resolution & Codec | ~Per Episode (24 min) | ~Per Episode (45 min) | ~Per Movie (90-120 min) |
 | :--- | :---: | :---: | :---: |
 | 480p DVD-Rip (H.264) | ~200 MB | ~400 MB | ~700 MB – 1.5 GB |
 | 720p BDRip (H.264) | ~300 MB | ~600 MB | ~1.5 – 3 GB |
@@ -47,152 +50,311 @@ The agent **MUST** first inspect the user's prompt for inline options, flags, or
 | 1080p BDRip (HEVC/x265) | ~300 – 600 MB | ~600 MB – 1.2 GB | ~2 – 5 GB |
 | 1080p BD Remux (Lossless) | ~2 – 4 GB | ~4 – 8 GB | ~15 – 35 GB |
 | 2160p 4K UHD (HEVC/HDR) | ~3 – 6 GB | ~5 – 10 GB | ~20 – 60 GB |
-| Subtitle files (.srt/.ass) | ~30 – 80 KB | ~50 – 120 KB | ~50 – 150 KB |
 
-### 2. Estimation Procedure (Agent MUST Follow):
+### 2. Estimation Procedure:
 
 ```
-1. Xác định số lượng tập / movie cần tải.
-2. Nhân với kích thước ước lượng theo bảng trên (dựa vào resolution & codec từ nguồn).
-3. Chạy `df -h <target_disk>` để lấy dung lượng trống hiện tại.
-4. Tính phần trăm ổ cứng sẽ bị chiếm sau khi tải.
-5. Hiển thị Bảng Ước Lượng cho user trước khi bắt đầu.
+1. Xác định số lượng tập / movie cần tải
+2. Nhân với kích thước ước lượng theo bảng (dựa vào resolution & codec từ nguồn)
+3. Chạy `df -h <target_disk>` để lấy dung lượng trống
+4. Tính phần trăm ổ cứng sau tải
+5. Hiển thị Bảng Ước Lượng cho user TRƯỚC KHI bắt đầu
 ```
 
-### 3. Output Format (MUST SHOW TO USER):
+### 3. Cảnh Báo Tự Động Theo Ngưỡng:
 
-```markdown
-## 💾 Ước Lượng Dung Lượng Tải Về
-
-| Hạng Mục | Giá Trị |
-| :--- | ---: |
-| **Tổng số tập / movie** | XX tập |
-| **Chất lượng nguồn** | 1080p BDRip HEVC |
-| **Dung lượng ước lượng** | ~XX GB |
-| **Phụ đề (~XX files)** | ~X MB (không đáng kể) |
-| **Tổng cộng ước tính** | **~XX GB** |
-| --- | --- |
-| **Dung lượng trống hiện tại** | XXX GB |
-| **Dung lượng trống sau khi tải** | XXX GB |
-| **Phần trăm ổ cứng sau tải** | XX% |
-```
-
-### 4. Cảnh Báo Tự Động Theo Ngưỡng:
-
-| Phần Trăm Ổ Cứng Sau Tải | Hành Động |
+| % Ổ Cứng Sau Tải | Hành Động |
 | :---: | :--- |
-| ≤ 75% | 🟢 **AN TOÀN** — Tiến hành tải bình thường. |
-| 76% – 85% | 🟡 **CẨN THẬN** — Cảnh báo: *"Ổ cứng sẽ khá đầy sau khi tải. Anh có muốn tiếp tục?"* |
-| 86% – 92% | 🟠 **NGUY HIỂM** — Cảnh báo mạnh: *"Ổ cứng sẽ gần đầy! Nên cân nhắc thu hồi dung lượng phim cũ đã đủ 3 tiêu chí trước khi tải."* |
-| > 92% | 🔴 **CHẶN** — Không cho tải, yêu cầu dọn dẹp trước: *"KHÔNG ĐỦ DUNG LƯỢNG. Cần giải phóng ít nhất XX GB trước khi tải."* |
+| ≤ 75% | 🟢 **AN TOÀN** — Tải bình thường |
+| 76% – 85% | 🟡 **CẨN THẬN** — Hỏi xác nhận |
+| 86% – 92% | 🟠 **NGUY HIỂM** — Khuyên dọn dẹp phim cũ đã đủ 3 tiêu chí |
+| > 92% | 🔴 **CHẶN** — Yêu cầu giải phóng dung lượng trước |
 
 ---
 
 ## 🔗 Translate-Subtitle Handoff (ASK FIRST — NEVER AUTO-EXECUTE)
 
 > [!IMPORTANT]
-> After completing the curation pipeline, if subtitle source files are available for translation, the agent **MUST ASK** the user whether they want to trigger the `translate-subtitle` skill. **NEVER auto-execute translation without explicit user consent.**
+> After completing curation, if translatable subtitle sources exist, the agent **MUST ASK** the user. **NEVER auto-execute translation.**
 
-### Handoff Procedure:
-
-1. **Detect Translatable Subtitles:**
-   After Step 3 (Subtitle Hunting), check if any acquired subtitles can serve as source for Vietnamese translation:
-   - English `.en.srt` / `.en.ass` → Translatable
-   - Japanese `.ja.ass` / `.jpn.ass` → Translatable (CJK module)
-   - Chinese `.zh.ass` / `.chi.ass` → Translatable (CJK module)
-   - Vietnamese `.vi.srt` already exists → Skip (already done)
-
-2. **Present Handoff Prompt to User:**
-   ```
-   📝 Phụ đề nguồn sẵn sàng để dịch sang tiếng Việt:
-   • Nguồn: 48 file .en.srt (Tiếng Anh)
-   • Thể loại gợi ý: detective-mystery
-   • Glossary có sẵn: The_Files_of_Young_Kindaichi_{tvdb-79354}
-   • Style gợi ý: --style detective-mystery
-
-   Anh có muốn bắt đầu dịch phụ đề tiếng Việt cho bộ phim này không?
-   ```
-
-3. **If User Accepts:**
-   - Pass the franchise ID, subtitle paths, genre, and style recommendation to the `translate-subtitle` skill.
-   - Create `PROGRESS.md` and `AMBIGUITY_LOG.md` in the project workspace (per Two-Tier Architecture).
-
-4. **If User Declines or Doesn't Respond:**
-   - Do nothing. The curation output stands on its own.
+### Handoff Flow:
+1. Detect translatable subs (`.en.srt`, `.ja.ass`, `.zh.ass` → Vietnamese).
+2. Present prompt with franchise ID, genre, glossary availability, and recommended style.
+3. Only proceed if user explicitly accepts.
 
 ---
 
-## 🏷️ Subtitle Distribution Badging (MANDATORY TO AVOID CONFUSION)
+## 📺 NFO Metadata & Artwork Generation (`--nfo`)
+
+When the `--nfo` flag is used (or user requests metadata), generate Plex/Jellyfin/Kodi-compatible NFO files and artwork.
+
+### 1. TV Series NFO Structure:
+```
+<Show_Folder>/
+├── tvshow.nfo          # Series-level metadata
+├── poster.jpg          # Series poster (download from TMDb/TVDB)
+├── fanart.jpg          # Series fanart/backdrop
+├── Season 01/
+│   ├── S01E01.nfo      # Per-episode metadata
+│   ├── S01E01-thumb.jpg
+│   └── ...
+```
+
+### 2. Movie NFO Structure:
+```
+<Movie_Folder>/
+├── movie.nfo           # Movie metadata
+├── poster.jpg
+├── fanart.jpg
+└── <movie_file>.mkv
+```
+
+### 3. NFO Content Template (XML):
+```xml
+<!-- tvshow.nfo -->
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<tvshow>
+  <title>The Files of Young Kindaichi</title>
+  <originaltitle>金田一少年の事件簿</originaltitle>
+  <year>1997</year>
+  <plot>Kindaichi Hajime, grandson of the famous detective...</plot>
+  <genre>Mystery</genre>
+  <genre>Animation</genre>
+  <studio>Toei Animation</studio>
+  <uniqueid type="tvdb">79354</uniqueid>
+  <uniqueid type="tmdb">1481</uniqueid>
+  <uniqueid type="imdb">tt0159171</uniqueid>
+</tvshow>
+```
+
+### 4. Artwork Sources (Priority Order):
+1. **TMDb API** (`api.themoviedb.org/3/`) — Best quality, most complete
+2. **TheTVDB** (`thetvdb.com`) — Good alternative for anime
+3. **Fanart.tv** (`fanart.tv`) — HD logos, clearart, disc art
+
+### 5. Agent Behavior:
+- **ALWAYS** attempt to download `poster.jpg` and `fanart.jpg` from TMDb first.
+- Generate `.nfo` files with all available IDs (TVDB, TMDb, IMDb).
+- For episodes: include episode title, air date, plot summary, and thumbnail.
+- If TMDb API key is not available: generate NFO with IDs only (Plex/Jellyfin will scrape the rest automatically).
+
+---
+
+## ☁️ Post-Curation Cloud Sync (`--sync`)
+
+Automatically sync completed Plex/Jellyfin structures to Google Drive and/or NAS after download.
+
+### 1. Supported Targets:
+| Flag | Action |
+| :--- | :--- |
+| `--sync gdrive` | Upload to Google Drive via `rclone copy` |
+| `--sync nas` | Sync to NAS via `rsync` over SSH |
+| `--sync both` | Upload to both Google Drive AND NAS |
+
+### 2. Destination Path Convention:
+```
+Google Drive:  gdrive:Phim/TV Shows/<Show Name> (<Year>) {tvdb-ID} [tvdbid-ID]/
+               gdrive:Phim/Movies/<Movie Name> (<Year>) {tmdb-ID} [tmdbid-ID]/
+NAS:           /srv/mergerfs/MainPool/Phim/TV Shows/<same>/
+               /srv/mergerfs/MainPool/Phim/Movies/<same>/
+```
+
+### 3. Helper Script:
+```sh
+python3 <skill_dir>/scripts/cloud_sync.py ./local_output/ \
+  --gdrive "gdrive:Phim/TV Shows/..." \
+  --nas "/srv/mergerfs/MainPool/Phim/TV Shows/..." \
+  --dry-run   # Preview first, then remove --dry-run to execute
+```
+
+### 4. Agent Behavior:
+- **ALWAYS** run with `--dry-run` first and show the user what will be transferred.
+- Only execute actual transfer after user confirms.
+- Monitor transfer progress and report completion percentage.
+- After successful sync to both targets, check if local files qualify for cleanup (3-criteria rule).
+
+---
+
+## 🔍 Duplicate Detection Before Download
+
+> [!IMPORTANT]
+> Before downloading video files, the agent **MUST** check whether the files already exist on NAS or Google Drive to avoid wasting bandwidth and disk space.
+
+### 1. Check Procedure:
+```
+1. Scan target NAS path via SSH: ssh chungnh@192.168.1.37 "ls -la '<nas_path>/Season XX/'"
+2. Scan target Google Drive via rclone: rclone lsjson -R "gdrive:Phim/TV Shows/<show>/"
+3. Compare filename patterns and sizes against planned downloads
+4. Report duplicates and skip them
+```
+
+### 2. Helper Script:
+```sh
+python3 <skill_dir>/scripts/deduplicate.py ./local_dir/ \
+  --gdrive "gdrive:Phim/TV Shows/..." \
+  --nas "/srv/mergerfs/MainPool/Phim/TV Shows/..."
+```
+
+### 3. Agent Output Format:
+```
+🔍 Kiểm Tra Trùng Lặp Trước Khi Tải:
+  ✅ Đã có trên NAS: 45/48 tập (bỏ qua, không tải lại)
+  ✅ Đã có trên Drive: 48/48 tập
+  📥 Cần tải mới: 3 tập (S01E46, S01E47, S01E48)
+  💾 Dung lượng tải thực tế: ~1.8 GB (thay vì 28 GB nếu tải cả bộ)
+```
+
+---
+
+## 🔄 Resume & Checkpoint (Download Continuity)
+
+### 1. Checkpoint File (`DOWNLOAD_STATE.json`):
+The agent **MUST** create and maintain a checkpoint file in the project directory to track download progress:
+
+```json
+{
+  "franchise": "The Files of Young Kindaichi",
+  "tvdb_id": "79354",
+  "tmdb_id": "1481",
+  "started_at": "2026-08-29T12:00:00+07:00",
+  "updated_at": "2026-08-29T14:30:00+07:00",
+  "total_episodes": 148,
+  "status": "in_progress",
+  "episodes": {
+    "S01E01": {"status": "done", "file": "S01E01.mkv", "size_mb": 450},
+    "S01E02": {"status": "done", "file": "S01E02.mkv", "size_mb": 462},
+    "S01E03": {"status": "failed", "error": "HTTP 503", "retries": 2},
+    "S01E04": {"status": "pending"}
+  },
+  "subtitles": {
+    "S01E01.en.srt": "done",
+    "S01E01.ja.ass": "done"
+  }
+}
+```
+
+### 2. Resume Behavior:
+- **On start**: Check for existing `DOWNLOAD_STATE.json` in the target directory.
+- **If found**: Read state and skip all `"done"` items, retry `"failed"` items, continue `"pending"` items.
+- **If not found**: Create new checkpoint and start from scratch.
+- **On each completion**: Update the checkpoint file immediately.
+- **On interruption**: The next run picks up exactly where it left off.
+
+### 3. Agent MUST:
+- Always use `aria2c --continue=true` or `wget -c` for resumable HTTP downloads.
+- Update `DOWNLOAD_STATE.json` after each file completes or fails.
+- Report resume status to the user: *"Tiếp tục tải từ S01E35 (34/148 đã hoàn tất từ phiên trước)."*
+
+---
+
+## ⚡ aria2c Integration (Accelerated Downloads)
+
+### 1. When to Use aria2c:
+- Direct HTTP/HTTPS downloads (DDL mirrors, Archive.org, cloud links)
+- Torrent/Magnet downloads (built-in BitTorrent client)
+- Metalink downloads
+
+### 2. Standard aria2c Command Templates:
+
+**HTTP Direct Download (multi-connection):**
+```sh
+aria2c -x 16 -s 16 -k 1M --continue=true \
+  --file-allocation=falloc \
+  --dir="<target_directory>" \
+  --out="<output_filename>" \
+  "<download_url>"
+```
+
+**Torrent/Magnet Download:**
+```sh
+aria2c --seed-time=0 \
+  --dir="<target_directory>" \
+  --bt-stop-timeout=300 \
+  "<torrent_file_or_magnet_link>"
+```
+
+**Batch Download from URL List:**
+```sh
+aria2c -x 16 -s 16 -k 1M --continue=true \
+  --file-allocation=falloc \
+  --dir="<target_directory>" \
+  --input-file="<url_list.txt>"
+```
+
+### 3. Batch URL List Format (`download_urls.txt`):
+```
+https://example.com/S01E01.mkv
+  out=Season 01/Show Name - S01E01.mkv
+https://example.com/S01E02.mkv
+  out=Season 01/Show Name - S01E02.mkv
+```
+
+### 4. Agent Behavior:
+- **ALWAYS** use `--continue=true` for resumable downloads.
+- **ALWAYS** use `--seed-time=0` for torrents (don't seed after completion).
+- Generate a `download_urls.txt` batch file when downloading multiple episodes.
+- Report download speed and ETA during transfer.
+- Check for `aria2c` availability: `which aria2c`. If not installed, fall back to `curl -C -` or `wget -c`.
+
+---
+
+## 🏷️ Subtitle Distribution Badging (MANDATORY)
 
 The agent **MUST** clearly label the delivery format of subtitles for every release:
 
-- `[📦 MUXED SOFTSUB]`: Subtitles are embedded directly inside the `.mkv` container. Explain to the user: *"File video đã tích hợp sẵn phụ đề bên trong, không cần file sub rời bên ngoài."*
-- `[📄 STANDALONE SUB]`: Subtitles are separate external `.ass` or `.srt` files downloaded into the `Season XX/` directory.
-- `[🔥 HARDSUB]`: Subtitles are permanently burned into the video stream.
+- `[📦 MUXED SOFTSUB]`: Subtitles embedded in `.mkv` container.
+- `[📄 STANDALONE SUB]`: Separate external `.ass` / `.srt` files.
+- `[🔥 HARDSUB]`: Burned into video stream permanently.
 
 ---
 
-## ⚡ Non-Direct Download Fallback Protocol (WHEN USER CHOOSES VIDEO DOWNLOAD)
+## ⚡ Non-Direct Download Fallback Protocol
 
-If the user chooses **Option B (Download Video)**, but the source is NOT a direct HTTP link (e.g. Torrent, Streaming, Cyberlocker):
+If the source is NOT a direct HTTP link:
 
-1. **P2P Torrent / Magnet Sources (Nyaa, 1337x, TorrentGalaxy)**:
-   - **Action**: The agent **MUST download the `.torrent` file directly** and save it into the target show/season folder (e.g. `Season 01/Season_01_1080p.torrent`).
-   - **Action**: Provide the clickable **Magnet Link** in `DOWNLOAD_LINKS.txt` so the user can open it with their BitTorrent client (qBittorrent/Transmission) in 1 click.
-   - **Action**: Search for mirror DDLs (Anime Tosho direct mirror, Archive.org DDL).
-
-2. **Official Streaming Platforms (YouTube, Muse Asia, Ani-One, Vimeo)**:
-   - **Action**: Use `yt-dlp` / `ffmpeg` to rip and download the 1080p stream into standard `.mp4`/`.mkv` format if available without DRM.
-   - If DRM-protected: Provide the direct streaming link and official app recommendations.
-
-3. **Cloud Lockers (Google Drive, Mega, Mediafire, 1Fichier)**:
-   - **Action**: Label clearly as `[⚡ CLOUD LOCKER]` with direct browser access links in `DOWNLOAD_LINKS.txt`.
-
-4. **DRM / Paid Exclusive Platforms (Netflix, Disney+, Max, Apple TV+)**:
-   - **Action**: Inform the user transparently that the title is an exclusive streaming license, provide the official title link, and search for community WEBRip releases.
+1. **P2P Torrent / Magnet**: Download `.torrent` file + provide Magnet link + search DDL mirrors (Anime Tosho, Archive.org).
+2. **Official Streaming** (YouTube, Muse Asia): Use `yt-dlp` for non-DRM content.
+3. **Cloud Lockers** (GDrive, Mega): Label as `[⚡ CLOUD LOCKER]` with direct links.
+4. **DRM Platforms** (Netflix, Disney+): Inform user, provide official link, search WEBRip releases.
 
 ---
 
-## 🎯 Universal 6-Step Media Curation Pipeline
+## 🎯 Universal 8-Step Media Curation Pipeline
 
 ### Step 1: Franchise Census & Multi-Database Metadata Resolution
-1. **Map Release Types**: Movies, TV Seasons, Canonical OVAs, Bonus Extras.
-2. **Resolve All Direct Database URLs**:
-   - **TheTVDB**: Series/Movie URL + ID `{tvdb-XXXXX}`
-   - **TMDb (The Movie Database)**: URL + ID `{tmdb-XXXXX}`
-   - **IMDb**: Title URL + ID `ttXXXXXXX`
-
----
+Map all release types (Movies, TV Seasons, OVAs, Extras) and resolve TheTVDB, TMDb, IMDb IDs with direct URLs.
 
 ### Step 2: Disk Space Estimation & Safety Check
-1. **Estimate total download size** using the reference table above.
-2. **Check available disk space** with `df -h`.
-3. **Display the estimation table** to the user.
-4. **Apply threshold rules** (🟢🟡🟠🔴) and warn or block accordingly.
-5. Only proceed to Step 3 after user acknowledges the estimation.
+Estimate total download size, check available disk space, display estimation table, apply threshold rules (🟢🟡🟠🔴).
 
----
+### Step 3: Duplicate Detection
+Check NAS and Google Drive for existing files. Skip duplicates, report only files that need downloading.
 
-### Step 3: Standardized Plex & Jellyfin Layout
-Build a zero-guesswork folder hierarchy:
-- `TV_Shows/` & `Movies/`
-- Separate canonical specials into `Season 00/` and extras into `Behind The Scenes/`, `Trailers/`, `Featurettes/`.
+### Step 4: Standardized Plex & Jellyfin Layout
+Build zero-guesswork folder hierarchy with `Season 00/` for specials and `Behind The Scenes/`, `Trailers/`, `Featurettes/` for extras.
 
----
-
-### Step 4: Multi-Source Subtitle Hunting Protocol
+### Step 5: Multi-Source Subtitle Hunting
 - **Hollywood / International**: SubDL, OpenSubtitles, Subsource, Phudeviet.
-- **Anime / Asian Cinema**: ACG.RIP, ASSRT, Anime Tosho attachments (.ass.xz), Kitsunekko, SubHD.
+- **Anime / Asian Cinema**: ACG.RIP, ASSRT, Anime Tosho (.ass.xz), Kitsunekko, SubHD.
+
+### Step 6: Subtitle Engineering & Formatting
+Standardize to UTF-8 `.srt` or 1080p styled `.ass` using `scripts/srt_to_ass.py` (supports 7 style presets, batch mode, font fallback). Assign ISO language codes.
+
+### Step 7: NFO Metadata & Artwork (Optional)
+Generate `.nfo` files and download `poster.jpg` / `fanart.jpg` from TMDb/TVDB/Fanart.tv.
+
+### Step 8: Blueprint Output, Cloud Sync & Translation Handoff
+1. Generate `DOWNLOAD_LINKS.txt` with quality badges, codecs, resolution, and subtitle delivery format.
+2. Create/update `DOWNLOAD_STATE.json` checkpoint for resume capability.
+3. Offer `--sync` to upload to Google Drive / NAS.
+4. **ASK** user if they want to hand off to `translate-subtitle` for Vietnamese translation.
 
 ---
 
-### Step 5: Subtitle Engineering & Formatting
-1. Standardize format to clean UTF-8 `.srt` or 1080p styled `.ass` (`scripts/srt_to_ass.py`).
-2. Assign standardized ISO language codes (`.vie.srt`, `.eng.srt`, `.chi.ass`, `.jpn.ass`).
-3. Align / split timecodes when mapping compilation movies to episode series.
+## 🛠️ Bundled Scripts Reference
 
----
-
-### Step 6: Blueprint Output & Translation Handoff
-1. Every show/movie directory **MUST** contain a comprehensive `DOWNLOAD_LINKS.txt` enriched with **Quality Badges, Codecs, Resolution, Subtitle Delivery Format ([📦 MUXED] vs [📄 FILE RỜI]), and Source Ratings**.
-2. **ASK the user** if they want to hand off to `translate-subtitle` for Vietnamese translation (see Handoff section above).
+| Script | Purpose | Usage |
+| :--- | :--- | :--- |
+| `scripts/srt_to_ass.py` | SRT→ASS converter with 7 style presets, batch mode, font fallback | `python3 srt_to_ass.py input.srt --style detective-mystery` |
+| `scripts/deduplicate.py` | Check local vs NAS/GDrive for duplicates before downloading | `python3 deduplicate.py ./local/ --gdrive "gdrive:..." --nas "/srv/..."` |
+| `scripts/cloud_sync.py` | Post-curation sync to Google Drive (rclone) and NAS (rsync) | `python3 cloud_sync.py ./output/ --gdrive "gdrive:..." --sync both` |

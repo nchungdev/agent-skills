@@ -1,6 +1,6 @@
 {
   "name": "media-collector",
-  "description": "Universal Film, TV Show & Anime Curator Plugin for Antigravity",
+  "description": "Universal Film, TV Show & Anime Curator Plugin with disk estimation, duplicate detection, cloud sync, NFO metadata, aria2c integration, resume/checkpoint, and translate-subtitle handoff.",
   "version": "2.0.0",
   "author": "nchungdev"
 }
