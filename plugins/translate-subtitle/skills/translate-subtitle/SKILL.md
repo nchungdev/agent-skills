@@ -1,35 +1,20 @@
 ---
 name: translate-subtitle
-description: Dịch phụ đề phim chuyên sâu. Lõi chung áp dụng cho mọi ngôn ngữ nguồn, kèm mô-đun riêng cho nguồn CJK (Nhật/Trung/Hàn) xử lý tên riêng, Hán-Việt và karaoke tên chiêu. Có kho lưu trữ glossary dài hạn và nhật ký cạm bẫy lỗi ERRORS_AND_PITFALLS.md bồi đắp theo từng tác phẩm.
+description: Dịch phụ đề phim chuyên sâu. Hỗ trợ đa cơ sở dữ liệu định danh (TMDb ID, TheTVDB ID, IMDb ID). Tích hợp kho glossary dài hạn và nhật ký cạm bẫy lỗi ERRORS_AND_PITFALLS.md bồi đắp theo từng tác phẩm.
 ---
 
 # Translate Subtitle Skill
 
-Kỹ năng dịch phụ đề chuyên nghiệp, đúc kết từ các dự án dịch anime và live-action quy mô lớn.
+Kỹ năng dịch phụ đề chuyên nghiệp, đúc kết từ các dự án dịch anime, phim chiếu rạp (Movies) và live-action quy mô lớn.
 
-## 🚀 Kích hoạt
+## 🚀 Kích hoạt & Cơ chế Định danh Đa CSDL (Multi-Database ID Resolution)
 
 `translate-subtitle <tên_phim/tmdbid/tvdbid/imdbid> <đường_dẫn_subtitle> <ngôn_ngữ_đích>`
 
----
-
-## 0. Xác định ngôn ngữ nguồn & thể loại TRƯỚC KHI dịch
-
-| | Là gì | Quyết định |
-|---|---|---|
-| **Ngôn ngữ nguyên tác** | Phim được sản xuất bằng tiếng gì | Chọn mô-đun (phần B/C), tra tên riêng ở đâu |
-| **Ngôn ngữ file phụ đề đang có** | File nguồn ta cầm trong tay viết bằng tiếng gì | Biết nó là bản gốc hay bản qua trung gian |
-
-### 0.1. Nhận dạng ngôn ngữ nguyên tác
-* **Metadata âm thanh của file video:** `ffprobe -v error -select_streams a -show_entries stream=index:stream_tags=language,title -of csv=p=0 "phim.mkv"`
-* **Trường original_language từ TMDB/TVDB/IMDb.**
-* **Tên file / nhóm phát hành:** `[AI-Raws]`, `[DBD-Raws]`, `[SubsPlease]` -> nguồn Nhật.
-
-### 0.2. Nhận dạng hệ chữ viết
-* Nhật: có Kana (`[ぁ-んァ-ヶ]`)
-* Hàn: có Hangul (`[가-힣]`)
-* Trung: Chữ Hán không có Kana (`[一-鿿]`)
-* Latin (Anh/Pháp/Việt): Phân biệt bằng mật độ dấu phụ và hư từ (`the, is, are, that, you...`).
+### 📌 Quy chuẩn `id_glossary` cho TV Shows và Movies:
+* **TV Series / Anime nhiều mùa:** Định danh qua `{tvdb-ID}` hoặc `{tmdb-ID}` (Ví dụ: `Black_Jack_{tvdb-78864}`, `Monster_{tvdb-74880}`).
+* **Movies / Phim lẻ / OVA Chiếu rạp:** Định danh qua `{tmdb-ID}` (Ví dụ: `Black_Jack_The_Movie_1996_{tmdb-54378}`, `Mononoke_Movie_Karakasa_2024_{tmdb-1144933}`).
+* **Bộ giải mã tự động (Resolver):** File `resources/MASTER_INDEX.json` tự động ánh xạ mọi truy vấn `tmdb-XXXX`, `tvdb-XXXX`, hoặc tên phim về đúng thư mục glossary chuẩn!
 
 ---
 
@@ -38,9 +23,9 @@ Kỹ năng dịch phụ đề chuyên nghiệp, đúc kết từ các dự án d
 ## 1. Khởi tạo workspace & nạp Kho Glossary Dài Hạn
 
 * **Kho lưu trữ dài hạn tập trung:** Mọi dự án phải kiểm tra và nạp dữ liệu từ:
-  `<skill_dir>/resources/glossaries/<id_glossary>/` (vd: `resources/glossaries/Black_Jack_{tvdb-78864}/`)
+  `<skill_dir>/resources/glossaries/<id_glossary>/`
   * `glossary.json` — Bộ nhớ dài hạn, nhân vật, ma trận xưng hô, bảng quy đổi.
-  * `ERRORS_AND_PITFALLS.md` — Nhật ký cạm bẫy và lỗi thực chiến đã sửa (thay thế LOI-DA-GAP).
+  * `ERRORS_AND_PITFALLS.md` — Nhật ký cạm bẫy và lỗi thực chiến đã sửa.
   * `AUDIT_REPORT.md` — Báo cáo kiểm định toàn vẹn dòng và đối chiếu 3 chiều.
   * `WORKFLOW.md` — Quy trình dịch thuật và phân tích bối cảnh.
   * `metadata.json` — Thông tin định danh TheTVDB / TMDb / IMDb.

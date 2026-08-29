@@ -1,128 +1,452 @@
 {
-  "Mashin_Hero_Wataru_{tvdb-227501}": {
-    "id_glossary": "Mashin_Hero_Wataru_{tvdb-227501}",
-    "title": "Mashin Hero Wataru (Thần Long Đấu Sĩ)",
-    "tvdb_id": "227501",
-    "tmdb_id": "1015361",
-    "last_updated": "2026-08-29"
+  "version": "2.0",
+  "description": "Multi-Database ID Resolver for Subtitle Translation Glossaries",
+  "by_id": {
+    "Mashin_Hero_Wataru_{tvdb-227501}": {
+      "id_glossary": "Mashin_Hero_Wataru_{tvdb-227501}",
+      "title": "Mashin Hero Wataru (Thần Long Đấu Sĩ)",
+      "type": "tv",
+      "tvdb_id": "227501",
+      "tmdb_id": "35850",
+      "aliases": [
+        "wataru",
+        "than-long-dau-si",
+        "mashin-hero-wataru"
+      ]
+    },
+    "Mashin_Hero_Wataru_Reunion_2022_{tmdb-1015361}": {
+      "id_glossary": "Mashin_Hero_Wataru_Reunion_2022_{tmdb-1015361}",
+      "title": "Mashin Hero Wataru: The Seven Spirits Of Ryujinmaru Reunion (2022)",
+      "type": "movie",
+      "tvdb_id": null,
+      "tmdb_id": "1015361",
+      "aliases": [
+        "wataru-movie-2022",
+        "wataru-reunion"
+      ]
+    },
+    "Black_Jack_{tvdb-78864}": {
+      "id_glossary": "Black_Jack_{tvdb-78864}",
+      "title": "Black Jack TV & OVA Universe (Bác Sĩ Quái Dị)",
+      "type": "tv",
+      "tvdb_id": "78864",
+      "tmdb_id": "38708",
+      "aliases": [
+        "black-jack",
+        "bac-si-quai-di",
+        "bj",
+        "young-black-jack"
+      ]
+    },
+    "Black_Jack_The_Movie_1996_{tmdb-54378}": {
+      "id_glossary": "Black_Jack_The_Movie_1996_{tmdb-54378}",
+      "title": "Black Jack: The Movie (1996)",
+      "type": "movie",
+      "tvdb_id": null,
+      "tmdb_id": "54378",
+      "aliases": [
+        "bj-movie-1996",
+        "black-jack-1996"
+      ]
+    },
+    "Black_Jack_Two_Doctors_of_Darkness_2005_{tmdb-38933}": {
+      "id_glossary": "Black_Jack_Two_Doctors_of_Darkness_2005_{tmdb-38933}",
+      "title": "Black Jack: Two Doctors of Darkness (2005)",
+      "type": "movie",
+      "tvdb_id": null,
+      "tmdb_id": "38933",
+      "aliases": [
+        "bj-movie-2005",
+        "futari-no-kuroi-isha",
+        "two-doctors-of-darkness"
+      ]
+    },
+    "The_Three_Eyed_One_{tvdb-320122}": {
+      "id_glossary": "The_Three_Eyed_One_{tvdb-320122}",
+      "title": "The Three-Eyed One (Cậu Bé 3 Mắt)",
+      "type": "tv",
+      "tvdb_id": "320122",
+      "tmdb_id": "40348",
+      "aliases": [
+        "cau-be-3-mat",
+        "mitsume-ga-tooru",
+        "sharaku"
+      ]
+    },
+    "The_Three_Eyed_One_Prince_of_Devil_Island_1985_{tmdb-298418}": {
+      "id_glossary": "The_Three_Eyed_One_Prince_of_Devil_Island_1985_{tmdb-298418}",
+      "title": "The Three-Eyed One: The Prince of Devil Island (1985)",
+      "type": "movie",
+      "tvdb_id": null,
+      "tmdb_id": "298418",
+      "aliases": [
+        "three-eyed-boy-movie",
+        "akuma-tou-no-ouji"
+      ]
+    },
+    "The_Files_of_Young_Kindaichi_{tvdb-79354}": {
+      "id_glossary": "The_Files_of_Young_Kindaichi_{tvdb-79354}",
+      "title": "The File of Young Kindaichi (Thám Tử Kindaichi 1997 Anime)",
+      "type": "tv",
+      "tvdb_id": "79354",
+      "tmdb_id": "1481",
+      "aliases": [
+        "kindaichi",
+        "kindaichi-1997",
+        "tham-tu-kindaichi"
+      ]
+    },
+    "The_Files_of_Young_Kindaichi_Live_Action_{tvdb-79460}": {
+      "id_glossary": "The_Files_of_Young_Kindaichi_Live_Action_{tvdb-79460}",
+      "title": "The Files of Young Kindaichi Live-Action (1995-2022)",
+      "type": "tv",
+      "tvdb_id": "79460",
+      "tmdb_id": "32177",
+      "aliases": [
+        "kindaichi-live-action",
+        "kindaichi-la"
+      ]
+    },
+    "Kindaichi_Legend_of_Shanghai_Mermaid_1997_{tmdb-320786}": {
+      "id_glossary": "Kindaichi_Legend_of_Shanghai_Mermaid_1997_{tmdb-320786}",
+      "title": "The Files of Young Kindaichi: Legend of the Shanghai Mermaid (1997)",
+      "type": "movie",
+      "tvdb_id": null,
+      "tmdb_id": "320786",
+      "aliases": [
+        "kindaichi-movie-1997",
+        "shanghai-mermaid"
+      ]
+    },
+    "Monster_{tvdb-74880}": {
+      "id_glossary": "Monster_{tvdb-74880}",
+      "title": "Monster (Quái Vật 2004 - Naoki Urasawa)",
+      "type": "tv",
+      "tvdb_id": "74880",
+      "tmdb_id": "1942",
+      "aliases": [
+        "monster",
+        "johan-liebert",
+        "dr-tenma"
+      ]
+    },
+    "Pluto_{tvdb-334863}": {
+      "id_glossary": "Pluto_{tvdb-334863}",
+      "title": "Pluto (2023 Netflix - Naoki Urasawa / Osamu Tezuka)",
+      "type": "tv",
+      "tvdb_id": "334863",
+      "tmdb_id": "71398",
+      "aliases": [
+        "pluto",
+        "gesicht",
+        "atom"
+      ]
+    },
+    "Tantei_Gakuen_Q_{tvdb-230211}": {
+      "id_glossary": "Tantei_Gakuen_Q_{tvdb-230211}",
+      "title": "Tantei Gakuen Q (Học Viện Thám Tử Q 2003)",
+      "type": "tv",
+      "tvdb_id": "230211",
+      "tmdb_id": "18659",
+      "aliases": [
+        "tantei-q",
+        "hoc-vien-tham-tu-q",
+        "dan-morihiko",
+        "kyu"
+      ]
+    },
+    "Dororo_{tvdb-358509}": {
+      "id_glossary": "Dororo_{tvdb-358509}",
+      "title": "Dororo (2019 - MAPPA / Tezuka)",
+      "type": "tv",
+      "tvdb_id": "358509",
+      "tmdb_id": "84824",
+      "aliases": [
+        "dororo",
+        "hyakkimaru"
+      ]
+    },
+    "Mushishi_{tvdb-79243}": {
+      "id_glossary": "Mushishi_{tvdb-79243}",
+      "title": "Mushishi Collection (Trùng Sư)",
+      "type": "tv",
+      "tvdb_id": "79243",
+      "tmdb_id": "17466",
+      "aliases": [
+        "mushishi",
+        "trung-su",
+        "ginko"
+      ]
+    },
+    "Houshin_Engi_{tvdb-79284}": {
+      "id_glossary": "Houshin_Engi_{tvdb-79284}",
+      "title": "Houshin Engi (Phong Thần 1999 & 2018)",
+      "type": "tv",
+      "tvdb_id": "79284",
+      "tmdb_id": "30310",
+      "aliases": [
+        "phong-than",
+        "houshin-engi",
+        "soul-hunter",
+        "taikoubou"
+      ]
+    },
+    "Master_Keaton_{tvdb-78788}": {
+      "id_glossary": "Master_Keaton_{tvdb-78788}",
+      "title": "Master Keaton (1998 - Naoki Urasawa)",
+      "type": "tv",
+      "tvdb_id": "78788",
+      "tmdb_id": "41577",
+      "aliases": [
+        "master-keaton",
+        "keaton",
+        "taichi-keaton"
+      ]
+    },
+    "Mouryou_no_Hako_{tvdb-83441}": {
+      "id_glossary": "Mouryou_no_Hako_{tvdb-83441}",
+      "title": "Mouryou no Hako (Chiếc Hộp Ma 2008 - Madhouse / CLAMP)",
+      "type": "tv",
+      "tvdb_id": "83441",
+      "tmdb_id": "21381",
+      "aliases": [
+        "mouryou-no-hako",
+        "chiec-hop-ma",
+        "kyogokudo"
+      ]
+    },
+    "Mononoke_{tvdb-80242}": {
+      "id_glossary": "Mononoke_{tvdb-80242}",
+      "title": "Mononoke Collection (Dược Phu 2007)",
+      "type": "tv",
+      "tvdb_id": "80242",
+      "tmdb_id": "18635",
+      "aliases": [
+        "mononoke",
+        "kusuriuri",
+        "medicine-seller"
+      ]
+    },
+    "Mononoke_Movie_Karakasa_2024_{tmdb-1144933}": {
+      "id_glossary": "Mononoke_Movie_Karakasa_2024_{tmdb-1144933}",
+      "title": "Mononoke the Movie: Phantom in the Rain (Karakasa 2024)",
+      "type": "movie",
+      "tvdb_id": null,
+      "tmdb_id": "1144933",
+      "aliases": [
+        "mononoke-movie-2024",
+        "karakasa"
+      ]
+    },
+    "The_Westward_{tvdb-350711}": {
+      "id_glossary": "The_Westward_{tvdb-350711}",
+      "title": "The Westward (Tây Hành Kỷ Universe)",
+      "type": "tv",
+      "tvdb_id": "350711",
+      "tmdb_id": "81347",
+      "aliases": [
+        "tay-hanh-ky",
+        "westward",
+        "xi-xing-ji",
+        "kuang-wang"
+      ]
+    },
+    "Kingdom_{tvdb-259259}": {
+      "id_glossary": "Kingdom_{tvdb-259259}",
+      "title": "Kingdom Anime (Vương Giả Thiên Hạ 2012-2024)",
+      "type": "tv",
+      "tvdb_id": "259259",
+      "tmdb_id": "45782",
+      "aliases": [
+        "kingdom",
+        "vuong-gia-thien-ha",
+        "tin",
+        "doanh-chinh"
+      ]
+    },
+    "Galileo_{tvdb-80957}": {
+      "id_glossary": "Galileo_{tvdb-80957}",
+      "title": "Detective Galileo Universe (Thám Tử Galileo - Keigo Higashino)",
+      "type": "tv",
+      "tvdb_id": "80957",
+      "tmdb_id": "10023",
+      "aliases": [
+        "galileo",
+        "tham-tu-galileo",
+        "yukawa-manabu"
+      ]
+    },
+    "Furuhata_Ninzaburo_{tvdb-165311}": {
+      "id_glossary": "Furuhata_Ninzaburo_{tvdb-165311}",
+      "title": "Furuhata Ninzaburo (Thanh Tra Furuhata Ninzaburo)",
+      "type": "tv",
+      "tvdb_id": "165311",
+      "tmdb_id": "18029",
+      "aliases": [
+        "furuhata-ninzaburo",
+        "furuhata"
+      ]
+    }
   },
-  "Black_Jack_{tvdb-78864}": {
-    "id_glossary": "Black_Jack_{tvdb-78864}",
-    "title": "Black Jack Universe (Bác Sĩ Quái Dị)",
-    "tvdb_id": "78864",
-    "tmdb_id": "38708",
-    "last_updated": "2026-08-29"
-  },
-  "The_Three_Eyed_One_{tvdb-320122}": {
-    "id_glossary": "The_Three_Eyed_One_{tvdb-320122}",
-    "title": "The Three-Eyed One (Cậu Bé 3 Mắt)",
-    "tvdb_id": "320122",
-    "tmdb_id": "40348",
-    "last_updated": "2026-08-29"
-  },
-  "The_Files_of_Young_Kindaichi_{tvdb-79354}": {
-    "id_glossary": "The_Files_of_Young_Kindaichi_{tvdb-79354}",
-    "title": "The File of Young Kindaichi (Thám Tử Kindaichi 1997)",
-    "tvdb_id": "79354",
-    "tmdb_id": "1481",
-    "last_updated": "2026-08-29"
-  },
-  "The_Files_of_Young_Kindaichi_Live_Action_{tvdb-79460}": {
-    "id_glossary": "The_Files_of_Young_Kindaichi_Live_Action_{tvdb-79460}",
-    "title": "The Files of Young Kindaichi Live-Action (1995-2022)",
-    "tvdb_id": "79460",
-    "tmdb_id": "32177",
-    "last_updated": "2026-08-29"
-  },
-  "Monster_{tvdb-74880}": {
-    "id_glossary": "Monster_{tvdb-74880}",
-    "title": "Monster (Quái Vật 2004)",
-    "tvdb_id": "74880",
-    "tmdb_id": "1942",
-    "last_updated": "2026-08-29"
-  },
-  "Pluto_{tvdb-334863}": {
-    "id_glossary": "Pluto_{tvdb-334863}",
-    "title": "Pluto (2023 Netflix)",
-    "tvdb_id": "334863",
-    "tmdb_id": "71398",
-    "last_updated": "2026-08-29"
-  },
-  "Tantei_Gakuen_Q_{tvdb-230211}": {
-    "id_glossary": "Tantei_Gakuen_Q_{tvdb-230211}",
-    "title": "Tantei Gakuen Q (Học Viện Thám Tử Q 2003)",
-    "tvdb_id": "230211",
-    "tmdb_id": "18659",
-    "last_updated": "2026-08-29"
-  },
-  "Dororo_{tvdb-358509}": {
-    "id_glossary": "Dororo_{tvdb-358509}",
-    "title": "Dororo (2019)",
-    "tvdb_id": "358509",
-    "tmdb_id": "84824",
-    "last_updated": "2026-08-29"
-  },
-  "Mushishi_{tvdb-79243}": {
-    "id_glossary": "Mushishi_{tvdb-79243}",
-    "title": "Mushishi Collection (Trùng Sư)",
-    "tvdb_id": "79243",
-    "tmdb_id": "17466",
-    "last_updated": "2026-08-29"
-  },
-  "Houshin_Engi_{tvdb-79284}": {
-    "id_glossary": "Houshin_Engi_{tvdb-79284}",
-    "title": "Houshin Engi (Phong Thần 1999 & 2018)",
-    "tvdb_id": "79284",
-    "tmdb_id": "30310",
-    "last_updated": "2026-08-29"
-  },
-  "Master_Keaton_{tvdb-78788}": {
-    "id_glossary": "Master_Keaton_{tvdb-78788}",
-    "title": "Master Keaton (1998)",
-    "tvdb_id": "78788",
-    "tmdb_id": "41577",
-    "last_updated": "2026-08-29"
-  },
-  "Mouryou_no_Hako_{tvdb-83441}": {
-    "id_glossary": "Mouryou_no_Hako_{tvdb-83441}",
-    "title": "Mouryou no Hako (Chiếc Hộp Ma 2008)",
-    "tvdb_id": "83441",
-    "tmdb_id": "21381",
-    "last_updated": "2026-08-29"
-  },
-  "Mononoke_{tvdb-80242}": {
-    "id_glossary": "Mononoke_{tvdb-80242}",
-    "title": "Mononoke Collection (Dược Phu)",
-    "tvdb_id": "80242",
-    "tmdb_id": "18635",
-    "last_updated": "2026-08-29"
-  },
-  "The_Westward_{tvdb-350711}": {
-    "id_glossary": "The_Westward_{tvdb-350711}",
-    "title": "The Westward (Tây Hành Kỷ)",
-    "tvdb_id": "350711",
-    "tmdb_id": "81347",
-    "last_updated": "2026-08-29"
-  },
-  "Kingdom_{tvdb-259259}": {
-    "id_glossary": "Kingdom_{tvdb-259259}",
-    "title": "Kingdom Anime (Vương Giả Thiên Hạ)",
-    "tvdb_id": "259259",
-    "tmdb_id": "45782",
-    "last_updated": "2026-08-29"
-  },
-  "Galileo_{tvdb-80957}": {
-    "id_glossary": "Galileo_{tvdb-80957}",
-    "title": "Detective Galileo Universe (Thám Tử Galileo - Keigo)",
-    "tvdb_id": "80957",
-    "tmdb_id": "10023",
-    "last_updated": "2026-08-29"
-  },
-  "Furuhata_Ninzaburo_{tvdb-165311}": {
-    "id_glossary": "Furuhata_Ninzaburo_{tvdb-165311}",
-    "title": "Furuhata Ninzaburo (Thanh Tra Furuhata Ninzaburo)",
-    "tvdb_id": "165311",
-    "tmdb_id": "18029",
-    "last_updated": "2026-08-29"
+  "resolvers": {
+    "tvdb": {
+      "227501": "Mashin_Hero_Wataru_{tvdb-227501}",
+      "tvdb-227501": "Mashin_Hero_Wataru_{tvdb-227501}",
+      "78864": "Black_Jack_{tvdb-78864}",
+      "tvdb-78864": "Black_Jack_{tvdb-78864}",
+      "320122": "The_Three_Eyed_One_{tvdb-320122}",
+      "tvdb-320122": "The_Three_Eyed_One_{tvdb-320122}",
+      "79354": "The_Files_of_Young_Kindaichi_{tvdb-79354}",
+      "tvdb-79354": "The_Files_of_Young_Kindaichi_{tvdb-79354}",
+      "79460": "The_Files_of_Young_Kindaichi_Live_Action_{tvdb-79460}",
+      "tvdb-79460": "The_Files_of_Young_Kindaichi_Live_Action_{tvdb-79460}",
+      "74880": "Monster_{tvdb-74880}",
+      "tvdb-74880": "Monster_{tvdb-74880}",
+      "334863": "Pluto_{tvdb-334863}",
+      "tvdb-334863": "Pluto_{tvdb-334863}",
+      "230211": "Tantei_Gakuen_Q_{tvdb-230211}",
+      "tvdb-230211": "Tantei_Gakuen_Q_{tvdb-230211}",
+      "358509": "Dororo_{tvdb-358509}",
+      "tvdb-358509": "Dororo_{tvdb-358509}",
+      "79243": "Mushishi_{tvdb-79243}",
+      "tvdb-79243": "Mushishi_{tvdb-79243}",
+      "79284": "Houshin_Engi_{tvdb-79284}",
+      "tvdb-79284": "Houshin_Engi_{tvdb-79284}",
+      "78788": "Master_Keaton_{tvdb-78788}",
+      "tvdb-78788": "Master_Keaton_{tvdb-78788}",
+      "83441": "Mouryou_no_Hako_{tvdb-83441}",
+      "tvdb-83441": "Mouryou_no_Hako_{tvdb-83441}",
+      "80242": "Mononoke_{tvdb-80242}",
+      "tvdb-80242": "Mononoke_{tvdb-80242}",
+      "350711": "The_Westward_{tvdb-350711}",
+      "tvdb-350711": "The_Westward_{tvdb-350711}",
+      "259259": "Kingdom_{tvdb-259259}",
+      "tvdb-259259": "Kingdom_{tvdb-259259}",
+      "80957": "Galileo_{tvdb-80957}",
+      "tvdb-80957": "Galileo_{tvdb-80957}",
+      "165311": "Furuhata_Ninzaburo_{tvdb-165311}",
+      "tvdb-165311": "Furuhata_Ninzaburo_{tvdb-165311}"
+    },
+    "tmdb": {
+      "35850": "Mashin_Hero_Wataru_{tvdb-227501}",
+      "tmdb-35850": "Mashin_Hero_Wataru_{tvdb-227501}",
+      "1015361": "Mashin_Hero_Wataru_Reunion_2022_{tmdb-1015361}",
+      "tmdb-1015361": "Mashin_Hero_Wataru_Reunion_2022_{tmdb-1015361}",
+      "38708": "Black_Jack_{tvdb-78864}",
+      "tmdb-38708": "Black_Jack_{tvdb-78864}",
+      "54378": "Black_Jack_The_Movie_1996_{tmdb-54378}",
+      "tmdb-54378": "Black_Jack_The_Movie_1996_{tmdb-54378}",
+      "38933": "Black_Jack_Two_Doctors_of_Darkness_2005_{tmdb-38933}",
+      "tmdb-38933": "Black_Jack_Two_Doctors_of_Darkness_2005_{tmdb-38933}",
+      "40348": "The_Three_Eyed_One_{tvdb-320122}",
+      "tmdb-40348": "The_Three_Eyed_One_{tvdb-320122}",
+      "298418": "The_Three_Eyed_One_Prince_of_Devil_Island_1985_{tmdb-298418}",
+      "tmdb-298418": "The_Three_Eyed_One_Prince_of_Devil_Island_1985_{tmdb-298418}",
+      "1481": "The_Files_of_Young_Kindaichi_{tvdb-79354}",
+      "tmdb-1481": "The_Files_of_Young_Kindaichi_{tvdb-79354}",
+      "32177": "The_Files_of_Young_Kindaichi_Live_Action_{tvdb-79460}",
+      "tmdb-32177": "The_Files_of_Young_Kindaichi_Live_Action_{tvdb-79460}",
+      "320786": "Kindaichi_Legend_of_Shanghai_Mermaid_1997_{tmdb-320786}",
+      "tmdb-320786": "Kindaichi_Legend_of_Shanghai_Mermaid_1997_{tmdb-320786}",
+      "1942": "Monster_{tvdb-74880}",
+      "tmdb-1942": "Monster_{tvdb-74880}",
+      "71398": "Pluto_{tvdb-334863}",
+      "tmdb-71398": "Pluto_{tvdb-334863}",
+      "18659": "Tantei_Gakuen_Q_{tvdb-230211}",
+      "tmdb-18659": "Tantei_Gakuen_Q_{tvdb-230211}",
+      "84824": "Dororo_{tvdb-358509}",
+      "tmdb-84824": "Dororo_{tvdb-358509}",
+      "17466": "Mushishi_{tvdb-79243}",
+      "tmdb-17466": "Mushishi_{tvdb-79243}",
+      "30310": "Houshin_Engi_{tvdb-79284}",
+      "tmdb-30310": "Houshin_Engi_{tvdb-79284}",
+      "41577": "Master_Keaton_{tvdb-78788}",
+      "tmdb-41577": "Master_Keaton_{tvdb-78788}",
+      "21381": "Mouryou_no_Hako_{tvdb-83441}",
+      "tmdb-21381": "Mouryou_no_Hako_{tvdb-83441}",
+      "18635": "Mononoke_{tvdb-80242}",
+      "tmdb-18635": "Mononoke_{tvdb-80242}",
+      "1144933": "Mononoke_Movie_Karakasa_2024_{tmdb-1144933}",
+      "tmdb-1144933": "Mononoke_Movie_Karakasa_2024_{tmdb-1144933}",
+      "81347": "The_Westward_{tvdb-350711}",
+      "tmdb-81347": "The_Westward_{tvdb-350711}",
+      "45782": "Kingdom_{tvdb-259259}",
+      "tmdb-45782": "Kingdom_{tvdb-259259}",
+      "10023": "Galileo_{tvdb-80957}",
+      "tmdb-10023": "Galileo_{tvdb-80957}",
+      "18029": "Furuhata_Ninzaburo_{tvdb-165311}",
+      "tmdb-18029": "Furuhata_Ninzaburo_{tvdb-165311}"
+    },
+    "aliases": {
+      "wataru": "Mashin_Hero_Wataru_{tvdb-227501}",
+      "than-long-dau-si": "Mashin_Hero_Wataru_{tvdb-227501}",
+      "mashin-hero-wataru": "Mashin_Hero_Wataru_{tvdb-227501}",
+      "wataru-movie-2022": "Mashin_Hero_Wataru_Reunion_2022_{tmdb-1015361}",
+      "wataru-reunion": "Mashin_Hero_Wataru_Reunion_2022_{tmdb-1015361}",
+      "black-jack": "Black_Jack_{tvdb-78864}",
+      "bac-si-quai-di": "Black_Jack_{tvdb-78864}",
+      "bj": "Black_Jack_{tvdb-78864}",
+      "young-black-jack": "Black_Jack_{tvdb-78864}",
+      "bj-movie-1996": "Black_Jack_The_Movie_1996_{tmdb-54378}",
+      "black-jack-1996": "Black_Jack_The_Movie_1996_{tmdb-54378}",
+      "bj-movie-2005": "Black_Jack_Two_Doctors_of_Darkness_2005_{tmdb-38933}",
+      "futari-no-kuroi-isha": "Black_Jack_Two_Doctors_of_Darkness_2005_{tmdb-38933}",
+      "two-doctors-of-darkness": "Black_Jack_Two_Doctors_of_Darkness_2005_{tmdb-38933}",
+      "cau-be-3-mat": "The_Three_Eyed_One_{tvdb-320122}",
+      "mitsume-ga-tooru": "The_Three_Eyed_One_{tvdb-320122}",
+      "sharaku": "The_Three_Eyed_One_{tvdb-320122}",
+      "three-eyed-boy-movie": "The_Three_Eyed_One_Prince_of_Devil_Island_1985_{tmdb-298418}",
+      "akuma-tou-no-ouji": "The_Three_Eyed_One_Prince_of_Devil_Island_1985_{tmdb-298418}",
+      "kindaichi": "The_Files_of_Young_Kindaichi_{tvdb-79354}",
+      "kindaichi-1997": "The_Files_of_Young_Kindaichi_{tvdb-79354}",
+      "tham-tu-kindaichi": "The_Files_of_Young_Kindaichi_{tvdb-79354}",
+      "kindaichi-live-action": "The_Files_of_Young_Kindaichi_Live_Action_{tvdb-79460}",
+      "kindaichi-la": "The_Files_of_Young_Kindaichi_Live_Action_{tvdb-79460}",
+      "kindaichi-movie-1997": "Kindaichi_Legend_of_Shanghai_Mermaid_1997_{tmdb-320786}",
+      "shanghai-mermaid": "Kindaichi_Legend_of_Shanghai_Mermaid_1997_{tmdb-320786}",
+      "monster": "Monster_{tvdb-74880}",
+      "johan-liebert": "Monster_{tvdb-74880}",
+      "dr-tenma": "Monster_{tvdb-74880}",
+      "pluto": "Pluto_{tvdb-334863}",
+      "gesicht": "Pluto_{tvdb-334863}",
+      "atom": "Pluto_{tvdb-334863}",
+      "tantei-q": "Tantei_Gakuen_Q_{tvdb-230211}",
+      "hoc-vien-tham-tu-q": "Tantei_Gakuen_Q_{tvdb-230211}",
+      "dan-morihiko": "Tantei_Gakuen_Q_{tvdb-230211}",
+      "kyu": "Tantei_Gakuen_Q_{tvdb-230211}",
+      "dororo": "Dororo_{tvdb-358509}",
+      "hyakkimaru": "Dororo_{tvdb-358509}",
+      "mushishi": "Mushishi_{tvdb-79243}",
+      "trung-su": "Mushishi_{tvdb-79243}",
+      "ginko": "Mushishi_{tvdb-79243}",
+      "phong-than": "Houshin_Engi_{tvdb-79284}",
+      "houshin-engi": "Houshin_Engi_{tvdb-79284}",
+      "soul-hunter": "Houshin_Engi_{tvdb-79284}",
+      "taikoubou": "Houshin_Engi_{tvdb-79284}",
+      "master-keaton": "Master_Keaton_{tvdb-78788}",
+      "keaton": "Master_Keaton_{tvdb-78788}",
+      "taichi-keaton": "Master_Keaton_{tvdb-78788}",
+      "mouryou-no-hako": "Mouryou_no_Hako_{tvdb-83441}",
+      "chiec-hop-ma": "Mouryou_no_Hako_{tvdb-83441}",
+      "kyogokudo": "Mouryou_no_Hako_{tvdb-83441}",
+      "mononoke": "Mononoke_{tvdb-80242}",
+      "kusuriuri": "Mononoke_{tvdb-80242}",
+      "medicine-seller": "Mononoke_{tvdb-80242}",
+      "mononoke-movie-2024": "Mononoke_Movie_Karakasa_2024_{tmdb-1144933}",
+      "karakasa": "Mononoke_Movie_Karakasa_2024_{tmdb-1144933}",
+      "tay-hanh-ky": "The_Westward_{tvdb-350711}",
+      "westward": "The_Westward_{tvdb-350711}",
+      "xi-xing-ji": "The_Westward_{tvdb-350711}",
+      "kuang-wang": "The_Westward_{tvdb-350711}",
+      "kingdom": "Kingdom_{tvdb-259259}",
+      "vuong-gia-thien-ha": "Kingdom_{tvdb-259259}",
+      "tin": "Kingdom_{tvdb-259259}",
+      "doanh-chinh": "Kingdom_{tvdb-259259}",
+      "galileo": "Galileo_{tvdb-80957}",
+      "tham-tu-galileo": "Galileo_{tvdb-80957}",
+      "yukawa-manabu": "Galileo_{tvdb-80957}",
+      "furuhata-ninzaburo": "Furuhata_Ninzaburo_{tvdb-165311}",
+      "furuhata": "Furuhata_Ninzaburo_{tvdb-165311}"
+    }
   }
 }
