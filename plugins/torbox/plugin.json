@@ -1,8 +1,0 @@
-{
-  "name": "torbox",
-  "version": "1.0.0",
-  "description": "TorBox Debrid Cloud Integration for Antigravity & Media Pipeline",
-  "skills": [
-    "skills/torbox-manager"
-  ]
-}
