@@ -11,12 +11,85 @@ Kho lưu trữ chuẩn hóa các **Agent Skills & Plugins độc lập** đượ
 
 ## 🧭 Ma Trận Tương Thích Đa Nền Tảng (Cross-AI Matrix)
 
-| AI Agent Platform | Giao Thức Kích Hoạt | Cách Cấu Hình |
+| AI Agent Platform | Giao Thức Kích Hoạt | Cơ Chế Thực Thi |
 | :--- | :--- | :--- |
-| 🟣 **Claude Code (Anthropic CLI)** | Native Terminal / `CLAUDE.md` | Thêm đường dẫn CLI vào `CLAUDE.md` |
-| 🔵 **Google Antigravity (DeepMind AGY)** | Skills Engine / `SKILL.md` | Đặt thư mục vào `~/.gemini/config/skills/` |
+| 🔵 **Google Antigravity (DeepMind AGY)** | Skills Engine / `SKILL.md` | Tự động nhận diện ngữ cảnh & gọi tool qua CLI |
+| 🟣 **Claude Code (Anthropic CLI)** | Native Terminal / `CLAUDE.md` | Đọc rule trong `CLAUDE.md` và chạy Python CLI |
 | 🟢 **OpenAI Codex / OpenCode** | System Prompt / `AGENTS.md` | Tham chiếu lệnh trong `CODEX.md` hoặc `AGENTS.md` |
+| 🟠 **Cursor / Windsurf AI** | Rule Files (`.cursorrules`) | Gọi thông qua Terminal Tools tích hợp |
 | ⚡ **Nodeterm Canvas Sessions** | Shared Terminal Workspace | Dùng chung Python environment và shared configs |
+
+---
+
+## 🛠️ Hướng Dẫn Cài Đặt Cho Từng Nền Tảng AI (Installation Guide)
+
+### 🔵 1. Cài đặt cho Google Antigravity (AGY):
+Antigravity tự động quét các thư mục skill nằm tại `~/.gemini/config/skills/` hoặc `~/.gemini/config/plugins/`.
+
+```bash
+# Cách 1: Cài đặt tự động qua Git (Khuyên dùng)
+git clone https://github.com/nchungdev/agent-skills.git /tmp/agent-skills
+mkdir -p ~/.gemini/config/skills
+cp -r /tmp/agent-skills/plugins/*/skills/* ~/.gemini/config/skills/
+rm -rf /tmp/agent-skills
+
+# Kiểm tra danh sách skill đã nhận diện:
+python3 -c "import os; print(os.listdir(os.path.expanduser('~/.gemini/config/skills')))"
+```
+
+---
+
+### 🟣 2. Cài đặt cho Claude Code (Anthropic CLI):
+1. **Clone repository về máy:**
+   ```bash
+   git clone https://github.com/nchungdev/agent-skills.git ~/tools/agent-skills
+   ```
+2. **Khai báo vào `CLAUDE.md` (Toàn cục hoặc trong Workspace dự án):**
+   Thêm đoạn sau vào file `CLAUDE.md` (hoặc `~/.claude/CLAUDE.md`):
+   ```markdown
+   ## 🛠️ Universal Agent Skills Available:
+   - **TorBox Debrid Manager:** `python3 ~/tools/agent-skills/plugins/torbox/skills/torbox-manager/scripts/torbox_cli.py <command>`
+   - **TMDb Metadata Engine:** `python3 ~/tools/agent-skills/plugins/tmdb-lookup/skills/tmdb-lookup/scripts/tmdb_client.py <command>`
+   
+   Khi người dùng yêu cầu quản lý tải phim, tra cứu phim ảnh hoặc dịch thuật, hãy tự động kích hoạt các công cụ dòng lệnh trên.
+   ```
+
+---
+
+### 🟢 3. Cài đặt cho OpenAI Codex / OpenCode:
+1. **Clone repository về máy:**
+   ```bash
+   git clone https://github.com/nchungdev/agent-skills.git ~/tools/agent-skills
+   ```
+2. **Thêm vào `AGENTS.md` hoặc `CODEX.md`:**
+   ```markdown
+   ## System Tools:
+   You have access to standalone Python CLI tools in `~/tools/agent-skills/`:
+   - `python3 ~/tools/agent-skills/plugins/torbox/skills/torbox-manager/scripts/torbox_cli.py --help`
+   - `python3 ~/tools/agent-skills/plugins/tmdb-lookup/skills/tmdb-lookup/scripts/tmdb_client.py --help`
+   ```
+
+---
+
+### 🟠 4. Cài đặt cho Cursor / Windsurf IDE:
+Tạo hoặc bổ sung vào file `.cursorrules` (hoặc `.windsurfrules`) trong dự án:
+```markdown
+# Custom CLI Skills
+- TorBox Cloud: Use `python3 plugins/torbox/skills/torbox-manager/scripts/torbox_cli.py <args>`
+- TMDb Engine: Use `python3 plugins/tmdb-lookup/skills/tmdb-lookup/scripts/tmdb_client.py <args>`
+```
+
+---
+
+### ⚡ 5. Dùng trong Nodeterm Canvas (Multi-Agent Workflow):
+Tất cả các trạm agent (Claude, Codex, Gemini) trong Nodeterm canvas chạy trên cùng máy Mac đều có thể tương tác chung:
+```bash
+# Agent A (Claude) thêm torrent vào TorBox:
+python3 ~/tools/agent-skills/plugins/torbox/skills/torbox-manager/scripts/torbox_cli.py add "<MAGNET_LINK>"
+
+# Agent B (Gemini) giám sát và kéo file về máy khi hoàn thành:
+python3 ~/tools/agent-skills/plugins/torbox/skills/torbox-manager/scripts/torbox_cli.py download <TORRENT_ID> -o "/Volumes/512GB/AI Workspace"
+```
 
 ---
 
@@ -40,6 +113,9 @@ python3 plugins/torbox/skills/torbox-manager/scripts/torbox_cli.py login --brows
 
 # Xem danh sách torrents trên Cloud:
 python3 plugins/torbox/skills/torbox-manager/scripts/torbox_cli.py list
+
+# Thêm Magnet link vào TorBox:
+python3 plugins/torbox/skills/torbox-manager/scripts/torbox_cli.py add "magnet:?xt=urn:btih:..."
 
 # Tải thông minh về thư mục đích:
 python3 plugins/torbox/skills/torbox-manager/scripts/torbox_cli.py download <TORRENT_ID> -o "/path/to/downloads"
