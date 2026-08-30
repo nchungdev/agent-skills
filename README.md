@@ -1,34 +1,43 @@
-# 🚀 Antigravity Custom Plugins Collection
+# 🪐 Antigravity Plugins & Skills Hub
 
-A curated collection of professional, modular plugins and skills for **Google Antigravity (AGY)** agentic pair-programming assistant.
-
----
-
-## 📦 Available Plugins
-
-| Plugin Name | Description | Status |
-|---|---|---|
-| **[media-collector](./plugins/media-collector)** | Universal Film, TV Series & Anime Curator. Automatically maps franchise censuses, resolves TheTVDB/TMDb IDs, organizes Plex/Jellyfin structures, hunts multi-language subtitles (.ass/.srt), and generates verified download link blueprints. | ✅ Stable (v1.0.0) |
-| **[translate-subtitle](./plugins/translate-subtitle)** | Deep Subtitle Translation & Glossary Engine. Automatically constructs context glossaries, manages 4-tier source hierarchy (JP/ZH/EN/VI), applies dual-layer ASS Karaoke ruby styling for shouted skills, and executes comprehensive automated audits. | ✅ Stable (v1.0.0) |
+Tập hợp các Plugin và Skill cao cấp dành cho **Google Antigravity**, tối ưu hóa tự động hóa đa phương tiện, xử lý phụ đề điện ảnh, tra cứu siêu dữ liệu TMDb và quản lý tải đám mây TorBox Debrid.
 
 ---
 
-## 🛠️ How to Install on Any Machine
+## 📦 Danh sách Plugins
 
-### Method 1: Install via Antigravity CLI (Recommended)
-```bash
-agy plugin install https://github.com/nchungdev/antigravity-plugin
-```
+### 1. ⚡ `torbox` (`torbox-manager`)
+* **Mô tả:** Tích hợp trực tiếp với dịch vụ đám mây **TorBox Debrid** (`api.torbox.app`).
+* **Tính năng chính:**
+  * 🔐 Đăng nhập xác thực an toàn qua API Token hoặc mở trình duyệt web (`login --browser`).
+  * 📋 Liệt kê trạng thái thời gian thực (`downloading`, `completed`, `cached`, `stalled`).
+  * 🧲 Thêm nhanh bằng Magnet link hoặc file `.torrent`.
+  * 🗑️ Xóa torrent và giải phóng slot tải trên Cloud.
+  * 🚀 Tự động kéo file zip từ Cloudflare CDN qua `aria2c` 16 luồng và giải nén chuẩn hóa vào Plex.
 
-### Method 2: Clone into Antigravity Global Plugins
-```bash
-git clone https://github.com/nchungdev/antigravity-plugin.git ~/.gemini/config/plugins/nchungdev-plugins
-```
+### 2. 🎬 `tmdb-lookup`
+* **Mô tả:** Tra cứu và phân tích siêu dữ liệu điện ảnh & truyền hình qua The Movie Database (TMDb) API v3.
+* **Tính năng chính:**
+  * 🔍 Tìm kiếm phim, anime, TV Shows theo tên, TMDb ID, TVDB ID, IMDb ID.
+  * 👥 Trích xuất danh sách diễn viên, nhân vật, đạo diễn, studio sản xuất.
+  * 🖼️ Tải poster, backdrop/fanart độ phân giải cao gốc.
+  * 📄 Xuất file `tvshow.nfo` và `movie.nfo` chuẩn Plex / Jellyfin / Kodi.
 
-### Method 3: Project-Specific Installation
-Copy or symlink the desired plugin from `plugins/<plugin-name>` into your project workspace `.gemini/plugins/` or `.agents/plugins/`.
+### 3. 🎯 `media-collector`
+* **Mô tả:** Pipeline tự động hóa thu thập và quản lý thư viện phim ảnh, anime, TV Shows đa thế hệ.
+* **Tính năng chính:**
+  * 🔍 Tự động tìm kiếm nguồn tải Nyaa, DDL, torrent với bộ lọc chất lượng nghiêm ngặt (tránh watermark, hardsub xấu).
+  * 🏷️ Đổi tên và cấu trúc theo chuẩn quốc tế TVDB/Plex.
+  * 🧹 Phát hiện và dọn dẹp file trùng lặp, tối ưu hóa bộ nhớ đĩa.
+
+### 4. 📝 `translate-subtitle`
+* **Mô tả:** Hệ thống dịch thuật phụ đề phim ảnh AI chuyên nghiệp 2 tầng (Two-Tier Architecture).
+* **Tính năng chính:**
+  * 🌐 Trích xuất và dịch thuật ngữ theo Master Glossary Hub.
+  * 🎨 Định dạng phụ đề ASS/SRT với bộ style điện ảnh tùy biến (Mecha, Trinh thám, Cổ trang, Y khoa).
 
 ---
 
-## 👨‍💻 Author
-- **GitHub**: [@nchungdev](https://github.com/nchungdev)
+## 🛡️ Bảo mật & Secret Data
+* Toàn bộ mã nguồn **không chứa bất kỳ API Key, Token hay thông tin cá nhân nhạy cảm nào**.
+* API Key được quản lý cục bộ qua biến môi trường (`TORBOX_API_KEY`, `TMDB_API_KEY`) hoặc file cấu hình an toàn `~/.config/torbox/config.json` (chế độ bảo mật `0600`).
