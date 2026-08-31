@@ -1321,86 +1321,56 @@
               let iconBox = `<div class="w-8 h-8 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-500 flex items-center justify-center font-mono font-bold text-xs shrink-0">${task.index || '•'}</div>`;
 
               if (isDone) {
-                statusBorder = "border-emerald-500/20 bg-emerald-500/[0.03]";
+                statusBorder = "border-zinc-800/80 bg-zinc-900/40 hover:border-emerald-500/40";
                 badgeColor = "bg-emerald-500/10 border-emerald-500/30 text-emerald-400";
-                percentBadge = `<span class="px-2.5 py-1 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-mono font-bold text-xs">✓ 100%</span>`;
-                iconBox = `<div class="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">✓</div>`;
+                percentBadge = `<span class="px-2.5 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono font-bold text-xs">✓ 100%</span>`;
+                iconBox = `<div class="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">✓</div>`;
               } else if (isActive) {
-                statusBorder = "border-amber-500/40 bg-amber-500/[0.06] shadow-lg shadow-amber-500/5";
+                statusBorder = "border-amber-500/40 bg-amber-500/[0.04] shadow-md shadow-amber-500/5";
                 badgeColor = "bg-amber-500/20 border-amber-500/40 text-amber-400";
                 percentBadge = `<span class="px-2.5 py-1 rounded-xl bg-amber-500 text-black font-mono font-bold text-xs shadow-md shadow-amber-500/20">${task.percent}%</span>`;
-                iconBox = `<div class="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center font-bold text-sm shrink-0 animate-pulse">⚡</div>`;
+                iconBox = `<div class="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center font-bold text-xs shrink-0 animate-pulse">⚡</div>`;
               }
 
               return `
-                <div onclick="openPipelineDetail(${task.index})" class="p-4 rounded-2xl border ${statusBorder} hover:border-zinc-700 hover:bg-zinc-900/60 cursor-pointer transition space-y-3.5 group">
-                  <!-- Task Header -->
-                  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2.5">
-                    <div class="flex items-center gap-3 flex-1 min-w-0">
-                      ${iconBox}
-                      <div class="min-w-0 flex-1">
-                        <div class="flex items-center gap-2 flex-wrap">
-                          <span class="px-2 py-0.5 rounded-md font-mono text-[10px] font-semibold border ${badgeColor}">
-                            ${task.type}
-                          </span>
-                          <h4 class="font-bold text-xs text-white truncate group-hover:text-blue-400 transition">${task.title}</h4>
-                          <span class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400 text-[10px] font-mono">${task.format}</span>
-                        </div>
-                        <div class="text-[11px] text-zinc-400 mt-1 flex items-center gap-2">
-                          <span>📍 ${task.destination}</span>
-                          <span class="text-zinc-600">•</span>
-                          <span class="text-zinc-400 font-mono">${task.size}</span>
-                        </div>
+                <div onclick="openPipelineDetail(${task.index})" class="px-3.5 py-3 sm:px-4 sm:py-3.5 rounded-2xl border ${statusBorder} hover:bg-zinc-900/80 cursor-pointer transition flex flex-col sm:flex-row sm:items-center justify-between gap-3 group shadow-sm">
+                  
+                  <!-- Left Side: Icon + Title + Tags + Path -->
+                  <div class="flex items-center gap-3 min-w-0 flex-1">
+                    ${iconBox}
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md font-mono text-[10px] font-semibold border ${badgeColor}">
+                          ${task.type}
+                        </span>
+                        <h4 class="font-bold text-xs sm:text-sm text-white truncate group-hover:text-amber-400 transition">${task.title}</h4>
+                        <span class="px-1.5 py-0.2 rounded bg-zinc-900 border border-zinc-800 text-zinc-400 text-[10px] font-mono">${task.format}</span>
+                      </div>
+                      <div class="text-[11px] text-zinc-400 mt-0.5 flex items-center gap-2 truncate">
+                        <span class="truncate">📍 ${task.destination}</span>
+                        <span class="text-zinc-600 shrink-0">•</span>
+                        <span class="text-zinc-400 font-mono shrink-0">${task.size}</span>
                       </div>
                     </div>
-                    <div class="flex items-center gap-2.5 self-end sm:self-center">
-                      ${percentBadge}
-                      <span class="text-[11px] text-zinc-400 group-hover:text-amber-400 font-bold transition flex items-center gap-0.5">
-                        <span class="hidden sm:inline">Chi Tiết</span> ➔
+                  </div>
+
+                  <!-- Right Side: Mini Compact Dual Stream Status + Percent + Arrow -->
+                  <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-800/60">
+                    <div class="flex items-center gap-1.5 text-[10px] font-mono">
+                      <span class="px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center gap-1 font-semibold" title="Tiến độ Download">
+                        <span>📥</span> ${task.dl_percent}%
+                      </span>
+                      <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1 font-semibold" title="Tiến độ Upload Drive">
+                        <span>📤</span> ${task.ul_percent}%
                       </span>
                     </div>
-                  </div>
 
-                  <!-- DUAL PHASE SEPARATION: DOWNLOAD vs. UPLOAD -->
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 border-t border-zinc-800/60">
-                    <!-- PHASE 1: DOWNLOAD (TorBox Cloud -> Staging Buffer) -->
-                    <div class="p-3 rounded-xl bg-zinc-950/70 border border-blue-500/20 space-y-2">
-                      <div class="flex items-center justify-between text-[11px]">
-                        <div class="flex items-center gap-1.5 font-bold text-blue-400">
-                          <span>📥</span> GIAI ĐOẠN 1: DOWNLOAD
-                        </div>
-                        <span class="font-mono text-xs font-semibold ${isDone || task.dl_percent === 100 ? 'text-emerald-400' : 'text-blue-400'}">
-                          ${task.dl_percent}%
-                        </span>
-                      </div>
-                      <div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden border border-blue-500/20">
-                        <div class="bg-blue-500 h-full rounded-full transition-all duration-500" style="width: ${task.dl_percent}%;"></div>
-                      </div>
-                      <div class="flex items-center justify-between text-[10px] text-zinc-400">
-                        <span>Nguồn: TorBox Cloud Cache</span>
-                        <span class="${task.dl_percent === 100 ? 'text-emerald-400' : 'text-zinc-400'}">${task.dl_status}</span>
-                      </div>
-                    </div>
-
-                    <!-- PHASE 2: UPLOAD (Staging Buffer -> Google Drive Plex) -->
-                    <div class="p-3 rounded-xl bg-zinc-950/70 border border-emerald-500/20 space-y-2">
-                      <div class="flex items-center justify-between text-[11px]">
-                        <div class="flex items-center gap-1.5 font-bold text-emerald-400">
-                          <span>📤</span> GIAI ĐOẠN 2: UPLOAD & SYNC
-                        </div>
-                        <span class="font-mono text-xs font-semibold ${isDone || task.ul_percent === 100 ? 'text-emerald-400' : 'text-amber-400'}">
-                          ${task.ul_percent}%
-                        </span>
-                      </div>
-                      <div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden border border-emerald-500/20">
-                        <div class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: ${task.ul_percent}%;"></div>
-                      </div>
-                      <div class="flex items-center justify-between text-[10px] text-zinc-400">
-                        <span>Đích: Google Drive Plex</span>
-                        <span class="${task.ul_percent === 100 ? 'text-emerald-400' : 'text-zinc-400'}">${task.ul_status}</span>
-                      </div>
+                    <div class="flex items-center gap-2">
+                      ${percentBadge}
+                      <span class="text-zinc-500 group-hover:text-amber-400 text-xs font-bold transition">➔</span>
                     </div>
                   </div>
+
                 </div>
               `;
             };
