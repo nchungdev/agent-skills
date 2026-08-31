@@ -37,20 +37,25 @@ Kỹ năng đặc biệt giúp khởi chạy, điều khiển và theo dõi toà
 
 ## 💻 Cách Khởi Chạy Dashboard
 
-### 1. Khởi Chạy Trực Tiếp Bằng Lệnh Python:
+### 1. Khởi Chạy 1-Chạm (Tự Động Bật TryCloudflare & In Link Ra Màn Hình):
 ```bash
-# Chạy Dashboard Server trên cổng 8888:
-python3 /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/server.py
-```
-
-### 2. Khởi Chạy Trọn Gói (Server + Cloudflare Tunnel + Agent Queue Watcher):
-```bash
+# Script tự động bật Server + Agent Watcher + Tạo link trycloudflare trực tiếp:
+python3 /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/launcher.py
+# Hoặc:
 bash /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/launch_dashboard.sh
 ```
 
-### 3. Khởi Chạy Riêng Agent Queue Watcher Daemon:
+Khi chạy, script sẽ tự động tạo đường truyền **TryCloudflare** miễn phí, bắt link và in ngay ra màn hình cho người dùng:
+```text
+================================================================
+🎉 LINK TRUY CẬP ONLINE THỜI GIAN THỰC (TRYCLOUDFLARE):
+👉 https://example-subdomain.trycloudflare.com
+================================================================
+```
+
+### 2. Khởi Chạy Chỉ Server Local (Không cần Tunnel):
 ```bash
-python3 /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/agent_queue_watcher.py
+python3 /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/server.py
 ```
 
 ---
