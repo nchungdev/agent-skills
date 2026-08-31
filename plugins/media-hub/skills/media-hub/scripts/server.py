@@ -670,6 +670,34 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             except Exception as e:
                 return self._send_json({"success": False, "error": str(e)})
 
+        # 10. API: Manual Purge Staging Buffer (/api/staging/purge)
+        elif path == "/api/staging/purge":
+            cfg = load_unified_settings()
+            staging = cfg.get("staging_dir", "/Volumes/512GB/AI Workspace/media_staging")
+            deleted_count = 0
+            freed_bytes = 0
+            if os.path.exists(staging):
+                for root, dirs, files in os.walk(staging, topdown=False):
+                    for f in files:
+                        fp = os.path.join(root, f)
+                        try:
+                            freed_bytes += os.path.getsize(fp)
+                            os.remove(fp)
+                            deleted_count += 1
+                        except Exception:
+                            pass
+                    for d in dirs:
+                        dp = os.path.join(root, d)
+                        try:
+                            os.rmdir(dp)
+                        except Exception:
+                            pass
+            freed_mb = round(freed_bytes / (1024 * 1024), 2)
+            return self._send_json({
+                "success": True,
+                "message": f"Đã dọn dẹp sạch thư mục đệm ({deleted_count} file, giải phóng {freed_mb} MB)!"
+            })
+
         else:
             self.send_error(404, "Not Found")
 
