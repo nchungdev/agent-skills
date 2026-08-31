@@ -143,10 +143,21 @@ class MediaHubHandler(BaseHTTPRequestHandler):
         # 1.1 Static Assets Routing (/static/...)
         elif path.startswith("/static/"):
             file_rel = path.lstrip("/")
-            file_path = os.path.join(BASE_DIR, file_rel)
-            if os.path.exists(file_path) and os.path.isfile(file_path):
+            candidate_paths = [
+                os.path.join(BASE_DIR, file_rel),
+                os.path.join(os.path.dirname(BASE_DIR), file_rel),
+                f"/Volumes/512GB/AI Workspace/agent-skills/plugins/media-hub/skills/media-hub/{file_rel}"
+            ]
+            file_path = None
+            for cp in candidate_paths:
+                if os.path.exists(cp) and os.path.isfile(cp):
+                    file_path = cp
+                    break
+
+            if file_path:
                 content_type = "image/jpeg"
                 if file_path.endswith(".png"): content_type = "image/png"
+                elif file_path.endswith(".jpg") or file_path.endswith(".jpeg"): content_type = "image/jpeg"
                 elif file_path.endswith(".svg"): content_type = "image/svg+xml"
                 elif file_path.endswith(".css"): content_type = "text/css"
                 elif file_path.endswith(".js"): content_type = "application/javascript"
