@@ -2,45 +2,55 @@
 # -*- coding: utf-8 -*-
 """
 Agent Command Queue Watcher Daemon
-Notifies Antigravity AI immediately when a user dispatches a command from Web UI
+Auto-evaluates pending user commands through Skill-Scoped Intent Router
 """
 
 import os
+import sys
 import json
 import time
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+if SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, SCRIPT_DIR)
+
+from core.intent_router import execute_scoped_command
 
 QUEUE_FILE = "/Volumes/512GB/AI Workspace/antigravity-media-hub/agent_command_queue.json"
 
 def watch_queue():
-    print("🚀 Agent Queue Watcher Daemon started...", flush=True)
-    last_seen_ids = set()
+    print("🚀 Skill-Scoped Agent Command Watcher Daemon active...", flush=True)
     
-    # Initialize seen IDs
-    if os.path.exists(QUEUE_FILE):
-        try:
-            with open(QUEUE_FILE, "r", encoding="utf-8") as f:
-                queue = json.load(f)
-                for item in queue:
-                    if item.get("status") == "done":
-                        last_seen_ids.add(item.get("id"))
-        except Exception:
-            pass
-
     while True:
         try:
             if os.path.exists(QUEUE_FILE):
                 with open(QUEUE_FILE, "r", encoding="utf-8") as f:
                     queue = json.load(f)
                     
-                pending_items = [item for item in queue if item.get("status") == "pending" and item.get("id") not in last_seen_ids]
-                for item in pending_items:
-                    cmd_id = item.get("id")
-                    cmd_text = item.get("command")
-                    last_seen_ids.add(cmd_id)
-                    print(f"🔔 [AGENT_TRIGGER] Lệnh mới từ Web UI (ID: {cmd_id}): \"{cmd_text}\"", flush=True)
-        except Exception:
+                updated = False
+                for item in queue:
+                    if item.get("status") == "pending":
+                        cmd_id = item.get("id")
+                        cmd_text = item.get("command", "").strip()
+                        print(f"🔔 [AGENT_TRIGGER] Phân tích lệnh: \"{cmd_text}\" (ID: {cmd_id})", flush=True)
+                        
+                        # Process through intent router
+                        result = execute_scoped_command(cmd_text)
+                        
+                        item["status"] = "done"
+                        item["response"] = result.get("response")
+                        item["intent"] = result.get("intent")
+                        item["skill"] = result.get("skill")
+                        item["timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S")
+                        updated = True
+                        print(f"✅ [AGENT_RESOLVED] Intent: {result.get('intent')} | Skill: {result.get('skill')}", flush=True)
+                
+                if updated:
+                    with open(QUEUE_FILE, "w", encoding="utf-8") as f:
+                        json.dump(queue, f, indent=2, ensure_ascii=False)
+        except Exception as e:
             pass
-        time.sleep(2)
+        time.sleep(1.5)
 
 if __name__ == "__main__":
     watch_queue()

@@ -9,6 +9,22 @@ Kỹ năng đặc biệt giúp khởi chạy, điều khiển và theo dõi toà
 
 ---
 
+## 🛡️ Nguyên Tắc Hoạt Động Của AI Agent Assistant (Skill-Scoped Guardrails)
+
+Để đảm bảo AI Agent Assistant phản hồi và thực thi hành động **chính xác 100% trong ngữ cảnh của các Skill**, hệ thống sử dụng cơ chế **Intent Routing & Domain Whitelisting**:
+
+### 1. Phân Loại Ý Định & Phạm Vi Kỹ Năng (Intent Map):
+| Intent | Skill Tương Ứng | Phạm Vi & Thẩm Quyền |
+| :--- | :--- | :--- |
+| **`TORBOX_OP`** | `torbox-manager` | Tra cứu torrents trên Cloud, lọc torrent đã Ready/Cached, thêm Magnet link, xóa torrent giải phóng dung lượng. |
+| **`PIPELINE_OP`** | `sequential-pipeline` | Kiểm tra tiến độ chuỗi stream cuốn chiếu (`Cross Fight B-Daman`, `Monster`, `WUKONG`...), báo cáo % hoàn thành. |
+| **`GDRIVE_OP`** | `media-collector` | Quét thư mục media Google Drive, kiểm tra quan hệ series, chuẩn hóa tên mùa/tập (`S01E01`), cập nhật NFO/Poster. |
+| **`SUBTITLE_OP`** | `translate-subtitle` | Tra cứu, tải về, dịch phụ đề Vietsub và chuyển đổi định dạng phụ đề WebVTT zerolatency. |
+| **`SYSTEM_OP`** | `media-hub` | Báo cáo dung lượng ổ đĩa, kiểm tra RAM/Disk buffer và tự động dọn dẹp thư mục tạm. |
+| **`OUT_OF_SCOPE`** | *Ngoài phạm vi* | **Từ chối lịch sự** đối với các câu hỏi không liên quan đến Media Hub và hướng dẫn người dùng lệnh mẫu. |
+
+---
+
 ## 🌟 Tính Năng Trọng Tâm
 
 1. **📊 Tổng Quan Hệ Thống (System KPIs):**
@@ -25,13 +41,13 @@ Kỹ năng đặc biệt giúp khởi chạy, điều khiển và theo dõi toà
 
 4. **📁 Trình Duyệt Thư Viện Google Drive:**
    * Duyệt poster phim chuẩn 2:3 với tag chất lượng (`1080p BDRip`, `480p DVD`, `Anime`, `Live Action`).
-   * Xem chi tiết từng Season và danh sách tập đã chuẩn hóa theo quy chuẩn Plex/Jellyfin (`Show Name - S01E01 - [1080p BluRay]`).
-   * Nút Back thông minh ghim cố định ở Header và Breadcrumb điều hướng cực kỳ tiện lợi.
+   * Xem chi tiết từng Season và danh sách tập đã chuẩn hóa theo quy chuẩn Plex/Jellyfin.
+   * Trình phát video chuyên biệt toàn màn hình (Full-Screen Dedicated Player View) hỗ trợ phát trực tiếp, VLC, IINA, M3U.
 
 5. **🤖 AI Agent Assistant (Web Command Center):**
    * Chat và gửi lệnh trực tiếp cho Antigravity AI từ giao diện Web.
-   * Có sẵn các mẫu prompt nhanh: *Đồng bộ phim mới*, *Tải Anime*, *Quét kho Google Drive*, *Kiểm tra ổ đĩa*.
-   * Lịch sử hội thoại phản hồi theo thời gian thực.
+   * Tự động phân tích ý định qua `intent_router.py` và giải quyết lệnh ngay lập tức.
+   * Thanh nhập lệnh neo cố định chuẩn Mobile App trên điện thoại.
 
 ---
 
@@ -39,7 +55,6 @@ Kỹ năng đặc biệt giúp khởi chạy, điều khiển và theo dõi toà
 
 ### 1. Khởi Chạy 1-Chạm (Tự Động Bật TryCloudflare & In Link Ra Màn Hình):
 ```bash
-# Script tự động bật Server + Agent Watcher + Tạo link trycloudflare trực tiếp:
 python3 /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/launcher.py
 # Hoặc:
 bash /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/launch_dashboard.sh
@@ -49,30 +64,13 @@ Khi chạy, script sẽ tự động tạo đường truyền **TryCloudflare** 
 ```text
 ================================================================
 🎉 LINK TRUY CẬP ONLINE THỜI GIAN THỰC (TRYCLOUDFLARE):
-👉 https://example-subdomain.trycloudflare.com
+👉 https://constitution-plates-leisure-delegation.trycloudflare.com
 ================================================================
 ```
-
-### 2. Khởi Chạy Chỉ Server Local (Không cần Tunnel):
-```bash
-python3 /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/server.py
-```
-
----
-
-## 🔗 Liên Kết Với Các Skill Khác Trong Repository
-
-| Skill | Vai Trò Trong Dashboard |
-| :--- | :--- |
-| **`torbox-manager`** | Cung cấp API quản lý danh sách torrent, tải tập lẻ/Zip và xóa slot cloud. |
-| **`media-collector`** | Quản lý cấu trúc thư mục, chuẩn hóa tên tập và tạo metadata NFO. |
-| **`tmdb-lookup`** | Tự động lấy poster, backdrop, plot và thông tin diễn viên. |
-| **`translate-subtitle`** | Tự động dịch phụ đề SRT/ASS sang tiếng Việt chuẩn văn cảnh. |
 
 ---
 
 ## 🌐 Truy Cập Giao Diện Web
 
 * **Localhost:** `http://127.0.0.1:8888`
-* **Mạng nội bộ LAN:** `http://<IP-MÁY-BẠN>:8888`
-* **Public Cloudflare Tunnel (nếu bật):** Truy cập an toàn qua URL `https://*.trycloudflare.com` từ điện thoại hoặc máy tính từ xa.
+* **Public Cloudflare Tunnel:** Truy cập an toàn qua URL `https://*.trycloudflare.com` từ điện thoại iPhone / Android hoặc máy tính từ xa.
