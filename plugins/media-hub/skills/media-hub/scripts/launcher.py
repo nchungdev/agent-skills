@@ -28,12 +28,21 @@ def start_hub():
     print("🚀 Đang khởi chạy Antigravity Media Hub Dashboard v2.4...", flush=True)
     print("================================================================", flush=True)
 
-    # 1. Start Server if not running
-    server_script = os.path.join(BASE_DIR, "server.py")
-    server_proc = subprocess.Popen([sys.executable, server_script])
-    print(f"✅ Web Server đã chạy tại Localhost: http://127.0.0.1:{PORT}", flush=True)
+    # 1. Start Server if not already listening
+    import socket
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    is_port_in_use = sock.connect_ex(('127.0.0.1', PORT)) == 0
+    sock.close()
 
-    # 2. Start Agent Queue Watcher
+    server_proc = None
+    if not is_port_in_use:
+        server_script = os.path.join(BASE_DIR, "server.py")
+        server_proc = subprocess.Popen([sys.executable, server_script])
+        print(f"✅ Web Server đã khởi động tại Localhost: http://127.0.0.1:{PORT}", flush=True)
+    else:
+        print(f"✅ Web Server đang sẵn sàng tại Localhost: http://127.0.0.1:{PORT}", flush=True)
+
+    # 2. Start Agent Queue Watcher if not running
     watcher_script = os.path.join(BASE_DIR, "agent_queue_watcher.py")
     if os.path.exists(watcher_script):
         subprocess.Popen([sys.executable, watcher_script])
@@ -42,6 +51,7 @@ def start_hub():
     # 3. Start TryCloudflare Tunnel
     cloudflared_bin = find_cloudflared()
     public_url = None
+    tunnel_proc = None
 
     if cloudflared_bin:
         print("🌐 Đang khởi tạo đường truyền TryCloudflare tốc độ cao...", flush=True)
@@ -79,12 +89,19 @@ def start_hub():
     else:
         print("⚠️ Chưa cài đặt cloudflared (brew install cloudflared). Dùng http://127.0.0.1:8888", flush=True)
 
-    # Keep alive
+    # Keep alive with tunnel or server
     try:
-        server_proc.wait()
+        if tunnel_proc:
+            tunnel_proc.wait()
+        elif server_proc:
+            server_proc.wait()
+        else:
+            while True:
+                time.sleep(60)
     except KeyboardInterrupt:
         print("\n👋 Đang dừng Media Hub Dashboard...")
-        server_proc.terminate()
+        if tunnel_proc: tunnel_proc.terminate()
+        if server_proc: server_proc.terminate()
 
 if __name__ == "__main__":
     start_hub()
