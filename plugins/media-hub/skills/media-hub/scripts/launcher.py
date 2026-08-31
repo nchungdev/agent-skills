@@ -17,6 +17,8 @@ import socket
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_PORT = 8888
 URL_FILE = os.path.join(BASE_DIR, "active_public_url.txt")
+SERVER_LOG = "/tmp/media_hub_server.log"
+WATCHER_LOG = "/tmp/media_hub_watcher.log"
 
 def find_cloudflared():
     for path in ["/opt/homebrew/bin/cloudflared", "/usr/local/bin/cloudflared", "cloudflared"]:
@@ -35,28 +37,47 @@ def get_local_ip():
     except Exception:
         return "127.0.0.1"
 
+def kill_process_on_port(port):
+    try:
+        res = subprocess.run(["lsof", "-t", "-i", f":{port}"], capture_output=True, text=True)
+        pids = res.stdout.strip().split()
+        for pid in pids:
+            if pid and pid != str(os.getpid()):
+                subprocess.run(["kill", "-9", pid], capture_output=True)
+    except Exception:
+        pass
+
 def start_hub(enable_tunnel=False, port=DEFAULT_PORT):
     print("=" * 64, flush=True)
     print(f"🚀 Khởi chạy Antigravity Media Hub Dashboard (Port {port})...", flush=True)
     print("=" * 64, flush=True)
 
-    # 1. Start Server if not already listening
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    is_port_in_use = sock.connect_ex(('127.0.0.1', port)) == 0
-    sock.close()
+    # 1. Clean old processes on port to avoid deadlocks
+    kill_process_on_port(port)
+    time.sleep(0.5)
 
-    server_proc = None
-    if not is_port_in_use:
-        server_script = os.path.join(BASE_DIR, "server.py")
-        server_proc = subprocess.Popen([sys.executable, server_script])
-        print(f"✅ Web Server đã khởi động tại: http://127.0.0.1:{port}", flush=True)
-    else:
-        print(f"✅ Web Server đang hoạt động tại: http://127.0.0.1:{port}", flush=True)
+    # 2. Start Server
+    server_script = os.path.join(BASE_DIR, "server.py")
+    server_log_fp = open(SERVER_LOG, "a", encoding="utf-8")
+    server_proc = subprocess.Popen(
+        [sys.executable, server_script],
+        stdout=server_log_fp,
+        stderr=server_log_fp,
+        start_new_session=True
+    )
+    print(f"✅ Web Server đã khởi động tại: http://127.0.0.1:{port}", flush=True)
 
-    # 2. Start Agent Queue Watcher if not running
+    # 3. Start Agent Queue Watcher
     watcher_script = os.path.join(BASE_DIR, "agent_queue_watcher.py")
+    watcher_proc = None
     if os.path.exists(watcher_script):
-        subprocess.Popen([sys.executable, watcher_script])
+        watcher_log_fp = open(WATCHER_LOG, "a", encoding="utf-8")
+        watcher_proc = subprocess.Popen(
+            [sys.executable, watcher_script],
+            stdout=watcher_log_fp,
+            stderr=watcher_log_fp,
+            start_new_session=True
+        )
         print("✅ Agent Queue Watcher Daemon đã kích hoạt.", flush=True)
 
     local_ip = get_local_ip()
@@ -65,7 +86,7 @@ def start_hub(enable_tunnel=False, port=DEFAULT_PORT):
 
     tunnel_proc = None
 
-    # 3. Optional TryCloudflare Tunnel
+    # 4. Optional TryCloudflare Tunnel
     if enable_tunnel:
         cloudflared_bin = find_cloudflared()
         if not cloudflared_bin:
@@ -130,13 +151,18 @@ def start_hub(enable_tunnel=False, port=DEFAULT_PORT):
     print("ℹ️ Nhấn Ctrl+C để dừng Dashboard.", flush=True)
     try:
         while True:
+            if server_proc.poll() is not None:
+                print("⚠️ Server đã kết thúc unexpectedly. Đang thoát...")
+                break
             if tunnel_proc and tunnel_proc.poll() is not None:
                 break
             time.sleep(2)
     except KeyboardInterrupt:
         print("\n👋 Đang dừng Media Hub Dashboard...")
+    finally:
         if tunnel_proc: tunnel_proc.terminate()
         if server_proc: server_proc.terminate()
+        if watcher_proc: watcher_proc.terminate()
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Khởi chạy Antigravity Media Hub Dashboard")

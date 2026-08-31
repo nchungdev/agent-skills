@@ -703,6 +703,8 @@ class MediaHubHandler(BaseHTTPRequestHandler):
 
 def run_server():
     server_address = (HOST, PORT)
+    ThreadingHTTPServer.allow_reuse_address = True
+    ThreadingHTTPServer.daemon_threads = True
     httpd = ThreadingHTTPServer(server_address, MediaHubHandler)
     print("=" * 80)
     print(f"🚀 ANTIGRAVITY MEDIA HUB SERVER IS LIVE ON PORT {PORT}")
