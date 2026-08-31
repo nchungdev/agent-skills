@@ -966,8 +966,6 @@
           </div>
         </div>
 
-        </div>
-
         <!-- Input Box Anchored / Docked Directly on top of Bottom Navigation Bar -->
         <div class="fixed left-0 right-0 z-30 lg:relative mobile-docked-input bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-800/80 px-3 py-3 sm:px-4 sm:py-3.5 shadow-2xl">
           <div class="max-w-5xl mx-auto flex gap-2.5 sm:gap-3 items-center">
@@ -1047,40 +1045,32 @@
             </div>
           </div>
 
-          <!-- Card 2: Khóa API & Tài Khoản Các Skill (TorBox, TMDb, Gemini, Aria2) -->
+          <!-- Card 2: Khóa API & Tài Khoản Các Skill (TorBox, TMDb, Aria2) -->
           <div class="p-5 sm:p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800/80 shadow-xl space-y-4">
             <div class="flex items-center gap-3 border-b border-zinc-800 pb-3">
               <div class="w-8 h-8 rounded-xl bg-purple-600/10 text-purple-400 flex items-center justify-center font-bold text-sm border border-purple-500/20">🔑</div>
               <div>
                 <h4 class="font-bold text-xs sm:text-sm text-white">2. Tài Khoản & Khóa API Dịch Vụ (Centralized Credentials)</h4>
-                <p class="text-[11px] text-zinc-400">Cấu hình tập trung cho toàn bộ Skills: TorBox Cloud, TMDb Metadata, Gemini AI và Aria2 RPC</p>
+                <p class="text-[11px] text-zinc-400">Cấu hình tập trung cho toàn bộ Skills: TorBox Cloud, TMDb Metadata và Aria2c RPC</p>
               </div>
             </div>
 
             <div class="space-y-3.5 text-xs">
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-zinc-400 font-medium mb-1.5 flex items-center justify-between">
-                    <span>⚡ TorBox Token</span>
+                    <span>⚡ TorBox API Token</span>
                     <span class="text-[9px] text-purple-400 font-mono">media-downloader</span>
                   </label>
-                  <input type="password" id="cfg-torbox-token" placeholder="Dán TorBox Token..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-purple-500">
+                  <input type="password" id="cfg-torbox-token" placeholder="Dán TorBox Token từ torbox.app..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-purple-500">
                 </div>
 
                 <div>
                   <label class="block text-zinc-400 font-medium mb-1.5 flex items-center justify-between">
-                    <span>🎬 TMDb API Key</span>
+                    <span>🎬 TMDb API Key v3</span>
                     <span class="text-[9px] text-blue-400 font-mono">tmdb-lookup</span>
                   </label>
-                  <input type="password" id="cfg-tmdb-key" placeholder="Dán TMDb Key v3..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-blue-500">
-                </div>
-
-                <div>
-                  <label class="block text-zinc-400 font-medium mb-1.5 flex items-center justify-between">
-                    <span>🌐 Gemini API Key</span>
-                    <span class="text-[9px] text-emerald-400 font-mono">translate-sub</span>
-                  </label>
-                  <input type="password" id="cfg-gemini-key" placeholder="Dán Gemini API Key..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-emerald-500">
+                  <input type="password" id="cfg-tmdb-key" placeholder="Dán TMDb API Key v3..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-blue-500">
                 </div>
               </div>
 
@@ -2438,7 +2428,6 @@
         if (document.getElementById('cfg-staging-dir')) document.getElementById('cfg-staging-dir').value = cfg.staging_dir || '/Volumes/512GB/AI Workspace/media_staging';
         if (document.getElementById('cfg-torbox-token')) document.getElementById('cfg-torbox-token').value = cfg.torbox_token || '';
         if (document.getElementById('cfg-tmdb-key')) document.getElementById('cfg-tmdb-key').value = cfg.tmdb_api_key || '';
-        if (document.getElementById('cfg-gemini-key')) document.getElementById('cfg-gemini-key').value = cfg.gemini_api_key || '';
         if (document.getElementById('cfg-aria2-host')) document.getElementById('cfg-aria2-host').value = cfg.aria2_rpc_host || '127.0.0.1';
         if (document.getElementById('cfg-aria2-port')) document.getElementById('cfg-aria2-port').value = cfg.aria2_rpc_port || 6800;
         if (document.getElementById('cfg-aria2-secret')) document.getElementById('cfg-aria2-secret').value = cfg.aria2_rpc_secret || '';
@@ -2482,7 +2471,6 @@
         staging_dir: document.getElementById('cfg-staging-dir')?.value || '/Volumes/512GB/AI Workspace/media_staging',
         torbox_token: document.getElementById('cfg-torbox-token')?.value || '',
         tmdb_api_key: document.getElementById('cfg-tmdb-key')?.value || '',
-        gemini_api_key: document.getElementById('cfg-gemini-key')?.value || '',
         aria2_rpc_host: document.getElementById('cfg-aria2-host')?.value || '127.0.0.1',
         aria2_rpc_port: parseInt(document.getElementById('cfg-aria2-port')?.value || 6800),
         aria2_rpc_secret: document.getElementById('cfg-aria2-secret')?.value || '',
