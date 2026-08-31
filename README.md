@@ -155,7 +155,27 @@ python3 plugins/tmdb-lookup/skills/tmdb-lookup/scripts/tmdb_client.py export-nfo
 
 ---
 
-### 4. 📝 `translate-subtitle` (v1.0.0)
+### 4. 🚀 `media-hub` (v2.4.0)
+* **Vị trí:** `plugins/media-hub/skills/media-hub/`
+* **Mô tả:** Antigravity Real-Time Media Hub & Agent Command Center Dashboard Web UI (cổng `8888`), theo dõi trực quan tiến trình các skill, quản lý TorBox Debrid, kho Google Drive và gửi lệnh trực tiếp cho AI Agent.
+* **Tính năng chủ lực:**
+  * 📊 **Live System Overview:** Theo dõi dung lượng ổ cứng, thông số cache RAM/Disk, và các tác vụ đang stream theo thời gian thực.
+  * 🚀 **Sequential Multi-Show Pipeline:** Giám sát chuỗi tải & đẩy Google Drive cuốn chiếu từng tập với cơ chế tự động giải phóng ổ cứng.
+  * ⚡ **TorBox Cloud Manager:** Bảng điều khiển đám mây TorBox, thêm Magnet nhanh, lấy link tải trực tiếp và xóa torrent.
+  * 📁 **Google Drive Media Browser:** Trình duyệt poster phim chuẩn hóa theo mùa và tập, hỗ trợ tìm kiếm và xem chi tiết.
+  * 🤖 **AI Agent Interactive Chat:** Hộp thoại điều phối AI Agent trực tiếp từ Web UI với các lệnh nhanh một chạm.
+
+```bash
+# Khởi chạy Dashboard Web Server (Port 8888):
+python3 plugins/media-hub/skills/media-hub/scripts/server.py
+
+# Hoặc khởi chạy trọn gói (Server + Watcher + Cloudflare Tunnel):
+bash plugins/media-hub/skills/media-hub/scripts/launch_dashboard.sh
+```
+
+---
+
+### 5. 📝 `translate-subtitle` (v1.0.0)
 * **Vị trí:** `plugins/translate-subtitle/skills/translate-subtitle/`
 * **Mô tả:** Hệ thống dịch thuật phụ đề AI 2 tầng (*Two-Tier Translation Pipeline*) chuyên sâu cho phim ảnh và anime.
 * **Tính năng chủ lực:**
@@ -165,6 +185,13 @@ python3 plugins/tmdb-lookup/skills/tmdb-lookup/scripts/tmdb_client.py export-nfo
 ---
 
 ## 📜 Nhật Ký Phiên Bản (Skill Version Changelog)
+
+### 🚀 `media-hub`
+* **`v2.4.0` (2026-08-31):**
+  * 🌟 Phát hành Dashboard thời gian thực Antigravity Media Hub với Web UI hiện đại (Dark Theme Tailwind CSS).
+  * 📌 Header ghim cố định (`sticky top-0`) không rung lắc, tích hợp nút quay lại trực quan cho trang chi tiết phim.
+  * 🤖 Bổ sung tab AI Agent Assistant với cơ chế command queue watcher tương tác 2 chiều.
+  * 📁 Chuyển đổi giao diện sang Google Drive thuần túy, loại bỏ hoàn toàn logo và branding Plex cũ.
 
 ### ⚡ `torbox-manager`
 * **`v1.2.0` (2026-08-30):**
