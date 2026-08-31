@@ -1016,30 +1016,19 @@
                 <div class="w-8 h-8 rounded-xl bg-purple-600/10 text-purple-400 flex items-center justify-center font-bold text-sm border border-purple-500/20 shadow-inner">⚡</div>
                 <div>
                   <h4 class="font-bold text-xs sm:text-sm text-white">CỤM 1: CẤU HÌNH TORBOX & BỘ TẢI (DOWNLOADER ENGINE)</h4>
-                  <p class="text-[11px] text-zinc-400">TorBox Debrid API, TMDb siêu dữ liệu, nguồn tải và bộ đệm tạm thời</p>
+                  <p class="text-[11px] text-zinc-400">TorBox Debrid API token, nguồn tải mặc định, số luồng và thư mục đệm</p>
                 </div>
               </div>
               <span class="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[10px] font-mono font-bold">torbox-engine</span>
             </div>
 
             <div class="space-y-4 text-xs">
-              <!-- TorBox Token & TMDb Key -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-zinc-400 font-medium mb-1.5 flex items-center justify-between">
-                    <span>⚡ TorBox API Token</span>
-                    <span class="text-[9px] text-purple-400 font-mono">media-downloader</span>
-                  </label>
-                  <input type="password" id="cfg-torbox-token" placeholder="Dán TorBox Token từ torbox.app..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-purple-500">
-                </div>
-
-                <div>
-                  <label class="block text-zinc-400 font-medium mb-1.5 flex items-center justify-between">
-                    <span>🎬 TMDb API Key v3</span>
-                    <span class="text-[9px] text-blue-400 font-mono">tmdb-lookup</span>
-                  </label>
-                  <input type="password" id="cfg-tmdb-key" placeholder="Dán TMDb API Key v3..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-blue-500">
-                </div>
+              <div>
+                <label class="block text-zinc-400 font-medium mb-1.5 flex items-center justify-between">
+                  <span>⚡ TorBox API Token (Bearer Key)</span>
+                  <span class="text-[9px] text-purple-400 font-mono">media-downloader</span>
+                </label>
+                <input type="password" id="cfg-torbox-token" placeholder="Dán TorBox Token từ torbox.app..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-purple-500">
               </div>
 
               <!-- Provider & Concurrent -->
@@ -1090,15 +1079,62 @@
             </div>
           </div>
 
-          <!-- ==================== CỤM 2: NAS (Bộ Nhớ Nội Bộ & Phân Loại Plex) ==================== -->
+          <!-- ==================== CỤM 2: TMDB (Tra Cứu Siêu Dữ Liệu & Poster) ==================== -->
+          <div class="p-5 sm:p-6 rounded-3xl bg-zinc-900/70 border border-blue-500/20 shadow-xl space-y-4 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="flex items-center justify-between border-b border-zinc-800 pb-3 flex-wrap gap-2">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-sm border border-blue-500/20 shadow-inner">🎬</div>
+                <div>
+                  <h4 class="font-bold text-xs sm:text-sm text-white">CỤM 2: CẤU HÌNH TMDB (TRA CỨU SIÊU DỮ LIỆU & POSTER)</h4>
+                  <p class="text-[11px] text-zinc-400">The Movie Database API v3, ngôn ngữ tra cứu và tạo metadata chuẩn Plex</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-mono font-bold">tmdb-lookup</span>
+            </div>
+
+            <div class="space-y-4 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="sm:col-span-2">
+                  <label class="block text-zinc-400 font-medium mb-1.5 flex items-center justify-between">
+                    <span>🎬 TMDb API Key v3</span>
+                    <span class="text-[9px] text-blue-400 font-mono">themoviedb.org</span>
+                  </label>
+                  <input type="password" id="cfg-tmdb-key" placeholder="Dán TMDb API Key v3 vào đây..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div>
+                  <label class="block text-zinc-400 font-medium mb-1.5">Ngôn Ngữ Mặc Định</label>
+                  <select id="cfg-tmdb-lang" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                    <option value="vi-VN" selected>🇻🇳 vi-VN (Tiếng Việt)</option>
+                    <option value="en-US">🇺🇸 en-US (English)</option>
+                    <option value="ja-JP">🇯🇵 ja-JP (Tiếng Nhật)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="pt-2 border-t border-zinc-800/60 flex flex-wrap gap-4 text-zinc-300">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="cfg-tmdb-auto-poster" checked class="w-4 h-4 rounded border-zinc-700 text-blue-600 focus:ring-0">
+                  <span>Tự động tải Poster & Fanart chất lượng cao khi quét phim</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="cfg-tmdb-auto-nfo" checked class="w-4 h-4 rounded border-zinc-700 text-blue-600 focus:ring-0">
+                  <span>Tự động tạo file metadata <code class="text-blue-400 font-mono">.nfo</code> chuẩn Plex/Kodi</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================== CỤM 3: NAS STORAGE (Hỗ Trợ Kết Nối SSH / SFTP) ==================== -->
           <div class="p-5 sm:p-6 rounded-3xl bg-zinc-900/70 border border-amber-500/20 shadow-xl space-y-4 relative overflow-hidden">
             <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none"></div>
             <div class="flex items-center justify-between border-b border-zinc-800 pb-3 flex-wrap gap-2">
               <div class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded-xl bg-amber-600/10 text-amber-400 flex items-center justify-center font-bold text-sm border border-amber-500/20 shadow-inner">🖥️</div>
                 <div>
-                  <h4 class="font-bold text-xs sm:text-sm text-white">CỤM 2: CẤU HÌNH NAS STORAGE (SSH & PLEX LIBRARIAN)</h4>
-                  <p class="text-[11px] text-zinc-400">Kết nối SSH mạng nội bộ tới NAS Synology/QNAP và tự động dò thư mục Plex</p>
+                  <h4 class="font-bold text-xs sm:text-sm text-white">CỤM 3: CẤU HÌNH NAS STORAGE (HỖ TRỢ KẾT NỐI SSH / SFTP)</h4>
+                  <p class="text-[11px] text-zinc-400">Kết nối SSH mạng nội bộ tới NAS Synology/QNAP/TrueNAS và tự động dò thư mục Plex</p>
                 </div>
               </div>
               <button onclick="scanNasLibraries()" class="px-3 py-1.5 bg-amber-600/20 hover:bg-amber-600 border border-amber-500/30 text-amber-300 hover:text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
@@ -1107,10 +1143,10 @@
             </div>
 
             <div class="space-y-3.5 text-xs">
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
+              <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                <div class="sm:col-span-2">
                   <label class="block text-zinc-400 font-medium mb-1.5">NAS Host IP / Domain</label>
-                  <input type="text" id="cfg-nas-host" placeholder="ví dụ: 192.168.1.50" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-500">
+                  <input type="text" id="cfg-nas-host" placeholder="ví dụ: 192.168.1.50 hoặc nas.local" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-500">
                 </div>
                 <div>
                   <label class="block text-zinc-400 font-medium mb-1.5">SSH User</label>
@@ -1120,10 +1156,16 @@
                   <label class="block text-zinc-400 font-medium mb-1.5">SSH Port</label>
                   <input type="number" id="cfg-nas-port" value="22" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-500">
                 </div>
-                <div class="sm:col-span-3">
+                <div class="sm:col-span-2">
+                  <label class="block text-zinc-400 font-medium mb-1.5">SSH Key / Auth Path (Tùy chọn)</label>
+                  <input type="text" id="cfg-nas-ssh-key" placeholder="ví dụ: ~/.ssh/id_rsa" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-500">
+                </div>
+                <div class="sm:col-span-2">
                   <label class="block text-zinc-400 font-medium mb-1.5">Thư Mục Plex Trên NAS (Plex Library Path)</label>
                   <input type="text" id="cfg-nas-path" value="/volume1/video/TV Shows" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-500">
-                  <div id="nas-scan-results" class="hidden mt-2 p-3 rounded-xl bg-zinc-950 border border-zinc-800 text-xs space-y-1.5"></div>
+                </div>
+                <div class="sm:col-span-4">
+                  <div id="nas-scan-results" class="hidden mt-1 p-3 rounded-xl bg-zinc-950 border border-zinc-800 text-xs space-y-1.5"></div>
                 </div>
               </div>
 
@@ -1137,15 +1179,15 @@
             </div>
           </div>
 
-          <!-- ==================== CỤM 3: GOOGLE DRIVE (Lưu Trữ Đám Mây & Auto-Purge) ==================== -->
+          <!-- ==================== CỤM 4: GOOGLE DRIVE (Qua Rclone Config & Dọn Dẹp) ==================== -->
           <div class="p-5 sm:p-6 rounded-3xl bg-zinc-900/70 border border-emerald-500/20 shadow-xl space-y-4 relative overflow-hidden">
             <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none"></div>
             <div class="flex items-center justify-between border-b border-zinc-800 pb-3 flex-wrap gap-2">
               <div class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded-xl bg-emerald-600/10 text-emerald-400 flex items-center justify-center font-bold text-sm border border-emerald-500/20 shadow-inner">☁️</div>
                 <div>
-                  <h4 class="font-bold text-xs sm:text-sm text-white">CỤM 3: CẤU HÌNH GOOGLE DRIVE & DỌN DẸP (RCLONE & PURGE)</h4>
-                  <p class="text-[11px] text-zinc-400">Rclone remote Google Drive, phân cấp thư viện Cloud và cơ chế Auto-Purge</p>
+                  <h4 class="font-bold text-xs sm:text-sm text-white">CỤM 4: CẤU HÌNH GOOGLE DRIVE (QUA RCLONE CONFIG & DỌN DẸP)</h4>
+                  <p class="text-[11px] text-zinc-400">Rclone remote Google Drive, phân cấp thư viện Cloud, số luồng và Auto-Purge</p>
                 </div>
               </div>
               <button onclick="checkGDriveConnection()" class="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600 border border-emerald-500/30 text-emerald-300 hover:text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
@@ -1154,7 +1196,7 @@
             </div>
 
             <div class="space-y-3.5 text-xs">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label class="block text-zinc-400 font-medium mb-1.5">Tên Remote Rclone</label>
                   <input type="text" id="cfg-gdrive-remote" value="gdrive" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-emerald-500">
@@ -1163,6 +1205,11 @@
                 <div>
                   <label class="block text-zinc-400 font-medium mb-1.5">Thư Mục Root Trên Drive</label>
                   <input type="text" id="cfg-gdrive-root" value="Phim/TV Shows" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div>
+                  <label class="block text-zinc-400 font-medium mb-1.5">Số Luồng Truyền Tải (Transfers)</label>
+                  <input type="number" id="cfg-sync-transfers" value="4" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-emerald-500">
                 </div>
               </div>
 
@@ -2570,6 +2617,7 @@
         if (document.getElementById('cfg-staging-dir')) document.getElementById('cfg-staging-dir').value = cfg.staging_dir || '/Volumes/512GB/AI Workspace/media_staging';
         if (document.getElementById('cfg-torbox-token')) document.getElementById('cfg-torbox-token').value = cfg.torbox_token || '';
         if (document.getElementById('cfg-tmdb-key')) document.getElementById('cfg-tmdb-key').value = cfg.tmdb_api_key || '';
+        if (document.getElementById('cfg-tmdb-lang')) document.getElementById('cfg-tmdb-lang').value = cfg.tmdb_lang || 'vi-VN';
         if (document.getElementById('cfg-aria2-host')) document.getElementById('cfg-aria2-host').value = cfg.aria2_rpc_host || '127.0.0.1';
         if (document.getElementById('cfg-aria2-port')) document.getElementById('cfg-aria2-port').value = cfg.aria2_rpc_port || 6800;
         if (document.getElementById('cfg-aria2-secret')) document.getElementById('cfg-aria2-secret').value = cfg.aria2_rpc_secret || '';
@@ -2577,10 +2625,12 @@
         if (document.getElementById('cfg-nas-host')) document.getElementById('cfg-nas-host').value = cfg.nas_host || '';
         if (document.getElementById('cfg-nas-user')) document.getElementById('cfg-nas-user').value = cfg.nas_user || 'admin';
         if (document.getElementById('cfg-nas-port')) document.getElementById('cfg-nas-port').value = cfg.nas_port || 22;
+        if (document.getElementById('cfg-nas-ssh-key')) document.getElementById('cfg-nas-ssh-key').value = cfg.nas_ssh_key || '';
         if (document.getElementById('cfg-nas-path')) document.getElementById('cfg-nas-path').value = cfg.nas_path || '/volume1/video/TV Shows';
 
         if (document.getElementById('cfg-gdrive-remote')) document.getElementById('cfg-gdrive-remote').value = cfg.gdrive_remote || 'gdrive';
         if (document.getElementById('cfg-gdrive-root')) document.getElementById('cfg-gdrive-root').value = cfg.gdrive_root || 'Phim/TV Shows';
+        if (document.getElementById('cfg-sync-transfers')) document.getElementById('cfg-sync-transfers').value = cfg.sync_transfers || 4;
 
         const targets = cfg.sync_targets || ['drive'];
         if (document.getElementById('cfg-target-drive')) document.getElementById('cfg-target-drive').checked = targets.includes('drive');
@@ -2613,15 +2663,18 @@
         staging_dir: document.getElementById('cfg-staging-dir')?.value || '/Volumes/512GB/AI Workspace/media_staging',
         torbox_token: document.getElementById('cfg-torbox-token')?.value || '',
         tmdb_api_key: document.getElementById('cfg-tmdb-key')?.value || '',
+        tmdb_lang: document.getElementById('cfg-tmdb-lang')?.value || 'vi-VN',
         aria2_rpc_host: document.getElementById('cfg-aria2-host')?.value || '127.0.0.1',
         aria2_rpc_port: parseInt(document.getElementById('cfg-aria2-port')?.value || 6800),
         aria2_rpc_secret: document.getElementById('cfg-aria2-secret')?.value || '',
         nas_host: document.getElementById('cfg-nas-host')?.value || '',
         nas_user: document.getElementById('cfg-nas-user')?.value || 'admin',
         nas_port: parseInt(document.getElementById('cfg-nas-port')?.value || 22),
+        nas_ssh_key: document.getElementById('cfg-nas-ssh-key')?.value || '',
         nas_path: document.getElementById('cfg-nas-path')?.value || '/volume1/video/TV Shows',
         gdrive_remote: document.getElementById('cfg-gdrive-remote')?.value || 'gdrive',
         gdrive_root: document.getElementById('cfg-gdrive-root')?.value || 'Phim/TV Shows',
+        sync_transfers: parseInt(document.getElementById('cfg-sync-transfers')?.value || 4),
         sync_targets: targets,
         auto_purge: !!document.getElementById('cfg-auto-purge')?.checked
       };
