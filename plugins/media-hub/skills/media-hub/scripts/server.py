@@ -65,7 +65,6 @@ def load_unified_settings():
         "staging_dir": "/Volumes/512GB/AI Workspace/media_staging",
         "torbox_token": os.environ.get("TORBOX_API_TOKEN") or env_dict.get("TORBOX_API_TOKEN") or env_dict.get("TORBOX_TOKEN") or "",
         "tmdb_api_key": os.environ.get("TMDB_API_KEY") or env_dict.get("TMDB_API_KEY") or "",
-        "gemini_api_key": os.environ.get("GEMINI_API_KEY") or env_dict.get("GEMINI_API_KEY") or "",
         "aria2_rpc_host": "127.0.0.1",
         "aria2_rpc_port": 6800,
         "aria2_rpc_secret": "",
@@ -93,8 +92,6 @@ def load_unified_settings():
         cfg["torbox_token"] = os.environ.get("TORBOX_API_TOKEN") or env_dict.get("TORBOX_API_TOKEN") or env_dict.get("TORBOX_TOKEN") or ""
     if not cfg.get("tmdb_api_key"):
         cfg["tmdb_api_key"] = os.environ.get("TMDB_API_KEY") or env_dict.get("TMDB_API_KEY") or ""
-    if not cfg.get("gemini_api_key"):
-        cfg["gemini_api_key"] = os.environ.get("GEMINI_API_KEY") or env_dict.get("GEMINI_API_KEY") or ""
 
     return cfg
 
@@ -130,10 +127,15 @@ class MediaHubHandler(BaseHTTPRequestHandler):
 
         # 1. Web UI Root
         if path == "/" or path == "/index.html":
-            template_path = os.path.join(BASE_DIR, "templates", "index.html")
-            if os.path.exists(template_path):
-                with open(template_path, "r", encoding="utf-8") as f:
-                    return self._send_html(f.read())
+            candidate_paths = [
+                os.path.join(BASE_DIR, "templates", "index.html"),
+                os.path.join(os.path.dirname(BASE_DIR), "templates", "index.html"),
+                "/Volumes/512GB/AI Workspace/antigravity-media-hub/templates/index.html"
+            ]
+            for tp in candidate_paths:
+                if os.path.exists(tp):
+                    with open(tp, "r", encoding="utf-8") as f:
+                        return self._send_html(f.read())
             return self._send_html("<h1>Antigravity Media Hub</h1><p>Template missing.</p>", status=404)
 
         # 1.1 Static Assets Routing (/static/...)

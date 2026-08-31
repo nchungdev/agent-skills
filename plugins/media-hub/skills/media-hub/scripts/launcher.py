@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Antigravity Media Hub - Auto Launcher with Ephemeral TryCloudflare Tunnel
-Automatically boots Server + Agent Watcher + Quick Cloudflare Tunnel and prints the Live URL.
+Antigravity Media Hub - Robust Auto Launcher with Ephemeral TryCloudflare Tunnel
 """
 
 import os
@@ -11,6 +10,7 @@ import time
 import subprocess
 import re
 import shutil
+import threading
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PORT = 8888
@@ -24,9 +24,9 @@ def find_cloudflared():
     return None
 
 def start_hub():
-    print("================================================================", flush=True)
+    print("=" * 64, flush=True)
     print("🚀 Đang khởi chạy Antigravity Media Hub Dashboard v2.4...", flush=True)
-    print("================================================================", flush=True)
+    print("=" * 64, flush=True)
 
     # 1. Start Server if not already listening
     import socket
@@ -50,54 +50,57 @@ def start_hub():
 
     # 3. Start TryCloudflare Tunnel
     cloudflared_bin = find_cloudflared()
-    public_url = None
-    tunnel_proc = None
-
-    if cloudflared_bin:
-        print("🌐 Đang khởi tạo đường truyền TryCloudflare tốc độ cao...", flush=True)
-        tunnel_proc = subprocess.Popen(
-            [cloudflared_bin, "tunnel", "--url", f"http://127.0.0.1:{PORT}"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            bufsize=1
-        )
-
-        # Parse tunnel url from stderr
-        start_time = time.time()
-        while time.time() - start_time < 15:
-            line = tunnel_proc.stderr.readline()
-            if not line:
-                time.sleep(0.2)
-                continue
-            
-            # Match trycloudflare url
-            match = re.search(r"https://[a-zA-Z0-9-]+\.trycloudflare\.com", line)
-            if match:
-                public_url = match.group(0)
-                break
-
-        if public_url:
-            with open(URL_FILE, "w", encoding="utf-8") as f:
-                f.write(public_url)
-            print("\n" + "=" * 64, flush=True)
-            print(f"🎉 LINK TRUY CẬP ONLINE THỜI GIAN THỰC (TRYCLOUDFLARE):", flush=True)
-            print(f"👉 {public_url}", flush=True)
-            print("=" * 64 + "\n", flush=True)
-        else:
-            print("⚠️ Không lấy được link trycloudflare kịp thời, vui lòng dùng http://127.0.0.1:8888", flush=True)
-    else:
+    if not cloudflared_bin:
         print("⚠️ Chưa cài đặt cloudflared (brew install cloudflared). Dùng http://127.0.0.1:8888", flush=True)
+        while True:
+            time.sleep(60)
+        return
 
-    # Keep alive with tunnel or server
+    print("🌐 Đang khởi tạo đường truyền TryCloudflare tốc độ cao...", flush=True)
+    tunnel_proc = subprocess.Popen(
+        [cloudflared_bin, "tunnel", "--url", f"http://127.0.0.1:{PORT}"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        bufsize=1
+    )
+
+    public_url_event = threading.Event()
+    public_url_holder = {"url": None}
+
+    def drain_pipe(stream):
+        try:
+            for line in iter(stream.readline, ''):
+                if not line:
+                    break
+                if not public_url_holder["url"]:
+                    match = re.search(r"https://[a-zA-Z0-9-]+\.trycloudflare\.com", line)
+                    if match:
+                        public_url_holder["url"] = match.group(0)
+                        public_url_event.set()
+        except Exception:
+            pass
+
+    t_err = threading.Thread(target=drain_pipe, args=(tunnel_proc.stderr,), daemon=True)
+    t_out = threading.Thread(target=drain_pipe, args=(tunnel_proc.stdout,), daemon=True)
+    t_err.start()
+    t_out.start()
+
+    # Wait up to 15s for URL
+    if public_url_event.wait(timeout=15) and public_url_holder["url"]:
+        public_url = public_url_holder["url"]
+        with open(URL_FILE, "w", encoding="utf-8") as f:
+            f.write(public_url)
+        print("\n" + "=" * 64, flush=True)
+        print("🎉 LINK TRUY CẬP ONLINE THỜI GIAN THỰC (TRYCLOUDFLARE):", flush=True)
+        print(f"👉 {public_url}", flush=True)
+        print("=" * 64 + "\n", flush=True)
+    else:
+        print("⚠️ Không lấy được link trycloudflare kịp thời, vui lòng dùng http://127.0.0.1:8888", flush=True)
+
     try:
-        if tunnel_proc:
-            tunnel_proc.wait()
-        elif server_proc:
-            server_proc.wait()
-        else:
-            while True:
-                time.sleep(60)
+        while tunnel_proc.poll() is None:
+            time.sleep(2)
     except KeyboardInterrupt:
         print("\n👋 Đang dừng Media Hub Dashboard...")
         if tunnel_proc: tunnel_proc.terminate()
