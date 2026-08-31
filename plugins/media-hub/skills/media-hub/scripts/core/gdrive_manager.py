@@ -7,19 +7,34 @@ Google Drive & Plex Library Core Module
 import subprocess
 import json
 import os
+import shutil
 import time
 import threading
 
-RCLONE_BIN = "/opt/homebrew/bin/rclone"
-RCLONE_CONFIG = "/Users/chungnh/.config/rclone/rclone.conf"
+RCLONE_BIN = shutil.which("rclone") or "/opt/homebrew/bin/rclone"
+
+def find_rclone_config():
+    candidates = [
+        os.path.expanduser("~/.config/rclone/rclone.conf"),
+        "/Users/chungnh/.config/rclone/rclone.conf",
+        "/Users/chungnh/.agy-account2/.config/rclone/rclone.conf",
+        os.path.expanduser("~/.rclone.conf"),
+        "/Users/chungnh/.rclone.conf"
+    ]
+    for c in candidates:
+        if os.path.exists(c):
+            return c
+    return candidates[0]
+
+RCLONE_CONFIG = find_rclone_config()
 BASE_GDRIVE = "gdrive:Phim/TV Shows"
 CACHE_FILE = "/Volumes/512GB/AI Workspace/antigravity-media-hub/gdrive_cache.json"
 DEFAULT_TTL = 900  # 15 minutes
 
 class GDriveManager:
-    def __init__(self, rclone_bin=RCLONE_BIN, rclone_config=RCLONE_CONFIG, cache_file=CACHE_FILE):
-        self.rclone_bin = rclone_bin if os.path.exists(rclone_bin) else "rclone"
-        self.rclone_config = rclone_config
+    def __init__(self, rclone_bin=RCLONE_BIN, rclone_config=None, cache_file=CACHE_FILE):
+        self.rclone_bin = rclone_bin if (isinstance(rclone_bin, str) and os.path.exists(rclone_bin)) else "rclone"
+        self.rclone_config = rclone_config or find_rclone_config()
         self.cache_file = cache_file
         self.lock = threading.Lock()
         self._cache = self._load_cache()

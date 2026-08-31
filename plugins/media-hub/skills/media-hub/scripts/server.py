@@ -591,14 +591,18 @@ class MediaHubHandler(BaseHTTPRequestHandler):
 
         # 6. API: Check Google Drive Connection (/api/gdrive/check)
         elif path == "/api/gdrive/check":
-            remote = req_data.get("remote", "gdrive")
-            root = req_data.get("root", "Phim/TV Shows")
-            rclone_bin = shutil.which("rclone") or "/opt/homebrew/bin/rclone"
-            cmd = [rclone_bin, "lsd", f"{remote}:{root.lstrip('/')}"]
+            remote = req_data.get("remote", "gdrive").strip()
+            root = req_data.get("root", "Phim/TV Shows").strip()
+            cmd = [gdrive_mgr.rclone_bin, "--config", gdrive_mgr.rclone_config, "lsd", f"{remote}:{root.lstrip('/')}"]
             try:
                 res = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
                 if res.returncode == 0:
-                    return self._send_json({"success": True, "message": f"Kết nối tới {remote}:{root} thành công!"})
+                    dirs = [l.split()[-1] for l in res.stdout.strip().splitlines() if l.strip()]
+                    return self._send_json({
+                        "success": True, 
+                        "message": f"Kết nối tới {remote}:{root} thành công! (Tìm thấy {len(dirs)} thư mục TV Shows)",
+                        "dirs": dirs[:10]
+                    })
                 else:
                     return self._send_json({"success": False, "error": res.stderr.strip() or "Lỗi kết nối Rclone"})
             except Exception as e:
