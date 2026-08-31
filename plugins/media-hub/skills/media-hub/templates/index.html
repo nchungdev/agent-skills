@@ -1382,6 +1382,32 @@
         console.error("Pipelines fetch error:", e);
       }
 
+      // 2. Fetch TorBox Cloud Cache
+      try {
+        const res = await fetch('/api/torbox');
+        const data = await res.json();
+        if (data.data) {
+          currentTorrents = data.data;
+          applyTorboxFilter();
+          const tbCount = document.getElementById('torbox-count');
+          if (tbCount) {
+            const counts = data.counts || { total: currentTorrents.length, active: 0, queued: 0 };
+            tbCount.innerText = `${counts.total} Torrents (${counts.active} Sẵn Sàng, ${counts.queued} Hàng Đợi)`;
+          }
+          const badgeQueued = document.getElementById('tbfilter-queued');
+          if (badgeQueued && data.counts) {
+            badgeQueued.innerText = `⏳ Hàng Đợi (${data.counts.queued})`;
+          }
+          const badgeReady = document.getElementById('tbfilter-ready');
+          if (badgeReady && data.counts) {
+            badgeReady.innerText = `🟢 Sẵn Sàng (${data.counts.active})`;
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     let selectedPipelineTask = null;
     let pipelineEpisodesData = [];
 
@@ -1656,32 +1682,6 @@
       if (!selectedPipelineTask) return;
       setTab('agent');
       sendQuickCommand(`Kiểm tra chi tiết tiến trình và phụ đề cho show ${selectedPipelineTask.title}`);
-    }
-
-    // 2. Fetch TorBox Cloud Cache
-      try {
-        const res = await fetch('/api/torbox');
-        const data = await res.json();
-        if (data.data) {
-          currentTorrents = data.data;
-          applyTorboxFilter();
-          const tbCount = document.getElementById('torbox-count');
-          if (tbCount) {
-            const counts = data.counts || { total: currentTorrents.length, active: 0, queued: 0 };
-            tbCount.innerText = `${counts.total} Torrents (${counts.active} Sẵn Sàng, ${counts.queued} Hàng Đợi)`;
-          }
-          const badgeQueued = document.getElementById('tbfilter-queued');
-          if (badgeQueued && data.counts) {
-            badgeQueued.innerText = `⏳ Hàng Đợi (${data.counts.queued})`;
-          }
-          const badgeReady = document.getElementById('tbfilter-ready');
-          if (badgeReady && data.counts) {
-            badgeReady.innerText = `🟢 Sẵn Sàng (${data.counts.active})`;
-          }
-        }
-      } catch (e) {
-        console.error(e);
-      }
     }
 
     let currentTorboxFilter = "all";
