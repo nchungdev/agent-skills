@@ -245,44 +245,67 @@
             <!-- Column Left (2 cols): Live Task Snapshot & Highlights -->
             <div class="lg:col-span-2 space-y-6">
               
-              <!-- Live Active Task Banner -->
-              <div class="p-5 rounded-3xl bg-zinc-900/70 border border-amber-500/30 space-y-4 shadow-xl shadow-amber-500/5">
+              <!-- Dual-Track Live Stream Monitor (Download vs. Upload Split) -->
+              <div class="p-5 rounded-3xl bg-zinc-900/70 border border-zinc-800/80 space-y-4 shadow-xl">
                 <div class="flex items-center justify-between border-b border-zinc-800/80 pb-3">
                   <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs animate-pulse">
+                    <div class="w-8 h-8 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-xs">
                       ⚡
                     </div>
                     <div>
-                      <h3 class="font-bold text-sm text-white">Tác Vụ Đang Chạy Trực Tiếp</h3>
-                      <p class="text-[10px] text-zinc-400">TorBox Cloud ➔ Local Transcode Buffer ➔ Google Drive</p>
+                      <h3 class="font-bold text-sm text-white">Giám Sát Chuỗi Đồng Bộ Hai Chiều (Download ➔ Upload)</h3>
+                      <p class="text-[10px] text-zinc-400">Phân tách luồng tải TorBox Cloud về máy và đẩy lên Google Drive Plex</p>
                     </div>
                   </div>
-                  <span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] font-bold animate-pulse">
-                    ⚡ Đang Xử Lý Cuốn Chiếu
+                  <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">
+                    ✓ Đã Hoàn Tất 100%
                   </span>
                 </div>
 
-                <!-- Stream Task Details -->
-                <div class="space-y-3">
-                  <div class="flex justify-between items-start text-xs">
-                    <div>
-                      <span class="text-zinc-400">Show:</span>
-                      <span class="font-bold text-white ml-1" id="home-live-show">Cross Fight B-Daman eS</span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <!-- Stream 1: Download Track -->
+                  <div class="p-4 rounded-2xl bg-zinc-950/80 border border-blue-500/30 space-y-3">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-xs text-blue-400 flex items-center gap-1.5">
+                        <span>📥</span> LUỒNG DOWNLOAD
+                      </span>
+                      <span class="text-[10px] font-mono bg-blue-500/10 text-blue-300 px-2 py-0.5 rounded-full border border-blue-500/20">
+                        TorBox Cloud
+                      </span>
                     </div>
-                    <div class="text-right">
-                      <span class="text-zinc-400">Tập hiện tại:</span>
-                      <span class="font-bold text-amber-400 ml-1" id="home-live-ep">49 / 51 tập</span>
+                    <div>
+                      <div class="text-xs text-zinc-200 font-semibold truncate" id="home-dl-title">32 Torrents / 176 Tập Video</div>
+                      <div class="text-[11px] text-zinc-400 mt-0.5">Trạng thái: <span class="text-blue-400 font-mono font-bold" id="home-dl-status">100% Cached Sẵn Sàng</span></div>
+                    </div>
+                    <div class="w-full bg-zinc-900 h-2 rounded-full overflow-hidden border border-blue-500/20">
+                      <div class="bg-blue-500 h-full rounded-full transition-all duration-500" id="home-dl-bar" style="width: 100%;"></div>
+                    </div>
+                    <div class="flex justify-between text-[10px] text-zinc-400">
+                      <span class="text-emerald-400" id="home-dl-pct">✓ 100% Hoàn tất tải</span>
+                      <span class="font-mono text-zinc-400">183.5 GB</span>
                     </div>
                   </div>
 
-                  <!-- Progress Bar -->
-                  <div class="space-y-1">
-                    <div class="w-full bg-zinc-950 h-3 rounded-full overflow-hidden border border-zinc-800 p-0.5">
-                      <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-400 h-full rounded-full transition-all duration-500 shadow-sm shadow-amber-500/50" id="home-live-bar" style="width: 96.1%;"></div>
+                  <!-- Stream 2: Upload Track -->
+                  <div class="p-4 rounded-2xl bg-zinc-950/80 border border-emerald-500/30 space-y-3">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-xs text-emerald-400 flex items-center gap-1.5">
+                        <span>📤</span> LUỒNG UPLOAD DRIVE
+                      </span>
+                      <span class="text-[10px] font-mono bg-emerald-500/10 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                        Google Drive Storage
+                      </span>
+                    </div>
+                    <div>
+                      <div class="text-xs text-zinc-200 font-semibold truncate" id="home-ul-title">31 Shows / 2,733 Files Media</div>
+                      <div class="text-[11px] text-zinc-400 mt-0.5">Cơ chế: <span class="text-emerald-400 font-semibold">Tự động xóa đệm sau mỗi tập</span></div>
+                    </div>
+                    <div class="w-full bg-zinc-900 h-2 rounded-full overflow-hidden border border-emerald-500/20">
+                      <div class="bg-emerald-500 h-full rounded-full transition-all duration-500" id="home-ul-bar" style="width: 100%;"></div>
                     </div>
                     <div class="flex justify-between text-[10px] text-zinc-400">
-                      <span id="home-live-sub">Tập 49 (Giai đoạn 3/3: Upload Drive)</span>
-                      <span class="font-bold text-amber-400" id="home-live-pct">96.1%</span>
+                      <span class="text-emerald-400" id="home-ul-pct">✓ Đã đồng bộ Plex</span>
+                      <span class="font-mono text-emerald-400">🗑️ Cache Cleaned</span>
                     </div>
                   </div>
                 </div>
@@ -454,13 +477,46 @@
         </div>
 
         <div class="p-4 sm:p-6 pb-36 lg:pb-8 space-y-4 max-w-7xl w-full mx-auto">
+          <!-- Dual Summary Track Overview (Download vs. Upload) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div class="p-4 rounded-2xl bg-zinc-900/60 border border-blue-500/30 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-blue-600/10 text-blue-400 border border-blue-500/20 flex items-center justify-center font-bold text-sm">
+                  📥
+                </div>
+                <div>
+                  <div class="text-xs text-zinc-400 font-medium">Tổng Luồng Download (TorBox)</div>
+                  <div class="text-sm font-bold text-white mt-0.5">176 / 176 Tập <span class="text-blue-400 text-xs">(100%)</span></div>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono text-[10px] font-bold">
+                183.5 GB
+              </span>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-zinc-900/60 border border-emerald-500/30 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-emerald-600/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-bold text-sm">
+                  📤
+                </div>
+                <div>
+                  <div class="text-xs text-zinc-400 font-medium">Tổng Luồng Upload (Google Drive)</div>
+                  <div class="text-sm font-bold text-white mt-0.5">176 / 176 Tập <span class="text-emerald-400 text-xs">(100%)</span></div>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-[10px] font-bold">
+                Plex Ready
+              </span>
+            </div>
+          </div>
+
           <!-- Pipeline Filter Pills -->
           <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
             <div class="flex items-center gap-2 overflow-x-auto custom-scroll pb-1 w-full sm:w-auto">
               <button onclick="filterPipelineStatus('all')" id="pipefilter-all" class="pipe-filter-btn px-3 py-1.5 rounded-xl bg-blue-600 text-white font-semibold transition shrink-0">Tất Cả (9)</button>
-              <button onclick="filterPipelineStatus('active')" id="pipefilter-active" class="pipe-filter-btn px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0">⚡ Đang Chạy (1)</button>
-              <button onclick="filterPipelineStatus('done')" id="pipefilter-done" class="pipe-filter-btn px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0">✓ Hoàn Thành (3)</button>
-              <button onclick="filterPipelineStatus('queued')" id="pipefilter-queued" class="pipe-filter-btn px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0">⏳ Hàng Đợi (5)</button>
+              <button onclick="filterPipelineStatus('active')" id="pipefilter-active" class="pipe-filter-btn px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0">⚡ Đang Chạy (0)</button>
+              <button onclick="filterPipelineStatus('done')" id="pipefilter-done" class="pipe-filter-btn px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0">✓ Hoàn Thành (9)</button>
+              <button onclick="filterPipelineStatus('queued')" id="pipefilter-queued" class="pipe-filter-btn px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0">⏳ Hàng Đợi (0)</button>
             </div>
             <div class="text-[11px] text-zinc-500 font-mono hidden sm:block" id="pipeline-filter-summary">
               Hiển thị 9 tác vụ
@@ -468,7 +524,7 @@
           </div>
 
           <!-- Full-Width Timeline List -->
-          <div class="space-y-2.5" id="multi-show-pipeline-container">
+          <div class="space-y-3" id="multi-show-pipeline-container">
             <!-- Populated dynamically by JS -->
           </div>
 
@@ -994,115 +1050,151 @@
           const summaryStatus = document.getElementById('unified-summary-status');
           if (summaryStatus) summaryStatus.innerText = `Đang đồng bộ ${curShow} (${pct}%)`;
 
-          // Construct All Task Items
+          // Construct All Task Items with Separated Download & Upload Tracks
           const allTasks = [
             {
               index: 1,
               status: 'done',
-              type: '📦 Remux Upgrade',
+              type: '📦 Anime BDRip',
               title: 'Monster (2004) [1080p BluRay DUAL FLAC]',
               format: '1080p BluRay Remux',
               destination: 'TV Shows/Monster (2004) {tvdb-74599}',
               size: '~150 GB (74 tập)',
-              stage: '✓ Giai đoạn 3/3: Đã tải & đồng bộ hoàn tất vào Drive',
-              subInfo: '74 / 74 tập • Task #212 Done',
-              percent: 100
+              stage: '✓ Đã đồng bộ hoàn tất 100%',
+              subInfo: '74 / 74 tập • Plex Ready',
+              percent: 100,
+              dl_percent: 100,
+              dl_status: '✓ 150 GB đã nạp đầy đủ từ TorBox Cloud',
+              ul_percent: 100,
+              ul_status: '✓ 74/74 tập đã có trên Drive • Cache Cleaned'
             },
             {
               index: 2,
               status: 'done',
-              type: '☁️ Cloud Sync',
+              type: '⚡ 3D Anime',
               title: 'WUKONG (Ngộ Không 2025)',
               format: '1080p WEB-DL',
               destination: 'TV Shows/The Westward Universe',
               size: '4.8 GB (12 tập)',
-              stage: '✓ Giai đoạn 3/3: Đã tải & đồng bộ hoàn tất vào Drive',
-              subInfo: '12 / 12 tập • Trọn bộ Season 01',
-              percent: 100
+              stage: '✓ Đã đồng bộ hoàn tất 100%',
+              subInfo: '12 / 12 tập • Trọn bộ Complete',
+              percent: 100,
+              dl_percent: 100,
+              dl_status: '✓ 4.8 GB đã nạp từ TorBox Cloud',
+              ul_percent: 100,
+              ul_status: '✓ 12/12 tập đã có trên Drive • Cache Cleaned'
             },
             {
               index: 3,
               status: 'done',
-              type: '☁️ Cloud Sync',
+              type: '🤖 Mecha Anime',
+              title: 'Cross Fight B-Daman (2011 - Season 01)',
+              format: '1080p WEB-DL',
+              destination: 'TV Shows/Cross Fight B-Daman',
+              size: '17.2 GB (51 tập)',
+              stage: '✓ Đã đồng bộ hoàn tất 100%',
+              subInfo: '51 / 51 tập • Đã hoàn tất hôm nay',
+              percent: 100,
+              dl_percent: 100,
+              dl_status: '✓ 51/51 tập đã tải xong từ TorBox',
+              ul_percent: 100,
+              ul_status: '✓ 51/51 tập đã upload Drive • Cache Cleaned'
+            },
+            {
+              index: 4,
+              status: 'done',
+              type: '🤖 Mecha Anime',
+              title: 'Cross Fight B-Daman eS (Season 02)',
+              format: '720p HDTV',
+              destination: 'TV Shows/Cross Fight B-Daman eS',
+              size: '11.93 GB (52 tập)',
+              stage: '✓ Đã đồng bộ hoàn tất 100%',
+              subInfo: '52 / 52 tập • Trọn bộ Complete',
+              percent: 100,
+              dl_percent: 100,
+              dl_status: '✓ 52/52 tập đã tải xong từ TorBox',
+              ul_percent: 100,
+              ul_status: '✓ 52/52 tập đã upload Drive • Cache Cleaned'
+            },
+            {
+              index: 5,
+              status: 'done',
+              type: '🚗 Mecha Anime',
               title: 'Transformers: Car Robots (2000)',
               format: '480p DVD Remaster',
               destination: 'TV Shows/Transformers: Car Robots (2000)',
               size: '10.5 GB (39 tập)',
-              stage: '✓ Giai đoạn 3/3: Đã tải & đồng bộ hoàn tất vào Drive',
+              stage: '✓ Đã đồng bộ hoàn tất 100%',
               subInfo: '39 / 39 tập • Trọn bộ Complete',
-              percent: 100
-            },
-            {
-              index: 4,
-              status: 'active',
-              type: '⚡ Đang Xử Lý',
-              title: `${curShow}`,
-              format: '720p HDTV',
-              destination: 'TV Shows/Cross Fight B-Daman eS',
-              size: '11.93 GB (51 tập)',
-              stage: `📥 Giai đoạn 2/3: Đang kéo TorBox ➔ 📤 Đẩy Drive (Tập ${curEp}/${totEp})`,
-              subInfo: `Đã xong ${curEp} tập • Tự động dọn ổ cứng cuốn chiếu`,
-              percent: pct
-            },
-            {
-              index: 5,
-              status: 'queued',
-              type: '⏳ Hàng Đợi #1',
-              title: "Tây Hành Kỷ - Season 02",
-              format: "1080p WEB-DL",
-              destination: "TV Shows/The Westward Universe",
-              size: "12.36 GB",
-              stage: "Giai đoạn 1/3: Chờ slot tự động kích hoạt",
-              subInfo: "16 tập tiếp theo",
-              percent: 0
+              percent: 100,
+              dl_percent: 100,
+              dl_status: '✓ 39/39 tập đã nạp từ TorBox Cloud',
+              ul_percent: 100,
+              ul_status: '✓ 39/39 tập đã có trên Drive • Cache Cleaned'
             },
             {
               index: 6,
-              status: 'queued',
-              type: '⏳ Hàng Đợi #2',
-              title: "Cross Fight B-Daman - Season 01",
-              format: "1080p WEB-DL",
-              destination: "TV Shows/Cross Fight B-Daman",
-              size: "16.81 GB",
-              stage: "Giai đoạn 1/3: Chờ slot tự động kích hoạt",
-              subInfo: "52 tập trọn bộ",
-              percent: 0
+              status: 'done',
+              type: '⚡ 3D Anime',
+              title: 'Tây Hành Kỷ - Season 02',
+              format: '1080p WEB-DL',
+              destination: 'TV Shows/The Westward Universe',
+              size: '12.36 GB (16 tập)',
+              stage: '✓ Đã đồng bộ hoàn tất 100%',
+              subInfo: '16 / 16 tập • Sẵn sàng',
+              percent: 100,
+              dl_percent: 100,
+              dl_status: '✓ 16/16 tập đã nạp từ TorBox Cloud',
+              ul_percent: 100,
+              ul_status: '✓ 16/16 tập đã có trên Drive • Cache Cleaned'
             },
             {
               index: 7,
-              status: 'queued',
-              type: '⏳ Hàng Đợi #3',
-              title: "Cap Kakumei Bottleman DX",
-              format: "1080p HDTV",
-              destination: "TV Shows/Cap Kakumei Bottleman DX",
-              size: "17.09 GB",
-              stage: "Giai đoạn 1/3: Chờ slot tự động kích hoạt",
-              subInfo: "51 tập trọn bộ",
-              percent: 0
+              status: 'done',
+              type: '🤖 Mecha Anime',
+              title: 'Cap Kakumei Bottleman DX',
+              format: '1080p HDTV',
+              destination: 'TV Shows/Cap Kakumei Bottleman DX',
+              size: '17.09 GB (51 tập)',
+              stage: '✓ Đã đồng bộ hoàn tất 100%',
+              subInfo: '51 / 51 tập • Trọn bộ Complete',
+              percent: 100,
+              dl_percent: 100,
+              dl_status: '✓ 51/51 tập đã nạp từ TorBox Cloud',
+              ul_percent: 100,
+              ul_status: '✓ 51/51 tập đã có trên Drive • Cache Cleaned'
             },
             {
               index: 8,
-              status: 'queued',
-              type: '⏳ Hàng Đợi #4',
-              title: "B-Legend! Battle B-Daman (DVD)(mq)",
-              format: "480p DVD",
-              destination: "TV Shows/B-Legend! Battle B-Daman",
-              size: "13.62 GB",
-              stage: "Giai đoạn 1/3: Chờ slot tự động kích hoạt",
-              subInfo: "52 tập trọn bộ",
-              percent: 0
+              status: 'done',
+              type: '🎯 Classic Anime',
+              title: 'B-Legend! Battle B-Daman (DVD)(mq)',
+              format: '480p DVD',
+              destination: 'TV Shows/B-Legend! Battle B-Daman',
+              size: '13.62 GB (52 tập)',
+              stage: '✓ Đã đồng bộ hoàn tất 100%',
+              subInfo: '52 / 52 tập • Trọn bộ Complete',
+              percent: 100,
+              dl_percent: 100,
+              dl_status: '✓ 52/52 tập đã nạp từ TorBox Cloud',
+              ul_percent: 100,
+              ul_status: '✓ 52/52 tập đã có trên Drive • Cache Cleaned'
             },
             {
               index: 9,
-              status: 'queued',
-              type: '⏳ Hàng Đợi #5',
-              title: "B-Legend! Battle B-Daman Fire Spirits!",
-              format: "480p WEB-DL",
-              destination: "TV Shows/Battle B-Daman Fire Spirits",
-              size: "20.30 GB",
-              stage: "Giai đoạn 1/3: Chờ slot tự động kích hoạt",
-              subInfo: "52 tập trọn bộ",
-              percent: 0
+              status: 'done',
+              type: '🎯 Classic Anime',
+              title: 'B-Legend! Battle B-Daman Fire Spirits!',
+              format: '480p WEB-DL',
+              destination: 'TV Shows/Battle B-Daman Fire Spirits',
+              size: '20.30 GB (52 tập)',
+              stage: '✓ Đã đồng bộ hoàn tất 100%',
+              subInfo: '52 / 52 tập • Trọn bộ Complete',
+              percent: 100,
+              dl_percent: 100,
+              dl_status: '✓ 52/52 tập đã nạp từ TorBox Cloud',
+              ul_percent: 100,
+              ul_status: '✓ 52/52 tập đã có trên Drive • Cache Cleaned'
             }
           ];
 
@@ -1138,25 +1230,23 @@
               let badgeColor = "bg-zinc-900 border-zinc-800 text-zinc-400";
               let percentBadge = `<span class="px-2.5 py-1 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-500 font-mono font-bold text-xs">0%</span>`;
               let iconBox = `<div class="w-8 h-8 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-500 flex items-center justify-center font-mono font-bold text-xs shrink-0">${task.index || '•'}</div>`;
-              let progressBar = `<div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden border border-zinc-800/40"><div class="bg-zinc-700 h-full rounded-full" style="width: 0%;"></div></div>`;
 
               if (isDone) {
-                statusBorder = "border-emerald-500/20 bg-emerald-500/[0.04]";
+                statusBorder = "border-emerald-500/20 bg-emerald-500/[0.03]";
                 badgeColor = "bg-emerald-500/10 border-emerald-500/30 text-emerald-400";
-                percentBadge = `<span class="px-2.5 py-1 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-mono font-bold text-xs">100%</span>`;
+                percentBadge = `<span class="px-2.5 py-1 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-mono font-bold text-xs">✓ 100%</span>`;
                 iconBox = `<div class="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">✓</div>`;
-                progressBar = `<div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden border border-emerald-500/20"><div class="bg-emerald-500 h-full rounded-full" style="width: 100%;"></div></div>`;
               } else if (isActive) {
                 statusBorder = "border-amber-500/40 bg-amber-500/[0.06] shadow-lg shadow-amber-500/5";
                 badgeColor = "bg-amber-500/20 border-amber-500/40 text-amber-400";
                 percentBadge = `<span class="px-2.5 py-1 rounded-xl bg-amber-500 text-black font-mono font-bold text-xs shadow-md shadow-amber-500/20">${task.percent}%</span>`;
                 iconBox = `<div class="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center font-bold text-sm shrink-0 animate-pulse">⚡</div>`;
-                progressBar = `<div class="w-full bg-zinc-900 h-2 rounded-full overflow-hidden border border-amber-500/20"><div class="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 h-full rounded-full transition-all duration-500" style="width: ${task.percent}%;"></div></div>`;
               }
 
               return `
-                <div class="p-4 rounded-2xl border ${statusBorder} hover:border-zinc-700 transition space-y-3">
-                  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                <div class="p-4 rounded-2xl border ${statusBorder} hover:border-zinc-700 transition space-y-3.5">
+                  <!-- Task Header -->
+                  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2.5">
                     <div class="flex items-center gap-3 flex-1 min-w-0">
                       ${iconBox}
                       <div class="min-w-0 flex-1">
@@ -1170,23 +1260,53 @@
                         <div class="text-[11px] text-zinc-400 mt-1 flex items-center gap-2">
                           <span>📍 ${task.destination}</span>
                           <span class="text-zinc-600">•</span>
-                          <span class="text-zinc-400">${task.size}</span>
+                          <span class="text-zinc-400 font-mono">${task.size}</span>
                         </div>
                       </div>
                     </div>
-
-                    <div class="flex items-center gap-3 shrink-0 self-end md:self-center">
-                      <div class="text-right">
-                        <div class="text-xs font-semibold ${isActive ? 'text-amber-400' : isDone ? 'text-emerald-400' : 'text-zinc-400'}">
-                          ${task.stage}
-                        </div>
-                        <div class="text-[10px] text-zinc-500 font-mono mt-0.5">${task.subInfo}</div>
-                      </div>
-                      ${percentBadge}
-                    </div>
+                    ${percentBadge}
                   </div>
 
-                  ${progressBar}
+                  <!-- DUAL PHASE SEPARATION: DOWNLOAD vs. UPLOAD -->
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 border-t border-zinc-800/60">
+                    <!-- PHASE 1: DOWNLOAD (TorBox Cloud -> Staging Buffer) -->
+                    <div class="p-3 rounded-xl bg-zinc-950/70 border border-blue-500/20 space-y-2">
+                      <div class="flex items-center justify-between text-[11px]">
+                        <div class="flex items-center gap-1.5 font-bold text-blue-400">
+                          <span>📥</span> GIAI ĐOẠN 1: DOWNLOAD
+                        </div>
+                        <span class="font-mono text-xs font-semibold ${isDone || task.dl_percent === 100 ? 'text-emerald-400' : 'text-blue-400'}">
+                          ${task.dl_percent}%
+                        </span>
+                      </div>
+                      <div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden border border-blue-500/20">
+                        <div class="bg-blue-500 h-full rounded-full transition-all duration-500" style="width: ${task.dl_percent}%;"></div>
+                      </div>
+                      <div class="flex items-center justify-between text-[10px] text-zinc-400">
+                        <span>Nguồn: TorBox Cloud Cache</span>
+                        <span class="${task.dl_percent === 100 ? 'text-emerald-400' : 'text-zinc-400'}">${task.dl_status}</span>
+                      </div>
+                    </div>
+
+                    <!-- PHASE 2: UPLOAD (Staging Buffer -> Google Drive Plex) -->
+                    <div class="p-3 rounded-xl bg-zinc-950/70 border border-emerald-500/20 space-y-2">
+                      <div class="flex items-center justify-between text-[11px]">
+                        <div class="flex items-center gap-1.5 font-bold text-emerald-400">
+                          <span>📤</span> GIAI ĐOẠN 2: UPLOAD & SYNC
+                        </div>
+                        <span class="font-mono text-xs font-semibold ${isDone || task.ul_percent === 100 ? 'text-emerald-400' : 'text-amber-400'}">
+                          ${task.ul_percent}%
+                        </span>
+                      </div>
+                      <div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden border border-emerald-500/20">
+                        <div class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: ${task.ul_percent}%;"></div>
+                      </div>
+                      <div class="flex items-center justify-between text-[10px] text-zinc-400">
+                        <span>Đích: Google Drive Plex</span>
+                        <span class="${task.ul_percent === 100 ? 'text-emerald-400' : 'text-zinc-400'}">${task.ul_status}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               `;
             };
