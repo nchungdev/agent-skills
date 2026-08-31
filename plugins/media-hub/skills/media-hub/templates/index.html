@@ -673,12 +673,12 @@
       </div>
 
       <!-- ==================== TAB 4: AI AGENT ASSISTANT FULL VIEW ==================== -->
-      <div id="tab-agent" class="hidden space-y-0">
+      <div id="tab-agent" class="hidden flex-1 flex flex-col min-h-0 h-full space-y-0 relative">
         
         <!-- Pinned Header (Sticky Top-0 Flush) -->
-        <div class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+        <div class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-3 min-h-14 flex flex-wrap items-center justify-between gap-3 shadow-sm shrink-0">
           <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-base border border-blue-500/20 shrink-0">
+            <div class="w-8 h-8 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-base border border-blue-500/20 shrink-0">
               🤖
             </div>
             <div>
@@ -690,52 +690,48 @@
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <button onclick="loadAgentQueueFull()" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-zinc-300 transition flex items-center gap-1.5 shadow-sm">
+            <button onclick="loadAgentQueueFull()" class="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-zinc-300 transition flex items-center gap-1.5 shadow-sm">
               <span>🔄</span> <span class="hidden sm:inline">Làm Mới</span>
             </button>
           </div>
         </div>
 
-        <div class="p-4 sm:p-6 pb-36 lg:pb-8 space-y-4 max-w-7xl w-full mx-auto">
-          <!-- Quick Prompts Pills -->
-          <div class="flex gap-2 overflow-x-auto custom-scroll pb-1 text-xs">
-            <button onclick="sendQuickCommand('Kiểm tra tiến độ chi tiết của tất cả các bộ phim đang đồng bộ')" class="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition shrink-0">
+        <!-- Quick Prompts Pills Bar -->
+        <div class="px-4 py-2 border-b border-zinc-800/60 bg-zinc-950/80 shrink-0">
+          <div class="flex gap-2 overflow-x-auto custom-scroll pb-0.5 text-xs max-w-5xl mx-auto">
+            <button onclick="sendQuickCommand('Kiểm tra tiến độ chi tiết của tất cả các bộ phim đang đồng bộ')" class="px-3 py-1 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition shrink-0 text-[11px]">
               🔍 Tiến độ tất cả show
             </button>
-            <button onclick="sendQuickCommand('Tìm và bổ sung phụ đề tiếng Việt cho các tập mới nhất')" class="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition shrink-0">
+            <button onclick="sendQuickCommand('Tìm và bổ sung phụ đề tiếng Việt cho các tập mới nhất')" class="px-3 py-1 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition shrink-0 text-[11px]">
               💬 Bổ sung phụ đề Vietsub
             </button>
-            <button onclick="sendQuickCommand('Dọn dẹp thư mục đệm tạm sau khi sync hoàn tất')" class="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition shrink-0">
+            <button onclick="sendQuickCommand('Dọn dẹp thư mục đệm tạm sau khi sync hoàn tất')" class="px-3 py-1 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition shrink-0 text-[11px]">
               🧹 Dọn dẹp bộ nhớ đệm
             </button>
           </div>
+        </div>
 
-          <!-- Chat Workspace Window -->
-          <div class="rounded-3xl bg-zinc-950 border border-zinc-800 flex flex-col h-[460px] sm:h-[560px] overflow-hidden shadow-2xl">
-            <!-- Messages Trajectory -->
-            <div id="full-agent-messages" class="flex-1 p-4 sm:p-6 overflow-y-auto space-y-3 sm:space-y-4 custom-scroll text-xs">
-              <div class="flex items-start gap-2.5 sm:gap-3">
-                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs sm:text-sm shrink-0 font-bold">🤖</div>
-                <div class="p-3.5 sm:p-4 rounded-2xl rounded-tl-none bg-zinc-900 border border-zinc-800 text-zinc-300 space-y-1.5 sm:space-y-2 max-w-2xl">
-                  <p class="font-bold text-white">Xin chào! Tôi là Antigravity AI Agent.</p>
-                  <p class="leading-relaxed text-zinc-400 text-xs">Bạn có thể gửi bất kỳ yêu cầu điều khiển hệ thống, tra cứu torrent hoặc xử lý video tại đây.</p>
-                  <div class="text-[9px] sm:text-[10px] text-zinc-500 font-mono">Hệ thống sẵn sàng tiếp nhận lệnh</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Bottom Command Input -->
-            <div class="p-3 sm:p-4 bg-zinc-900/90 border-t border-zinc-800 flex gap-2 sm:gap-3 items-center">
-              <input type="text" id="full-agent-input" onkeydown="if(event.key==='Enter') sendFullAgentMessage()" placeholder="Nhập câu lệnh cho AI Agent..." class="flex-1 bg-zinc-950 border border-zinc-800 rounded-2xl px-3.5 py-2.5 sm:px-4 sm:py-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 shadow-inner">
-              <button onclick="sendFullAgentMessage()" class="px-4 py-2.5 sm:px-5 sm:py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-2xl transition flex items-center gap-1.5 sm:gap-2 shadow-lg shadow-blue-600/30 shrink-0">
-                <span class="hidden sm:inline">Gửi Lệnh</span>
-                <span>➤</span>
-              </button>
+        <!-- Messages Trajectory List (Full Height Scrollable) -->
+        <div id="full-agent-messages" class="flex-1 p-4 sm:p-6 overflow-y-auto space-y-3 sm:space-y-4 custom-scroll text-xs max-w-5xl mx-auto w-full pb-36 lg:pb-28">
+          <div class="flex items-start gap-2.5 sm:gap-3">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs sm:text-sm shrink-0 font-bold">🤖</div>
+            <div class="p-3.5 sm:p-4 rounded-2xl rounded-tl-none bg-zinc-900 border border-zinc-800 text-zinc-300 space-y-1.5 sm:space-y-2 max-w-2xl">
+              <p class="font-bold text-white">Xin chào! Tôi là Antigravity AI Agent.</p>
+              <p class="leading-relaxed text-zinc-400 text-xs">Bạn có thể gửi bất kỳ yêu cầu điều khiển hệ thống, tra cứu torrent hoặc xử lý video tại đây.</p>
+              <div class="text-[9px] sm:text-[10px] text-zinc-500 font-mono">Hệ thống sẵn sàng tiếp nhận lệnh</div>
             </div>
           </div>
+        </div>
 
-          <!-- Mobile Clearance Spacer -->
-          <div class="h-10 lg:hidden"></div>
+        <!-- Input Box Anchored / Docked Directly on top of Bottom Navigation Bar -->
+        <div class="fixed bottom-[52px] lg:bottom-0 left-0 right-0 z-30 lg:relative bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-800/80 p-2.5 sm:p-4 safe-bottom">
+          <div class="max-w-5xl mx-auto flex gap-2 sm:gap-3 items-center">
+            <input type="text" id="full-agent-input" onkeydown="if(event.key==='Enter') sendFullAgentMessage()" placeholder="Nhập câu lệnh cho AI Agent..." class="flex-1 bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-2.5 sm:py-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 shadow-inner">
+            <button onclick="sendFullAgentMessage()" class="px-4 py-2.5 sm:px-5 sm:py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-2xl transition flex items-center gap-1.5 sm:gap-2 shadow-lg shadow-blue-600/30 shrink-0">
+              <span class="hidden sm:inline">Gửi</span>
+              <span>➤</span>
+            </button>
+          </div>
         </div>
 
       </div>
