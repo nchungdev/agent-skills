@@ -24,4 +24,3 @@ Kho lưu trữ chuẩn hóa các bộ kỹ năng (**Agent Skills & Plugins**) ch
 ---
 
 ### 📦 3. TIỆN ÍCH MỞ RỘNG KHÁC
-* **`expense-tracker`**: Quản lý chi tiêu và tự động đồng bộ hóa đơn Shopee.

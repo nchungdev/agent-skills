@@ -1,6 +1,0 @@
-{
-  "name": "expense-tracker",
-  "description": "Kỹ năng phân tích chi tiêu hợp nhất: Bóc tách hoá đơn từ hình ảnh (kèm xử lý ảnh thiếu ngày) kết hợp đồng bộ trực tiếp đơn hàng từ Shopee & TikTok Shop, tự động phân loại danh mục và xuất báo cáo tài chính theo tháng.",
-  "version": "1.0.0",
-  "author": "nchungdev"
-}
