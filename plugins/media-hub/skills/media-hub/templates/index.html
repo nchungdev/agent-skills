@@ -111,7 +111,7 @@
           </div>
           <nav class="space-y-1 text-xs font-semibold">
             <!-- Collector -->
-            <button onclick="setTab('agent'); sendQuickCommand('media-collector tìm nguồn phim...')" class="w-full px-3 py-2 rounded-xl flex items-center justify-between transition text-zinc-400 hover:text-white hover:bg-zinc-900/80 group text-left">
+            <button onclick="openModal('modal-toolbox-collector')" class="w-full px-3 py-2 rounded-xl flex items-center justify-between transition text-zinc-400 hover:text-white hover:bg-zinc-900/80 group text-left">
               <div class="flex items-center gap-2.5 min-w-0">
                 <span class="text-base shrink-0">🔍</span>
                 <span class="text-xs text-zinc-300 group-hover:text-white font-semibold truncate">Thu Thập & Lập Sơ Đồ</span>
@@ -120,7 +120,7 @@
             </button>
 
             <!-- TMDb Lookup -->
-            <button onclick="setTab('agent'); sendQuickCommand('tmdb-lookup tra cứu metadata...')" class="w-full px-3 py-2 rounded-xl flex items-center justify-between transition text-zinc-400 hover:text-white hover:bg-zinc-900/80 group text-left">
+            <button onclick="openModal('modal-toolbox-tmdb')" class="w-full px-3 py-2 rounded-xl flex items-center justify-between transition text-zinc-400 hover:text-white hover:bg-zinc-900/80 group text-left">
               <div class="flex items-center gap-2.5 min-w-0">
                 <span class="text-base shrink-0">🎬</span>
                 <span class="text-xs text-zinc-300 group-hover:text-white font-semibold truncate">Tra Cứu Siêu Dữ Liệu</span>
@@ -129,7 +129,7 @@
             </button>
 
             <!-- Subtitle Translation -->
-            <button onclick="setTab('agent'); sendQuickCommand('translate-subtitle dịch phụ đề...')" class="w-full px-3 py-2 rounded-xl flex items-center justify-between transition text-zinc-400 hover:text-white hover:bg-zinc-900/80 group text-left">
+            <button onclick="openModal('modal-toolbox-subtitles'); loadSubtitlesStaging();" class="w-full px-3 py-2 rounded-xl flex items-center justify-between transition text-zinc-400 hover:text-white hover:bg-zinc-900/80 group text-left">
               <div class="flex items-center gap-2.5 min-w-0">
                 <span class="text-base shrink-0">🌐</span>
                 <span class="text-xs text-zinc-300 group-hover:text-white font-semibold truncate">Dịch Thuật Phụ Đề</span>
@@ -1350,6 +1350,129 @@
       <div class="flex justify-end gap-2 pt-2">
         <button onclick="closeModal('modal-add-magnet')" class="px-4 py-2 text-xs font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-lg transition">Hủy</button>
         <button onclick="submitMagnet()" class="px-5 py-2 text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition shadow-md shadow-blue-600/20">Bắt Đầu Tải</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLBOX MODAL 1: MEDIA COLLECTOR & CENSUS -->
+  <div id="modal-toolbox-collector" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 rounded-3xl max-w-2xl w-full p-6 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto custom-scroll">
+      <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold text-sm border border-blue-500/20">🔍</div>
+          <div>
+            <h3 class="font-bold text-sm text-white">Media Collector & Lập Sơ Đồ Nguồn</h3>
+            <p class="text-[11px] text-zinc-400 font-mono">media-collector • Kiểm tra magnet, kích thước & census bản quyền</p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-toolbox-collector')" class="w-7 h-7 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white flex items-center justify-center text-sm font-bold">×</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-zinc-400 font-medium mb-1.5">Nhập Magnet Link hoặc Tên Phim:</label>
+          <textarea id="collector-input" rows="3" placeholder="magnet:?xt=urn:btih:... hoặc tên series..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-white font-mono focus:outline-none focus:border-blue-500"></textarea>
+        </div>
+        <button onclick="inspectCollectorSource()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-md shadow-blue-600/30">
+          <span>⚡</span> Phân Tích & Kiểm Tra Sơ Đồ
+        </button>
+
+        <div id="collector-results" class="hidden p-4 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-3">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLBOX MODAL 2: TMDB METADATA LOOKUP -->
+  <div id="modal-toolbox-tmdb" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 rounded-3xl max-w-3xl w-full p-6 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto custom-scroll">
+      <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold text-sm border border-purple-500/20">🎬</div>
+          <div>
+            <h3 class="font-bold text-sm text-white">Tra Cứu Siêu Dữ Liệu TMDb</h3>
+            <p class="text-[11px] text-zinc-400 font-mono">tmdb-lookup • Poster HD, tóm tắt, diễn viên & ID chuẩn Plex</p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-toolbox-tmdb')" class="w-7 h-7 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white flex items-center justify-center text-sm font-bold">×</button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div class="flex gap-2">
+          <input type="text" id="tmdb-search-input" onkeydown="if(event.key==='Enter') searchTmdbLive()" placeholder="Nhập tên phim (ví dụ: Monster, Kindaichi, Transformers...)" class="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-purple-500">
+          <button onclick="searchTmdbLive()" class="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl transition flex items-center gap-1.5 shrink-0 shadow-md shadow-purple-600/30">
+            <span>🔍</span> Tra Cứu
+          </button>
+        </div>
+
+        <div id="tmdb-search-results" class="space-y-3 max-h-96 overflow-y-auto custom-scroll">
+          <div class="p-8 text-center text-zinc-500 text-xs">
+            Nhập tên phim để bắt đầu tìm kiếm thông tin và poster chất lượng cao từ TMDb API.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLBOX MODAL 3: SUBTITLE TRANSLATION & UTILITIES -->
+  <div id="modal-toolbox-subtitles" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 rounded-3xl max-w-3xl w-full p-6 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto custom-scroll">
+      <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-sm border border-emerald-500/20">🌐</div>
+          <div>
+            <h3 class="font-bold text-sm text-white">Xử Lý & Dịch Thuật Phụ Đề</h3>
+            <p class="text-[11px] text-zinc-400 font-mono">subtitle-extractor • sub-to-webvtt • translate-subtitle</p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-toolbox-subtitles')" class="w-7 h-7 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white flex items-center justify-center text-sm font-bold">×</button>
+      </div>
+
+      <!-- Tabs Navigation -->
+      <div class="flex gap-2 border-b border-zinc-800 pb-2 text-xs">
+        <button onclick="switchSubTab('extractor')" id="subtab-btn-extractor" class="px-3.5 py-1.5 rounded-xl bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 font-bold transition">
+          ✂️ Bóc Tách Sub Nhúng (MKV)
+        </button>
+        <button onclick="switchSubTab('webvtt')" id="subtab-btn-webvtt" class="px-3.5 py-1.5 rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-400 hover:text-white transition">
+          ⚡ Chuẩn Hóa WebVTT
+        </button>
+        <button onclick="switchSubTab('translate')" id="subtab-btn-translate" class="px-3.5 py-1.5 rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-400 hover:text-white transition">
+          💬 Dịch Vietsub AI
+        </button>
+      </div>
+
+      <!-- Tab Content 1: Sub Extractor -->
+      <div id="subtab-content-extractor" class="space-y-3 text-xs">
+        <div class="flex justify-between items-center">
+          <span class="text-zinc-400 font-medium">Danh sách video trong thư mục bộ đệm đệm (Staging):</span>
+          <button onclick="loadSubtitlesStaging()" class="text-emerald-400 hover:underline">🔄 Quét Lại</button>
+        </div>
+        <div id="sub-staging-videos-list" class="space-y-2 max-h-64 overflow-y-auto custom-scroll">
+          <div class="p-4 rounded-xl bg-zinc-950 border border-zinc-800 text-center text-zinc-500">Đang quét thư mục...</div>
+        </div>
+      </div>
+
+      <!-- Tab Content 2: WebVTT Converter -->
+      <div id="subtab-content-webvtt" class="hidden space-y-3 text-xs">
+        <div class="flex justify-between items-center">
+          <span class="text-zinc-400 font-medium">Các file phụ đề (.srt / .ass) cần chuyển sang .vtt:</span>
+          <button onclick="loadSubtitlesStaging()" class="text-emerald-400 hover:underline">🔄 Quét Lại</button>
+        </div>
+        <div id="sub-staging-subs-list" class="space-y-2 max-h-64 overflow-y-auto custom-scroll">
+          <div class="p-4 rounded-xl bg-zinc-950 border border-zinc-800 text-center text-zinc-500">Đang quét file phụ đề...</div>
+        </div>
+      </div>
+
+      <!-- Tab Content 3: Vietsub AI Translation -->
+      <div id="subtab-content-translate" class="hidden space-y-3 text-xs">
+        <div>
+          <label class="block text-zinc-400 font-medium mb-1.5">Gửi yêu cầu dịch phụ đề chuyên sâu cho AI Agent:</label>
+          <textarea id="sub-translate-input" rows="4" placeholder="Nhập tên bộ phim hoặc đoạn phụ đề cần dịch Vietsub..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-white font-mono focus:outline-none focus:border-emerald-500"></textarea>
+        </div>
+        <button onclick="sendSubTranslateToAgent()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-md shadow-emerald-600/30">
+          <span>🚀</span> Gửi Lệnh Dịch Phụ Đề Cho AI Agent
+        </button>
       </div>
     </div>
   </div>
@@ -2585,6 +2708,225 @@
       } catch (e) {
         showToast('Lỗi: ' + e, 'error');
       }
+    }
+
+    // ==================== TOOLBOX CONTROLLER FUNCTIONS ====================
+    async function inspectCollectorSource() {
+      const input = document.getElementById('collector-input')?.value?.trim();
+      if (!input) {
+        showToast('Vui lòng nhập Magnet link hoặc tên phim', 'warning');
+        return;
+      }
+      const resBox = document.getElementById('collector-results');
+      if (resBox) {
+        resBox.classList.remove('hidden');
+        resBox.innerHTML = '<div class="text-blue-400 animate-pulse">⏳ Đang phân tích metadata nguồn và sơ đồ phân đoạn...</div>';
+      }
+      try {
+        const res = await fetch('/api/collector/inspect', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({magnet: input, query: input})
+        });
+        const data = await res.json();
+        if (data.success) {
+          resBox.innerHTML = `
+            <div class="space-y-2">
+              <div class="font-bold text-white text-xs">📦 ${data.title}</div>
+              <div class="text-[10px] text-zinc-400 font-mono">BTIH: ${data.hash || 'Auto-Detected'}</div>
+              <div class="pt-2 flex gap-2">
+                <button onclick="document.getElementById('magnet-input').value = '${data.magnet || ''}'; closeModal('modal-toolbox-collector'); openModal('modal-add-magnet');" class="px-4 py-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold text-xs transition">
+                  ⚡ Đẩy Sang Tải TorBox
+                </button>
+                <button onclick="setTab('agent'); sendQuickCommand('media-collector phân tích chi tiết census cho: ${data.title}'); closeModal('modal-toolbox-collector');" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-xl font-medium text-xs transition">
+                  🤖 Hỏi AI Agent
+                </button>
+              </div>
+            </div>
+          `;
+        } else {
+          resBox.innerHTML = `<div class="text-red-400">❌ ${data.error}</div>`;
+        }
+      } catch (e) {
+        if (resBox) resBox.innerHTML = `<div class="text-red-400">Lỗi kết nối: ${e}</div>`;
+      }
+    }
+
+    async function searchTmdbLive() {
+      const q = document.getElementById('tmdb-search-input')?.value?.trim();
+      if (!q) {
+        showToast('Vui lòng nhập tên phim cần tra cứu', 'warning');
+        return;
+      }
+      const box = document.getElementById('tmdb-search-results');
+      if (box) box.innerHTML = '<div class="p-6 text-center text-purple-400 animate-pulse text-xs">⏳ Đang kết nối TMDb API tra cứu siêu dữ liệu...</div>';
+      
+      try {
+        const res = await fetch(`/api/tmdb/search?query=${encodeURIComponent(q)}`);
+        const data = await res.json();
+        const list = data.results || [];
+        if (list.length === 0) {
+          box.innerHTML = `<div class="p-6 text-center text-zinc-500 text-xs">${data.warning || data.error || 'Không tìm thấy kết quả phù hợp trên TMDb.'}</div>`;
+          return;
+        }
+
+        let html = '';
+        list.slice(0, 8).forEach(item => {
+          const title = item.name || item.title || 'Unknown Title';
+          const year = (item.first_air_date || item.release_date || '').slice(0, 4);
+          const poster = item.poster_path ? `https://image.tmdb.org/t/p/w200${item.poster_path}` : 'https://placehold.co/200x300/18181b/71717a?text=No+Poster';
+          const rating = (item.vote_average || 0).toFixed(1);
+          const overview = item.overview || 'Không có mô tả nội dung tiếng Việt.';
+          const mtype = item.media_type === 'tv' ? 'TV Series' : 'Movie';
+
+          html += `
+            <div class="p-3 rounded-2xl bg-zinc-950 border border-zinc-800 flex gap-3.5 items-start">
+              <img src="${poster}" class="w-16 h-24 object-cover rounded-xl border border-zinc-800 shrink-0 shadow-md">
+              <div class="flex-1 min-w-0 space-y-1">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="font-bold text-white text-xs truncate">${title}</div>
+                  <span class="px-1.5 py-0.2 rounded bg-purple-500/10 text-purple-400 border border-purple-500/30 text-[9px] font-bold shrink-0">⭐ ${rating}</span>
+                </div>
+                <div class="text-[10px] text-zinc-400 font-mono">${mtype} • Năm: ${year || 'N/A'} • TMDb ID: ${item.id}</div>
+                <p class="text-[11px] text-zinc-400 line-clamp-2 leading-relaxed">${overview}</p>
+                <div class="pt-1 flex gap-2">
+                  <button onclick="document.getElementById('collector-input').value = '${title.replace(/'/g, "\\'")}'; closeModal('modal-toolbox-tmdb'); openModal('modal-toolbox-collector');" class="px-2.5 py-1 rounded-lg bg-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white border border-blue-500/30 text-[10px] font-bold transition">
+                    🔍 Tìm Nguồn Phim
+                  </button>
+                  <button onclick="setTab('agent'); sendQuickCommand('tmdb-lookup tạo file NFO chuẩn cho ${title.replace(/'/g, "\\'")} (TMDb: ${item.id})'); closeModal('modal-toolbox-tmdb');" class="px-2.5 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 text-[10px] font-medium transition">
+                    📝 Tạo NFO
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        box.innerHTML = html;
+      } catch (e) {
+        if (box) box.innerHTML = `<div class="p-4 text-center text-red-400 text-xs">Lỗi: ${e}</div>`;
+      }
+    }
+
+    function switchSubTab(tab) {
+      ['extractor', 'webvtt', 'translate'].forEach(t => {
+        const btn = document.getElementById(`subtab-btn-${t}`);
+        const content = document.getElementById(`subtab-content-${t}`);
+        if (btn) {
+          if (t === tab) {
+            btn.className = "px-3.5 py-1.5 rounded-xl bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 font-bold transition";
+          } else {
+            btn.className = "px-3.5 py-1.5 rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-400 hover:text-white transition";
+          }
+        }
+        if (content) {
+          content.classList.toggle('hidden', t !== tab);
+        }
+      });
+    }
+
+    async function loadSubtitlesStaging() {
+      const vBox = document.getElementById('sub-staging-videos-list');
+      const sBox = document.getElementById('sub-staging-subs-list');
+      if (vBox) vBox.innerHTML = '<div class="text-zinc-500 text-xs animate-pulse">⏳ Đang quét thư mục media_staging...</div>';
+      if (sBox) sBox.innerHTML = '<div class="text-zinc-500 text-xs animate-pulse">⏳ Đang quét thư mục media_staging...</div>';
+
+      try {
+        const res = await fetch('/api/subtitles/staging');
+        const data = await res.json();
+        const files = data.files || [];
+
+        const videos = files.filter(f => f.type === 'video');
+        const subs = files.filter(f => f.type === 'subtitle');
+
+        if (vBox) {
+          if (videos.length === 0) {
+            vBox.innerHTML = '<div class="p-3 text-center text-zinc-500 text-xs">Không có file video nào trong thư mục staging.</div>';
+          } else {
+            vBox.innerHTML = videos.map(v => `
+              <div class="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800 flex items-center justify-between gap-2">
+                <div class="min-w-0">
+                  <div class="font-bold text-white text-xs truncate">🎬 ${v.filename}</div>
+                  <div class="text-[10px] text-zinc-500 font-mono">${v.size_mb} MB • ${v.rel_path}</div>
+                </div>
+                <button onclick="extractSubtitlesFromVideo('${v.full_path.replace(/'/g, "\\'")}')" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg transition shrink-0">
+                  ✂️ Bóc Tách Sub
+                </button>
+              </div>
+            `).join('');
+          }
+        }
+
+        if (sBox) {
+          if (subs.length === 0) {
+            sBox.innerHTML = '<div class="p-3 text-center text-zinc-500 text-xs">Không có file phụ đề rời (.srt/.ass) nào trong thư mục staging.</div>';
+          } else {
+            sBox.innerHTML = subs.map(s => `
+              <div class="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800 flex items-center justify-between gap-2">
+                <div class="min-w-0">
+                  <div class="font-bold text-white text-xs truncate">💬 ${s.filename}</div>
+                  <div class="text-[10px] text-zinc-500 font-mono">${s.size_mb} MB • ${s.rel_path}</div>
+                </div>
+                <button onclick="convertSubtitleToVtt('${s.full_path.replace(/'/g, "\\'")}')" class="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-lg transition shrink-0">
+                  ⚡ Sang .vtt
+                </button>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (e) {
+        if (vBox) vBox.innerHTML = `<div class="text-red-400 text-xs">Lỗi quét: ${e}</div>`;
+      }
+    }
+
+    async function extractSubtitlesFromVideo(filepath) {
+      showToast('⏳ Đang bóc tách phụ đề nhúng qua ffmpeg...', 'info');
+      try {
+        const res = await fetch('/api/subtitles/extract', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({file: filepath})
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('✅ ' + data.message, 'success');
+          loadSubtitlesStaging();
+        } else {
+          showToast('❌ ' + (data.error || 'Lỗi bóc tách'), 'error');
+        }
+      } catch (e) {
+        showToast('Lỗi: ' + e, 'error');
+      }
+    }
+
+    async function convertSubtitleToVtt(filepath) {
+      showToast('⏳ Đang chuẩn hóa typography sang WebVTT...', 'info');
+      try {
+        const res = await fetch('/api/subtitles/convert', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({file: filepath})
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('✅ ' + data.message, 'success');
+          loadSubtitlesStaging();
+        } else {
+          showToast('❌ ' + (data.error || 'Lỗi chuyển đổi'), 'error');
+        }
+      } catch (e) {
+        showToast('Lỗi: ' + e, 'error');
+      }
+    }
+
+    function sendSubTranslateToAgent() {
+      const text = document.getElementById('sub-translate-input')?.value?.trim();
+      if (!text) {
+        showToast('Vui lòng nhập nội dung hoặc tên phim cần dịch', 'warning');
+        return;
+      }
+      closeModal('modal-toolbox-subtitles');
+      setTab('agent');
+      sendQuickCommand(`translate-subtitle dịch thuật phụ đề tiếng Việt chuyên sâu cho: ${text}`);
     }
 
     async function sendQuickCommand(cmd) {

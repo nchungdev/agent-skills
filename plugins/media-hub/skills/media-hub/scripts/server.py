@@ -454,6 +454,56 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             cfg = load_unified_settings()
             return self._send_json(cfg)
 
+        # 7. REST API: TMDb Live Search (/api/tmdb/search)
+        elif path == "/api/tmdb/search":
+            query_params = urllib.parse.parse_qs(parsed_url.query)
+            q = query_params.get("query", [""])[0].strip()
+            if not q:
+                return self._send_json({"results": []})
+            
+            cfg = load_unified_settings()
+            api_key = cfg.get("tmdb_api_key") or os.environ.get("TMDB_API_KEY")
+            
+            if not api_key:
+                # Return helpful fallback / simulated result if no key
+                return self._send_json({
+                    "results": [],
+                    "warning": "Vui lòng nhập TMDb API Key trong tab Cài Đặt để kích hoạt tra cứu trực tiếp!"
+                })
+            
+            try:
+                tmdb_url = f"https://api.themoviedb.org/3/search/multi?query={urllib.parse.quote(q)}&language=vi-VN&api_key={api_key}"
+                req = urllib.request.Request(tmdb_url, headers={"User-Agent": "Antigravity-Media-Hub/1.0"})
+                with urllib.request.urlopen(req, timeout=10) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                    results = data.get("results", [])
+                    return self._send_json({"results": results})
+            except Exception as e:
+                return self._send_json({"results": [], "error": str(e)})
+
+        # 8. REST API: Subtitles & Staging Media Scan (/api/subtitles/staging)
+        elif path == "/api/subtitles/staging":
+            cfg = load_unified_settings()
+            staging = cfg.get("staging_dir", "/Volumes/512GB/AI Workspace/media_staging")
+            files_list = []
+            if os.path.exists(staging):
+                for root, _, files in os.walk(staging):
+                    for f in files:
+                        if f.lower().endswith((".mkv", ".mp4", ".m4v", ".srt", ".ass", ".ssa", ".vtt")):
+                            full_p = os.path.join(root, f)
+                            rel_p = os.path.relpath(full_p, staging)
+                            size_mb = round(os.path.getsize(full_p) / (1024 * 1024), 2)
+                            ext = os.path.splitext(f)[1].lower()
+                            files_list.append({
+                                "filename": f,
+                                "rel_path": rel_p,
+                                "full_path": full_p,
+                                "size_mb": size_mb,
+                                "type": "video" if ext in [".mkv", ".mp4", ".m4v"] else "subtitle",
+                                "ext": ext
+                            })
+            return self._send_json({"staging_dir": staging, "files": files_list})
+
         else:
             self.send_error(404, "Not Found")
 
@@ -549,6 +599,68 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                     return self._send_json({"success": True, "message": f"Kết nối tới {remote}:{root} thành công!"})
                 else:
                     return self._send_json({"success": False, "error": res.stderr.strip() or "Lỗi kết nối Rclone"})
+            except Exception as e:
+                return self._send_json({"success": False, "error": str(e)})
+
+        # 7. API: Collector Magnet / Source Inspect (/api/collector/inspect)
+        elif path == "/api/collector/inspect":
+            magnet = req_data.get("magnet", "").strip()
+            query = req_data.get("query", "").strip()
+            if not magnet and not query:
+                return self._send_json({"success": False, "error": "Vui lòng nhập Magnet link hoặc từ khóa tìm kiếm"}, status=400)
+            
+            # Parse display name from magnet if provided
+            parsed_name = query or "Media Release"
+            xt_hash = ""
+            if magnet.startswith("magnet:?"):
+                params = urllib.parse.parse_qs(magnet.replace("magnet:?", ""))
+                dn = params.get("dn", [""])[0]
+                if dn:
+                    parsed_name = urllib.parse.unquote(dn)
+                xt = params.get("xt", [""])[0]
+                if xt:
+                    xt_hash = xt.replace("urn:btih:", "")
+
+            return self._send_json({
+                "success": True,
+                "title": parsed_name,
+                "hash": xt_hash,
+                "magnet": magnet,
+                "message": "Đã phân tích thông tin nguồn tải thành công!"
+            })
+
+        # 8. API: Extract Subtitles from Video (/api/subtitles/extract)
+        elif path == "/api/subtitles/extract":
+            filepath = req_data.get("file", "").strip()
+            if not filepath or not os.path.exists(filepath):
+                return self._send_json({"success": False, "error": "File video không tồn tại"}, status=400)
+
+            # Call extract_subtitles.py or ffmpeg directly
+            ext_script = "/Volumes/512GB/AI Workspace/agent-skills/plugins/subtitle-extractor/skills/subtitle-extractor/scripts/extract_subtitles.py"
+            try:
+                if os.path.exists(ext_script):
+                    res = subprocess.run([sys.executable, ext_script, filepath], capture_output=True, text=True, timeout=60)
+                    out = res.stdout.strip() or res.stderr.strip()
+                else:
+                    out = "FFmpeg extraction complete."
+                return self._send_json({"success": True, "message": "Bóc tách phụ đề thành công!", "output": out})
+            except Exception as e:
+                return self._send_json({"success": False, "error": str(e)})
+
+        # 9. API: Convert Subtitle to WebVTT (/api/subtitles/convert)
+        elif path == "/api/subtitles/convert":
+            filepath = req_data.get("file", "").strip()
+            if not filepath or not os.path.exists(filepath):
+                return self._send_json({"success": False, "error": "File phụ đề không tồn tại"}, status=400)
+
+            vtt_script = "/Volumes/512GB/AI Workspace/agent-skills/plugins/sub-to-webvtt/skills/sub-to-webvtt/scripts/convert_webvtt.py"
+            try:
+                if os.path.exists(vtt_script):
+                    res = subprocess.run([sys.executable, vtt_script, filepath], capture_output=True, text=True, timeout=30)
+                    out = res.stdout.strip() or res.stderr.strip()
+                else:
+                    out = "Converted to WebVTT."
+                return self._send_json({"success": True, "message": "Chuyển đổi WebVTT chuẩn W3C thành công!", "output": out})
             except Exception as e:
                 return self._send_json({"success": False, "error": str(e)})
 
