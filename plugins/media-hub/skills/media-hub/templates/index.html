@@ -910,7 +910,7 @@
       </div>
 
       <!-- ==================== TAB 4: AI AGENT ASSISTANT FULL VIEW ==================== -->
-      <div id="tab-agent" class="hidden flex-1 flex flex-col min-h-0 h-full space-y-0 relative">
+      <div id="tab-agent" style="display: none;" class="flex-1 flex-col min-h-0 h-full space-y-0 relative">
         
         <!-- Pinned Header (Sticky Top-0 Flush) -->
         <div class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-3 min-h-14 flex flex-wrap items-center justify-between gap-3 shadow-sm shrink-0">
@@ -967,7 +967,7 @@
         </div>
 
         <!-- Input Box Anchored / Docked Directly on top of Bottom Navigation Bar -->
-        <div class="fixed left-0 right-0 z-30 lg:relative mobile-docked-input bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-800/80 px-3 py-3 sm:px-4 sm:py-3.5 shadow-2xl">
+        <div id="agent-input-dock" style="display: none;" class="fixed left-0 right-0 z-30 lg:relative mobile-docked-input bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-800/80 px-3 py-3 sm:px-4 sm:py-3.5 shadow-2xl">
           <div class="max-w-5xl mx-auto flex gap-2.5 sm:gap-3 items-center">
             <input type="text" id="full-agent-input" onkeydown="if(event.key==='Enter') sendFullAgentMessage()" placeholder="Nhập câu lệnh cho AI Agent..." class="flex-1 bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-2.5 sm:py-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 shadow-inner">
             <button onclick="sendFullAgentMessage()" class="px-4 py-2.5 sm:px-5 sm:py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-2xl transition flex items-center gap-1.5 sm:gap-2 shadow-lg shadow-blue-600/30 shrink-0">
@@ -2386,7 +2386,10 @@
         const panel = document.getElementById(`tab-${t}`);
         const btn = document.getElementById(`tab-btn-${t}`);
         const mbtn = document.getElementById(`mobile-tab-btn-${t}`);
-        if (panel) panel.classList.add('hidden');
+        if (panel) {
+          panel.classList.add('hidden');
+          panel.style.display = 'none';
+        }
         if (btn) {
           btn.className = "w-full px-3 py-2 rounded-xl flex items-center justify-between transition text-zinc-400 hover:text-white hover:bg-zinc-900";
         }
@@ -2395,10 +2398,22 @@
           mbtn.classList.add('text-zinc-400');
         }
       });
+
       const activePanel = document.getElementById(`tab-${tab}`);
       const activeBtn = document.getElementById(`tab-btn-${tab}`);
       const activeMBtn = document.getElementById(`mobile-tab-btn-${tab}`);
-      if (activePanel) activePanel.classList.remove('hidden');
+      
+      if (activePanel) {
+        activePanel.classList.remove('hidden');
+        activePanel.style.display = (tab === 'agent') ? 'flex' : 'block';
+      }
+
+      // Strictly control agent input dock visibility
+      const agentDock = document.getElementById('agent-input-dock');
+      if (agentDock) {
+        agentDock.style.display = (tab === 'agent') ? 'block' : 'none';
+      }
+
       if (activeBtn) {
         activeBtn.className = "w-full px-3 py-2 rounded-xl flex items-center justify-between transition bg-blue-600/10 text-blue-400 border border-blue-500/20 font-bold shadow-sm";
       }
