@@ -785,6 +785,40 @@
         <div class="p-4 sm:p-6 pb-36 lg:pb-8 space-y-5 max-w-7xl w-full mx-auto">
           <!-- VIEW 1: PLEX LIBRARY VIEW -->
           <div id="plex-view-library" class="space-y-4">
+            
+            <!-- NAS Storage Overview Glance Card (Hiện thông tin cơ bản & link mở nhanh) -->
+            <div id="nas-overview-banner" class="p-3.5 sm:p-4 rounded-2xl bg-zinc-900/80 border border-zinc-800/80 shadow-md flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-sm border border-amber-500/20 shrink-0">
+                  🖥️
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="font-bold text-white text-xs">NAS Storage (Mạng Nội Bộ)</span>
+                    <span id="nas-status-badge" class="px-2 py-0.2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold flex items-center gap-1 font-mono">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Sẵn Sàng
+                    </span>
+                  </div>
+                  <div class="text-[11px] text-zinc-400 font-mono truncate mt-0.5" id="nas-path-display">
+                    📁 /volume1/video/TV Shows
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Action Links for NAS -->
+              <div class="flex items-center gap-2 flex-wrap">
+                <a id="nas-link-plex" href="#" target="_blank" class="px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white font-medium transition flex items-center gap-1.5 shadow-sm text-xs">
+                  <span>🎬</span> Mở Plex Web
+                </a>
+                <a id="nas-link-dsm" href="#" target="_blank" class="px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white font-medium transition flex items-center gap-1.5 shadow-sm text-xs">
+                  <span>🌐</span> Mở NAS DSM
+                </a>
+                <button onclick="setTab('settings')" class="px-2.5 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition text-xs" title="Cấu hình NAS">
+                  ⚙️
+                </button>
+              </div>
+            </div>
+
             <!-- Quick Filter Pills -->
             <div class="flex gap-2 overflow-x-auto custom-scroll pb-1 text-xs">
               <button onclick="filterPlexTag('all')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white font-medium hover:bg-zinc-700 transition active shrink-0" id="pfilter-all">Tất Cả (17)</button>
@@ -2421,6 +2455,17 @@
         if (document.getElementById('cfg-target-drive')) document.getElementById('cfg-target-drive').checked = targets.includes('drive');
         if (document.getElementById('cfg-target-nas')) document.getElementById('cfg-target-nas').checked = targets.includes('nas');
         if (document.getElementById('cfg-auto-purge')) document.getElementById('cfg-auto-purge').checked = cfg.auto_purge !== false;
+
+        // Update NAS glance card in library view
+        const nasPathEl = document.getElementById('nas-path-display');
+        if (nasPathEl) nasPathEl.textContent = '📁 ' + (cfg.nas_path || '/volume1/video/TV Shows');
+        
+        const host = cfg.nas_host || '192.168.1.50';
+        const nasPlexEl = document.getElementById('nas-link-plex');
+        if (nasPlexEl) nasPlexEl.href = `http://${host}:32400/web`;
+        
+        const nasDsmEl = document.getElementById('nas-link-dsm');
+        if (nasDsmEl) nasDsmEl.href = `http://${host}:5000`;
       } catch (e) {
         console.error("Error fetching settings:", e);
       }
@@ -3202,6 +3247,7 @@
     // Init & Polling every 4 seconds
     setTab('home');
     fetchData();
+    fetchSettings();
     renderPlexGrid(plexShowsData);
     setInterval(fetchData, 4000);
   </script>
