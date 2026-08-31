@@ -1006,56 +1006,24 @@
           </div>
         </div>
 
-        <div class="p-4 sm:p-6 pb-36 lg:pb-8 space-y-5 max-w-5xl w-full mx-auto">
+        <div class="p-4 sm:p-6 pb-36 lg:pb-8 space-y-6 max-w-5xl w-full mx-auto">
           
-          <!-- Card 1: Cấu Hình Tải & Staging Buffer -->
-          <div class="p-5 sm:p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800/80 shadow-xl space-y-4">
-            <div class="flex items-center gap-3 border-b border-zinc-800 pb-3">
-              <div class="w-8 h-8 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-sm border border-blue-500/20">📥</div>
-              <div>
-                <h4 class="font-bold text-xs sm:text-sm text-white">1. Cấu Hình Tải & Bộ Đệm (Downloader Engine)</h4>
-                <p class="text-[11px] text-zinc-400">Thiết lập nguồn tải mặc định, số luồng và thư mục lưu đệm tạm thời</p>
+          <!-- ==================== CỤM 1: TORBOX (Bộ Tải & Debrid Cloud) ==================== -->
+          <div class="p-5 sm:p-6 rounded-3xl bg-zinc-900/70 border border-purple-500/20 shadow-xl space-y-4 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="flex items-center justify-between border-b border-zinc-800 pb-3 flex-wrap gap-2">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-xl bg-purple-600/10 text-purple-400 flex items-center justify-center font-bold text-sm border border-purple-500/20 shadow-inner">⚡</div>
+                <div>
+                  <h4 class="font-bold text-xs sm:text-sm text-white">CỤM 1: CẤU HÌNH TORBOX & BỘ TẢI (DOWNLOADER ENGINE)</h4>
+                  <p class="text-[11px] text-zinc-400">TorBox Debrid API, TMDb siêu dữ liệu, nguồn tải và bộ đệm tạm thời</p>
+                </div>
               </div>
+              <span class="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[10px] font-mono font-bold">torbox-engine</span>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div>
-                <label class="block text-zinc-400 font-medium mb-1.5">Nguồn Tải Mặc Định (Default Provider)</label>
-                <select id="cfg-default-provider" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-blue-500">
-                  <option value="torbox">☁️ TorBox Debrid Cloud (Khuyên dùng)</option>
-                  <option value="aria2">🧲 Aria2c P2P Client (Tải trên máy)</option>
-                  <option value="direct">🔗 Direct Download Link (HTTP/DDL)</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-zinc-400 font-medium mb-1.5">Số Luồng Tải Song Song (Max Concurrent)</label>
-                <select id="cfg-max-downloads" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-blue-500">
-                  <option value="1">1 Tập (Cuốn chiếu an toàn nhất)</option>
-                  <option value="2" selected>2 Tập (Tối ưu tốc độ)</option>
-                  <option value="4">4 Tập (Băng thông cao)</option>
-                </select>
-              </div>
-
-              <div class="sm:col-span-2">
-                <label class="block text-zinc-400 font-medium mb-1.5">Thư Mục Bộ Đệm Tạm Thời (Staging Buffer Directory)</label>
-                <input type="text" id="cfg-staging-dir" value="/Volumes/512GB/AI Workspace/media_staging" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono placeholder-zinc-500 focus:outline-none focus:border-blue-500">
-                <p class="text-[10px] text-zinc-500 mt-1">Nơi lưu file video tạm trong khi tải trước khi được đẩy lên NAS/Google Drive</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 2: Khóa API & Tài Khoản Các Skill (TorBox, TMDb, Aria2) -->
-          <div class="p-5 sm:p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800/80 shadow-xl space-y-4">
-            <div class="flex items-center gap-3 border-b border-zinc-800 pb-3">
-              <div class="w-8 h-8 rounded-xl bg-purple-600/10 text-purple-400 flex items-center justify-center font-bold text-sm border border-purple-500/20">🔑</div>
-              <div>
-                <h4 class="font-bold text-xs sm:text-sm text-white">2. Tài Khoản & Khóa API Dịch Vụ (Centralized Credentials)</h4>
-                <p class="text-[11px] text-zinc-400">Cấu hình tập trung cho toàn bộ Skills: TorBox Cloud, TMDb Metadata và Aria2c RPC</p>
-              </div>
-            </div>
-
-            <div class="space-y-3.5 text-xs">
+            <div class="space-y-4 text-xs">
+              <!-- TorBox Token & TMDb Key -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-zinc-400 font-medium mb-1.5 flex items-center justify-between">
@@ -1074,7 +1042,35 @@
                 </div>
               </div>
 
-              <div class="pt-2 border-t border-zinc-800/60">
+              <!-- Provider & Concurrent -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-zinc-400 font-medium mb-1.5">Nguồn Tải Mặc Định (Default Provider)</label>
+                  <select id="cfg-default-provider" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-purple-500">
+                    <option value="torbox">☁️ TorBox Debrid Cloud (Khuyên dùng)</option>
+                    <option value="aria2">🧲 Aria2c P2P Client (Tải trên máy)</option>
+                    <option value="direct">🔗 Direct Download Link (HTTP/DDL)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-zinc-400 font-medium mb-1.5">Số Luồng Tải Song Song (Max Concurrent)</label>
+                  <select id="cfg-max-downloads" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-purple-500">
+                    <option value="1">1 Tập (Cuốn chiếu an toàn nhất)</option>
+                    <option value="2" selected>2 Tập (Tối ưu tốc độ)</option>
+                    <option value="4">4 Tập (Băng thông cao)</option>
+                  </select>
+                </div>
+
+                <div class="sm:col-span-2">
+                  <label class="block text-zinc-400 font-medium mb-1.5">Thư Mục Bộ Đệm Tạm Thời (Staging Buffer Directory)</label>
+                  <input type="text" id="cfg-staging-dir" value="/Volumes/512GB/AI Workspace/media_staging" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono placeholder-zinc-500 focus:outline-none focus:border-purple-500">
+                  <p class="text-[10px] text-zinc-500 mt-1">Nơi lưu file video tạm trong khi tải trước khi được đẩy lên NAS/Google Drive</p>
+                </div>
+              </div>
+
+              <!-- Aria2 RPC Daemon Settings -->
+              <div class="pt-3 border-t border-zinc-800/60">
                 <label class="block text-zinc-400 font-medium mb-1.5 font-mono text-[11px]">🧲 Aria2c RPC Daemon (Tải Torrent trên máy):</label>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
@@ -1094,14 +1090,15 @@
             </div>
           </div>
 
-          <!-- Card 3: Cấu Hình NAS Storage (SSH/SFTP) -->
-          <div class="p-5 sm:p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800/80 shadow-xl space-y-4">
+          <!-- ==================== CỤM 2: NAS (Bộ Nhớ Nội Bộ & Phân Loại Plex) ==================== -->
+          <div class="p-5 sm:p-6 rounded-3xl bg-zinc-900/70 border border-amber-500/20 shadow-xl space-y-4 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none"></div>
             <div class="flex items-center justify-between border-b border-zinc-800 pb-3 flex-wrap gap-2">
               <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-xl bg-amber-600/10 text-amber-400 flex items-center justify-center font-bold text-sm border border-amber-500/20">🖥️</div>
+                <div class="w-8 h-8 rounded-xl bg-amber-600/10 text-amber-400 flex items-center justify-center font-bold text-sm border border-amber-500/20 shadow-inner">🖥️</div>
                 <div>
-                  <h4 class="font-bold text-xs sm:text-sm text-white">3. Cấu Hình NAS Storage (SSH / SFTP)</h4>
-                  <p class="text-[11px] text-zinc-400">Kết nối mạng nội bộ tới NAS Synology, QNAP, TrueNAS hoặc Linux Server</p>
+                  <h4 class="font-bold text-xs sm:text-sm text-white">CỤM 2: CẤU HÌNH NAS STORAGE (SSH & PLEX LIBRARIAN)</h4>
+                  <p class="text-[11px] text-zinc-400">Kết nối SSH mạng nội bộ tới NAS Synology/QNAP và tự động dò thư mục Plex</p>
                 </div>
               </div>
               <button onclick="scanNasLibraries()" class="px-3 py-1.5 bg-amber-600/20 hover:bg-amber-600 border border-amber-500/30 text-amber-300 hover:text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
@@ -1109,35 +1106,46 @@
               </button>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-              <div>
-                <label class="block text-zinc-400 font-medium mb-1.5">NAS Host IP / Domain</label>
-                <input type="text" id="cfg-nas-host" placeholder="ví dụ: 192.168.1.50" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-500">
+            <div class="space-y-3.5 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label class="block text-zinc-400 font-medium mb-1.5">NAS Host IP / Domain</label>
+                  <input type="text" id="cfg-nas-host" placeholder="ví dụ: 192.168.1.50" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                  <label class="block text-zinc-400 font-medium mb-1.5">SSH User</label>
+                  <input type="text" id="cfg-nas-user" value="admin" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                  <label class="block text-zinc-400 font-medium mb-1.5">SSH Port</label>
+                  <input type="number" id="cfg-nas-port" value="22" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-500">
+                </div>
+                <div class="sm:col-span-3">
+                  <label class="block text-zinc-400 font-medium mb-1.5">Thư Mục Plex Trên NAS (Plex Library Path)</label>
+                  <input type="text" id="cfg-nas-path" value="/volume1/video/TV Shows" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-500">
+                  <div id="nas-scan-results" class="hidden mt-2 p-3 rounded-xl bg-zinc-950 border border-zinc-800 text-xs space-y-1.5"></div>
+                </div>
               </div>
-              <div>
-                <label class="block text-zinc-400 font-medium mb-1.5">SSH User</label>
-                <input type="text" id="cfg-nas-user" value="admin" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-500">
-              </div>
-              <div>
-                <label class="block text-zinc-400 font-medium mb-1.5">SSH Port</label>
-                <input type="number" id="cfg-nas-port" value="22" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-500">
-              </div>
-              <div class="sm:col-span-3">
-                <label class="block text-zinc-400 font-medium mb-1.5">Thư Mục Plex Trên NAS (Plex Library Path)</label>
-                <input type="text" id="cfg-nas-path" value="/volume1/video/TV Shows" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-amber-500">
-                <div id="nas-scan-results" class="hidden mt-2 p-3 rounded-xl bg-zinc-950 border border-zinc-800 text-xs space-y-1.5"></div>
+
+              <!-- NAS Sync Option Checkbox -->
+              <div class="pt-2 border-t border-zinc-800/60">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="cfg-target-nas" class="w-4 h-4 rounded border-zinc-700 text-amber-500 focus:ring-0">
+                  <span class="text-white font-medium">🖥️ Kích hoạt đẩy phim tự động lên NAS Storage sau khi tải</span>
+                </label>
               </div>
             </div>
           </div>
 
-          <!-- Card 4: Cấu Hình Google Drive & Cơ Chế Sync/Dọn Dẹp -->
-          <div class="p-5 sm:p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800/80 shadow-xl space-y-4">
+          <!-- ==================== CỤM 3: GOOGLE DRIVE (Lưu Trữ Đám Mây & Auto-Purge) ==================== -->
+          <div class="p-5 sm:p-6 rounded-3xl bg-zinc-900/70 border border-emerald-500/20 shadow-xl space-y-4 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none"></div>
             <div class="flex items-center justify-between border-b border-zinc-800 pb-3 flex-wrap gap-2">
               <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-xl bg-emerald-600/10 text-emerald-400 flex items-center justify-center font-bold text-sm border border-emerald-500/20">☁️</div>
+                <div class="w-8 h-8 rounded-xl bg-emerald-600/10 text-emerald-400 flex items-center justify-center font-bold text-sm border border-emerald-500/20 shadow-inner">☁️</div>
                 <div>
-                  <h4 class="font-bold text-xs sm:text-sm text-white">4. Cấu Hình Google Drive & Cơ Chế Đồng Bộ</h4>
-                  <p class="text-[11px] text-zinc-400">Thiết lập kết nối Rclone Google Drive, chọn đích đồng bộ và dọn dẹp</p>
+                  <h4 class="font-bold text-xs sm:text-sm text-white">CỤM 3: CẤU HÌNH GOOGLE DRIVE & DỌN DẸP (RCLONE & PURGE)</h4>
+                  <p class="text-[11px] text-zinc-400">Rclone remote Google Drive, phân cấp thư viện Cloud và cơ chế Auto-Purge</p>
                 </div>
               </div>
               <button onclick="checkGDriveConnection()" class="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600 border border-emerald-500/30 text-emerald-300 hover:text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
@@ -1145,31 +1153,27 @@
               </button>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div>
-                <label class="block text-zinc-400 font-medium mb-1.5">Tên Remote Rclone</label>
-                <input type="text" id="cfg-gdrive-remote" value="gdrive" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-emerald-500">
-              </div>
-
-              <div>
-                <label class="block text-zinc-400 font-medium mb-1.5">Thư Mục Root Trên Drive</label>
-                <input type="text" id="cfg-gdrive-root" value="Phim/TV Shows" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-emerald-500">
-              </div>
-
-              <div class="sm:col-span-2 pt-2 border-t border-zinc-800/60 space-y-3">
-                <div class="font-bold text-zinc-300">Đích Đồng Bộ Mặc Định:</div>
-                <div class="flex flex-wrap gap-4">
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" id="cfg-target-drive" checked class="w-4 h-4 rounded border-zinc-700 text-blue-600 focus:ring-0">
-                    <span class="text-white font-medium">☁️ Đồng bộ lên Google Drive</span>
-                  </label>
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" id="cfg-target-nas" class="w-4 h-4 rounded border-zinc-700 text-blue-600 focus:ring-0">
-                    <span class="text-white font-medium">🖥️ Đồng bộ lên NAS Storage</span>
-                  </label>
+            <div class="space-y-3.5 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-zinc-400 font-medium mb-1.5">Tên Remote Rclone</label>
+                  <input type="text" id="cfg-gdrive-remote" value="gdrive" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-emerald-500">
                 </div>
 
-                <div class="pt-2">
+                <div>
+                  <label class="block text-zinc-400 font-medium mb-1.5">Thư Mục Root Trên Drive</label>
+                  <input type="text" id="cfg-gdrive-root" value="Phim/TV Shows" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-emerald-500">
+                </div>
+              </div>
+
+              <!-- GDrive Sync & Auto-Purge Checkbox -->
+              <div class="pt-2 border-t border-zinc-800/60 space-y-3">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="cfg-target-drive" checked class="w-4 h-4 rounded border-zinc-700 text-emerald-500 focus:ring-0">
+                  <span class="text-white font-medium">☁️ Kích hoạt đẩy phim tự động lên Google Drive sau khi tải</span>
+                </label>
+
+                <div class="pt-1">
                   <label class="flex items-center gap-2.5 cursor-pointer p-3 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/30">
                     <input type="checkbox" id="cfg-auto-purge" checked class="w-4 h-4 rounded border-zinc-700 text-emerald-500 focus:ring-0">
                     <div>
