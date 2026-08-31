@@ -1,11 +1,23 @@
 ---
 name: media-hub
-description: Khởi chạy và quản lý Dashboard Antigravity Media Hub & AI Agent Command Center (Web UI thời gian thực cổng 8888, giám sát chuỗi đồng bộ tải phim TorBox Cloud ➔ Google Drive, quản lý torrent, duyệt thư viện Google Drive và điều phối tương tác trực tiếp với AI Agent qua Web UI).
+description: Trung tâm điều phối & Quản trị cấu hình / tài khoản tập trung cho toàn bộ hệ sinh thái Media Skills, đồng thời là Dashboard Web UI thời gian thực cổng 8888 kết nối AI Agent Command Center, giám sát chuỗi đồng bộ tải phim TorBox Cloud ➔ NAS & Google Drive, duyệt thư viện Plex và điều phối tương tác trực tiếp với AI Agent.
 ---
 
-# 🚀 Antigravity Media Hub & Agent Command Center Skill
+# 🚀 Antigravity Media Hub & Centralized Configuration Hub
 
-Kỹ năng đặc biệt giúp khởi chạy, điều khiển và theo dõi toàn bộ tiến trình hoạt động của các **Agent Skills** (như `torbox-manager`, `media-collector`, `translate-subtitle`) trên giao diện Web thời gian thực (**Real-Time Dashboard**).
+Kỹ năng cốt lõi đóng vai trò là **Trung Tâm Điều Phối & Quản Trị Cấu Hình / Tài Khoản Tập Trung (Centralized Credential & Config Hub)** cho toàn bộ hệ sinh thái Media Skills (`media-downloader`, `plex-librarian`, `media-sync`, `tmdb-lookup`, `translate-subtitle`), đồng thời cung cấp giao diện Web thời gian thực (**Real-Time Dashboard cổng 8888**).
+
+---
+
+## 🔑 Quản Trị Tài Khoản & Cấu Hình Tập Trung
+
+Media Hub tự động quét, gộp và đồng bộ cấu hình từ **Biến môi trường hệ thống (`os.environ`)**, file **`~/.env`** và file **`~/.gemini/config/media_hub_settings.json`**:
+1. ⚡ **TorBox Token**: Dùng chung cho `media-downloader` và `torbox`.
+2. 🎬 **TMDb API Key**: Dùng chung cho `tmdb-lookup` và `media-collector`.
+3. 🌐 **Gemini API Key**: Dùng chung cho `translate-subtitle` và `ai-agent`.
+4. 🖥️ **NAS SSH Credentials**: Dùng chung cho `media-sync` và `plex-librarian` (tự động nhận diện thư mục Plex).
+5. ☁️ **Google Drive Rclone**: Dùng chung cho `media-sync` và `plex-librarian`.
+6. ⚙️ **Download & Sync Policy**: Tự động load lên UI và lưu trữ phản hồi tức thì qua REST API `/api/settings`.
 
 ---
 

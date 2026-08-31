@@ -42,6 +42,62 @@ if os.path.exists(CONFIG_FILE):
 PORT = int(config.get("port", 8888))
 HOST = str(config.get("host", "0.0.0.0"))
 
+def load_unified_settings():
+    """Load unified configuration from environment, ~/.env, and settings.json."""
+    settings_path = Path.home() / ".gemini" / "config" / "media_hub_settings.json"
+    env_file = Path.home() / ".env"
+    
+    env_dict = {}
+    if env_file.is_file():
+        try:
+            with open(env_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        env_dict[k.strip()] = v.strip().strip('"').strip("'")
+        except Exception:
+            pass
+
+    cfg = {
+        "default_provider": "torbox",
+        "max_concurrent_downloads": 2,
+        "staging_dir": "/Volumes/512GB/AI Workspace/media_staging",
+        "torbox_token": os.environ.get("TORBOX_API_TOKEN") or env_dict.get("TORBOX_API_TOKEN") or env_dict.get("TORBOX_TOKEN") or "",
+        "tmdb_api_key": os.environ.get("TMDB_API_KEY") or env_dict.get("TMDB_API_KEY") or "",
+        "gemini_api_key": os.environ.get("GEMINI_API_KEY") or env_dict.get("GEMINI_API_KEY") or "",
+        "aria2_rpc_host": "127.0.0.1",
+        "aria2_rpc_port": 6800,
+        "aria2_rpc_secret": "",
+        "nas_host": "",
+        "nas_user": "admin",
+        "nas_port": 22,
+        "nas_path": "/volume1/video/TV Shows",
+        "gdrive_remote": "gdrive",
+        "gdrive_root": "Phim/TV Shows",
+        "sync_targets": ["drive"],
+        "sync_transfers": 4,
+        "auto_purge": True
+    }
+
+    if settings_path.is_file():
+        try:
+            with open(settings_path, "r", encoding="utf-8") as f:
+                saved = json.load(f)
+                cfg.update(saved)
+        except Exception:
+            pass
+
+    # Fallback to env if empty
+    if not cfg.get("torbox_token"):
+        cfg["torbox_token"] = os.environ.get("TORBOX_API_TOKEN") or env_dict.get("TORBOX_API_TOKEN") or env_dict.get("TORBOX_TOKEN") or ""
+    if not cfg.get("tmdb_api_key"):
+        cfg["tmdb_api_key"] = os.environ.get("TMDB_API_KEY") or env_dict.get("TMDB_API_KEY") or ""
+    if not cfg.get("gemini_api_key"):
+        cfg["gemini_api_key"] = os.environ.get("GEMINI_API_KEY") or env_dict.get("GEMINI_API_KEY") or ""
+
+    return cfg
+
 class MediaHubHandler(BaseHTTPRequestHandler):
     def _send_json(self, data, status=200):
         self.send_response(status)
@@ -393,33 +449,8 @@ class MediaHubHandler(BaseHTTPRequestHandler):
 
         # 6. REST API: Media Hub Settings (/api/settings)
         elif path == "/api/settings":
-            settings_path = Path.home() / ".gemini" / "config" / "media_hub_settings.json"
-            defaults = {
-                "default_provider": "torbox",
-                "max_concurrent_downloads": 2,
-                "staging_dir": "/Volumes/512GB/AI Workspace/media_staging",
-                "torbox_token": os.environ.get("TORBOX_API_TOKEN", ""),
-                "aria2_rpc_host": "127.0.0.1",
-                "aria2_rpc_port": 6800,
-                "aria2_rpc_secret": "",
-                "nas_host": "",
-                "nas_user": "admin",
-                "nas_port": 22,
-                "nas_path": "/volume1/video/TV Shows",
-                "gdrive_remote": "gdrive",
-                "gdrive_root": "Phim/TV Shows",
-                "sync_targets": ["drive"],
-                "sync_transfers": 4,
-                "auto_purge": True
-            }
-            if settings_path.is_file():
-                try:
-                    with open(settings_path, "r", encoding="utf-8") as f:
-                        saved = json.load(f)
-                        defaults.update(saved)
-                except Exception:
-                    pass
-            return self._send_json(defaults)
+            cfg = load_unified_settings()
+            return self._send_json(cfg)
 
         else:
             self.send_error(404, "Not Found")
