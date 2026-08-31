@@ -9,8 +9,10 @@ import os
 import sys
 import json
 import time
+import shutil
 import urllib.parse
 import subprocess
+from pathlib import Path
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 
 # Import Core Modules
@@ -72,32 +74,17 @@ class MediaHubHandler(BaseHTTPRequestHandler):
 
         # 1. Web UI Root
         if path == "/" or path == "/index.html":
-            candidate_paths = [
-                os.path.join(BASE_DIR, "templates", "index.html"),
-                os.path.join(BASE_DIR, "..", "templates", "index.html"),
-                os.path.join(os.getcwd(), "templates", "index.html")
-            ]
-            for template_path in candidate_paths:
-                if os.path.exists(template_path):
-                    with open(template_path, "r", encoding="utf-8") as f:
-                        return self._send_html(f.read())
-            return self._send_html("<h1>Antigravity Media Hub</h1><p>Template index.html missing.</p>", status=404)
+            template_path = os.path.join(BASE_DIR, "templates", "index.html")
+            if os.path.exists(template_path):
+                with open(template_path, "r", encoding="utf-8") as f:
+                    return self._send_html(f.read())
+            return self._send_html("<h1>Antigravity Media Hub</h1><p>Template missing.</p>", status=404)
 
         # 1.1 Static Assets Routing (/static/...)
         elif path.startswith("/static/"):
             file_rel = path.lstrip("/")
-            candidate_files = [
-                os.path.join(BASE_DIR, file_rel),
-                os.path.join(BASE_DIR, "..", file_rel),
-                os.path.join(os.getcwd(), file_rel)
-            ]
-            file_path = None
-            for cand in candidate_files:
-                if os.path.exists(cand) and os.path.isfile(cand):
-                    file_path = cand
-                    break
-                    
-            if file_path:
+            file_path = os.path.join(BASE_DIR, file_rel)
+            if os.path.exists(file_path) and os.path.isfile(file_path):
                 content_type = "image/jpeg"
                 if file_path.endswith(".png"): content_type = "image/png"
                 elif file_path.endswith(".svg"): content_type = "image/svg+xml"
@@ -404,6 +391,36 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             queue = agent_bridge.list_commands()
             return self._send_json(queue)
 
+        # 6. REST API: Media Hub Settings (/api/settings)
+        elif path == "/api/settings":
+            settings_path = Path.home() / ".gemini" / "config" / "media_hub_settings.json"
+            defaults = {
+                "default_provider": "torbox",
+                "max_concurrent_downloads": 2,
+                "staging_dir": "/Volumes/512GB/AI Workspace/media_staging",
+                "torbox_token": os.environ.get("TORBOX_API_TOKEN", ""),
+                "aria2_rpc_host": "127.0.0.1",
+                "aria2_rpc_port": 6800,
+                "aria2_rpc_secret": "",
+                "nas_host": "",
+                "nas_user": "admin",
+                "nas_port": 22,
+                "nas_path": "/volume1/video/TV Shows",
+                "gdrive_remote": "gdrive",
+                "gdrive_root": "Phim/TV Shows",
+                "sync_targets": ["drive"],
+                "sync_transfers": 4,
+                "auto_purge": True
+            }
+            if settings_path.is_file():
+                try:
+                    with open(settings_path, "r", encoding="utf-8") as f:
+                        saved = json.load(f)
+                        defaults.update(saved)
+                except Exception:
+                    pass
+            return self._send_json(defaults)
+
         else:
             self.send_error(404, "Not Found")
 
@@ -451,6 +468,56 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                 return self._send_json({"success": False, "error": "Empty command"}, status=400)
             item = agent_bridge.add_command(cmd)
             return self._send_json({"success": True, "command": item})
+
+        # 4. API: Save Media Hub Settings (/api/settings)
+        elif path == "/api/settings":
+            settings_path = Path.home() / ".gemini" / "config" / "media_hub_settings.json"
+            settings_path.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                with open(settings_path, "w", encoding="utf-8") as f:
+                    json.dump(req_data, f, indent=2, ensure_ascii=False)
+                return self._send_json({"success": True, "message": "Đã lưu cài đặt thành công!"})
+            except Exception as e:
+                return self._send_json({"success": False, "error": str(e)}, status=500)
+
+        # 5. API: Scan NAS Plex Directories (/api/nas/scan)
+        elif path == "/api/nas/scan":
+            host = req_data.get("host")
+            user = req_data.get("user", "admin")
+            port = int(req_data.get("port", 22))
+            if not host:
+                return self._send_json({"success": False, "error": "Thiếu địa chỉ IP NAS"}, status=400)
+            
+            common_nas_paths = [
+                "/volume1/video/TV Shows", "/volume1/video/Movies",
+                "/volume1/Media", "/volume1/Plex",
+                "/share/CACHEDEV1_DATA/Multimedia/TV Shows",
+                "/share/Multimedia/Plex", "/srv/media"
+            ]
+            ssh_cmd = ["ssh", "-p", str(port), "-o", "BatchMode=yes", "-o", "ConnectTimeout=5", f"{user}@{host}"]
+            remote_script = f"for p in {' '.join(common_nas_paths)}; do if [ -d \"$p\" ]; then echo \"FOUND:$p\"; fi; done"
+            
+            try:
+                res = subprocess.run(ssh_cmd + [remote_script], capture_output=True, text=True, timeout=8)
+                found = [line.split(":", 1)[1].strip() for line in res.stdout.splitlines() if line.startswith("FOUND:")]
+                return self._send_json({"success": True, "libraries": found})
+            except Exception as e:
+                return self._send_json({"success": False, "error": f"Không thể kết nối SSH tới NAS: {e}"})
+
+        # 6. API: Check Google Drive Connection (/api/gdrive/check)
+        elif path == "/api/gdrive/check":
+            remote = req_data.get("remote", "gdrive")
+            root = req_data.get("root", "Phim/TV Shows")
+            rclone_bin = shutil.which("rclone") or "/opt/homebrew/bin/rclone"
+            cmd = [rclone_bin, "lsd", f"{remote}:{root.lstrip('/')}"]
+            try:
+                res = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+                if res.returncode == 0:
+                    return self._send_json({"success": True, "message": f"Kết nối tới {remote}:{root} thành công!"})
+                else:
+                    return self._send_json({"success": False, "error": res.stderr.strip() or "Lỗi kết nối Rclone"})
+            except Exception as e:
+                return self._send_json({"success": False, "error": str(e)})
 
         else:
             self.send_error(404, "Not Found")

@@ -1,0 +1,91 @@
+{
+  "categories": {
+    "Food & Dining": {
+      "name_vi": "Ăn uống & Ẩm thực",
+      "icon": "🍔",
+      "keywords": [
+        "highland", "phuc long", "phúc long", "starbucks", "the coffee house", "katinat", "cafe", "cà phê",
+        "shopeefood", "grabfood", "baemin", "food", "lotte mart", "coopmart", "co.op", "winmart", "vinmart",
+        "bach hoa xanh", "bách hoá xanh", "bách hóa xanh", "gs25", "circle k", "family mart", "ministop",
+        "nướng", "lẩu", "bbq", "pizza", "kfc", "lotteria", "jollibee", "mcdonald", "pho", "phở", "bún", "cơm",
+        "bánh mì", "trà sữa", "topping", "quán ăn", "nhà hàng", "bếp", "thịt", "rau", "hải sản", "trái cây"
+      ]
+    },
+    "Shopping": {
+      "name_vi": "Mua sắm & Tiêu dùng",
+      "icon": "🛍️",
+      "keywords": [
+        "shopee", "lazada", "tiki", "tiktok shop", "sendo", "amazon", "quần", "áo", "váy", "giày", "dép",
+        "túi xách", "mỹ phẩm", "son", "kem dưỡng", "nước hoa", "uniqlo", "zara", "h&m", "routine", "coolmate",
+        "yody", "hasaki", "guardian", "watsons", "thời trang", "phụ kiện", "trang sức", "đồng hồ", "vải"
+      ]
+    },
+    "Utilities & Housing": {
+      "name_vi": "Hoá đơn & Tiện ích",
+      "icon": "💡",
+      "keywords": [
+        "evn", "điện lực", "tiền điện", "cấp nước", "tiền nước", "viettel", "vnpt", "fpt telecom", "internet",
+        "truyền hình", "chung cư", "tiền nhà", "thuê nhà", "ban quản lý", "phí dịch vụ", "vệ sinh", "rác",
+        "gas", "năng lượng"
+      ]
+    },
+    "Transportation": {
+      "name_vi": "Di chuyển & Đi lại",
+      "icon": "🚗",
+      "keywords": [
+        "grab", "be group", "gojek", "xanh sm", "taxi", "mai linh", "vinataxi", "petrolimex", "pvoil", "xăng",
+        "dầu", "gửi xe", "vé xe", "vé tàu", "vé máy bay", "vietnam airlines", "vietjet", "bamboo", "bot",
+        "epass", "vetc", "bảo dưỡng xe", "rửa xe", "sửa xe", "thay nhớt"
+      ]
+    },
+    "Healthcare": {
+      "name_vi": "Y tế & Sức khoẻ",
+      "icon": "💊",
+      "keywords": [
+        "pharmacity", "long châu", "long chau", "an khang", "nhà thuốc", "hiệu thuốc", "thuốc", "bệnh viện",
+        "phòng khám", "bác sĩ", "xét nghiệm", "nha khoa", "răng", "mắt", "kính", "khám bệnh", "bảo hiểm y tế",
+        "vitamin", "thực phẩm chức năng"
+      ]
+    },
+    "Education": {
+      "name_vi": "Giáo dục & Học tập",
+      "icon": "📚",
+      "keywords": [
+        "fahasa", "nhã nam", "nha nam", "kim đồng", "sách", "học phí", "khóa học", "khoá học", "udemy",
+        "coursera", "tiếng anh", "ielts", "toeic", "trường", "đại học", "văn phòng phẩm", "bút", "vở", "giấy"
+      ]
+    },
+    "Entertainment & Travel": {
+      "name_vi": "Giải trí & Du lịch",
+      "icon": "🎬",
+      "keywords": [
+        "cgv", "lotte cinema", "bhd", "galaxy cinema", "netflix", "spotify", "youtube premium", "steam",
+        "playstation", "nintendo", "game", "khách sạn", "hotel", "resort", "homestay", "agoda", "booking.com",
+        "traveloka", "klook", "vé tham quan", "tour", "karaoke", "bida", "bowling"
+      ]
+    },
+    "Technology & Electronics": {
+      "name_vi": "Công nghệ & Điện tử",
+      "icon": "💻",
+      "keywords": [
+        "thegioididong", "thế giới di động", "fpt shop", "cellphones", "hoanghamobile", "gearvn", "hacom",
+        "memoryzone", "apple", "samsung", "xiaomi", "laptop", "máy tính", "chuột", "bàn phím", "tai nghe",
+        "màn hình", "ổ cứng", "ssd", "ram", "cáp sạc", "pin", "icloud", "chatgpt", "github", "google one"
+      ]
+    },
+    "Financial & Fees": {
+      "name_vi": "Tài chính & Phí",
+      "icon": "🏦",
+      "keywords": [
+        "phí chuyển tiền", "phí duy trì", "phí thường niên", "lãi vay", "trả góp", "home credit", "fe credit",
+        "mcredit", "sao kê", "thẻ tín dụng", "tất toán", "phí dịch vụ ngân hàng", "chứng khoán", "vndirect",
+        "ssi", "tcb", "vcb", "mbbank"
+      ]
+    },
+    "Uncategorized": {
+      "name_vi": "Chưa phân loại / Khác",
+      "icon": "❓",
+      "keywords": []
+    }
+  }
+}
