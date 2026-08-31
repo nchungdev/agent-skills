@@ -59,9 +59,10 @@ def execute_scoped_command(command: str):
     
     if intent == "TORBOX_OP":
         try:
-            from core.torbox_manager import TorboxManager
-            tb = TorboxManager()
-            torrents = tb.get_torrents()
+            from core.torbox_manager import TorBoxManager
+            tb = TorBoxManager()
+            tb_res = tb.list_torrents()
+            torrents = tb_res.get("data", [])
             ready = [t for t in torrents if t.get("download_state") in ["completed", "cached"]]
             queued = [t for t in torrents if t.get("download_state") not in ["completed", "cached"]]
             
