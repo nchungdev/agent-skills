@@ -931,51 +931,7 @@
     </button>
   </nav>
 
-  <!-- Floating AI Agent Chat Button (Desktop / Tablet only) -->
-  <button id="floating-ai-btn" onclick="setTab('agent')" class="hidden lg:flex fixed bottom-6 right-6 z-[9999] cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-xs rounded-full px-4 py-3 shadow-2xl shadow-blue-500/30 items-center gap-2 border border-blue-400/30 transition transform hover:scale-105 active:scale-95">
-    <span class="text-base animate-bounce">🤖</span>
-    <span>AI Agent Assistant</span>
-    <span id="ai-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-  </button>
 
-  <!-- Floating AI Chat Window -->
-  <div id="floating-ai-chat" class="fixed bottom-6 right-6 z-[10000] w-80 sm:w-96 h-[490px] bg-zinc-950/95 backdrop-blur-xl border border-zinc-700/80 rounded-3xl shadow-2xl flex flex-col hidden overflow-hidden transition-all duration-300">
-    <!-- Chat Header -->
-    <div class="p-3.5 bg-zinc-900/90 border-b border-zinc-800 flex justify-between items-center">
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/40 text-blue-400 flex items-center justify-center font-bold text-sm">
-          🤖
-        </div>
-        <div>
-          <div class="font-bold text-xs text-white flex items-center gap-1.5">
-            Antigravity AI Agent
-            <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
-          </div>
-          <p class="text-[10px] text-zinc-400">Trực tuyến • Phản hồi lệnh tức thì</p>
-        </div>
-      </div>
-      <button onclick="toggleAIChat()" class="w-7 h-7 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white flex items-center justify-center text-xs transition">✕</button>
-    </div>
-
-    <!-- Messages Container -->
-    <div id="ai-chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3.5 custom-scroll text-xs">
-      <div class="flex items-start gap-2">
-        <div class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs shrink-0">🤖</div>
-        <div class="p-3 rounded-2xl rounded-tl-none bg-zinc-900 border border-zinc-800 text-zinc-300 space-y-1">
-          <div>Xin chào! Tôi là AI Agent điều phối Media Hub. Bạn có thể gửi lệnh điều khiển hoặc hỏi bất cứ điều gì về tiến trình tải phim tại đây.</div>
-          <div class="text-[9px] text-zinc-500 font-mono text-right">Vừa xong</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Message Input Bar -->
-    <div class="p-3 bg-zinc-900/90 border-t border-zinc-800 flex gap-2 items-center">
-      <input type="text" id="ai-chat-input" onkeydown="if(event.key==='Enter') sendAIChatMessage()" placeholder="Nhập lệnh cho AI Agent..." class="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500">
-      <button onclick="sendAIChatMessage()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center shadow-md shadow-blue-600/20">
-        <span>➤</span>
-      </button>
-    </div>
-  </div>
 
   <!-- Global Toast Notification Container -->
   <div id="toast-container" class="fixed top-5 right-5 z-[99999] flex flex-col gap-2.5 max-w-sm w-full pointer-events-none"></div>
