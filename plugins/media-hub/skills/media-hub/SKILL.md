@@ -65,17 +65,25 @@ Media Hub tự động quét, gộp và đồng bộ cấu hình từ **Biến m
 
 ## 💻 Cách Khởi Chạy Dashboard
 
-### 1. Khởi Chạy 1-Chạm (Tự Động Bật TryCloudflare & In Link Ra Màn Hình):
+### 1. Khởi Chạy Mặc Định (Chế Độ Nội Bộ / Localhost):
 ```bash
 python3 /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/launcher.py
 # Hoặc:
 bash /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/launch_dashboard.sh
 ```
+* Dashboard khởi động ngay tại `http://127.0.0.1:8888` và IP mạng LAN nội bộ.
 
-Khi chạy, script sẽ tự động tạo đường truyền **TryCloudflare** miễn phí, bắt link và in ngay ra màn hình cho người dùng:
+### 2. Mở Rộng Truy Cập Online Từ Xa (Tùy Chọn `--tunnel`):
+Khi muốn truy cập Dashboard từ điện thoại di động 4G/5G hoặc máy tính bên ngoài, thêm cờ `--tunnel` (hoặc `--public`):
+```bash
+python3 /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/launcher.py --tunnel
+# Hoặc:
+bash /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/launch_dashboard.sh --tunnel
+```
+Script sẽ tự động tạo đường truyền **TryCloudflare** miễn phí, bắt link và in ngay ra màn hình cho người dùng:
 ```text
 ================================================================
-🎉 LINK TRUY CẬP ONLINE THỜI GIAN THỰC (TRYCLOUDFLARE):
+🎉 LINK TRUY CẬP ONLINE TỪ XA (TRYCLOUDFLARE):
 👉 https://constitution-plates-leisure-delegation.trycloudflare.com
 ================================================================
 ```
@@ -84,5 +92,6 @@ Khi chạy, script sẽ tự động tạo đường truyền **TryCloudflare** 
 
 ## 🌐 Truy Cập Giao Diện Web
 
-* **Localhost:** `http://127.0.0.1:8888`
-* **Public Cloudflare Tunnel:** Truy cập an toàn qua URL `https://*.trycloudflare.com` từ điện thoại iPhone / Android hoặc máy tính từ xa.
+* **Mặc định (Nội bộ):** `http://127.0.0.1:8888` (hoặc `http://<LAN-IP>:8888`)
+* **Tùy chọn Online (Khi bật `--tunnel`):** Truy cập an toàn qua URL `https://*.trycloudflare.com` từ điện thoại iPhone / Android hoặc máy tính từ xa.
+
