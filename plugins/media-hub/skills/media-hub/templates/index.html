@@ -2,7 +2,11 @@
 <html lang="vi" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Antigravity Hub">
+  <meta name="theme-color" content="#09090b">
   <title>Antigravity Media Hub & Command Center</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
@@ -19,15 +23,17 @@
     }
   </script>
   <style>
-    body { background-color: #09090b; color: #f4f4f5; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #09090b; color: #f4f4f5; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+    .safe-bottom { padding-bottom: max(0.5rem, env(safe-area-inset-bottom)); }
+    .safe-top { padding-top: max(0.5rem, env(safe-area-inset-top)); }
   </style>
 </head>
 <body class="h-screen overflow-hidden flex bg-[#09090b] antialiased selection:bg-blue-500 selection:text-white">
 
-  <!-- Left Sidebar Navigation -->
-  <aside class="w-64 bg-zinc-950 border-r border-zinc-800 flex flex-col justify-between shrink-0 select-none z-30">
+  <!-- Left Sidebar Navigation (Desktop / Tablet lg+ only) -->
+  <aside class="hidden lg:flex w-64 bg-zinc-950 border-r border-zinc-800 flex-col justify-between shrink-0 select-none z-30">
     <div>
       <!-- Brand Logo Header -->
       <div class="h-16 shrink-0 px-5 border-b border-zinc-800 flex items-center gap-3">
@@ -121,6 +127,28 @@
   <!-- Main View Area (Right Content) -->
   <div class="flex-1 flex flex-col h-screen overflow-y-auto custom-scroll">
 
+    <!-- Mobile Top Bar Header (Visible on Mobile only) -->
+    <header class="lg:hidden h-14 shrink-0 bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-4 flex items-center justify-between z-30 sticky top-0">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-md font-bold text-sm">
+          🪐
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="font-bold text-xs text-white">Antigravity Hub</h1>
+            <span class="px-1.5 py-0.2 text-[8px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">v2.4</span>
+          </div>
+          <p class="text-[9px] text-zinc-400">Media Hub & Pipelines</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="fetchData()" class="px-2.5 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-zinc-300 rounded-lg flex items-center gap-1 transition shadow-sm">
+          <span>🔄</span> <span class="hidden sm:inline">Làm Mới</span>
+        </button>
+      </div>
+    </header>
+
     <!-- Main Content Panels -->
     <main class="flex-1 flex flex-col w-full min-h-0">
 
@@ -128,33 +156,33 @@
       <div id="tab-home" class="space-y-0">
         
         <!-- Pinned Header (Sticky Top-0 Flush) -->
-        <div class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-4 shadow-sm">
-          <div class="flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-base border border-blue-500/20">
+        <div class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-base border border-blue-500/20 shrink-0">
               🏠
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <h3 class="font-bold text-sm text-white">Tổng Quan Hệ Thống Antigravity</h3>
-                <span class="px-2 py-0.5 text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">Live v2.4</span>
+                <h3 class="font-bold text-sm text-white">Tổng Quan Hệ Thống</h3>
+                <span class="px-1.5 py-0.2 text-[9px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">Live v2.4</span>
               </div>
-              <p class="text-xs text-zinc-400">Tự động stream cuốn chiếu TorBox Cloud về Google Drive Plex, dọn dẹp sau mỗi tập</p>
+              <p class="text-xs text-zinc-400 hidden sm:block">Tự động stream cuốn chiếu TorBox Cloud về Google Drive Plex, dọn dẹp sau mỗi tập</p>
             </div>
           </div>
 
           <div class="flex items-center gap-2">
-            <button onclick="setTab('pipelines')" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold transition shadow-md shadow-blue-600/20 flex items-center gap-1.5">
-              <span>🚀</span> Xem Tiến Trình
+            <button onclick="setTab('pipelines')" class="px-3 py-1.5 sm:px-3.5 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold transition shadow-md shadow-blue-600/20 flex items-center gap-1.5">
+              <span>🚀</span> <span class="hidden sm:inline">Xem</span> Tiến Trình
             </button>
-            <button onclick="fetchData()" class="px-3.5 py-2 text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-xl text-zinc-300 transition flex items-center gap-1.5 shadow-sm">
+            <button onclick="fetchData()" class="px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-xl text-zinc-300 transition flex items-center gap-1.5 shadow-sm">
               <span>🔄</span> Làm Mới
             </button>
           </div>
         </div>
 
-        <div class="p-6 space-y-6 max-w-7xl w-full mx-auto">
-          <!-- 4 KPI Summary Cards -->
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-4 sm:p-6 pb-24 lg:pb-8 space-y-6 max-w-7xl w-full mx-auto">
+          <!-- 4 KPI Summary Cards (Mobile Responsive: 1 col on phone, 2 cols on tablet, 4 on desktop) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <div class="p-4 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 hover:border-zinc-700 transition">
               <div class="text-xs text-zinc-400 font-medium">Monster 1080p BluRay</div>
               <div class="text-xl font-bold text-blue-400 mt-2" id="kpi-monster-val">74 / 74 tập</div>
@@ -391,43 +419,39 @@
       <div id="tab-pipelines" class="hidden space-y-0">
         
         <!-- Pinned Header (Sticky Top-0 Flush) -->
-        <div class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-4 shadow-sm">
-          <div class="flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-base border border-amber-500/20">
+        <div class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-base border border-amber-500/20 shrink-0">
               🚀
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <h3 class="font-bold text-sm text-white">Chuỗi Đồng Bộ & Tải Phim Tự Động Vào Google Drive Plex</h3>
-                <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20" id="multi-status-badge">
-                  Đang Chạy Tự Động
+                <h3 class="font-bold text-sm text-white">Chuỗi Đồng Bộ & Tải Phim</h3>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20" id="multi-status-badge">
+                  Tự Động
                 </span>
               </div>
-              <p class="text-xs text-zinc-400">Stream tốc độ cao từ TorBox Cloud về Google Drive Plex, giải phóng ổ cứng sau mỗi tập</p>
+              <p class="text-xs text-zinc-400 hidden sm:block">Stream tốc độ cao từ TorBox Cloud về Google Drive Plex, giải phóng ổ cứng sau mỗi tập</p>
             </div>
           </div>
 
-          <div class="flex items-center gap-3">
-            <div class="text-right hidden sm:block">
-              <div class="text-[11px] font-medium text-zinc-400">Trạng Thái Toàn Hệ Thống</div>
-              <div class="text-xs font-bold text-amber-400 truncate max-w-[260px]" id="unified-summary-status">Đang đồng bộ Cross Fight B-Daman eS</div>
-            </div>
-            <button onclick="fetchData()" class="px-3.5 py-2 text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-xl text-zinc-300 transition flex items-center gap-1.5 shadow-sm">
+          <div class="flex items-center gap-2">
+            <button onclick="fetchData()" class="px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-xl text-zinc-300 transition flex items-center gap-1.5 shadow-sm">
               <span>🔄</span> Làm Mới
             </button>
           </div>
         </div>
 
-        <div class="p-6 space-y-4 max-w-7xl w-full mx-auto">
+        <div class="p-4 sm:p-6 pb-24 lg:pb-8 space-y-4 max-w-7xl w-full mx-auto">
           <!-- Pipeline Filter Pills -->
           <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
-            <div class="flex items-center gap-2 overflow-x-auto custom-scroll">
-              <button onclick="filterPipelineStatus('all')" id="pipefilter-all" class="pipe-filter-btn px-3.5 py-1.5 rounded-xl bg-blue-600 text-white font-semibold transition">Tất Cả (9)</button>
-              <button onclick="filterPipelineStatus('active')" id="pipefilter-active" class="pipe-filter-btn px-3.5 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition">⚡ Đang Chạy (1)</button>
-              <button onclick="filterPipelineStatus('done')" id="pipefilter-done" class="pipe-filter-btn px-3.5 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition">✓ Hoàn Thành (3)</button>
-              <button onclick="filterPipelineStatus('queued')" id="pipefilter-queued" class="pipe-filter-btn px-3.5 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition">⏳ Hàng Đợi (5)</button>
+            <div class="flex items-center gap-2 overflow-x-auto custom-scroll pb-1 w-full sm:w-auto">
+              <button onclick="filterPipelineStatus('all')" id="pipefilter-all" class="pipe-filter-btn px-3 py-1.5 rounded-xl bg-blue-600 text-white font-semibold transition shrink-0">Tất Cả (9)</button>
+              <button onclick="filterPipelineStatus('active')" id="pipefilter-active" class="pipe-filter-btn px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0">⚡ Đang Chạy (1)</button>
+              <button onclick="filterPipelineStatus('done')" id="pipefilter-done" class="pipe-filter-btn px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0">✓ Hoàn Thành (3)</button>
+              <button onclick="filterPipelineStatus('queued')" id="pipefilter-queued" class="pipe-filter-btn px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0">⏳ Hàng Đợi (5)</button>
             </div>
-            <div class="text-[11px] text-zinc-500 font-mono" id="pipeline-filter-summary">
+            <div class="text-[11px] text-zinc-500 font-mono hidden sm:block" id="pipeline-filter-summary">
               Hiển thị 9 tác vụ
             </div>
           </div>
@@ -444,35 +468,35 @@
       <div id="tab-torbox" class="hidden space-y-0">
         
         <!-- Pinned Header (Sticky Top-0 Flush) -->
-        <div class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-4 shadow-sm">
-          <div class="flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold text-base border border-purple-500/20">
+        <div class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold text-base border border-purple-500/20 shrink-0">
               ⚡
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <h3 class="font-bold text-sm text-white">Quản Lý TorBox Cloud Cache</h3>
-                <span class="px-2 py-0.5 text-[10px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/30 rounded" id="torbox-count">32 Torrents (24 Sẵn Sàng, 8 Hàng Đợi)</span>
+                <h3 class="font-bold text-sm text-white">Quản Lý TorBox</h3>
+                <span class="px-1.5 py-0.2 text-[9px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/30 rounded" id="torbox-count">32 mục</span>
               </div>
-              <p class="text-xs text-zinc-400">Tải trực tiếp về máy • Thêm Magnet • Xóa Torrent • Lọc theo trạng thái</p>
+              <p class="text-xs text-zinc-400 hidden sm:block">Tải trực tiếp về máy • Thêm Magnet • Xóa Torrent • Lọc theo trạng thái</p>
             </div>
           </div>
 
           <div class="flex items-center gap-2">
-            <input type="text" id="torbox-search" oninput="filterTorbox()" placeholder="🔍 Tìm kiếm torrent..." class="bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 w-48 sm:w-64">
-            <button onclick="openModal('modal-add-magnet')" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs rounded-xl transition shadow-md shadow-purple-600/20 flex items-center gap-1.5">
-              <span>➕</span> Thêm Magnet
+            <input type="text" id="torbox-search" oninput="filterTorbox()" placeholder="🔍 Tìm torrent..." class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 w-32 sm:w-48">
+            <button onclick="openModal('modal-add-magnet')" class="px-3 py-1.5 sm:px-4 sm:py-2 bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs rounded-xl transition shadow-md shadow-purple-600/20 flex items-center gap-1 shrink-0">
+              <span>➕</span> <span class="hidden sm:inline">Thêm</span> Magnet
             </button>
           </div>
         </div>
 
-        <div class="p-6 space-y-4 max-w-7xl w-full mx-auto">
+        <div class="p-4 sm:p-6 pb-24 lg:pb-8 space-y-4 max-w-7xl w-full mx-auto">
           <!-- TorBox Filter Pills -->
           <div class="flex gap-2 overflow-x-auto custom-scroll pb-1 text-xs">
-            <button onclick="filterTorboxStatus('all')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white font-medium hover:bg-zinc-700 transition active" id="tbfilter-all">Tất Cả</button>
-            <button onclick="filterTorboxStatus('ready')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition" id="tbfilter-ready">🟢 Sẵn Sàng (Ready/Cached)</button>
-            <button onclick="filterTorboxStatus('active')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition" id="tbfilter-active">🚀 Đang Tải (Active)</button>
-            <button onclick="filterTorboxStatus('queued')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition" id="tbfilter-queued">⏳ Hàng Đợi (Queued)</button>
+            <button onclick="filterTorboxStatus('all')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white font-medium hover:bg-zinc-700 transition active shrink-0" id="tbfilter-all">Tất Cả</button>
+            <button onclick="filterTorboxStatus('ready')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="tbfilter-ready">🟢 Sẵn Sàng</button>
+            <button onclick="filterTorboxStatus('active')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="tbfilter-active">🚀 Đang Tải</button>
+            <button onclick="filterTorboxStatus('queued')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="tbfilter-queued">⏳ Hàng Đợi</button>
           </div>
 
           <div class="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl">
@@ -501,65 +525,65 @@
       <div id="tab-gdrive" class="hidden space-y-0">
         
         <!-- Pinned Library View Header (Sticky Top-0 Flush) -->
-        <div id="gdrive-header-library" class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-4 shadow-sm">
-          <div class="flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-base border border-amber-500/20 shadow-inner">
+        <div id="gdrive-header-library" class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-base border border-amber-500/20 shadow-inner shrink-0">
               📁
             </div>
             <div>
               <div class="flex items-center gap-2">
                 <h3 class="font-bold text-sm text-white">Thư Viện Google Drive</h3>
-                <span class="px-2 py-0.5 text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded">31 SHOWS • 2,733 FILES</span>
+                <span class="px-1.5 py-0.2 text-[9px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded">31 SHOWS</span>
               </div>
-              <p class="text-xs text-zinc-400">Kho lưu trữ media đám mây • Gắn thẻ chất lượng & phụ đề chuẩn hóa</p>
+              <p class="text-xs text-zinc-400 hidden sm:block">Kho lưu trữ media đám mây • Gắn thẻ chất lượng & phụ đề chuẩn hóa</p>
             </div>
           </div>
 
           <div class="flex items-center gap-2">
-            <input type="text" id="plex-search" oninput="filterPlexShows()" placeholder="🔍 Tìm kiếm trong Google Drive..." class="bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500 w-48 sm:w-64">
-            <button onclick="triggerPlexScan()" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-xl transition shadow-md shadow-amber-500/20 flex items-center gap-1.5">
-              <span>⚡</span> Quét Lại
+            <input type="text" id="plex-search" oninput="filterPlexShows()" placeholder="🔍 Tìm kiếm..." class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500 w-32 sm:w-48">
+            <button onclick="triggerPlexScan()" class="px-3 py-1.5 sm:px-4 sm:py-2 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-xl transition shadow-md shadow-amber-500/20 flex items-center gap-1 shrink-0">
+              <span>⚡</span> <span class="hidden sm:inline">Quét</span> Lại
             </button>
           </div>
         </div>
 
         <!-- Pinned Show Detail Top Header (Sticky Top-0 Flush) -->
-        <div id="gdrive-header-show" class="hidden sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-4 shadow-sm">
-          <div class="flex items-center gap-3">
-            <button onclick="backToPlexLibrary()" class="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-bold text-amber-400 transition flex items-center gap-1.5 shadow-sm">
-              <span>←</span> Quay Lại Google Drive
+        <div id="gdrive-header-show" class="hidden sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+          <div class="flex items-center gap-2.5 sm:gap-3">
+            <button onclick="backToPlexLibrary()" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-bold text-amber-400 transition flex items-center gap-1 shadow-sm shrink-0">
+              <span>←</span> <span class="hidden sm:inline">Quay Lại</span>
             </button>
             <div class="h-5 w-px bg-zinc-800 hidden sm:block"></div>
             <div>
-              <div class="flex items-center gap-2">
-                <h3 class="font-bold text-sm text-white truncate max-w-xs sm:max-w-md" id="header-show-title">Tên Phim</h3>
-                <span class="px-2 py-0.5 text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded" id="header-show-badge">1080p BDRip</span>
+              <div class="flex items-center gap-1.5 sm:gap-2">
+                <h3 class="font-bold text-xs sm:text-sm text-white truncate max-w-[150px] sm:max-w-md" id="header-show-title">Tên Phim</h3>
+                <span class="px-1.5 py-0.2 text-[9px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded shrink-0" id="header-show-badge">1080p</span>
               </div>
-              <p class="text-xs text-zinc-400" id="header-show-subtitle">Google Drive Storage • Đã chuẩn hóa tập</p>
+              <p class="text-[10px] text-zinc-400 hidden sm:block" id="header-show-subtitle">Google Drive Storage • Đã chuẩn hóa tập</p>
             </div>
           </div>
 
           <div class="flex items-center gap-2">
-            <button onclick="triggerPlexScan()" class="px-3.5 py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-zinc-300 rounded-xl transition flex items-center gap-1.5 shadow-sm">
-              <span>⚡</span> Quét Lại File
+            <button onclick="triggerPlexScan()" class="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-zinc-300 rounded-xl transition flex items-center gap-1 shadow-sm">
+              <span>⚡</span> <span class="hidden sm:inline">Quét Lại</span>
             </button>
           </div>
         </div>
 
-        <div class="p-6 space-y-5 max-w-7xl w-full mx-auto">
+        <div class="p-4 sm:p-6 pb-24 lg:pb-8 space-y-5 max-w-7xl w-full mx-auto">
           <!-- VIEW 1: PLEX LIBRARY VIEW -->
-          <div id="plex-view-library" class="space-y-5">
+          <div id="plex-view-library" class="space-y-4">
             <!-- Quick Filter Pills -->
             <div class="flex gap-2 overflow-x-auto custom-scroll pb-1 text-xs">
-              <button onclick="filterPlexTag('all')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white font-medium hover:bg-zinc-700 transition active" id="pfilter-all">Tất Cả (17)</button>
-              <button onclick="filterPlexTag('1080p')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition" id="pfilter-1080p">🎬 1080p BDRip / WEB-DL</button>
-              <button onclick="filterPlexTag('480p')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition" id="pfilter-480p">📺 480p DVD</button>
-              <button onclick="filterPlexTag('anime')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition" id="pfilter-anime">🎌 Anime</button>
-              <button onclick="filterPlexTag('live')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition" id="pfilter-live">🎥 Live Action</button>
+              <button onclick="filterPlexTag('all')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white font-medium hover:bg-zinc-700 transition active shrink-0" id="pfilter-all">Tất Cả (17)</button>
+              <button onclick="filterPlexTag('1080p')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="pfilter-1080p">🎬 1080p</button>
+              <button onclick="filterPlexTag('480p')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="pfilter-480p">📺 480p</button>
+              <button onclick="filterPlexTag('anime')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="pfilter-anime">🎌 Anime</button>
+              <button onclick="filterPlexTag('live')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="pfilter-live">🎥 Live Action</button>
             </div>
 
             <!-- Plex Poster Grid -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4" id="plex-poster-grid">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4" id="plex-poster-grid">
               <!-- JS will populate Plex cards -->
             </div>
           </div>
@@ -569,42 +593,42 @@
 
             <!-- Sleek Inline Back Button Bar -->
             <div class="flex items-center justify-between">
-              <button onclick="backToPlexLibrary()" class="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-bold text-amber-400 hover:text-amber-300 transition flex items-center gap-2 shadow-sm">
-                <span>←</span> Quay Lại Danh Sách Google Drive
+              <button onclick="backToPlexLibrary()" class="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-bold text-amber-400 hover:text-amber-300 transition flex items-center gap-1.5 shadow-sm">
+                <span>←</span> Quay Lại Danh Sách
               </button>
-              <div class="text-xs text-zinc-400">
-                <span class="text-zinc-500">Đang xem:</span> <span class="font-bold text-white" id="inline-show-name">Monster (2004)</span>
+              <div class="text-xs text-zinc-400 truncate max-w-[180px] sm:max-w-none">
+                <span class="text-zinc-500 hidden sm:inline">Đang xem:</span> <span class="font-bold text-white text-xs truncate" id="inline-show-name">Monster (2004)</span>
               </div>
             </div>
 
             <!-- Hero Show Banner -->
-            <div class="relative rounded-3xl overflow-hidden border border-zinc-800 bg-zinc-950 p-6 md:p-8">
+            <div class="relative rounded-3xl overflow-hidden border border-zinc-800 bg-zinc-950 p-4 sm:p-6 md:p-8">
               <div class="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/90 to-transparent z-10"></div>
               <div id="show-backdrop-bg" class="absolute inset-0 bg-cover bg-center opacity-25 filter blur-sm"></div>
 
-              <div class="relative z-20 flex flex-col md:flex-row gap-6 items-start">
+              <div class="relative z-20 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
                 <!-- Show Poster Frame (2:3) -->
-                <div class="w-36 sm:w-44 aspect-[2/3] rounded-2xl bg-zinc-900 border border-zinc-700/80 shadow-2xl flex flex-col justify-center items-center shrink-0 overflow-hidden relative" id="show-poster-box">
-                  <span class="text-6xl" id="show-hero-icon">🎬</span>
-                  <span class="absolute bottom-2 px-2 py-0.5 rounded bg-amber-500 text-black font-black text-[10px]" id="show-hero-badge">1080p BDRip</span>
+                <div class="w-28 sm:w-44 aspect-[2/3] rounded-2xl bg-zinc-900 border border-zinc-700/80 shadow-2xl flex flex-col justify-center items-center shrink-0 overflow-hidden relative mx-auto sm:mx-0" id="show-poster-box">
+                  <span class="text-5xl sm:text-6xl" id="show-hero-icon">🎬</span>
+                  <span class="absolute bottom-2 px-2 py-0.5 rounded bg-amber-500 text-black font-black text-[9px] sm:text-[10px]" id="show-hero-badge">1080p</span>
                 </div>
 
                 <!-- Show Meta Details -->
-                <div class="space-y-3 flex-1">
-                  <div class="flex flex-wrap items-center gap-2">
+                <div class="space-y-2.5 sm:space-y-3 flex-1 text-center sm:text-left">
+                  <div class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2">
                     <span class="px-2 py-0.5 rounded bg-amber-500 text-black font-black text-xs" id="show-hero-year">1993</span>
                     <span class="px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono text-xs" id="show-hero-tvdb">{tvdb-78864}</span>
                     <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold">✓ Drive Ready</span>
                   </div>
 
-                  <h2 class="text-2xl sm:text-3xl font-black text-white" id="show-hero-title">Tên Phim</h2>
-                  <div class="text-sm font-medium text-zinc-400" id="show-hero-vn">Tên Tiếng Việt</div>
+                  <h2 class="text-xl sm:text-3xl font-black text-white" id="show-hero-title">Tên Phim</h2>
+                  <div class="text-xs sm:text-sm font-medium text-zinc-400" id="show-hero-vn">Tên Tiếng Việt</div>
 
-                  <p class="text-xs text-zinc-300 leading-relaxed max-w-3xl" id="show-hero-plot">
+                  <p class="text-xs text-zinc-300 leading-relaxed max-w-3xl line-clamp-4 sm:line-clamp-none" id="show-hero-plot">
                     Tóm tắt nội dung...
                   </p>
 
-                  <div class="pt-2 flex flex-wrap gap-2 text-xs" id="show-hero-genres">
+                  <div class="pt-1 flex flex-wrap justify-center sm:justify-start gap-1.5 text-xs" id="show-hero-genres">
                     <!-- Genre tags -->
                   </div>
                 </div>
@@ -615,7 +639,7 @@
             <div class="space-y-4">
               <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
                 <h3 class="font-bold text-sm text-white flex items-center gap-2">
-                  <span>📺</span> Danh Sách Tập Theo Mùa (Seasons)
+                  <span>📺</span> Các Mùa (Seasons)
                 </h3>
                 <span class="text-xs text-zinc-400 font-mono" id="show-files-count">0 files</span>
               </div>
@@ -640,60 +664,59 @@
       <div id="tab-agent" class="hidden space-y-0">
         
         <!-- Pinned Header (Sticky Top-0 Flush) -->
-        <div class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-4 shadow-sm">
-          <div class="flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-base border border-blue-500/20">
+        <div class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-base border border-blue-500/20 shrink-0">
               🤖
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <h3 class="font-bold text-sm text-white">Antigravity AI Agent Assistant</h3>
-                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold">Trực Tuyến</span>
+                <h3 class="font-bold text-sm text-white">AI Agent Assistant</h3>
+                <span class="px-1.5 py-0.2 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-bold">Online</span>
               </div>
-              <p class="text-xs text-zinc-400">Điều phối luồng stream, giải mã phụ đề tự động và quản lý kho phim thông minh</p>
+              <p class="text-xs text-zinc-400 hidden sm:block">Điều phối luồng stream, giải mã phụ đề tự động và quản lý kho phim thông minh</p>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <button onclick="loadAgentQueueFull()" class="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-zinc-300 transition flex items-center gap-1.5 shadow-sm">
-              <span>🔄</span> Làm Mới Lịch Sử
+            <button onclick="loadAgentQueueFull()" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-zinc-300 transition flex items-center gap-1.5 shadow-sm">
+              <span>🔄</span> <span class="hidden sm:inline">Làm Mới</span>
             </button>
           </div>
         </div>
 
-        <div class="p-6 space-y-6 max-w-7xl w-full mx-auto">
+        <div class="p-4 sm:p-6 pb-24 lg:pb-8 space-y-4 max-w-7xl w-full mx-auto">
           <!-- Quick Prompts Pills -->
-          <div class="flex flex-wrap gap-2 text-xs">
-            <span class="text-zinc-500 text-xs flex items-center">Gợi ý lệnh nhanh:</span>
-            <button onclick="sendQuickCommand('Kiểm tra tiến độ chi tiết của tất cả các bộ phim đang đồng bộ')" class="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition">
+          <div class="flex gap-2 overflow-x-auto custom-scroll pb-1 text-xs">
+            <button onclick="sendQuickCommand('Kiểm tra tiến độ chi tiết của tất cả các bộ phim đang đồng bộ')" class="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition shrink-0">
               🔍 Tiến độ tất cả show
             </button>
-            <button onclick="sendQuickCommand('Tìm và bổ sung phụ đề tiếng Việt cho các tập mới nhất')" class="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition">
+            <button onclick="sendQuickCommand('Tìm và bổ sung phụ đề tiếng Việt cho các tập mới nhất')" class="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition shrink-0">
               💬 Bổ sung phụ đề Vietsub
             </button>
-            <button onclick="sendQuickCommand('Dọn dẹp thư mục đệm tạm sau khi sync hoàn tất')" class="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition">
+            <button onclick="sendQuickCommand('Dọn dẹp thư mục đệm tạm sau khi sync hoàn tất')" class="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition shrink-0">
               🧹 Dọn dẹp bộ nhớ đệm
             </button>
           </div>
 
           <!-- Chat Workspace Window -->
-          <div class="rounded-3xl bg-zinc-950 border border-zinc-800 flex flex-col h-[560px] overflow-hidden shadow-2xl">
+          <div class="rounded-3xl bg-zinc-950 border border-zinc-800 flex flex-col h-[460px] sm:h-[560px] overflow-hidden shadow-2xl">
             <!-- Messages Trajectory -->
-            <div id="full-agent-messages" class="flex-1 p-6 overflow-y-auto space-y-4 custom-scroll text-xs">
-              <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-sm shrink-0 font-bold">🤖</div>
-                <div class="p-4 rounded-2xl rounded-tl-none bg-zinc-900 border border-zinc-800 text-zinc-300 space-y-2 max-w-2xl">
+            <div id="full-agent-messages" class="flex-1 p-4 sm:p-6 overflow-y-auto space-y-3 sm:space-y-4 custom-scroll text-xs">
+              <div class="flex items-start gap-2.5 sm:gap-3">
+                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs sm:text-sm shrink-0 font-bold">🤖</div>
+                <div class="p-3.5 sm:p-4 rounded-2xl rounded-tl-none bg-zinc-900 border border-zinc-800 text-zinc-300 space-y-1.5 sm:space-y-2 max-w-2xl">
                   <p class="font-bold text-white">Xin chào! Tôi là Antigravity AI Agent.</p>
-                  <p class="leading-relaxed text-zinc-400">Bạn có thể gửi bất kỳ yêu cầu điều khiển hệ thống, yêu cầu tra cứu torrent, sắp xếp thứ tự tải hoặc xử lý video tại đây. Tôi sẽ phản hồi và xử lý tức thì.</p>
-                  <div class="text-[10px] text-zinc-500 font-mono">Hệ thống sẵn sàng tiếp nhận lệnh</div>
+                  <p class="leading-relaxed text-zinc-400 text-xs">Bạn có thể gửi bất kỳ yêu cầu điều khiển hệ thống, tra cứu torrent hoặc xử lý video tại đây.</p>
+                  <div class="text-[9px] sm:text-[10px] text-zinc-500 font-mono">Hệ thống sẵn sàng tiếp nhận lệnh</div>
                 </div>
               </div>
             </div>
 
             <!-- Bottom Command Input -->
-            <div class="p-4 bg-zinc-900/90 border-t border-zinc-800 flex gap-3 items-center">
-              <input type="text" id="full-agent-input" onkeydown="if(event.key==='Enter') sendFullAgentMessage()" placeholder="Nhập câu lệnh điều khiển hệ thống cho AI Agent..." class="flex-1 bg-zinc-950 border border-zinc-800 rounded-2xl px-4 py-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 shadow-inner">
-              <button onclick="sendFullAgentMessage()" class="px-5 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-2xl transition flex items-center gap-2 shadow-lg shadow-blue-600/30 shrink-0">
-                <span>Gửi Lệnh</span>
+            <div class="p-3 sm:p-4 bg-zinc-900/90 border-t border-zinc-800 flex gap-2 sm:gap-3 items-center">
+              <input type="text" id="full-agent-input" onkeydown="if(event.key==='Enter') sendFullAgentMessage()" placeholder="Nhập câu lệnh cho AI Agent..." class="flex-1 bg-zinc-950 border border-zinc-800 rounded-2xl px-3.5 py-2.5 sm:px-4 sm:py-3 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 shadow-inner">
+              <button onclick="sendFullAgentMessage()" class="px-4 py-2.5 sm:px-5 sm:py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-2xl transition flex items-center gap-1.5 sm:gap-2 shadow-lg shadow-blue-600/30 shrink-0">
+                <span class="hidden sm:inline">Gửi Lệnh</span>
                 <span>➤</span>
               </button>
             </div>
@@ -705,8 +728,44 @@
     </main>
   </div>
 
-  <!-- Floating AI Agent Chat Button -->
-  <button id="floating-ai-btn" onclick="setTab('agent')" class="fixed bottom-6 right-6 z-[9999] cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-xs rounded-full px-4 py-3 shadow-2xl shadow-blue-500/30 flex items-center gap-2 border border-blue-400/30 transition transform hover:scale-105 active:scale-95">
+  <!-- Mobile Bottom App Bar (Native iOS/Android Web App Navigation) -->
+  <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-800/80 px-2 py-1.5 flex items-center justify-around shadow-2xl safe-bottom">
+    <!-- 1. Home -->
+    <button onclick="setTab('home')" id="mobile-tab-btn-home" class="flex flex-col items-center justify-center flex-1 py-1 text-blue-400 font-bold transition">
+      <span class="text-lg">🏠</span>
+      <span class="text-[9px] mt-0.5 tracking-tight">Tổng Quan</span>
+    </button>
+
+    <!-- 2. Pipelines -->
+    <button onclick="setTab('pipelines')" id="mobile-tab-btn-pipelines" class="flex flex-col items-center justify-center flex-1 py-1 text-zinc-400 transition relative">
+      <span class="text-lg">🚀</span>
+      <span class="text-[9px] mt-0.5 tracking-tight">Tiến Trình</span>
+      <span class="absolute top-1 right-3 w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+    </button>
+
+    <!-- 3. TorBox -->
+    <button onclick="setTab('torbox')" id="mobile-tab-btn-torbox" class="flex flex-col items-center justify-center flex-1 py-1 text-zinc-400 transition relative">
+      <span class="text-lg">⚡</span>
+      <span class="text-[9px] mt-0.5 tracking-tight">TorBox</span>
+      <span class="absolute top-1 right-2.5 px-1 py-0.2 text-[8px] bg-purple-500 text-white rounded-full font-mono">32</span>
+    </button>
+
+    <!-- 4. Google Drive -->
+    <button onclick="setTab('gdrive')" id="mobile-tab-btn-gdrive" class="flex flex-col items-center justify-center flex-1 py-1 text-zinc-400 transition">
+      <span class="text-lg">📁</span>
+      <span class="text-[9px] mt-0.5 tracking-tight">G-Drive</span>
+    </button>
+
+    <!-- 5. AI Agent -->
+    <button onclick="setTab('agent')" id="mobile-tab-btn-agent" class="flex flex-col items-center justify-center flex-1 py-1 text-zinc-400 transition relative">
+      <span class="text-lg">🤖</span>
+      <span class="text-[9px] mt-0.5 tracking-tight">AI Agent</span>
+      <span class="absolute top-1 right-2.5 w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+    </button>
+  </nav>
+
+  <!-- Floating AI Agent Chat Button (Desktop / Tablet only) -->
+  <button id="floating-ai-btn" onclick="setTab('agent')" class="hidden lg:flex fixed bottom-6 right-6 z-[9999] cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-xs rounded-full px-4 py-3 shadow-2xl shadow-blue-500/30 items-center gap-2 border border-blue-400/30 transition transform hover:scale-105 active:scale-95">
     <span class="text-base animate-bounce">🤖</span>
     <span>AI Agent Assistant</span>
     <span id="ai-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -1556,16 +1615,26 @@
       ['home', 'pipelines', 'torbox', 'gdrive', 'agent'].forEach(t => {
         const panel = document.getElementById(`tab-${t}`);
         const btn = document.getElementById(`tab-btn-${t}`);
+        const mbtn = document.getElementById(`mobile-tab-btn-${t}`);
         if (panel) panel.classList.add('hidden');
         if (btn) {
           btn.className = "w-full px-3.5 py-2.5 rounded-xl flex items-center justify-between transition text-zinc-400 hover:text-white hover:bg-zinc-900";
         }
+        if (mbtn) {
+          mbtn.classList.remove('text-blue-400', 'font-bold');
+          mbtn.classList.add('text-zinc-400');
+        }
       });
       const activePanel = document.getElementById(`tab-${tab}`);
       const activeBtn = document.getElementById(`tab-btn-${tab}`);
+      const activeMBtn = document.getElementById(`mobile-tab-btn-${tab}`);
       if (activePanel) activePanel.classList.remove('hidden');
       if (activeBtn) {
         activeBtn.className = "w-full px-3.5 py-2.5 rounded-xl flex items-center justify-between transition bg-blue-600/10 text-blue-400 border border-blue-500/20 font-bold shadow-sm";
+      }
+      if (activeMBtn) {
+        activeMBtn.classList.remove('text-zinc-400');
+        activeMBtn.classList.add('text-blue-400', 'font-bold');
       }
 
       if (tab === 'agent') {
