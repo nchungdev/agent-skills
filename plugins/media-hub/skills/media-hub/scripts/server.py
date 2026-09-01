@@ -290,11 +290,10 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                 return
             return self.send_error(404, "Static file not found")
 
-                        # 2. REST API: TorBox List with Auto Library Cross-Sync Detection
+                                # 2. REST API: TorBox List with 3-Way Storage Tracking (Local, GDrive, NAS)
         elif path == "/api/torbox":
             res = torbox_mgr.list_torrents()
             if res.get("success") and "data" in res and isinstance(res["data"], list):
-                # Fetch known show titles from GDrive cache
                 try:
                     gdrive_raw = [s.get("name") or s.get("folder") or "" for s in gdrive_mgr.list_tv_shows()]
                 except Exception:
@@ -308,25 +307,44 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                 # Known NAS show titles
                 nas_titles = ["the three-eyed one", "black jack", "young black jack", "monster", "cross fight b-daman", "wukong", "kindaichi"]
 
+                # Local workspace staging check
+                local_files = []
+                for root_dir in ["/Volumes/512GB/AI Workspace", os.path.expanduser("~/Downloads")]:
+                    if os.path.exists(root_dir):
+                        try:
+                            local_files.extend([f.lower() for f in os.listdir(root_dir)])
+                        except Exception:
+                            pass
+
                 for t in res["data"]:
                     name = t.get("name", "").lower()
-                    synced = []
+                    locations = []
 
-                    # 1. Check GDrive
+                    # 1. Check Local Machine
+                    for lf in local_files:
+                        if len(lf) >= 5 and (lf in name or name in lf):
+                            locations.append("local")
+                            break
+
+                    # 2. Check GDrive
                     for g in clean_gdrive_titles:
                         if len(g) >= 4 and (g in name or any(w in name for w in g.split() if len(w) > 4)):
-                            synced.append("gdrive")
+                            locations.append("gdrive")
                             break
 
-                    # 2. Check NAS
+                    # 3. Check NAS
                     for n in nas_titles:
                         if len(n) >= 4 and (n in name or any(w in name for w in n.split() if len(w) > 4)):
-                            if "nas" not in synced:
-                                synced.append("nas")
+                            if "nas" not in locations:
+                                locations.append("nas")
                             break
 
-                    t["synced_destinations"] = synced
-                    t["is_completed_and_synced"] = len(synced) > 0
+                    t["locations"] = locations
+                    t["synced_destinations"] = [loc for loc in locations if loc in ["gdrive", "nas"]]
+                    t["is_completed_and_synced"] = len(t["synced_destinations"]) > 0
+                    t["is_on_local"] = "local" in locations
+                    t["is_on_gdrive"] = "gdrive" in locations
+                    t["is_on_nas"] = "nas" in locations
                     
             return self._send_json(res)
 

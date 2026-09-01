@@ -2747,20 +2747,32 @@
         const sizeGb = t.size ? (t.size / (1024*1024*1024)).toFixed(2) : '0.00';
         const safeName = (t.name || '').replace(/'/g, "\'");
         
-                let statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold text-[10px]">TorBox Sẵn Sàng</span>`;
+                        const locations = t.locations || [];
+        const onLocal = locations.includes('local');
+        const onDrive = locations.includes('gdrive');
+        const onNas = locations.includes('nas');
         
-        if (isSynced) {
-          if (destinations.includes('gdrive') && destinations.includes('nas')) {
-            statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/30 font-bold text-[10px]">Cả Drive & NAS</span>`;
-          } else if (destinations.includes('nas')) {
-            statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 font-bold text-[10px]">Đã Lên NAS</span>`;
-          } else {
-            statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold text-[10px]">Đã Lên Drive</span>`;
-          }
+        let statusBadge = '';
+        if (onLocal && onDrive && onNas) {
+          statusBadge = `<span class="px-2 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold text-[10px] whitespace-nowrap">Cả 3 Nơi (Máy • Drive • NAS)</span>`;
+        } else if (onDrive && onNas) {
+          statusBadge = `<span class="px-2 py-0.5 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold text-[10px] whitespace-nowrap">Drive • NAS</span>`;
+        } else if (onLocal && onDrive) {
+          statusBadge = `<span class="px-2 py-0.5 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/30 font-bold text-[10px] whitespace-nowrap">Máy • Drive</span>`;
+        } else if (onLocal && onNas) {
+          statusBadge = `<span class="px-2 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold text-[10px] whitespace-nowrap">Máy • NAS</span>`;
+        } else if (onDrive) {
+          statusBadge = `<span class="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold text-[10px] whitespace-nowrap">Đã Lên Drive</span>`;
+        } else if (onNas) {
+          statusBadge = `<span class="px-2 py-0.5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 font-bold text-[10px] whitespace-nowrap">Đã Lên NAS</span>`;
+        } else if (onLocal) {
+          statusBadge = `<span class="px-2 py-0.5 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold text-[10px] whitespace-nowrap">Đã Về Máy</span>`;
         } else if (isQueued) {
-          statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold text-[10px]">Hàng Đợi</span>`;
+          statusBadge = `<span class="px-2 py-0.5 rounded-lg bg-zinc-800 text-zinc-400 border border-zinc-700 font-medium text-[10px] whitespace-nowrap">Hàng Đợi</span>`;
         } else if (t.download_state === 'downloading' || (t.progress > 0 && t.progress < 1)) {
-          statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold text-[10px] animate-pulse">Đang Tải ${(t.progress*100).toFixed(1)}%</span>`;
+          statusBadge = `<span class="px-2 py-0.5 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 font-bold text-[10px] animate-pulse whitespace-nowrap">Đang Tải ${(t.progress*100).toFixed(1)}%</span>`;
+        } else {
+          statusBadge = `<span class="px-2 py-0.5 rounded-lg bg-zinc-800/80 text-zinc-400 border border-zinc-700/60 font-medium text-[10px] whitespace-nowrap">TorBox Cloud</span>`;
         }
 
         return `
@@ -2771,25 +2783,25 @@
             <td class="px-3 py-3 w-60 sm:w-72 lg:w-80">
               <div class="font-bold text-white text-xs truncate max-w-[220px] sm:max-w-[280px] lg:max-w-[320px]" title="${t.name}">${t.name}</div>
               <div class="text-[10px] text-zinc-500 font-mono mt-0.5 flex items-center gap-1.5">
-                <span>TorBox Cloud</span>
+                <span>TorBox</span>
                 <span>• #${t.id}</span>
-                ${isSynced ? '<span class="text-emerald-400 font-bold">Đã có trong thư viện</span>' : ''}
+                ${isSynced ? '<span class="text-emerald-400 font-bold">Đã có trên kho</span>' : ''}
               </div>
             </td>
             <td class="px-3 py-3 font-mono text-zinc-300 font-semibold w-24 whitespace-nowrap">${isQueued ? 'Chờ slot' : sizeGb + ' GB'}</td>
-            <td class="px-3 py-3 w-36 whitespace-nowrap text-center">
+            <td class="px-3 py-3 w-44 whitespace-nowrap text-center">
               ${statusBadge}
             </td>
             <td class="px-3 py-3 text-right whitespace-nowrap">
               <div class="flex items-center justify-end gap-1.5 whitespace-nowrap">
                 <!-- Sync to Google Drive Button -->
-                <button onclick="syncSingleTorrent(${t.id}, 'gdrive', '${safeName}')" class="px-2.5 py-1 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 text-xs font-semibold rounded-xl transition shadow-sm shrink-0" title="Đồng bộ lên Google Drive">
-                  Sync Drive
+                <button onclick="syncSingleTorrent(${t.id}, 'gdrive', '${safeName}')" class="px-2.5 py-1 ${onDrive ? 'bg-zinc-900 text-zinc-400 hover:text-emerald-300 border-zinc-800' : 'bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border-emerald-500/30'} border text-xs font-semibold rounded-xl transition shadow-sm shrink-0" title="Đồng bộ lên Google Drive">
+                  ${onDrive ? 'Re-Sync Drive' : 'Sync Drive'}
                 </button>
 
                 <!-- Sync to NAS Storage Button -->
-                <button onclick="syncSingleTorrent(${t.id}, 'nas', '${safeName}')" class="px-2.5 py-1 bg-amber-600/10 hover:bg-amber-600 text-amber-400 hover:text-white border border-amber-500/30 text-xs font-semibold rounded-xl transition shadow-sm shrink-0" title="Đồng bộ qua SSH lên NAS Storage">
-                  Sync NAS
+                <button onclick="syncSingleTorrent(${t.id}, 'nas', '${safeName}')" class="px-2.5 py-1 ${onNas ? 'bg-zinc-900 text-zinc-400 hover:text-amber-300 border-zinc-800' : 'bg-amber-600/10 hover:bg-amber-600 text-amber-400 hover:text-white border-amber-500/30'} border text-xs font-semibold rounded-xl transition shadow-sm shrink-0" title="Đồng bộ qua SSH lên NAS Storage">
+                  ${onNas ? 'Re-Sync NAS' : 'Sync NAS'}
                 </button>
 
                 <!-- Local Download Zip Button -->
