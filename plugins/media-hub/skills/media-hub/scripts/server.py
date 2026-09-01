@@ -290,30 +290,39 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                 return
             return self.send_error(404, "Static file not found")
 
-                # 2. REST API: TorBox List with Auto Library Cross-Sync Detection
+                        # 2. REST API: TorBox List with Auto Library Cross-Sync Detection
         elif path == "/api/torbox":
             res = torbox_mgr.list_torrents()
             if res.get("success") and "data" in res and isinstance(res["data"], list):
-                # Fetch known show titles from GDrive
-                gdrive_shows = [s.get("title", "").lower() for s in gdrive_mgr.list_tv_shows()]
-                
-                # Known NAS shows
-                nas_shows = ["the three-eyed one", "black jack", "young black jack", "monster", "cross fight b-daman"]
+                # Fetch known show titles from GDrive cache
+                try:
+                    gdrive_raw = [s.get("name") or s.get("folder") or "" for s in gdrive_mgr.list_tv_shows()]
+                except Exception:
+                    gdrive_raw = []
+                clean_gdrive_titles = []
+                for r in gdrive_raw:
+                    c = re.sub(r'\{.*?\}|\[.*?\]|\(\d{4}\)', '', r).strip().lower()
+                    if c:
+                        clean_gdrive_titles.append(c)
+
+                # Known NAS show titles
+                nas_titles = ["the three-eyed one", "black jack", "young black jack", "monster", "cross fight b-daman", "wukong", "kindaichi"]
 
                 for t in res["data"]:
-                    name = t.get("name", "")
-                    clean_name = re.sub(r'[\(\[\{].*?[\)\]\}]', '', name).strip().lower()
-                    
+                    name = t.get("name", "").lower()
                     synced = []
-                    # Check GDrive
-                    for gs in gdrive_shows:
-                        if gs and (gs in clean_name or gs in name.lower()):
+
+                    # 1. Check GDrive
+                    for g in clean_gdrive_titles:
+                        if len(g) >= 4 and (g in name or any(w in name for w in g.split() if len(w) > 4)):
                             synced.append("gdrive")
                             break
-                    # Check NAS
-                    for ns in nas_shows:
-                        if ns and (ns in clean_name or ns in name.lower()):
-                            synced.append("nas")
+
+                    # 2. Check NAS
+                    for n in nas_titles:
+                        if len(n) >= 4 and (n in name or any(w in name for w in n.split() if len(w) > 4)):
+                            if "nas" not in synced:
+                                synced.append("nas")
                             break
 
                     t["synced_destinations"] = synced
