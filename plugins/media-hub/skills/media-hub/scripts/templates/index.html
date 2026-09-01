@@ -753,16 +753,16 @@
           <div class="flex items-center gap-2 flex-wrap">
             <input type="text" id="torbox-search" oninput="filterTorbox()" placeholder="🔍 Tìm kiếm..." class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 w-32 sm:w-44">
             
-            <button onclick="syncAllTorrents('drive')" class="px-3 py-1.5 sm:px-3.5 sm:py-2 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 font-bold text-xs rounded-xl transition shadow-sm flex items-center gap-1.5 shrink-0" title="Tự động đồng bộ toàn bộ torrents lên Google Drive">
-              <span>☁️</span> <span class="hidden sm:inline">Sync Tất Cả</span> Drive
+            <button onclick="syncAllTorrents('drive')" class="px-3.5 py-1.5 sm:py-2 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 font-bold text-xs rounded-xl transition shadow-sm shrink-0" title="Tự động đồng bộ toàn bộ torrents lên Google Drive">
+              Sync Tất Cả Drive
             </button>
 
-            <button onclick="syncAllTorrents('nas')" class="px-3 py-1.5 sm:px-3.5 sm:py-2 bg-amber-600/10 hover:bg-amber-600 text-amber-400 hover:text-white border border-amber-500/30 font-bold text-xs rounded-xl transition shadow-sm flex items-center gap-1.5 shrink-0" title="Tự động đồng bộ toàn bộ torrents lên NAS Storage">
-              <span>🖥️</span> <span class="hidden sm:inline">Sync Tất Cả</span> NAS
+            <button onclick="syncAllTorrents('nas')" class="px-3.5 py-1.5 sm:py-2 bg-amber-600/10 hover:bg-amber-600 text-amber-400 hover:text-white border border-amber-500/30 font-bold text-xs rounded-xl transition shadow-sm shrink-0" title="Tự động đồng bộ toàn bộ torrents lên NAS Storage">
+              Sync Tất Cả NAS
             </button>
 
-            <button onclick="openModal('modal-add-magnet')" class="px-3.5 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-purple-600/20 flex items-center gap-1.5 shrink-0">
-              <span>➕</span> Thêm Mới
+            <button onclick="openModal('modal-add-magnet')" class="px-4 py-1.5 sm:py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-purple-600/20 shrink-0">
+              Thêm Mới
             </button>
           </div>
         </div>
@@ -2725,23 +2725,23 @@
         const sizeGb = t.size ? (t.size / (1024*1024*1024)).toFixed(2) : '0.00';
         const safeName = (t.name || '').replace(/'/g, "\'");
         
-        let statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold text-[10px]">🟢 TorBox Sẵn Sàng</span>`;
+                let statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold text-[10px]">TorBox Sẵn Sàng</span>`;
         
         if (isSynced) {
           if (destinations.includes('gdrive') && destinations.includes('nas')) {
-            statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/30 font-bold text-[10px] flex items-center gap-1"><span>✓</span> Cả Drive & NAS</span>`;
+            statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/30 font-bold text-[10px]">Cả Drive & NAS</span>`;
           } else if (destinations.includes('nas')) {
-            statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 font-bold text-[10px] flex items-center gap-1"><span>🖥️</span> Đã Lên NAS</span>`;
+            statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 font-bold text-[10px]">Đã Lên NAS</span>`;
           } else {
-            statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold text-[10px] flex items-center gap-1"><span>☁️</span> Đã Lên Drive</span>`;
+            statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold text-[10px]">Đã Lên Drive</span>`;
           }
         } else if (isQueued) {
-          statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold text-[10px]">⏳ Hàng Đợi</span>`;
+          statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold text-[10px]">Hàng Đợi</span>`;
         } else if (t.download_state === 'downloading' || (t.progress > 0 && t.progress < 1)) {
-          statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold text-[10px] animate-pulse">⚡ ${(t.progress*100).toFixed(1)}%</span>`;
+          statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold text-[10px] animate-pulse">Đang Tải ${(t.progress*100).toFixed(1)}%</span>`;
         }
 
-                return `
+        return `
           <tr class="hover:bg-zinc-800/30 transition">
             <td class="px-3 py-3 text-center w-10">
               <input type="checkbox" value="${t.id}" class="torbox-item-cb w-4 h-4 rounded border-zinc-700 bg-zinc-900 text-purple-600 focus:ring-0 cursor-pointer" onchange="updateTorboxSelection()">
@@ -2749,9 +2749,9 @@
             <td class="px-3 py-3 w-60 sm:w-72 lg:w-80">
               <div class="font-bold text-white text-xs truncate max-w-[220px] sm:max-w-[280px] lg:max-w-[320px]" title="${t.name}">${t.name}</div>
               <div class="text-[10px] text-zinc-500 font-mono mt-0.5 flex items-center gap-1.5">
-                <span>⚡ TorBox</span>
+                <span>TorBox Cloud</span>
                 <span>• #${t.id}</span>
-                ${isSynced ? '<span class="text-emerald-400 font-bold">✓ Đã lên kho</span>' : ''}
+                ${isSynced ? '<span class="text-emerald-400 font-bold">Đã có trong thư viện</span>' : ''}
               </div>
             </td>
             <td class="px-3 py-3 font-mono text-zinc-300 font-semibold w-24 whitespace-nowrap">${isQueued ? 'Chờ slot' : sizeGb + ' GB'}</td>
@@ -2761,28 +2761,28 @@
             <td class="px-3 py-3 text-right whitespace-nowrap">
               <div class="flex items-center justify-end gap-1.5 whitespace-nowrap">
                 <!-- Sync to Google Drive Button -->
-                <button onclick="syncSingleTorrent(${t.id}, 'gdrive', '${safeName}')" class="px-2.5 py-1 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 text-xs font-bold rounded-xl transition flex items-center gap-1 shadow-sm shrink-0" title="Tải từ TorBox và đẩy thẳng lên Google Drive">
-                  <span>☁️</span> Sync Drive
+                <button onclick="syncSingleTorrent(${t.id}, 'gdrive', '${safeName}')" class="px-2.5 py-1 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 text-xs font-semibold rounded-xl transition shadow-sm shrink-0" title="Đồng bộ lên Google Drive">
+                  Sync Drive
                 </button>
 
                 <!-- Sync to NAS Storage Button -->
-                <button onclick="syncSingleTorrent(${t.id}, 'nas', '${safeName}')" class="px-2.5 py-1 bg-amber-600/10 hover:bg-amber-600 text-amber-400 hover:text-white border border-amber-500/30 text-xs font-bold rounded-xl transition flex items-center gap-1 shadow-sm shrink-0" title="Tải từ TorBox và đẩy qua SSH lên NAS Storage">
-                  <span>🖥️</span> Sync NAS
+                <button onclick="syncSingleTorrent(${t.id}, 'nas', '${safeName}')" class="px-2.5 py-1 bg-amber-600/10 hover:bg-amber-600 text-amber-400 hover:text-white border border-amber-500/30 text-xs font-semibold rounded-xl transition shadow-sm shrink-0" title="Đồng bộ qua SSH lên NAS Storage">
+                  Sync NAS
                 </button>
 
                 <!-- Local Download Zip Button -->
-                <button onclick="downloadTorboxTorrent(${t.id}, '${safeName}')" class="p-1.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white text-xs font-medium rounded-xl transition shrink-0" title="Tải file Zip về máy đệm">
-                  ⚡
+                <button onclick="downloadTorboxTorrent(${t.id}, '${safeName}')" class="px-2.5 py-1 bg-purple-600/10 hover:bg-purple-600 text-purple-300 hover:text-white border border-purple-500/30 text-xs font-semibold rounded-xl transition shrink-0" title="Tải file Zip về máy đệm">
+                  Tải Về
                 </button>
 
                 <!-- Copy Link Button -->
-                <button onclick="copyTorboxDownloadLink(${t.id})" class="p-1.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white text-xs font-medium rounded-xl transition shrink-0" title="Copy Link DDL">
-                  📋
+                <button onclick="copyTorboxDownloadLink(${t.id})" class="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white text-xs font-medium rounded-xl transition shrink-0" title="Copy Link Direct Download">
+                  Copy Link
                 </button>
 
                 <!-- Delete Button -->
-                <button onclick="deleteTorrent(${t.id})" class="p-1.5 text-zinc-500 hover:text-red-400 transition rounded-xl hover:bg-zinc-800 shrink-0" title="Xóa torrent khỏi TorBox">
-                  🗑️
+                <button onclick="deleteTorrent(${t.id})" class="px-2 py-1 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition rounded-xl text-xs font-medium shrink-0" title="Xóa torrent khỏi TorBox">
+                  Xóa
                 </button>
               </div>
             </td>
