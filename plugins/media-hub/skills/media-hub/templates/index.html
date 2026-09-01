@@ -2729,6 +2729,19 @@
     }
 
         // ==================== SMART MULTI-SOURCE SYNC ENGINE ====================
+        async function fetchTorrents() {
+      try {
+        const res = await fetch('/api/torbox');
+        const data = await res.json();
+        if (data.data) {
+          currentTorrents = data.data;
+          applyTorboxFilter();
+        }
+      } catch (e) {
+        console.error("fetchTorrents error:", e);
+      }
+    }
+
     async function syncSingleTorrent(id, target, name) {
       const torrent = currentTorrents.find(t => t.id === id) || {};
       const locations = torrent.locations || [];
