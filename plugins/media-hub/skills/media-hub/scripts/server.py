@@ -486,7 +486,7 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             staging_dir = cfg.get("staging_dir", "/Volumes/512GB/AI Workspace/media_staging")
             
             # 1. Get GDrive Shows
-            gdrive_shows = gdrive_mgr.list_shows()
+            gdrive_shows = gdrive_mgr.list_tv_shows()
             
             # 2. Get NAS Directory listings via SSH
             nas_folders = {}
