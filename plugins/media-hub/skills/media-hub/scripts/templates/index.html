@@ -2728,6 +2728,114 @@
       renderTorbox(filtered);
     }
 
+        // ==================== SMART MULTI-SOURCE SYNC ENGINE ====================
+    async function syncSingleTorrent(id, target, name) {
+      const torrent = currentTorrents.find(t => t.id === id) || {};
+      const locations = torrent.locations || [];
+      const onLocal = locations.includes('local');
+      const onDrive = locations.includes('gdrive') || (torrent.synced_destinations || []).includes('gdrive');
+      const onNas = locations.includes('nas') || (torrent.synced_destinations || []).includes('nas');
+
+      let routeDescription = "";
+      let commandPayload = "";
+
+      if (target === 'drive') {
+        if (onLocal) {
+          routeDescription = "💾 Máy Cục Bộ ➔ ☁️ Google Drive";
+          commandPayload = `Đồng bộ torrent "${name}" (ID #${id}) từ Máy Cục Bộ (Local) lên Google Drive (gdrive:Phim)`;
+        } else if (onNas) {
+          routeDescription = "🖥️ NAS Storage ➔ ☁️ Google Drive";
+          commandPayload = `Đồng bộ torrent "${name}" (ID #${id}) từ NAS Storage (/srv/mergerfs/MainPool/Phim) sang Google Drive (gdrive:Phim)`;
+        } else {
+          routeDescription = "⚡ TorBox Cloud ➔ 💾 Máy Đệm ➔ ☁️ Google Drive (Auto-Purge)";
+          commandPayload = `Kéo DDL từ TorBox torrent "${name}" (ID #${id}) về thư mục đệm rồi đẩy lên Google Drive (gdrive:Phim), sau đó tự động xóa buffer`;
+        }
+      } else if (target === 'nas') {
+        if (onLocal) {
+          routeDescription = "💾 Máy Cục Bộ ➔ 🖥️ NAS Storage (SSH/rsync)";
+          commandPayload = `Đồng bộ torrent "${name}" (ID #${id}) từ Máy Cục Bộ (Local) sang NAS Storage (/srv/mergerfs/MainPool/Phim)`;
+        } else if (onDrive) {
+          routeDescription = "☁️ Google Drive ➔ 🖥️ NAS Storage";
+          commandPayload = `Đồng bộ torrent "${name}" (ID #${id}) trực tiếp từ Google Drive (gdrive:Phim) sang NAS Storage (/srv/mergerfs/MainPool/Phim)`;
+        } else {
+          routeDescription = "⚡ TorBox Cloud ➔ 💾 Máy Đệm ➔ 🖥️ NAS Storage (Auto-Purge)";
+          commandPayload = `Kéo DDL từ TorBox torrent "${name}" (ID #${id}) về thư mục đệm rồi đẩy qua SSH lên NAS Storage (/srv/mergerfs/MainPool/Phim), sau đó tự động xóa buffer`;
+        }
+      }
+
+      showToast(`🚀 Tuyến đồng bộ: ${routeDescription}...`, 'info', 4000);
+      
+      try {
+        const res = await fetch('/api/agent/command', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            command: commandPayload,
+            torrent_id: id,
+            target: target,
+            route: routeDescription
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✅ Đã khởi chạy [${routeDescription}] thành công!`, 'success');
+          setTimeout(fetchTorrents, 1200);
+        } else {
+          showToast(`❌ ${data.error || 'Lỗi đồng bộ'}`, 'error');
+        }
+      } catch (e) {
+        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
+      }
+    }
+
+    async function syncAllTorrents(target) {
+      const targetLabel = (target === 'nas') ? '🖥️ NAS Storage (/srv/mergerfs/MainPool/Phim)' : '☁️ Google Drive (gdrive:Phim)';
+      if (!confirm(`Bạn có chắc chắn muốn kích hoạt chuỗi tự động đồng bộ TẤT CẢ các torrents lên ${targetLabel}?`)) return;
+      
+      showToast(`🚀 Đang khởi động chuỗi đồng bộ toàn bộ lên ${targetLabel}...`, 'info', 3500);
+      try {
+        const res = await fetch('/api/agent/command', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            command: `Tự động đồng bộ toàn bộ torrents từ TorBox Cloud lên ${target === 'nas' ? 'NAS Storage' : 'Google Drive'}`
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✅ Đã khởi chạy chuỗi đồng bộ toàn diện lên ${target === 'nas' ? 'NAS' : 'Google Drive'}!`, 'success');
+          setTimeout(fetchTorrents, 1200);
+        } else {
+          showToast(`❌ ${data.error || 'Lỗi đồng bộ'}`, 'error');
+        }
+      } catch (e) {
+        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
+      }
+    }
+
+    async function syncSelectedTorbox(target) {
+      const selected = Array.from(document.querySelectorAll('.torbox-item-cb:checked')).map(cb => cb.value);
+      if (selected.length === 0) return;
+      const targetLabel = (target === 'nas') ? 'NAS Storage' : 'Google Drive';
+      showToast(`🚀 Đang đồng bộ ${selected.length} mục đã chọn lên ${targetLabel}...`, 'info', 3000);
+      try {
+        const res = await fetch('/api/agent/command', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            command: `Đồng bộ các torrent ID [${selected.join(', ')}] lên ${targetLabel}`
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✅ Đã kích hoạt đồng bộ ${selected.length} mục lên ${targetLabel}!`, 'success');
+          setTimeout(fetchTorrents, 1200);
+        }
+      } catch (e) {
+        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
+      }
+    }
+
     function renderTorbox(items) {
       const tbody = document.getElementById('torbox-tbody');
       if (!tbody) return;
