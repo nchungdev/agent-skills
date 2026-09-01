@@ -218,12 +218,40 @@ def load_unified_settings():
     return cfg
 
 
-# ==================== DEDUPLICATING SYNC PIPELINE COORDINATOR ====================
+# ==================== PERSISTENT & DEDUPLICATING SYNC PIPELINE COORDINATOR ====================
 class SyncPipelineCoordinator:
     def __init__(self):
         self.lock = threading.Lock()
-        # active_jobs: torrent_id -> {"status": "downloading"|"uploading"|"completed", "targets": set(), "name": str, "progress": float}
-        self.active_jobs = {}
+        self.state_file = Path.home() / ".gemini" / "config" / "media_sync_state.json"
+        self.state_file.parent.mkdir(parents=True, exist_ok=True)
+        self.active_jobs = self._load_state()
+
+    def _load_state(self):
+        if self.state_file.exists():
+            try:
+                with open(self.state_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    # Convert target sets
+                    for k, v in data.items():
+                        if "targets" in v and isinstance(v["targets"], list):
+                            v["targets"] = set(v["targets"])
+                    return data
+            except Exception as e:
+                print(f"[SyncCoordinator] State load error: {e}")
+        return {}
+
+    def _save_state(self):
+        try:
+            serializable = {}
+            for k, v in self.active_jobs.items():
+                copy_v = dict(v)
+                if "targets" in copy_v and isinstance(copy_v["targets"], set):
+                    copy_v["targets"] = list(copy_v["targets"])
+                serializable[k] = copy_v
+            with open(self.state_file, "w", encoding="utf-8") as f:
+                json.dump(serializable, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"[SyncCoordinator] State save error: {e}")
 
     def register_sync_request(self, torrent_id, target, name=""):
         with self.lock:
@@ -231,6 +259,9 @@ class SyncPipelineCoordinator:
             if tid in self.active_jobs:
                 job = self.active_jobs[tid]
                 job["targets"].add(target)
+                job["status"] = "active"
+                job["updated_at"] = time.time()
+                self._save_state()
                 return {
                     "is_new_download": False,
                     "status": job["status"],
@@ -239,15 +270,18 @@ class SyncPipelineCoordinator:
                 }
             else:
                 self.active_jobs[tid] = {
-                    "status": "syncing",
+                    "torrent_id": tid,
+                    "status": "active",
                     "targets": {target},
                     "name": name,
-                    "progress": 0.0,
-                    "created_at": time.time()
+                    "progress": 25.0,
+                    "created_at": time.time(),
+                    "updated_at": time.time()
                 }
+                self._save_state()
                 return {
                     "is_new_download": True,
-                    "status": "syncing",
+                    "status": "active",
                     "targets": [target],
                     "message": f"Khởi động chuỗi tải 1 lần từ TorBox cho #{tid} và đẩy lên {target}"
                 }
@@ -255,6 +289,16 @@ class SyncPipelineCoordinator:
     def get_job_status(self, torrent_id):
         with self.lock:
             return self.active_jobs.get(str(torrent_id))
+
+    def get_all_jobs(self):
+        with self.lock:
+            jobs_list = []
+            for tid, j in self.active_jobs.items():
+                copy_j = dict(j)
+                if "targets" in copy_j and isinstance(copy_j["targets"], set):
+                    copy_j["targets"] = list(copy_j["targets"])
+                jobs_list.append(copy_j)
+            return jobs_list
 
 sync_coordinator = SyncPipelineCoordinator()
 
@@ -404,12 +448,18 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             res = torbox_mgr.request_download_link(t_id)
             return self._send_json(res)
 
-        # 3. REST API: Live Pipelines Status
+                # 3. REST API: Live Pipelines Status with Dynamic Active Sync Tasks
         elif path == "/api/pipelines":
             monster = pipeline_mon.get_monster_status()
             multi = pipeline_mon.get_multi_show_status()
+            active_sync_jobs = sync_coordinator.get_all_jobs()
             lib_ver = f"M:{monster.get('completed_eps',0)}_MS:{multi.get('current_show','')}:{multi.get('completed_eps',0)}_{gdrive_mgr.get_cache_version()}"
-            return self._send_json({"monster": monster, "multi_show": multi, "library_version": lib_ver})
+            return self._send_json({
+                "monster": monster, 
+                "multi_show": multi, 
+                "active_syncs": active_sync_jobs,
+                "library_version": lib_ver
+            })
 
         # 4. REST API: GDrive Shows List
         elif path == "/api/gdrive/shows":

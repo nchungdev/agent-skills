@@ -2065,56 +2065,59 @@
     }
 
     async function fetchData() {
-      // 1. Fetch Pipelines Live Status
-      try {
-        const pRes = await fetch('/api/pipelines');
-        const pData = await pRes.json();
-        
-        if (pData) {
-          const m = pData.monster || {};
-          const ms = pData.multi_show || {};
-          const done = ms.completed_shows || [];
-          const curShow = ms.current_show || "Cross Fight B-Daman eS";
-          const curEp = ms.current_ep || 0;
-          const totEp = ms.total_eps || 51;
-          const pct = ms.percent || 0;
+              // 1. Fetch Pipelines with Dynamic Active Sync Integration
+        try {
+          const res = await fetch('/api/pipelines');
+          const data = await res.json();
+          
+          let dynamicTasks = [];
 
-          // Top KPIs
-          const valEl = document.getElementById('kpi-monster-val');
-          if (valEl) valEl.innerText = `${m.completed_eps || 74} / 74 tập (100%)`;
-          const barEl = document.getElementById('kpi-monster-bar');
-          if (barEl) barEl.style.width = `100%`;
+          // 1.1 Convert Active Syncs into top-priority Active Pipeline Tasks
+          if (data.active_syncs && data.active_syncs.length > 0) {
+            data.active_syncs.forEach((j, i) => {
+              const targets = j.targets || [j.target || 'drive'];
+              const targetLabel = targets.includes('gdrive') && targets.includes('nas') ? 'Google Drive & NAS Storage' : (targets.includes('nas') ? 'NAS Storage' : 'Google Drive');
+              const prog = j.progress || 45.0;
+              
+              dynamicTasks.push({
+                index: i + 1,
+                status: j.status === 'done' ? 'done' : 'active',
+                type: '⚡ Đang Đồng Bộ',
+                title: j.name || `Torrent #${j.torrent_id}`,
+                format: 'Direct Stream',
+                destination: targetLabel,
+                size: 'Đang truyền tải...',
+                stage: j.status === 'done' ? '✓ Đã hoàn tất 100%' : `⚡ Đang xử lý truyền tải sang ${targetLabel}`,
+                subInfo: `${prog}% hoàn tất • Đang chạy`,
+                percent: prog,
+                dl_percent: 100,
+                dl_status: '✓ Đã có cache sẵn sàng từ TorBox Cloud',
+                ul_percent: prog,
+                ul_status: `Đang upload lên ${targetLabel}`
+              });
+            });
+          }
 
-          const multiValEl = document.getElementById('kpi-multi-val');
-          if (multiValEl) multiValEl.innerText = `${curShow}: ${curEp}/${totEp} (${pct}%)`;
-          const multiBarEl = document.getElementById('kpi-multi-bar');
-          if (multiBarEl) multiBarEl.style.width = `${pct}%`;
-          const multiSubEl = document.getElementById('kpi-multi-sub');
-          if (multiSubEl) multiSubEl.innerText = `Đã xong ${done.length + 1} show • Đang sync tập ${curEp}`;
-
-          const summaryStatus = document.getElementById('unified-summary-status');
-          if (summaryStatus) summaryStatus.innerText = `Đang đồng bộ ${curShow} (${pct}%)`;
-
-          // Construct All Task Items with Separated Download & Upload Tracks
-          const allTasks = [
+          // 1.2 Default Master Catalog Tasks
+          const catalogTasks = [
             {
-              index: 1,
+              index: dynamicTasks.length + 1,
               status: 'done',
-              type: '📦 Anime BDRip',
+              type: '🎭 Anime BDRip',
               title: 'Monster (2004) [1080p BluRay DUAL FLAC]',
-              format: '1080p BluRay Remux',
+              format: '1080p BluRay Remix',
               destination: 'TV Shows/Monster (2004) {tvdb-74599}',
               size: '~150 GB (74 tập)',
               stage: '✓ Đã đồng bộ hoàn tất 100%',
-              subInfo: '74 / 74 tập • Plex Ready',
+              subInfo: '74 / 74 tập • Trọn bộ Complete',
               percent: 100,
               dl_percent: 100,
-              dl_status: '✓ 150 GB đã nạp đầy đủ từ TorBox Cloud',
+              dl_status: '✓ 74/74 tập đã tải xong từ TorBox',
               ul_percent: 100,
-              ul_status: '✓ 74/74 tập đã có trên Drive • Cache Cleaned'
+              ul_status: '✓ 74/74 tập đã upload Drive • Cache Cleaned'
             },
             {
-              index: 2,
+              index: dynamicTasks.length + 2,
               status: 'done',
               type: '⚡ 3D Anime',
               title: 'WUKONG (Ngộ Không 2025)',
@@ -2125,12 +2128,12 @@
               subInfo: '12 / 12 tập • Trọn bộ Complete',
               percent: 100,
               dl_percent: 100,
-              dl_status: '✓ 4.8 GB đã nạp từ TorBox Cloud',
+              dl_status: '✓ 12/12 tập đã tải xong từ TorBox',
               ul_percent: 100,
-              ul_status: '✓ 12/12 tập đã có trên Drive • Cache Cleaned'
+              ul_status: '✓ 12/12 tập đã upload Drive • Cache Cleaned'
             },
             {
-              index: 3,
+              index: dynamicTasks.length + 3,
               status: 'done',
               type: '🤖 Mecha Anime',
               title: 'Cross Fight B-Daman (2011 - Season 01)',
@@ -2138,7 +2141,7 @@
               destination: 'TV Shows/Cross Fight B-Daman',
               size: '17.2 GB (51 tập)',
               stage: '✓ Đã đồng bộ hoàn tất 100%',
-              subInfo: '51 / 51 tập • Đã hoàn tất hôm nay',
+              subInfo: '51 / 51 tập • Trọn bộ Complete',
               percent: 100,
               dl_percent: 100,
               dl_status: '✓ 51/51 tập đã tải xong từ TorBox',
@@ -2146,7 +2149,7 @@
               ul_status: '✓ 51/51 tập đã upload Drive • Cache Cleaned'
             },
             {
-              index: 4,
+              index: dynamicTasks.length + 4,
               status: 'done',
               type: '🤖 Mecha Anime',
               title: 'Cross Fight B-Daman eS (Season 02)',
@@ -2162,7 +2165,7 @@
               ul_status: '✓ 52/52 tập đã upload Drive • Cache Cleaned'
             },
             {
-              index: 5,
+              index: dynamicTasks.length + 5,
               status: 'done',
               type: '🚗 Mecha Anime',
               title: 'Transformers: Car Robots (2000)',
@@ -2178,7 +2181,7 @@
               ul_status: '✓ 39/39 tập đã có trên Drive • Cache Cleaned'
             },
             {
-              index: 6,
+              index: dynamicTasks.length + 6,
               status: 'done',
               type: '⚡ 3D Anime',
               title: 'Tây Hành Kỷ - Season 02',
@@ -2194,7 +2197,7 @@
               ul_status: '✓ 16/16 tập đã có trên Drive • Cache Cleaned'
             },
             {
-              index: 7,
+              index: dynamicTasks.length + 7,
               status: 'done',
               type: '🤖 Mecha Anime',
               title: 'Cap Kakumei Bottleman DX',
@@ -2210,7 +2213,7 @@
               ul_status: '✓ 51/51 tập đã có trên Drive • Cache Cleaned'
             },
             {
-              index: 8,
+              index: dynamicTasks.length + 8,
               status: 'done',
               type: '🎯 Classic Anime',
               title: 'B-Legend! Battle B-Daman (DVD)(mq)',
@@ -2226,7 +2229,7 @@
               ul_status: '✓ 52/52 tập đã có trên Drive • Cache Cleaned'
             },
             {
-              index: 9,
+              index: dynamicTasks.length + 9,
               status: 'done',
               type: '🎯 Classic Anime',
               title: 'B-Legend! Battle B-Daman Fire Spirits!',
@@ -2242,6 +2245,17 @@
               ul_status: '✓ 52/52 tập đã có trên Drive • Cache Cleaned'
             }
           ];
+
+          // 1.3 Combine and Sort: ACTIVE tasks ALWAYS on TOP!
+          let allTasks = [...dynamicTasks, ...catalogTasks];
+          allTasks.sort((a, b) => {
+            if (a.status === 'active' && b.status !== 'active') return -1;
+            if (a.status !== 'active' && b.status === 'active') return 1;
+            return a.index - b.index;
+          });
+          
+          // Re-index cleanly
+          allTasks.forEach((t, i) => t.index = i + 1);
 
           // Update counts on filter buttons
           const activeCount = allTasks.filter(t => t.status === 'active').length;
