@@ -507,7 +507,7 @@ class MediaHubHandler(BaseHTTPRequestHandler):
 
             def check_torbox():
                 try:
-                    res = torbox_mgr.get_torrents()
+                    res = torbox_mgr.list_torrents()
                     return {"connected": res.get("success", False), "detail": "TorBox Cloud API Online" if res.get("success") else (res.get("error") or "Không thể xác thực Token")}
                 except Exception as e:
                     return {"connected": False, "detail": str(e)}
