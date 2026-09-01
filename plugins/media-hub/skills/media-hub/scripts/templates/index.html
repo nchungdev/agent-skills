@@ -2668,6 +2668,29 @@
       renderTorbox(filtered);
     }
 
+        async function syncSingleTorrent(id, target, name) {
+      const targetLabel = (target === 'nas') ? '🖥️ NAS Storage (/srv/mergerfs/MainPool/Phim)' : '☁️ Google Drive (gdrive:Phim)';
+      showToast(`🚀 Đang khởi chạy chuỗi tải & đồng bộ "${name}" lên ${targetLabel}...`, 'info', 3000);
+      try {
+        const res = await fetch('/api/agent/command', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            command: `Tải và đồng bộ torrent ID #${id} (${name}) trực tiếp lên ${target === 'nas' ? 'NAS Storage' : 'Google Drive'}`
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✅ Đã kích hoạt chuỗi đồng bộ lên ${target === 'nas' ? 'NAS' : 'Google Drive'} thành công!`, 'success');
+          setTimeout(fetchTorrents, 1000);
+        } else {
+          showToast(`❌ ${data.error || 'Lỗi đồng bộ'}`, 'error');
+        }
+      } catch (e) {
+        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
+      }
+    }
+
     function renderTorbox(items) {
       const tbody = document.getElementById('torbox-tbody');
       if (!tbody) return;
@@ -2688,8 +2711,9 @@
         const isSynced = !!t.is_completed_and_synced;
         const destinations = t.synced_destinations || [];
         const sizeGb = t.size ? (t.size / (1024*1024*1024)).toFixed(2) : '0.00';
+        const safeName = (t.name || '').replace(/'/g, "\'");
         
-        let statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold text-[10px]">🟢 TorBox (Chưa Sync)</span>`;
+        let statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold text-[10px]">🟢 TorBox Sẵn Sàng</span>`;
         
         if (isSynced) {
           if (destinations.includes('gdrive') && destinations.includes('nas')) {
@@ -2705,38 +2729,6 @@
           statusBadge = `<span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold text-[10px] animate-pulse">⚡ ${(t.progress*100).toFixed(1)}%</span>`;
         }
 
-        let actionHtml = '';
-        if (isSynced) {
-          // ALREADY COMPLETED & SYNCED -> Offer "Xem Trong Thư Viện" instead of demanding download
-          actionHtml = `
-            <button onclick="setTab('gdrive')" class="px-3 py-1 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 text-xs font-bold rounded-xl transition flex items-center gap-1 shadow-sm" title="Mở phim trong Quản Lý Thư Viện">
-              <span>🎬</span> Xem Thư Viện
-            </button>
-            <button onclick="copyTorboxDownloadLink(${t.id})" class="px-2.5 py-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white text-xs font-medium rounded-xl transition" title="Copy Link DDL">
-              <span>📋</span> Link
-            </button>
-            <button onclick="deleteTorrent(${t.id})" class="text-zinc-500 hover:text-red-400 transition p-1.5 rounded-xl hover:bg-zinc-800" title="Xóa TorBox cache giải phóng slot">
-              🗑️
-            </button>
-          `;
-        } else {
-          // NOT SYNCED YET -> Offer Quick Sync to Drive/NAS
-          actionHtml = `
-            <button onclick="openSyncPrompt(${t.id}, 'drive')" class="px-2.5 py-1 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold rounded-xl transition flex items-center gap-1 shadow-sm" title="Kéo và đẩy trực tiếp lên Google Drive">
-              <span>☁️</span> Sync Drive
-            </button>
-            <button onclick="openSyncPrompt(${t.id}, 'nas')" class="px-2.5 py-1 bg-amber-600/20 hover:bg-amber-600 text-amber-300 hover:text-white border border-amber-500/30 text-xs font-semibold rounded-xl transition flex items-center gap-1" title="Kéo và đẩy qua SSH lên NAS">
-              <span>🖥️</span> Sync NAS
-            </button>
-            <button onclick="downloadTorboxTorrent(${t.id}, '${(t.name || '').replace(/'/g, "\'")}')" class="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white text-xs font-medium rounded-xl transition" title="Tải Zip về máy">
-              <span>⚡</span>
-            </button>
-            <button onclick="deleteTorrent(${t.id})" class="text-zinc-500 hover:text-red-400 transition p-1.5 rounded-xl hover:bg-zinc-800" title="Xóa torrent">
-              🗑️
-            </button>
-          `;
-        }
-
         return `
           <tr class="hover:bg-zinc-800/30 transition">
             <td class="px-4 py-3.5 text-center">
@@ -2747,16 +2739,39 @@
               <div class="text-[10px] text-zinc-500 font-mono mt-0.5 flex items-center gap-2">
                 <span>⚡ TorBox Cloud</span>
                 <span>• #${t.id}</span>
-                ${isSynced ? '<span class="text-emerald-400 font-bold">✓ Hoàn tất</span>' : ''}
+                ${isSynced ? '<span class="text-emerald-400 font-bold">✓ Đã có trong thư viện</span>' : ''}
               </div>
             </td>
             <td class="px-4 py-3.5 font-mono text-zinc-300 font-semibold w-28 whitespace-nowrap">${isQueued ? 'Chờ slot' : sizeGb + ' GB'}</td>
             <td class="px-4 py-3.5">
               ${statusBadge}
             </td>
-            <td class="px-4 py-3.5 text-right w-72 whitespace-nowrap">
-              <div class="flex items-center justify-end gap-1.5">
-                ${actionHtml}
+            <td class="px-4 py-3.5 text-right w-80 whitespace-nowrap">
+              <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                <!-- Sync to Google Drive Button -->
+                <button onclick="syncSingleTorrent(${t.id}, 'gdrive', '${safeName}')" class="px-2.5 py-1 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 text-xs font-bold rounded-xl transition flex items-center gap-1 shadow-sm" title="Tải từ TorBox và đẩy thẳng lên Google Drive">
+                  <span>☁️</span> Sync Drive
+                </button>
+
+                <!-- Sync to NAS Storage Button -->
+                <button onclick="syncSingleTorrent(${t.id}, 'nas', '${safeName}')" class="px-2.5 py-1 bg-amber-600/10 hover:bg-amber-600 text-amber-400 hover:text-white border border-amber-500/30 text-xs font-bold rounded-xl transition flex items-center gap-1 shadow-sm" title="Tải từ TorBox và đẩy qua SSH lên NAS Storage">
+                  <span>🖥️</span> Sync NAS
+                </button>
+
+                <!-- Local Download Zip Button -->
+                <button onclick="downloadTorboxTorrent(${t.id}, '${safeName}')" class="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white text-xs font-medium rounded-xl transition" title="Tải file Zip về máy đệm">
+                  <span>⚡</span>
+                </button>
+
+                <!-- Copy Link Button -->
+                <button onclick="copyTorboxDownloadLink(${t.id})" class="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white text-xs font-medium rounded-xl transition" title="Copy Link DDL">
+                  <span>📋</span>
+                </button>
+
+                <!-- Delete Button -->
+                <button onclick="deleteTorrent(${t.id})" class="text-zinc-500 hover:text-red-400 transition p-1.5 rounded-xl hover:bg-zinc-800" title="Xóa torrent khỏi TorBox">
+                  🗑️
+                </button>
               </div>
             </td>
           </tr>
