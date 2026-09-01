@@ -484,15 +484,9 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             def check_gdrive():
                 try:
                     res = subprocess.run([
-                        gdrive_mgr.rclone_bin, "--config", gdrive_mgr.rclone_config, "about", "gdrive:"
-                    ], capture_output=True, text=True, timeout=5)
-                    if res.returncode == 0:
-                        return {"connected": True, "detail": "Rclone Google Drive Online"}
-                    # Fallback check lsd
-                    res2 = subprocess.run([
                         gdrive_mgr.rclone_bin, "--config", gdrive_mgr.rclone_config, "lsd", "gdrive:Phim"
-                    ], capture_output=True, text=True, timeout=5)
-                    return {"connected": res2.returncode == 0, "detail": "Rclone Google Drive Online" if res2.returncode == 0 else (res2.stderr.strip() or "Lỗi Rclone")}
+                    ], capture_output=True, text=True, timeout=8)
+                    return {"connected": res.returncode == 0, "detail": "Rclone Google Drive Online" if res.returncode == 0 else (res.stderr.strip() or "Lỗi Rclone")}
                 except Exception as e:
                     return {"connected": False, "detail": str(e)}
 
