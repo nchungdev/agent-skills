@@ -3371,8 +3371,11 @@
       } catch (e) {}
     }
 
-    function setTab(tab) {
-      ['home', 'pipelines', 'torbox', 'gdrive', 'settings', 'agent'].forEach(t => {
+        function setTab(tab) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      
+      const tabs = ['home', 'pipelines', 'torbox', 'gdrive', 'settings', 'agent'];
+      tabs.forEach(t => {
         const panel = document.getElementById(`tab-${t}`);
         const btn = document.getElementById(`tab-btn-${t}`);
         const mbtn = document.getElementById(`mobile-tab-btn-${t}`);
@@ -3381,7 +3384,7 @@
           panel.style.display = 'none';
         }
         if (btn) {
-          btn.className = "w-full px-3 py-2 rounded-xl flex items-center justify-between transition text-zinc-400 hover:text-white hover:bg-zinc-900";
+          btn.className = "w-full px-3 py-2.5 rounded-xl flex items-center justify-between transition text-zinc-400 hover:text-white hover:bg-zinc-900 group";
         }
         if (mbtn) {
           mbtn.classList.remove('text-blue-400', 'font-bold');
@@ -3405,14 +3408,39 @@
       }
 
       if (activeBtn) {
-        activeBtn.className = "w-full px-3 py-2 rounded-xl flex items-center justify-between transition bg-blue-600/10 text-blue-400 border border-blue-500/20 font-bold shadow-sm";
+        activeBtn.className = "w-full px-3 py-2.5 rounded-xl flex items-center justify-between transition bg-blue-600/10 text-blue-400 border border-blue-500/20 font-bold shadow-sm group";
       }
       if (activeMBtn) {
         activeMBtn.classList.remove('text-zinc-400');
         activeMBtn.classList.add('text-blue-400', 'font-bold');
       }
 
-      if (tab === 'settings') {
+      if (tab === 'home') {
+        fetchDashboardOverview();
+        fetchData();
+      } else if (tab === 'gdrive') {
+        const vLib = document.getElementById('plex-view-library');
+        const vShow = document.getElementById('plex-view-show');
+        const hLib = document.getElementById('gdrive-header-library');
+        const hShow = document.getElementById('gdrive-header-show');
+        if (vLib) vLib.classList.remove('hidden');
+        if (vShow) vShow.classList.add('hidden');
+        if (hLib) hLib.classList.remove('hidden');
+        if (hShow) hShow.classList.add('hidden');
+        if (typeof filterPlexShows === 'function') filterPlexShows();
+      } else if (tab === 'torbox') {
+        if (typeof fetchTorrents === 'function') fetchTorrents();
+      } else if (tab === 'pipelines') {
+        const vList = document.getElementById('pipeline-view-list');
+        const vDetail = document.getElementById('pipeline-view-detail');
+        const hList = document.getElementById('pipeline-header-list');
+        const hDetail = document.getElementById('pipeline-header-detail');
+        if (vList) vList.classList.remove('hidden');
+        if (vDetail) vDetail.classList.add('hidden');
+        if (hList) hList.classList.remove('hidden');
+        if (hDetail) hDetail.classList.add('hidden');
+        if (typeof fetchPipelines === 'function') fetchPipelines();
+      } else if (tab === 'settings') {
         fetchSettings();
         checkAllServicesStatus();
       } else if (tab === 'agent') {
