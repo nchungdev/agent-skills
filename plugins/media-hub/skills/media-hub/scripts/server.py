@@ -95,6 +95,15 @@ def load_unified_settings():
     if not cfg.get("tmdb_api_key"):
         cfg["tmdb_api_key"] = os.environ.get("TMDB_API_KEY") or env_dict.get("TMDB_API_KEY") or ""
 
+    # Auto-detect SSH Key if empty
+    if not cfg.get("nas_ssh_key"):
+        ssh_dir = Path.home() / ".ssh"
+        for k in ["id_ed25519", "id_rsa", "id_ecdsa"]:
+            cand = ssh_dir / k
+            if cand.is_file():
+                cfg["nas_ssh_key"] = f"~/.ssh/{k}"
+                break
+
     return cfg
 
 class MediaHubHandler(BaseHTTPRequestHandler):
