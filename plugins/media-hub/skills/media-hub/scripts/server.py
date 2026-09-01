@@ -486,7 +486,8 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             staging_dir = cfg.get("staging_dir", "/Volumes/512GB/AI Workspace/media_staging")
             
             # 1. Get GDrive Shows
-            gdrive_shows = gdrive_mgr.list_tv_shows()
+            gdrive_shows_list = gdrive_mgr.list_tv_shows()
+            gdrive_shows = {item["name"]: True for item in gdrive_shows_list if isinstance(item, dict) and "name" in item}
             
             # 2. Get NAS Directory listings via SSH
             nas_folders = {}
@@ -538,7 +539,7 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                 "299770": {"title": "Young Black Jack (2015)", "vn": "Bác Sĩ Black Jack Thời Trẻ", "qual": "1080p BDRip", "episodes": 12, "vietsub": True}
             }
 
-            all_folder_keys = set(gdrive_shows) | set(nas_folders.keys())
+            all_folder_keys = set(gdrive_shows.keys()) | set(nas_folders.keys())
             
             for folder in sorted(all_folder_keys):
                 in_gdrive = folder in gdrive_shows
