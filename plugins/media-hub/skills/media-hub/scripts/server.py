@@ -289,9 +289,35 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                 return
             return self.send_error(404, "Static file not found")
 
-        # 2. REST API: TorBox List
+                # 2. REST API: TorBox List with Auto Library Cross-Sync Detection
         elif path == "/api/torbox":
             res = torbox_mgr.list_torrents()
+            if res.get("success") and "data" in res and isinstance(res["data"], list):
+                # Fetch known show titles from GDrive
+                gdrive_shows = [s.get("title", "").lower() for s in gdrive_mgr.list_tv_shows()]
+                
+                # Known NAS shows
+                nas_shows = ["the three-eyed one", "black jack", "young black jack", "monster", "cross fight b-daman"]
+
+                for t in res["data"]:
+                    name = t.get("name", "")
+                    clean_name = re.sub(r'[\(\[\{].*?[\)\]\}]', '', name).strip().lower()
+                    
+                    synced = []
+                    # Check GDrive
+                    for gs in gdrive_shows:
+                        if gs and (gs in clean_name or gs in name.lower()):
+                            synced.append("gdrive")
+                            break
+                    # Check NAS
+                    for ns in nas_shows:
+                        if ns and (ns in clean_name or ns in name.lower()):
+                            synced.append("nas")
+                            break
+
+                    t["synced_destinations"] = synced
+                    t["is_completed_and_synced"] = len(synced) > 0
+                    
             return self._send_json(res)
 
         # 2.1 REST API: TorBox Download Link
