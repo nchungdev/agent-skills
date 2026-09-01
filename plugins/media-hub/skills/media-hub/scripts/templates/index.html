@@ -577,7 +577,7 @@
             <button onclick="setTab('gdrive')" id="tab-btn-gdrive" class="w-full px-3 py-2.5 rounded-xl flex items-center justify-between transition text-zinc-400 hover:text-white hover:bg-zinc-900 group">
               <div class="flex items-center gap-2.5 min-w-0">
                 <span class="text-base shrink-0">🏷️</span>
-                <span class="text-xs text-zinc-300 group-hover:text-white font-bold truncate">Quản Lý Thư Viện Plex</span>
+                <span class="text-xs text-zinc-300 group-hover:text-white font-bold truncate">Quản Lý Thư Viện</span>
               </div>
               <span class="px-1.5 py-0.2 text-[9px] bg-amber-500/10 text-amber-400 rounded border border-amber-500/20 font-mono shrink-0">31</span>
             </button>
@@ -1286,11 +1286,10 @@
             </div>
             <div>
               <div class="flex items-center gap-2 flex-wrap">
-                <h3 class="font-bold text-sm text-white">Quản Lý Thư Viện Plex (Google Drive & NAS)</h3>
-                <span class="px-1.5 py-0.2 text-[9px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded">31 SHOWS</span>
-                <span class="px-1.5 py-0.2 text-[9px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/30 rounded">2 KHO LƯU TRỮ</span>
+                <h3 class="font-bold text-sm sm:text-base text-white">Quản Lý Thư Viện</h3>
+                <span class="px-2 py-0.5 text-[9px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-full font-mono">2 KHO LƯU TRỮ</span>
               </div>
-              <p class="text-xs text-zinc-400 hidden sm:block">Đồng bộ đa nguồn: ☁️ Google Drive Cloud & 🖥️ NAS Storage Server • Gắn thẻ chất lượng & phụ đề chuẩn hóa</p>
+              <p class="text-xs text-zinc-400 hidden sm:block">Kho lưu trữ đám mây ☁️ Google Drive (gdrive:Phim) & Máy chủ nội bộ 🖥️ NAS Storage (/srv/mergerfs/MainPool/Phim)</p>
             </div>
           </div>
 
@@ -1332,90 +1331,107 @@
           <!-- VIEW 1: PLEX LIBRARY VIEW -->
           <div id="plex-view-library" class="space-y-4">
             
-            <!-- Dual Storage Overview Grid (Google Drive Cloud & NAS Storage Server) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4 text-xs">
+                        <!-- ==================== 2 INTERACTIVE STORAGE CARDS (2 CỤC KHO LƯU TRỮ) ==================== -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 text-xs">
               
-              <!-- 1. Google Drive Cloud Box -->
-              <div class="p-3.5 sm:p-4 rounded-2xl bg-zinc-900/80 border border-emerald-500/20 shadow-md flex flex-wrap items-center justify-between gap-3 text-xs relative overflow-hidden group hover:border-emerald-500/40 transition">
-                <div class="flex items-center gap-3 min-w-0">
-                  <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-base border border-emerald-500/20 shrink-0">
-                    ☁️
+              <!-- CỤC 1: Google Drive Cloud -->
+              <div onclick="selectStorageSource('gdrive')" id="storage-card-gdrive" class="p-5 rounded-3xl bg-emerald-950/30 border-2 border-emerald-500 ring-4 ring-emerald-500/10 shadow-xl cursor-pointer transition relative overflow-hidden group hover:scale-[1.01]">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-2xl border border-emerald-500/30 shrink-0 shadow-inner">
+                      ☁️
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <h4 class="font-bold text-white text-sm sm:text-base">Google Drive</h4>
+                        <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold font-mono">Cloud</span>
+                      </div>
+                      <p class="text-xs text-zinc-400 mt-0.5">Kho media đám mây tốc độ cao • Chuẩn hóa TheTVDB</p>
+                      <div class="text-[11px] text-emerald-400 font-mono mt-1 flex items-center gap-1">
+                        <span>📁</span> gdrive:Phim
+                      </div>
+                    </div>
                   </div>
-                  <div class="min-w-0">
-                    <div class="flex items-center gap-2 flex-wrap">
-                      <span class="font-bold text-white text-xs">Google Drive (Rclone Cloud)</span>
-                      <span id="gdrive-lib-status" class="px-2 py-0.2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold flex items-center gap-1 font-mono">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Sẵn Sàng
-                      </span>
-                    </div>
-                    <div class="text-[11px] text-zinc-400 font-mono truncate mt-0.5" id="gdrive-path-display">
-                      📁 gdrive:Phim/TV Shows
-                    </div>
+
+                  <div class="flex flex-col items-end gap-1.5 shrink-0">
+                    <span id="gdrive-active-indicator" class="px-2.5 py-1 rounded-full bg-emerald-500 text-black font-bold text-[10px] shadow-md flex items-center gap-1">
+                      <span>✓</span> Đang Xem
+                    </span>
+                    <span class="text-[10px] text-zinc-400 font-mono" id="gdrive-shows-count">31 Shows</span>
                   </div>
                 </div>
 
-                <div class="flex items-center gap-1.5">
-                  <button onclick="setTab('settings')" class="px-2.5 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white font-medium transition text-xs flex items-center gap-1 shadow-sm" title="Cấu hình Google Drive">
-                    <span>⚙️</span> Cấu Hình
-                  </button>
+                <div class="mt-4 pt-3 border-t border-emerald-500/20 flex items-center justify-between text-zinc-400 text-[11px]">
+                  <span class="text-emerald-400/90 font-medium">👉 Bấm để duyệt danh sách phim trên Google Drive</span>
+                  <span class="text-xs">📂</span>
                 </div>
               </div>
 
-              <!-- 2. NAS Storage Server Box -->
-              <div class="p-3.5 sm:p-4 rounded-2xl bg-zinc-900/80 border border-amber-500/20 shadow-md flex flex-wrap items-center justify-between gap-3 text-xs relative overflow-hidden group hover:border-amber-500/40 transition">
-                <div class="flex items-center gap-3 min-w-0">
-                  <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-base border border-amber-500/20 shrink-0">
-                    🖥️
-                  </div>
-                  <div class="min-w-0">
-                    <div class="flex items-center gap-2 flex-wrap">
-                      <span class="font-bold text-white text-xs">NAS Storage (Mạng Nội Bộ)</span>
-                      <span id="nas-status-badge" class="px-2 py-0.2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold flex items-center gap-1 font-mono">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Sẵn Sàng
-                      </span>
+              <!-- CỤC 2: NAS Storage Server -->
+              <div onclick="selectStorageSource('nas')" id="storage-card-nas" class="p-5 rounded-3xl bg-zinc-900/60 border border-zinc-800/80 hover:border-amber-500/50 shadow-md cursor-pointer transition relative overflow-hidden group hover:scale-[1.01] opacity-75 hover:opacity-100">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-2xl border border-amber-500/20 shrink-0 shadow-inner">
+                      🖥️
                     </div>
-                    <div class="text-[11px] text-zinc-400 font-mono truncate mt-0.5" id="nas-path-display">
-                      📁 /srv/mergerfs/MainPool/Phim/TV Shows
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <h4 class="font-bold text-white text-sm sm:text-base">NAS Storage</h4>
+                        <span class="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-bold font-mono">MergerFS</span>
+                      </div>
+                      <p class="text-xs text-zinc-400 mt-0.5">Máy chủ lưu trữ gia đình • Sẵn sàng phát Plex & Jellyfin</p>
+                      <div class="text-[11px] text-amber-400 font-mono mt-1 flex items-center gap-1">
+                        <span>📁</span> /srv/mergerfs/MainPool/Phim
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col items-end gap-1.5 shrink-0">
+                    <span id="nas-active-indicator" class="px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-400 font-medium text-[10px] flex items-center gap-1">
+                      Bấm để xem
+                    </span>
+                    <div class="flex items-center gap-1">
+                      <a href="http://192.168.1.37:32400/web" target="_blank" onclick="event.stopPropagation()" class="px-2 py-0.5 rounded bg-amber-500/10 hover:bg-amber-500 text-amber-300 hover:text-black font-semibold text-[10px] transition" title="Mở Plex Web">🎬 Plex</a>
+                      <a href="http://192.168.1.37:5000" target="_blank" onclick="event.stopPropagation()" class="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-semibold text-[10px] transition" title="Mở DSM">🌐 NAS</a>
                     </div>
                   </div>
                 </div>
 
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <a id="nas-link-plex" href="http://192.168.1.37:32400/web" target="_blank" class="px-2.5 py-1.5 rounded-xl bg-amber-600/20 hover:bg-amber-600 text-amber-300 hover:text-white font-medium transition flex items-center gap-1 shadow-sm text-xs">
-                    <span>🎬</span> Mở Plex
-                  </a>
-                  <a id="nas-link-dsm" href="http://192.168.1.37:5000" target="_blank" class="px-2.5 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white font-medium transition flex items-center gap-1 shadow-sm text-xs">
-                    <span>🌐</span> NAS
-                  </a>
+                <div class="mt-4 pt-3 border-t border-zinc-800/80 flex items-center justify-between text-zinc-400 text-[11px]">
+                  <span class="text-amber-400/90 font-medium">👉 Bấm để duyệt danh sách phim trên NAS Storage</span>
+                  <span class="text-xs">📂</span>
                 </div>
               </div>
 
             </div>
 
-            <!-- Dual Cloud Source & Format Filter Pills -->
-            <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
-              <div class="flex items-center gap-2 overflow-x-auto custom-scroll pb-1 text-xs">
-                <span class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider pl-1 pr-1 shrink-0 flex items-center gap-1">
-                  <span>🗂️</span> Kho Lưu Trữ:
-                </span>
-                <button onclick="filterPlexTag('all')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white font-medium hover:bg-zinc-700 transition active shrink-0" id="pfilter-all">Tất Cả Kho (17)</button>
-                <button onclick="filterPlexTag('gdrive')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0 flex items-center gap-1" id="pfilter-gdrive">
-                  <span>☁️</span> Google Drive
-                </button>
-                <button onclick="filterPlexTag('nas')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0 flex items-center gap-1" id="pfilter-nas">
-                  <span>🖥️</span> NAS Storage
-                </button>
-                <div class="h-4 w-px bg-zinc-800 mx-1 shrink-0"></div>
-                <button onclick="filterPlexTag('1080p')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="pfilter-1080p">🎬 1080p</button>
-                <button onclick="filterPlexTag('480p')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="pfilter-480p">📺 480p</button>
-                <button onclick="filterPlexTag('anime')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="pfilter-anime">🎌 Anime</button>
-                <button onclick="filterPlexTag('live')" class="plex-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="pfilter-live">🎥 Live Action</button>
-              </div>
-            </div>
+            <!-- ==================== MEDIA LIST CONTAINER (Hiển thị kho đã chọn) ==================== -->
+            <div id="storage-media-list-container" class="space-y-4 pt-2">
+              
+              <!-- Current Active Storage Header Bar -->
+              <div class="flex flex-wrap items-center justify-between gap-3 text-xs bg-zinc-900/60 p-3.5 rounded-2xl border border-zinc-800">
+                <div class="flex items-center gap-2">
+                  <span class="text-base" id="active-storage-icon">☁️</span>
+                  <div>
+                    <span class="font-bold text-white text-xs" id="active-storage-title">Đang Duyệt: Google Drive (gdrive:Phim)</span>
+                    <span class="text-zinc-500 text-[10px] ml-2" id="active-storage-subtitle">• 17 Phim hiển thị</span>
+                  </div>
+                </div>
 
-            <!-- Plex Poster Grid -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-10 gap-3 sm:gap-4" id="plex-poster-grid">
-              <!-- JS will populate Plex cards -->
+                <!-- Format Filter Pills -->
+                <div class="flex items-center gap-1.5 overflow-x-auto custom-scroll text-xs">
+                  <button onclick="filterPlexTag('all')" class="plex-filter-btn px-3 py-1 rounded-lg bg-[#e5a00d] text-black font-bold transition shadow shrink-0" id="pfilter-all">Tất Cả</button>
+                  <button onclick="filterPlexTag('1080p')" class="plex-filter-btn px-3 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="pfilter-1080p">🎬 1080p</button>
+                  <button onclick="filterPlexTag('480p')" class="plex-filter-btn px-3 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="pfilter-480p">📺 480p</button>
+                  <button onclick="filterPlexTag('anime')" class="plex-filter-btn px-3 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="pfilter-anime">🎌 Anime</button>
+                  <button onclick="filterPlexTag('live')" class="plex-filter-btn px-3 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="pfilter-live">🎥 Live Action</button>
+                </div>
+              </div>
+
+              <!-- Poster Grid -->
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-10 gap-3 sm:gap-4" id="plex-poster-grid">
+                <!-- Populated by JS -->
+              </div>
             </div>
           </div>
 
@@ -3965,15 +3981,69 @@
     }
 
     function filterPlexShows() {
-      const q = document.getElementById('plex-search').value.toLowerCase();
+      const q = (document.getElementById('plex-search')?.value || '').toLowerCase();
       let filtered = plexShowsData.filter(s => s.title.toLowerCase().includes(q) || s.vn.toLowerCase().includes(q) || s.id.includes(q));
+      
+      // Filter by selected Storage Hub (gdrive vs nas)
+      if (currentSelectedStorage === "nas") {
+        // Shows available on NAS Storage
+        filtered = filtered.filter(s => s.id === "320122" || s.id === "78864");
+      }
+
       if (currentPlexFilter !== "all") {
         if (currentPlexFilter === "1080p") filtered = filtered.filter(s => s.qual.includes("1080p"));
         else if (currentPlexFilter === "480p") filtered = filtered.filter(s => s.qual.includes("480p"));
         else if (currentPlexFilter === "anime") filtered = filtered.filter(s => s.type === "anime");
         else if (currentPlexFilter === "live") filtered = filtered.filter(s => s.type === "live");
       }
+
+      const subLabel = document.getElementById('active-storage-subtitle');
+      if (subLabel) {
+        subLabel.innerText = `• ${filtered.length} Phim hiển thị`;
+      }
+
       renderPlexGrid(filtered);
+    }
+
+    
+    let currentSelectedStorage = "gdrive";
+
+    function selectStorageSource(source) {
+      currentSelectedStorage = source;
+      const gdriveCard = document.getElementById('storage-card-gdrive');
+      const nasCard = document.getElementById('storage-card-nas');
+      const gdriveIndicator = document.getElementById('gdrive-active-indicator');
+      const nasIndicator = document.getElementById('nas-active-indicator');
+      const activeIcon = document.getElementById('active-storage-icon');
+      const activeTitle = document.getElementById('active-storage-title');
+
+      if (source === 'gdrive') {
+        gdriveCard.className = "p-5 rounded-3xl bg-emerald-950/30 border-2 border-emerald-500 ring-4 ring-emerald-500/10 shadow-xl cursor-pointer transition relative overflow-hidden group hover:scale-[1.01]";
+        nasCard.className = "p-5 rounded-3xl bg-zinc-900/60 border border-zinc-800/80 hover:border-amber-500/50 shadow-md cursor-pointer transition relative overflow-hidden group hover:scale-[1.01] opacity-75 hover:opacity-100";
+        
+        gdriveIndicator.className = "px-2.5 py-1 rounded-full bg-emerald-500 text-black font-bold text-[10px] shadow-md flex items-center gap-1";
+        gdriveIndicator.innerHTML = "<span>✓</span> Đang Xem";
+
+        nasIndicator.className = "px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-400 font-medium text-[10px] flex items-center gap-1";
+        nasIndicator.innerHTML = "Bấm để xem";
+
+        if (activeIcon) activeIcon.innerText = "☁️";
+        if (activeTitle) activeTitle.innerText = "Đang Duyệt: Google Drive (gdrive:Phim)";
+      } else if (source === 'nas') {
+        nasCard.className = "p-5 rounded-3xl bg-amber-950/30 border-2 border-amber-500 ring-4 ring-amber-500/10 shadow-xl cursor-pointer transition relative overflow-hidden group hover:scale-[1.01]";
+        gdriveCard.className = "p-5 rounded-3xl bg-zinc-900/60 border border-zinc-800/80 hover:border-emerald-500/50 shadow-md cursor-pointer transition relative overflow-hidden group hover:scale-[1.01] opacity-75 hover:opacity-100";
+
+        nasIndicator.className = "px-2.5 py-1 rounded-full bg-amber-500 text-black font-bold text-[10px] shadow-md flex items-center gap-1";
+        nasIndicator.innerHTML = "<span>✓</span> Đang Xem";
+
+        gdriveIndicator.className = "px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-400 font-medium text-[10px] flex items-center gap-1";
+        gdriveIndicator.innerHTML = "Bấm để xem";
+
+        if (activeIcon) activeIcon.innerText = "🖥️";
+        if (activeTitle) activeTitle.innerText = "Đang Duyệt: NAS Storage (/srv/mergerfs/MainPool/Phim)";
+      }
+
+      filterPlexShows();
     }
 
     function filterPlexTag(tag) {
