@@ -834,6 +834,9 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                 "command": item
             })
 
+        elif path == "/api/library/cross_check":
+            return self.do_GET()
+
         # 2.3 API: Start / Stop Aria2 Daemon
         elif path == "/api/aria2/control":
             op = req_data.get("operation", "start")
