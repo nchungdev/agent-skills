@@ -673,25 +673,25 @@
 
       </div>
 
-      <!-- ==================== TAB 2: TORBOX ==================== -->
+      <!-- ==================== TAB 2: TẢI XUỐNG ==================== -->
       <div id="tab-torbox" class="hidden space-y-0">
         
         <!-- Pinned Header (Sticky Top-0 Flush) -->
         <div class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-3 shadow-sm">
           <div class="flex items-center gap-3">
             <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold text-base border border-purple-500/20 shrink-0">
-              ⚡
+              📥
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <h3 class="font-bold text-sm text-white">Quản Lý TorBox</h3>
-                <span class="px-1.5 py-0.2 text-[9px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/30 rounded" id="torbox-count">32 mục</span>
+                <h3 class="font-bold text-sm text-white">Quản Lý Tải Xuống</h3>
+                <span class="px-1.5 py-0.2 text-[9px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/30 rounded" id="torbox-count">25 mục</span>
               </div>
-              <p class="text-xs text-zinc-400 hidden sm:block">Tải trực tiếp về máy • Thêm Magnet • Xóa Torrent • Lọc theo trạng thái</p>
+              <p class="text-xs text-zinc-400 hidden sm:block">Đa engine (TorBox Cloud, Aria2) • Tải về máy • Đồng bộ trực tiếp lên Google Drive & NAS</p>
             </div>
           </div>
 
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
             <input type="text" id="torbox-search" oninput="filterTorbox()" placeholder="🔍 Tìm torrent..." class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 w-32 sm:w-48">
             <button onclick="openModal('modal-add-magnet')" class="px-3 py-1.5 sm:px-4 sm:py-2 bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs rounded-xl transition shadow-md shadow-purple-600/20 flex items-center gap-1 shrink-0">
               <span>➕</span> <span class="hidden sm:inline">Thêm</span> Magnet
@@ -700,12 +700,34 @@
         </div>
 
         <div class="p-4 sm:p-6 pb-28 lg:pb-10 space-y-4 w-full">
-          <!-- TorBox Filter Pills -->
-          <div class="flex gap-2 overflow-x-auto custom-scroll pb-1 text-xs">
-            <button onclick="filterTorboxStatus('all')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white font-medium hover:bg-zinc-700 transition active shrink-0" id="tbfilter-all">Tất Cả</button>
-            <button onclick="filterTorboxStatus('ready')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="tbfilter-ready">🟢 Sẵn Sàng</button>
-            <button onclick="filterTorboxStatus('active')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="tbfilter-active">🚀 Đang Tải</button>
-            <button onclick="filterTorboxStatus('queued')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="tbfilter-queued">⏳ Hàng Đợi</button>
+          
+          <!-- Top Control Bar: Filters + Batch Sync Multi Toolbar -->
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <!-- Filter Pills -->
+            <div class="flex gap-2 overflow-x-auto custom-scroll pb-1 text-xs">
+              <button onclick="filterTorboxStatus('all')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white font-medium hover:bg-zinc-700 transition active shrink-0" id="tbfilter-all">Tất Cả</button>
+              <button onclick="filterTorboxStatus('ready')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="tbfilter-ready">🟢 Sẵn Sàng</button>
+              <button onclick="filterTorboxStatus('active')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="tbfilter-active">🚀 Đang Tải</button>
+              <button onclick="filterTorboxStatus('queued')" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0" id="tbfilter-queued">⏳ Hàng Đợi</button>
+            </div>
+
+            <!-- Batch Multi Sync Toolbar (Appears when items are checked) -->
+            <div id="torbox-batch-toolbar" class="hidden items-center gap-2 bg-zinc-900 border border-purple-500/40 rounded-xl px-3 py-1.5 shadow-lg shadow-purple-500/10 text-xs">
+              <span class="text-zinc-300 font-semibold font-mono" id="torbox-selected-count">Đã chọn 0 mục</span>
+              <div class="h-4 w-px bg-zinc-700 mx-1"></div>
+              <button onclick="syncSelectedTorbox('drive')" class="px-2.5 py-1 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 rounded-lg transition font-semibold flex items-center gap-1 shadow-sm">
+                <span>☁️</span> Sync Lên Drive
+              </button>
+              <button onclick="syncSelectedTorbox('nas')" class="px-2.5 py-1 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/30 rounded-lg transition font-semibold flex items-center gap-1 shadow-sm">
+                <span>🖥️</span> Sync Lên NAS
+              </button>
+              <button onclick="deleteSelectedTorbox()" class="px-2.5 py-1 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 rounded-lg transition font-semibold flex items-center gap-1">
+                <span>🗑️</span> Xóa
+              </button>
+              <button onclick="clearTorboxSelection()" class="text-zinc-500 hover:text-white px-1.5 py-1 text-xs" title="Bỏ chọn">
+                ✕
+              </button>
+            </div>
           </div>
 
           <div class="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl">
@@ -713,11 +735,14 @@
               <table class="w-full text-left text-xs text-zinc-300">
                 <thead class="bg-zinc-950 text-zinc-400 uppercase text-[10px] tracking-wider border-b border-zinc-800">
                   <tr>
-                    <th class="px-4 py-3.5">ID</th>
+                    <th class="px-3 py-3.5 w-10 text-center">
+                      <input type="checkbox" id="torbox-select-all" onchange="toggleSelectAllTorbox(this.checked)" class="w-4 h-4 rounded border-zinc-700 bg-zinc-900 text-purple-600 focus:ring-0 cursor-pointer">
+                    </th>
+                    <th class="px-3 py-3.5">ID</th>
                     <th class="px-4 py-3.5">Tên Phim / Torrent</th>
                     <th class="px-4 py-3.5">Dung Lượng</th>
                     <th class="px-4 py-3.5">Trạng Thái Cloud</th>
-                    <th class="px-4 py-3.5 text-right">Thao Tác</th>
+                    <th class="px-4 py-3.5 text-right">Đồng Bộ & Thao Tác</th>
                   </tr>
                 </thead>
                 <tbody id="torbox-tbody" class="divide-y divide-zinc-800">

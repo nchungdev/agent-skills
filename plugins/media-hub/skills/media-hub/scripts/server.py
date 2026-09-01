@@ -557,6 +557,25 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             res = torbox_mgr.control_queued(queued_id, operation=op)
             return self._send_json(res)
 
+        # 2.2 API: Sync Torbox Items to Drive/NAS
+        elif path == "/api/download/sync":
+            ids = req_data.get("ids", [])
+            target = req_data.get("target", "drive")
+            names = req_data.get("names", [])
+            if not ids:
+                return self._send_json({"success": False, "error": "Chưa chọn mục để đồng bộ"}, status=400)
+            
+            target_label = "Google Drive" if target == "drive" else ("NAS Storage" if target == "nas" else "Google Drive & NAS")
+            names_str = f" ({', '.join(names[:2])}{'...' if len(names) > 2 else ''})" if names else ""
+            cmd_desc = f"Đồng bộ {len(ids)} torrent{names_str} lên {target_label}"
+            item = agent_bridge.add_command(cmd_desc, author="MediaHub UI")
+            
+            return self._send_json({
+                "success": True,
+                "message": f"🚀 Đã tạo yêu cầu đồng bộ {len(ids)} mục lên {target_label} thành công!",
+                "command": item
+            })
+
         # 3. API: Send Agent Command
         elif path == "/api/agent/command":
             cmd = req_data.get("command")
