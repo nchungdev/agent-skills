@@ -476,6 +476,86 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             cfg = load_unified_settings()
             return self._send_json(cfg)
 
+        # 8. REST API: Service Connection Health Checks (/api/services/status)
+        elif path == "/api/services/status":
+            import concurrent.futures
+            cfg = load_unified_settings()
+            
+            def check_gdrive():
+                try:
+                    res = subprocess.run([
+                        gdrive_mgr.rclone_bin, "--config", gdrive_mgr.rclone_config, "about", "gdrive:"
+                    ], capture_output=True, text=True, timeout=5)
+                    if res.returncode == 0:
+                        return {"connected": True, "detail": "Rclone Google Drive Online"}
+                    # Fallback check lsd
+                    res2 = subprocess.run([
+                        gdrive_mgr.rclone_bin, "--config", gdrive_mgr.rclone_config, "lsd", "gdrive:Phim"
+                    ], capture_output=True, text=True, timeout=5)
+                    return {"connected": res2.returncode == 0, "detail": "Rclone Google Drive Online" if res2.returncode == 0 else (res2.stderr.strip() or "Lỗi Rclone")}
+                except Exception as e:
+                    return {"connected": False, "detail": str(e)}
+
+            def check_nas():
+                host = cfg.get("nas_host", "192.168.1.37")
+                user = cfg.get("nas_user", "chungnh")
+                port = int(cfg.get("nas_port", 22))
+                key = os.path.expanduser(cfg.get("nas_ssh_key", "~/.ssh/id_ed25519"))
+                try:
+                    ssh_cmd = ["ssh", "-p", str(port), "-o", "BatchMode=yes", "-o", "ConnectTimeout=3", "-o", "StrictHostKeyChecking=no"]
+                    if os.path.exists(key):
+                        ssh_cmd += ["-i", key]
+                    ssh_cmd += [f"{user}@{host}", "echo OK"]
+                    res = subprocess.run(ssh_cmd, capture_output=True, text=True, timeout=4)
+                    return {"connected": res.returncode == 0, "detail": f"SSH {user}@{host}:{port} Đang kết nối" if res.returncode == 0 else (res.stderr.strip() or "SSH Timeout")}
+                except Exception as e:
+                    return {"connected": False, "detail": str(e)}
+
+            def check_torbox():
+                try:
+                    res = torbox_mgr.get_torrents()
+                    return {"connected": res.get("success", False), "detail": "TorBox Cloud API Online" if res.get("success") else (res.get("error") or "Không thể xác thực Token")}
+                except Exception as e:
+                    return {"connected": False, "detail": str(e)}
+
+            def check_tmdb():
+                tmdb_key = cfg.get("tmdb_api_key")
+                if not tmdb_key:
+                    return {"connected": False, "detail": "Chưa điền API Key"}
+                try:
+                    req = urllib.request.Request(f"https://api.themoviedb.org/3/configuration?api_key={tmdb_key}")
+                    with urllib.request.urlopen(req, timeout=3) as resp:
+                        return {"connected": resp.status == 200, "detail": "TMDb API v3 Online"}
+                except Exception as e:
+                    return {"connected": False, "detail": str(e)}
+
+            def check_aria2():
+                aria_host = cfg.get("aria2_rpc_host", "127.0.0.1")
+                aria_port = int(cfg.get("aria2_rpc_port", 6800))
+                try:
+                    s = socket.create_connection((aria_host, aria_port), timeout=1.5)
+                    s.close()
+                    return {"connected": True, "detail": f"Aria2 RPC ({aria_host}:{aria_port}) Online"}
+                except Exception:
+                    return {"connected": False, "detail": f"Aria2 RPC ({aria_host}:{aria_port}) Offline"}
+
+            with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+                f_gdrive = executor.submit(check_gdrive)
+                f_nas = executor.submit(check_nas)
+                f_torbox = executor.submit(check_torbox)
+                f_tmdb = executor.submit(check_tmdb)
+                f_aria2 = executor.submit(check_aria2)
+
+                results = {
+                    "gdrive": f_gdrive.result(),
+                    "nas": f_nas.result(),
+                    "torbox": f_torbox.result(),
+                    "tmdb": f_tmdb.result(),
+                    "aria2": f_aria2.result()
+                }
+
+            return self._send_json({"success": True, "services": results})
+
         # 7. REST API: TMDb Live Search (/api/tmdb/search)
         elif path == "/api/tmdb/search":
             query_params = urllib.parse.parse_qs(parsed_url.query)

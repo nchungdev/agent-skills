@@ -1072,7 +1072,12 @@
                   <p class="text-[11px] text-zinc-400">Token API, nguồn tải mặc định và số luồng tải song song</p>
                 </div>
               </div>
-              <span class="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[10px] font-mono font-bold">torbox</span>
+              <div class="flex items-center gap-2">
+                <span id="status-badge-torbox" class="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-zinc-800 text-zinc-400 border border-zinc-700 flex items-center gap-1.5 transition-all">
+                  <span class="w-1.5 h-1.5 rounded-full bg-zinc-500"></span> Đang kiểm tra...
+                </span>
+                <span class="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[10px] font-mono font-bold">torbox</span>
+              </div>
             </div>
 
             <div class="space-y-4 text-xs">
@@ -1107,7 +1112,12 @@
 
               <!-- Aria2 RPC Daemon Settings -->
               <div class="pt-3 border-t border-zinc-800/60">
-                <label class="block text-zinc-400 font-medium mb-1.5 font-mono text-[11px]">🧲 Aria2c RPC Daemon (Tải Torrent trên máy):</label>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label class="block text-zinc-400 font-medium font-mono text-[11px]">🧲 Aria2c RPC Daemon (Tải Torrent trên máy):</label>
+                  <span id="status-badge-aria2" class="px-2 py-0.5 rounded-full text-[9px] font-semibold bg-zinc-800 text-zinc-400 border border-zinc-700 flex items-center gap-1 transition-all">
+                    <span class="w-1.5 h-1.5 rounded-full bg-zinc-500"></span> Đang kiểm tra...
+                  </span>
+                </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label class="block text-zinc-500 text-[10px] mb-1">Aria2 Host</label>
@@ -1137,7 +1147,12 @@
                   <p class="text-[11px] text-zinc-400">API Key, ngôn ngữ và tự động tải poster/metadata NFO chuẩn Plex</p>
                 </div>
               </div>
-              <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-mono font-bold">tmdb</span>
+              <div class="flex items-center gap-2">
+                <span id="status-badge-tmdb" class="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-zinc-800 text-zinc-400 border border-zinc-700 flex items-center gap-1.5 transition-all">
+                  <span class="w-1.5 h-1.5 rounded-full bg-zinc-500"></span> Đang kiểm tra...
+                </span>
+                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-mono font-bold">tmdb</span>
+              </div>
             </div>
 
             <div class="space-y-4 text-xs">
@@ -1184,9 +1199,14 @@
                   <p class="text-[11px] text-zinc-400">Kết nối SSH nội bộ tới NAS Synology/QNAP và tự động dò thư mục Plex</p>
                 </div>
               </div>
-              <button onclick="scanNasLibraries()" class="px-3 py-1.5 bg-amber-600/20 hover:bg-amber-600 border border-amber-500/30 text-amber-300 hover:text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
-                <span>🔍</span> Quét Thư Mục NAS
-              </button>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span id="status-badge-nas" class="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-zinc-800 text-zinc-400 border border-zinc-700 flex items-center gap-1.5 transition-all">
+                  <span class="w-1.5 h-1.5 rounded-full bg-zinc-500"></span> Đang kiểm tra...
+                </span>
+                <button onclick="scanNasLibraries()" class="px-3 py-1.5 bg-amber-600/20 hover:bg-amber-600 border border-amber-500/30 text-amber-300 hover:text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
+                  <span>🔍</span> Quét Thư Mục NAS
+                </button>
+              </div>
             </div>
 
             <div class="space-y-3.5 text-xs">
@@ -1237,9 +1257,14 @@
                   <p class="text-[11px] text-zinc-400">Remote Rclone, thư mục lưu Cloud và số luồng truyền tải</p>
                 </div>
               </div>
-              <button onclick="checkGDriveConnection()" class="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600 border border-emerald-500/30 text-emerald-300 hover:text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
-                <span>🔍</span> Kiểm Tra Kết Nối Drive
-              </button>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span id="status-badge-gdrive" class="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-zinc-800 text-zinc-400 border border-zinc-700 flex items-center gap-1.5 transition-all">
+                  <span class="w-1.5 h-1.5 rounded-full bg-zinc-500"></span> Đang kiểm tra...
+                </span>
+                <button onclick="checkGDriveConnection()" class="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600 border border-emerald-500/30 text-emerald-300 hover:text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
+                  <span>🔍</span> Kiểm Tra Kết Nối Drive
+                </button>
+              </div>
             </div>
 
             <div class="space-y-3.5 text-xs">
@@ -2671,12 +2696,45 @@
 
       if (tab === 'settings') {
         fetchSettings();
+        checkAllServicesStatus();
       } else if (tab === 'agent') {
         loadAgentQueueFull();
         setTimeout(() => {
           const inp = document.getElementById('full-agent-input');
           if (inp) inp.focus();
         }, 150);
+      }
+    }
+
+
+    async function checkAllServicesStatus() {
+      try {
+        const res = await fetch('/api/services/status');
+        const data = await res.json();
+        if (!data.success || !data.services) return;
+        const s = data.services;
+
+        const renderBadge = (elementId, serviceInfo, connectedText) => {
+          const el = document.getElementById(elementId);
+          if (!el) return;
+          if (serviceInfo && serviceInfo.connected) {
+            el.className = 'px-2.5 py-1 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5 shadow-sm';
+            el.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> ${connectedText || 'Đang kết nối'}`;
+            el.title = serviceInfo.detail || 'Kết nối thành công';
+          } else {
+            el.className = 'px-2.5 py-1 rounded-full text-[10px] font-semibold bg-red-500/10 text-red-400 border border-red-500/30 flex items-center gap-1.5 shadow-sm';
+            el.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Mất kết nối`;
+            el.title = (serviceInfo && serviceInfo.detail) || 'Không thể kết nối';
+          }
+        };
+
+        renderBadge('status-badge-gdrive', s.gdrive, 'Đang kết nối');
+        renderBadge('status-badge-nas', s.nas, 'Đang kết nối');
+        renderBadge('status-badge-torbox', s.torbox, 'Đang kết nối');
+        renderBadge('status-badge-tmdb', s.tmdb, 'Đang kết nối');
+        renderBadge('status-badge-aria2', s.aria2, 'Đang kết nối');
+      } catch (e) {
+        console.error("Error checking service statuses:", e);
       }
     }
 
