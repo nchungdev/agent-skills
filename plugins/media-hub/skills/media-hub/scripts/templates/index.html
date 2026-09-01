@@ -805,20 +805,23 @@
               </div>
             </div>
 
-            <!-- Row 2: Status Sub-Filter (Visible when All or TorBox is selected) -->
+                        <!-- Row 2: Status Sub-Filter (Filter by Storage Location & Progress) -->
             <div id="status-filter-container" class="flex items-center gap-1 bg-zinc-950/80 p-1 rounded-xl border border-zinc-800/80 text-xs font-semibold overflow-x-auto custom-scroll max-w-full">
               <span class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider px-2 shrink-0">Trạng Thái:</span>
               <button onclick="filterTorboxStatus('all')" id="tbfilter-all" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white font-bold transition shadow-sm shrink-0">
                 Tất Cả (<span id="tbcount-all">25</span>)
               </button>
-              <button onclick="filterTorboxStatus('ready')" id="tbfilter-ready" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
-                Sẵn Sàng (<span id="tbcount-ready">25</span>)
+              <button onclick="filterTorboxStatus('drive')" id="tbfilter-drive" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
+                Đã Có Trên Drive (<span id="tbcount-drive">21</span>)
               </button>
-              <button onclick="filterTorboxStatus('synced')" id="tbfilter-synced" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
-                Đã Lên Kho (<span id="tbcount-synced">21</span>)
+              <button onclick="filterTorboxStatus('nas')" id="tbfilter-nas" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
+                Đã Có Trên NAS (<span id="tbcount-nas">21</span>)
+              </button>
+              <button onclick="filterTorboxStatus('both')" id="tbfilter-both" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
+                Cả Drive & NAS (<span id="tbcount-both">21</span>)
               </button>
               <button onclick="filterTorboxStatus('unsynced')" id="tbfilter-unsynced" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
-                Chưa Sync (<span id="tbcount-unsynced">4</span>)
+                Chưa Lên Kho (<span id="tbcount-unsynced">4</span>)
               </button>
               <button onclick="filterTorboxStatus('active')" id="tbfilter-active" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
                 Đang Tải (<span id="tbcount-active">0</span>)
@@ -2639,7 +2642,7 @@
       sendQuickCommand(`Kiểm tra chi tiết tiến trình và phụ đề cho show ${selectedPipelineTask.title}`);
     }
 
-                let currentEngineFilter = "all";
+                    let currentEngineFilter = "all";
     let currentTorboxFilter = "all";
 
     function setEngineFilter(engine) {
@@ -2651,18 +2654,6 @@
       if (activeEngineBtn) {
         activeEngineBtn.className = "engine-tab-btn px-3 py-1.5 rounded-lg bg-purple-600 text-white font-bold transition shadow-sm shrink-0";
       }
-
-      const statusContainer = document.getElementById('status-filter-container');
-      if (statusContainer) {
-        if (engine === 'all' || engine === 'torbox') {
-          statusContainer.classList.remove('hidden');
-          statusContainer.classList.add('flex');
-        } else {
-          statusContainer.classList.remove('hidden');
-          statusContainer.classList.add('flex');
-        }
-      }
-
       applyTorboxFilter();
     }
 
@@ -2673,7 +2664,15 @@
       });
       const activeStatusBtn = document.getElementById(`tbfilter-${status}`);
       if (activeStatusBtn) {
-        activeStatusBtn.className = "torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white font-bold transition shadow-sm shrink-0";
+        if (status === 'drive') {
+          activeStatusBtn.className = "torbox-filter-btn px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold transition shadow-sm shrink-0";
+        } else if (status === 'nas') {
+          activeStatusBtn.className = "torbox-filter-btn px-3 py-1.5 rounded-lg bg-amber-600 text-white font-bold transition shadow-sm shrink-0";
+        } else if (status === 'both') {
+          activeStatusBtn.className = "torbox-filter-btn px-3 py-1.5 rounded-lg bg-purple-600 text-white font-bold transition shadow-sm shrink-0";
+        } else {
+          activeStatusBtn.className = "torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white font-bold transition shadow-sm shrink-0";
+        }
       }
       applyTorboxFilter();
     }
@@ -2695,27 +2694,31 @@
         filtered = filtered.filter(t => t.engine === 'direct');
       }
 
-      // Update TorBox Status Counts
-      const countReady = currentTorrents.filter(t => t.download_state === 'completed' || t.download_state === 'cached' || t.progress >= 1).length;
-      const countSynced = currentTorrents.filter(t => t.is_completed_and_synced).length;
-      const countUnsynced = currentTorrents.filter(t => !t.is_completed_and_synced && (t.download_state === 'completed' || t.download_state === 'cached' || t.progress >= 1)).length;
+      // Calculate Storage Location Counts
+      const countDrive = currentTorrents.filter(t => (t.locations || []).includes('gdrive') || (t.synced_destinations || []).includes('gdrive')).length;
+      const countNas = currentTorrents.filter(t => (t.locations || []).includes('nas') || (t.synced_destinations || []).includes('nas')).length;
+      const countBoth = currentTorrents.filter(t => ((t.locations || []).includes('gdrive') || (t.synced_destinations || []).includes('gdrive')) && ((t.locations || []).includes('nas') || (t.synced_destinations || []).includes('nas'))).length;
+      const countUnsynced = currentTorrents.filter(t => !t.is_completed_and_synced).length;
       const countActive = currentTorrents.filter(t => t.download_state === 'downloading' || (t.progress > 0 && t.progress < 1)).length;
       const countQueued = currentTorrents.filter(t => t.download_state === 'queued' || t.is_queued || t.progress === 0).length;
 
       if (document.getElementById('tbcount-all')) document.getElementById('tbcount-all').innerText = currentTorrents.length;
-      if (document.getElementById('tbcount-ready')) document.getElementById('tbcount-ready').innerText = countReady;
-      if (document.getElementById('tbcount-synced')) document.getElementById('tbcount-synced').innerText = countSynced;
+      if (document.getElementById('tbcount-drive')) document.getElementById('tbcount-drive').innerText = countDrive;
+      if (document.getElementById('tbcount-nas')) document.getElementById('tbcount-nas').innerText = countNas;
+      if (document.getElementById('tbcount-both')) document.getElementById('tbcount-both').innerText = countBoth;
       if (document.getElementById('tbcount-unsynced')) document.getElementById('tbcount-unsynced').innerText = countUnsynced;
       if (document.getElementById('tbcount-active')) document.getElementById('tbcount-active').innerText = countActive;
       if (document.getElementById('tbcount-queued')) document.getElementById('tbcount-queued').innerText = countQueued;
 
-      // Filter by TorBox Status
-      if (currentTorboxFilter === 'ready') {
-        filtered = filtered.filter(t => t.download_state === 'completed' || t.download_state === 'cached' || t.progress >= 1);
-      } else if (currentTorboxFilter === 'synced') {
-        filtered = filtered.filter(t => t.is_completed_and_synced);
+      // Filter by Storage Location & Status
+      if (currentTorboxFilter === 'drive') {
+        filtered = filtered.filter(t => (t.locations || []).includes('gdrive') || (t.synced_destinations || []).includes('gdrive'));
+      } else if (currentTorboxFilter === 'nas') {
+        filtered = filtered.filter(t => (t.locations || []).includes('nas') || (t.synced_destinations || []).includes('nas'));
+      } else if (currentTorboxFilter === 'both') {
+        filtered = filtered.filter(t => ((t.locations || []).includes('gdrive') || (t.synced_destinations || []).includes('gdrive')) && ((t.locations || []).includes('nas') || (t.synced_destinations || []).includes('nas')));
       } else if (currentTorboxFilter === 'unsynced') {
-        filtered = filtered.filter(t => !t.is_completed_and_synced && (t.download_state === 'completed' || t.download_state === 'cached' || t.progress >= 1));
+        filtered = filtered.filter(t => !t.is_completed_and_synced);
       } else if (currentTorboxFilter === 'active') {
         filtered = filtered.filter(t => t.download_state === 'downloading' || (t.progress > 0 && t.progress < 1));
       } else if (currentTorboxFilter === 'queued') {
