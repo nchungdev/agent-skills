@@ -1956,33 +1956,24 @@
               </div>
             `).join('');
           } else {
-            dlContainer.innerHTML = `
-              <div class="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-3">
+                        dlContainer.innerHTML = `
+              <div class="p-4 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 space-y-3">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2.5">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span class="font-bold text-xs text-white">Hàng Đợi Tải Xuống Đang Rảnh</span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span class="font-bold text-xs text-white">Không có tiến trình tải nào đang chạy</span>
                   </div>
-                  <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-bold">
-                    32 Torrents Sẵn Sàng
+                  <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-bold">
+                    Tất cả Torrents đã 100% Cached
                   </span>
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] font-mono">
-                  <div class="p-2 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
-                    <span class="text-zinc-500 block text-[9px] uppercase">Engine Tải Hoạt Động:</span>
-                    <span class="text-purple-300 font-bold">⚡ TorBox Cloud (Gigabit)</span>
-                  </div>
-                  <div class="p-2 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
-                    <span class="text-zinc-500 block text-[9px] uppercase">Thư Mục Đệm (Tải Về Đâu):</span>
-                    <span class="text-blue-400 truncate block">📁 .../media_staging</span>
-                  </div>
-                </div>
-
-                <div class="flex items-center justify-between pt-1 text-[11px]">
-                  <span class="text-zinc-400">Bấm nút bên cạnh để nạp link hoặc bắt đầu kéo tập phim</span>
-                  <button onclick="setTab('torbox')" class="px-3 py-1.5 rounded-xl bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/30 font-semibold transition flex items-center gap-1 shadow-sm text-xs">
-                    <span>📥</span> Mở Kho Tải Xuống
+                <p class="text-xs text-zinc-400">
+                  Dữ liệu trên TorBox Cloud đã được tải và lưu trữ an toàn. Khi bấm Sync, hệ thống sẽ tự động kích hoạt chuỗi truyền tải cuốn chiếu theo nhu cầu.
+                </p>
+                <div class="pt-1 flex items-center justify-between text-[11px] text-zinc-500">
+                  <span>Trạng thái: <strong class="text-zinc-300">Hàng đợi rảnh rỗi</strong></span>
+                  <button onclick="setTab('torbox')" class="text-blue-400 hover:text-blue-300 font-semibold">
+                    Xem danh sách torrent ➔
                   </button>
                 </div>
               </div>
