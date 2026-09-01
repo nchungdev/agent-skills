@@ -1,3 +1,4 @@
+import threading
 _torbox_api_cache = None
 _torbox_api_cache_time = 0
 import re
