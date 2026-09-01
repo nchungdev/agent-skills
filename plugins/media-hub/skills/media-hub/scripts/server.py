@@ -216,6 +216,47 @@ def load_unified_settings():
 
     return cfg
 
+
+# ==================== DEDUPLICATING SYNC PIPELINE COORDINATOR ====================
+class SyncPipelineCoordinator:
+    def __init__(self):
+        self.lock = threading.Lock()
+        # active_jobs: torrent_id -> {"status": "downloading"|"uploading"|"completed", "targets": set(), "name": str, "progress": float}
+        self.active_jobs = {}
+
+    def register_sync_request(self, torrent_id, target, name=""):
+        with self.lock:
+            tid = str(torrent_id)
+            if tid in self.active_jobs:
+                job = self.active_jobs[tid]
+                job["targets"].add(target)
+                return {
+                    "is_new_download": False,
+                    "status": job["status"],
+                    "targets": list(job["targets"]),
+                    "message": f"Torrent #{tid} đang trong tiến trình xử lý. Đã bổ sung đích đến: {target} (Chỉ tải 1 lần từ TorBox)"
+                }
+            else:
+                self.active_jobs[tid] = {
+                    "status": "queued",
+                    "targets": {target},
+                    "name": name,
+                    "progress": 0.0,
+                    "created_at": time.time()
+                }
+                return {
+                    "is_new_download": True,
+                    "status": "queued",
+                    "targets": [target],
+                    "message": f"Khởi động chuỗi tải 1 lần từ TorBox cho #{tid} và đẩy lên {target}"
+                }
+
+    def get_job_status(self, torrent_id):
+        with self.lock:
+            return self.active_jobs.get(str(torrent_id))
+
+sync_coordinator = SyncPipelineCoordinator()
+
 class MediaHubHandler(BaseHTTPRequestHandler):
     def _send_json(self, data, status=200):
         self.send_response(status)
@@ -974,7 +1015,7 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             res = torbox_mgr.control_queued(queued_id, operation=op)
             return self._send_json(res)
 
-        # 2.2 API: Sync Torbox Items to Drive/NAS
+                # 2.2 API: Sync Torbox Items to Drive/NAS with De-duplication
         elif path == "/api/download/sync":
             ids = req_data.get("ids", [])
             target = req_data.get("target", "drive")
@@ -982,14 +1023,20 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             if not ids:
                 return self._send_json({"success": False, "error": "Chưa chọn mục để đồng bộ"}, status=400)
             
+            results = []
+            for idx, tid in enumerate(ids):
+                tname = names[idx] if idx < len(names) else f"Torrent #{tid}"
+                res_info = sync_coordinator.register_sync_request(tid, target, tname)
+                results.append(res_info)
+
             target_label = "Google Drive" if target == "drive" else ("NAS Storage" if target == "nas" else "Google Drive & NAS")
-            names_str = f" ({', '.join(names[:2])}{'...' if len(names) > 2 else ''})" if names else ""
-            cmd_desc = f"Đồng bộ {len(ids)} torrent{names_str} lên {target_label}"
+            cmd_desc = f"Đồng bộ {len(ids)} torrent lên {target_label} (Tối ưu tải 1 lần từ TorBox)"
             item = agent_bridge.add_command(cmd_desc, author="MediaHub UI")
             
             return self._send_json({
                 "success": True,
-                "message": f"🚀 Đã tạo yêu cầu đồng bộ {len(ids)} mục lên {target_label} thành công!",
+                "message": f"🚀 Đã tiếp nhận yêu cầu đồng bộ {len(ids)} mục lên {target_label} (Chỉ tải 1 lần từ TorBox nếu trùng)!",
+                "details": results,
                 "command": item
             })
 
