@@ -476,6 +476,144 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             cfg = load_unified_settings()
             return self._send_json(cfg)
 
+        # 9. REST API: Cross-Storage Scan & Compare (GDrive vs NAS vs Local)
+        elif path == "/api/library/cross_check":
+            cfg = load_unified_settings()
+            key = os.path.expanduser(cfg.get("nas_ssh_key", "~/.ssh/id_ed25519"))
+            user = cfg.get("nas_user", "chungnh")
+            host = cfg.get("nas_host", "192.168.1.37")
+            nas_base = cfg.get("nas_path", "/srv/mergerfs/MainPool/Phim/TV Shows").rstrip("/")
+            staging_dir = cfg.get("staging_dir", "/Volumes/512GB/AI Workspace/media_staging")
+            
+            # 1. Get GDrive Shows
+            gdrive_shows = gdrive_mgr.list_shows()
+            
+            # 2. Get NAS Directory listings via SSH
+            nas_folders = {}
+            try:
+                ssh_cmd = ["ssh", "-p", "22", "-o", "BatchMode=yes", "-o", "ConnectTimeout=3", "-o", "StrictHostKeyChecking=no"]
+                if os.path.exists(key):
+                    ssh_cmd += ["-i", key]
+                ssh_cmd += [f"{user}@{host}", f'if [ -d "{nas_base}" ]; then ls -1 "{nas_base}"; fi']
+                res = subprocess.run(ssh_cmd, capture_output=True, text=True, timeout=5)
+                if res.returncode == 0:
+                    for line in res.stdout.splitlines():
+                        line = line.strip()
+                        if line:
+                            nas_folders[line] = True
+            except Exception as e:
+                print("NAS scan error:", e)
+
+            # 3. Check Local Staging Directory
+            local_folders = {}
+            if os.path.exists(staging_dir):
+                try:
+                    for item in os.listdir(staging_dir):
+                        if os.path.isdir(os.path.join(staging_dir, item)):
+                            local_folders[item] = True
+                except Exception:
+                    pass
+
+            # 4. Synthesize Comparisons & Smart Proposals
+            comparisons = []
+            
+            # Map of known show definitions for rich metadata
+            known_meta = {
+                "78864": {"title": "Black Jack (1993)", "vn": "Bác Sĩ Quái Dị Black Jack", "qual": "1080p BDRip", "episodes": 90, "vietsub": True},
+                "79354": {"title": "The File of Young Kindaichi (1997)", "vn": "Thám Tử Kindaichi (Anime 1997)", "qual": "480p DVD", "episodes": 148, "vietsub": True},
+                "279782": {"title": "The File of Young Kindaichi Returns (2014)", "vn": "Thám Tử Kindaichi Returns", "qual": "1080p BDRip", "episodes": 47, "vietsub": True},
+                "79460": {"title": "The Files of the Young Kindaichi (1995)", "vn": "Thám Tử Kindaichi (Live Action)", "qual": "1080p BDRip", "episodes": 13, "vietsub": True},
+                "227501": {"title": "Mashin Hero Wataru (1988)", "vn": "Thần Long Đấu Sĩ Wataru", "qual": "1080p BDRip", "episodes": 150, "vietsub": True},
+                "74599": {"title": "Monster (2004)", "vn": "Quái Vật Monster", "qual": "1080p BluRay", "episodes": 74, "vietsub": True},
+                "75939": {"title": "Battle B-Daman (2004)", "vn": "Chiến Binh B-Daman", "qual": "1080p / 480p", "episodes": 103, "vietsub": True},
+                "79178": {"title": "Transformers - Car Robots (2000)", "vn": "Transformers: Car Robots", "qual": "480p DVD", "episodes": 39, "vietsub": False},
+                "454526": {"title": "WUKONG: Đại Viên Hồn (2025)", "vn": "Tây Hành Kỷ: Đại Viên Hồn", "qual": "1080p WEB-DL", "episodes": 12, "vietsub": True},
+                "350711": {"title": "The Westward (2018)", "vn": "Tây Hành Kỷ", "qual": "1080p WEB-DL", "episodes": 21, "vietsub": True},
+                "259259": {"title": "Kingdom (2012)", "vn": "Vương Giả Thiên Hạ", "qual": "1080p BDRip", "episodes": 150, "vietsub": True},
+                "80674": {"title": "Furuhata Ninzaburo (1994)", "vn": "Thám Tử Cổ Điển Furuhata", "qual": "480p DVD", "episodes": 44, "vietsub": True},
+                "320122": {"title": "The Three-Eyed One (1990)", "vn": "Cậu Bé 3 Mắt (Mitsume ga Tooru)", "qual": "480p DVD", "episodes": 48, "vietsub": True},
+                "230211": {"title": "Tantei Gakuen Q (2003)", "vn": "Học Viện Thám Tử Q", "qual": "480p DVD", "episodes": 45, "vietsub": True},
+                "335191": {"title": "Hakyuu Houshin Engi (2018)", "vn": "Bá Khí Phong Thần Diễn Nghĩa", "qual": "1080p BDRip", "episodes": 24, "vietsub": True},
+                "79284": {"title": "Houshin Engi (1999)", "vn": "Phong Thần Bảng (1999)", "qual": "480p DVD", "episodes": 26, "vietsub": True},
+                "299770": {"title": "Young Black Jack (2015)", "vn": "Bác Sĩ Black Jack Thời Trẻ", "qual": "1080p BDRip", "episodes": 12, "vietsub": True}
+            }
+
+            all_folder_keys = set(gdrive_shows) | set(nas_folders.keys())
+            
+            for folder in sorted(all_folder_keys):
+                in_gdrive = folder in gdrive_shows
+                in_nas = folder in nas_folders
+                in_local = folder in local_folders
+                
+                # Extract ID or title
+                import re
+                m = re.search(r"\{tvdb-(\d+)\}", folder)
+                tvdb_id = m.group(1) if m else ""
+                meta = known_meta.get(tvdb_id, {
+                    "title": folder.split("{")[0].strip(),
+                    "vn": folder.split("{")[0].strip(),
+                    "qual": "1080p / 480p",
+                    "episodes": 0,
+                    "vietsub": True
+                })
+
+                # Determine Smart Proposals
+                proposals = []
+                if in_gdrive and not in_nas:
+                    proposals.append({
+                        "action": "sync_to_nas",
+                        "label": "☁️ ➔ 🖥️ Đồng bộ sang NAS",
+                        "desc": "Phim đã có trên Google Drive, đẩy sang NAS Storage qua SSH rclone",
+                        "color": "amber"
+                    })
+                elif in_nas and not in_gdrive:
+                    proposals.append({
+                        "action": "sync_to_drive",
+                        "label": "🖥️ ➔ ☁️ Sao lưu lên Drive",
+                        "desc": "Phim đã có trên NAS, sao lưu lên Google Drive Plex",
+                        "color": "emerald"
+                    })
+                
+                if not meta.get("vietsub", True):
+                    proposals.append({
+                        "action": "translate_vietsub",
+                        "label": "🇻🇳 Dịch Phụ Đề Vietsub",
+                        "desc": "Chưa có phụ đề tiếng Việt chuẩn, kích hoạt AI dịch tự động",
+                        "color": "purple"
+                    })
+
+                if in_gdrive and in_nas and meta.get("vietsub", True):
+                    proposals.append({
+                        "action": "perfect",
+                        "label": "✓ Đã Đồng Bộ Hoàn Hảo",
+                        "desc": "Đã có đầy đủ trên Google Drive & NAS kèm phụ đề Vietsub",
+                        "color": "blue"
+                    })
+
+                comparisons.append({
+                    "folder": folder,
+                    "tvdb_id": tvdb_id,
+                    "title": meta.get("title"),
+                    "vn": meta.get("vn"),
+                    "qual": meta.get("qual"),
+                    "poster": f"/static/posters/{tvdb_id}.jpg" if tvdb_id else "",
+                    "in_gdrive": in_gdrive,
+                    "in_nas": in_nas,
+                    "in_local": in_local,
+                    "proposals": proposals
+                })
+
+            summary = {
+                "total_shows": len(comparisons),
+                "synced_both": sum(1 for c in comparisons if c["in_gdrive"] and c["in_nas"]),
+                "only_gdrive": sum(1 for c in comparisons if c["in_gdrive"] and not c["in_nas"]),
+                "only_nas": sum(1 for c in comparisons if not c["in_gdrive"] and c["in_nas"]),
+                "need_sub": sum(1 for c in comparisons if any(p["action"] == "translate_vietsub" for p in c["proposals"]))
+            }
+
+            return self._send_json({"success": True, "summary": summary, "shows": comparisons})
+
+
         # 8. REST API: Service Connection Health Checks (/api/services/status)
         elif path == "/api/services/status":
             import concurrent.futures

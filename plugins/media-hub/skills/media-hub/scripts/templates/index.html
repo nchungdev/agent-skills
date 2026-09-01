@@ -8,8 +8,334 @@
   <meta name="apple-mobile-web-app-title" content="Antigravity Hub">
   <meta name="theme-color" content="#09090b">
   <title>Antigravity Media Hub & Command Center</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
+  <script src="https://cdn.tailwindcss.com">
+    let crossStorageData = null;
+
+    async function openCrossStorageModal() {
+      openModal('modal-cross-storage');
+      await scanAndCompareStorage();
+    }
+
+    async function scanAndCompareStorage() {
+      const tbody = document.getElementById('cross-storage-tbody');
+      if (tbody) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="p-8 text-center text-zinc-500">
+              <div class="animate-pulse flex items-center justify-center gap-2">
+                <span class="text-base">⏳</span> Đang kết nối SSH NAS & Google Drive để đối chiếu kho phim...
+              </div>
+            </td>
+          </tr>
+        `;
+      }
+
+      try {
+        const res = await fetch('/api/library/cross_check', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'}
+        });
+        const data = await res.json();
+        if (data.success) {
+          crossStorageData = data;
+          renderCrossStorageResults(data);
+        } else {
+          if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-red-400">❌ Lỗi: ${data.error || 'Không thể quét kho'}</td></tr>`;
+        }
+      } catch (e) {
+        if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-red-400">❌ Lỗi kết nối: ${e}</td></tr>`;
+      }
+    }
+
+    function renderCrossStorageResults(data) {
+      const { summary, shows } = data;
+      
+      // Update KPIs
+      if (document.getElementById('cross-total-shows')) document.getElementById('cross-total-shows').innerText = summary.total_shows;
+      if (document.getElementById('cross-synced-both')) document.getElementById('cross-synced-both').innerText = summary.synced_both;
+      if (document.getElementById('cross-only-gdrive')) document.getElementById('cross-only-gdrive').innerText = summary.only_gdrive;
+      if (document.getElementById('cross-only-nas')) document.getElementById('cross-only-nas').innerText = summary.only_nas;
+
+      const tbody = document.getElementById('cross-storage-tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = shows.map(s => {
+        const gdriveBadge = s.in_gdrive ? 
+          `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold text-[10px]">🟢 Có Sẵn</span>` :
+          `<span class="px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-500 border border-zinc-700 text-[10px]">⚪ Chưa Có</span>`;
+
+        const nasBadge = s.in_nas ? 
+          `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold text-[10px]">🟢 Có Sẵn</span>` :
+          `<span class="px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-500 border border-zinc-700 text-[10px]">⚪ Chưa Có</span>`;
+
+        const localBadge = s.in_local ?
+          `<span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[9px] font-mono">📁 Buffer</span>` :
+          `<span class="text-zinc-600 text-[10px]">--</span>`;
+
+        const proposalBtns = s.proposals.map(p => {
+          if (p.action === 'sync_to_nas') {
+            return `
+              <button onclick="executeSingleProposal('${s.folder.replace(/'/g, "\'")}', '${p.action}')" class="px-2.5 py-1 bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition font-semibold text-[11px] shadow-sm flex items-center gap-1 shrink-0" title="${p.desc}">
+                <span>☁️➔🖥️</span> Sync NAS
+              </button>
+            `;
+          } else if (p.action === 'sync_to_drive') {
+            return `
+              <button onclick="executeSingleProposal('${s.folder.replace(/'/g, "\'")}', '${p.action}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition font-semibold text-[11px] shadow-sm flex items-center gap-1 shrink-0" title="${p.desc}">
+                <span>🖥️➔☁️</span> Sync Drive
+              </button>
+            `;
+          } else if (p.action === 'translate_vietsub') {
+            return `
+              <button onclick="executeSingleProposal('${s.folder.replace(/'/g, "\'")}', '${p.action}')" class="px-2.5 py-1 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition font-semibold text-[11px] shadow-sm flex items-center gap-1 shrink-0" title="${p.desc}">
+                <span>🇻🇳</span> Dịch Sub
+              </button>
+            `;
+          } else {
+            return `
+              <span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-bold">
+                ✓ Hoàn Hảo
+              </span>
+            `;
+          }
+        }).join('');
+
+        return `
+          <tr class="hover:bg-zinc-800/40 transition">
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-11 rounded-lg bg-zinc-800 bg-cover bg-center shrink-0 border border-zinc-700/60 shadow-sm flex items-center justify-center text-xs" style="background-image: url('${s.poster || ''}')">
+                  ${!s.poster ? '🎬' : ''}
+                </div>
+                <div class="min-w-0">
+                  <div class="font-bold text-white text-xs truncate max-w-xs sm:max-w-md">${s.title}</div>
+                  <div class="text-[10px] text-zinc-400 truncate">${s.vn || ''}</div>
+                  <div class="text-[9px] text-zinc-500 font-mono mt-0.5">${s.folder}</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-3 py-3 text-center">${gdriveBadge}</td>
+            <td class="px-3 py-3 text-center">${nasBadge}</td>
+            <td class="px-3 py-3 text-center">${localBadge}</td>
+            <td class="px-4 py-3 text-right">
+              <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                ${proposalBtns}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function executeSingleProposal(folder, action) {
+      showToast(`🚀 Đang kích hoạt tiến trình ${action} cho "${folder}"...`, 'info', 2500);
+      try {
+        const res = await fetch('/api/agent/command', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            command: `Thực thi đề xuất ${action} cho bộ phim: ${folder}`
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✅ Đã gửi lệnh thực thi thành công!`, 'success');
+        } else {
+          showToast(`❌ ${data.error || 'Lỗi gửi lệnh'}`, 'error');
+        }
+      } catch (e) {
+        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
+      }
+    }
+
+    async function executeAllProposals() {
+      if (!crossStorageData || !crossStorageData.shows) return;
+      const count = crossStorageData.summary.only_gdrive + crossStorageData.summary.only_nas;
+      if (!confirm(`Bạn có chắc muốn tự động thực thi toàn bộ ${count} đề xuất đồng bộ giữa các kho lưu trữ?`)) return;
+      showToast(`🚀 Đang gửi toàn bộ danh sách đề xuất cho AI Agent điều phối...`, 'info', 3000);
+      try {
+        const res = await fetch('/api/agent/command', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            command: `Tự động đồng bộ toàn diện tất cả các phim giữa Google Drive và NAS Storage để đạt 100% hoàn hảo`
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✅ Đã khởi động chuỗi đồng bộ toàn diện thành công!`, 'success');
+          closeModal('modal-cross-storage');
+        }
+      } catch (e) {
+        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
+      }
+    }
+
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js">
+    let crossStorageData = null;
+
+    async function openCrossStorageModal() {
+      openModal('modal-cross-storage');
+      await scanAndCompareStorage();
+    }
+
+    async function scanAndCompareStorage() {
+      const tbody = document.getElementById('cross-storage-tbody');
+      if (tbody) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="p-8 text-center text-zinc-500">
+              <div class="animate-pulse flex items-center justify-center gap-2">
+                <span class="text-base">⏳</span> Đang kết nối SSH NAS & Google Drive để đối chiếu kho phim...
+              </div>
+            </td>
+          </tr>
+        `;
+      }
+
+      try {
+        const res = await fetch('/api/library/cross_check', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'}
+        });
+        const data = await res.json();
+        if (data.success) {
+          crossStorageData = data;
+          renderCrossStorageResults(data);
+        } else {
+          if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-red-400">❌ Lỗi: ${data.error || 'Không thể quét kho'}</td></tr>`;
+        }
+      } catch (e) {
+        if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-red-400">❌ Lỗi kết nối: ${e}</td></tr>`;
+      }
+    }
+
+    function renderCrossStorageResults(data) {
+      const { summary, shows } = data;
+      
+      // Update KPIs
+      if (document.getElementById('cross-total-shows')) document.getElementById('cross-total-shows').innerText = summary.total_shows;
+      if (document.getElementById('cross-synced-both')) document.getElementById('cross-synced-both').innerText = summary.synced_both;
+      if (document.getElementById('cross-only-gdrive')) document.getElementById('cross-only-gdrive').innerText = summary.only_gdrive;
+      if (document.getElementById('cross-only-nas')) document.getElementById('cross-only-nas').innerText = summary.only_nas;
+
+      const tbody = document.getElementById('cross-storage-tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = shows.map(s => {
+        const gdriveBadge = s.in_gdrive ? 
+          `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold text-[10px]">🟢 Có Sẵn</span>` :
+          `<span class="px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-500 border border-zinc-700 text-[10px]">⚪ Chưa Có</span>`;
+
+        const nasBadge = s.in_nas ? 
+          `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold text-[10px]">🟢 Có Sẵn</span>` :
+          `<span class="px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-500 border border-zinc-700 text-[10px]">⚪ Chưa Có</span>`;
+
+        const localBadge = s.in_local ?
+          `<span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[9px] font-mono">📁 Buffer</span>` :
+          `<span class="text-zinc-600 text-[10px]">--</span>`;
+
+        const proposalBtns = s.proposals.map(p => {
+          if (p.action === 'sync_to_nas') {
+            return `
+              <button onclick="executeSingleProposal('${s.folder.replace(/'/g, "\'")}', '${p.action}')" class="px-2.5 py-1 bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition font-semibold text-[11px] shadow-sm flex items-center gap-1 shrink-0" title="${p.desc}">
+                <span>☁️➔🖥️</span> Sync NAS
+              </button>
+            `;
+          } else if (p.action === 'sync_to_drive') {
+            return `
+              <button onclick="executeSingleProposal('${s.folder.replace(/'/g, "\'")}', '${p.action}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition font-semibold text-[11px] shadow-sm flex items-center gap-1 shrink-0" title="${p.desc}">
+                <span>🖥️➔☁️</span> Sync Drive
+              </button>
+            `;
+          } else if (p.action === 'translate_vietsub') {
+            return `
+              <button onclick="executeSingleProposal('${s.folder.replace(/'/g, "\'")}', '${p.action}')" class="px-2.5 py-1 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition font-semibold text-[11px] shadow-sm flex items-center gap-1 shrink-0" title="${p.desc}">
+                <span>🇻🇳</span> Dịch Sub
+              </button>
+            `;
+          } else {
+            return `
+              <span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-bold">
+                ✓ Hoàn Hảo
+              </span>
+            `;
+          }
+        }).join('');
+
+        return `
+          <tr class="hover:bg-zinc-800/40 transition">
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-11 rounded-lg bg-zinc-800 bg-cover bg-center shrink-0 border border-zinc-700/60 shadow-sm flex items-center justify-center text-xs" style="background-image: url('${s.poster || ''}')">
+                  ${!s.poster ? '🎬' : ''}
+                </div>
+                <div class="min-w-0">
+                  <div class="font-bold text-white text-xs truncate max-w-xs sm:max-w-md">${s.title}</div>
+                  <div class="text-[10px] text-zinc-400 truncate">${s.vn || ''}</div>
+                  <div class="text-[9px] text-zinc-500 font-mono mt-0.5">${s.folder}</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-3 py-3 text-center">${gdriveBadge}</td>
+            <td class="px-3 py-3 text-center">${nasBadge}</td>
+            <td class="px-3 py-3 text-center">${localBadge}</td>
+            <td class="px-4 py-3 text-right">
+              <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                ${proposalBtns}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function executeSingleProposal(folder, action) {
+      showToast(`🚀 Đang kích hoạt tiến trình ${action} cho "${folder}"...`, 'info', 2500);
+      try {
+        const res = await fetch('/api/agent/command', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            command: `Thực thi đề xuất ${action} cho bộ phim: ${folder}`
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✅ Đã gửi lệnh thực thi thành công!`, 'success');
+        } else {
+          showToast(`❌ ${data.error || 'Lỗi gửi lệnh'}`, 'error');
+        }
+      } catch (e) {
+        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
+      }
+    }
+
+    async function executeAllProposals() {
+      if (!crossStorageData || !crossStorageData.shows) return;
+      const count = crossStorageData.summary.only_gdrive + crossStorageData.summary.only_nas;
+      if (!confirm(`Bạn có chắc muốn tự động thực thi toàn bộ ${count} đề xuất đồng bộ giữa các kho lưu trữ?`)) return;
+      showToast(`🚀 Đang gửi toàn bộ danh sách đề xuất cho AI Agent điều phối...`, 'info', 3000);
+      try {
+        const res = await fetch('/api/agent/command', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            command: `Tự động đồng bộ toàn diện tất cả các phim giữa Google Drive và NAS Storage để đạt 100% hoàn hảo`
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✅ Đã khởi động chuỗi đồng bộ toàn diện thành công!`, 'success');
+          closeModal('modal-cross-storage');
+        }
+      } catch (e) {
+        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
+      }
+    }
+
+</script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -21,7 +347,170 @@
         }
       }
     }
-  </script>
+  
+    let crossStorageData = null;
+
+    async function openCrossStorageModal() {
+      openModal('modal-cross-storage');
+      await scanAndCompareStorage();
+    }
+
+    async function scanAndCompareStorage() {
+      const tbody = document.getElementById('cross-storage-tbody');
+      if (tbody) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="p-8 text-center text-zinc-500">
+              <div class="animate-pulse flex items-center justify-center gap-2">
+                <span class="text-base">⏳</span> Đang kết nối SSH NAS & Google Drive để đối chiếu kho phim...
+              </div>
+            </td>
+          </tr>
+        `;
+      }
+
+      try {
+        const res = await fetch('/api/library/cross_check', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'}
+        });
+        const data = await res.json();
+        if (data.success) {
+          crossStorageData = data;
+          renderCrossStorageResults(data);
+        } else {
+          if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-red-400">❌ Lỗi: ${data.error || 'Không thể quét kho'}</td></tr>`;
+        }
+      } catch (e) {
+        if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-red-400">❌ Lỗi kết nối: ${e}</td></tr>`;
+      }
+    }
+
+    function renderCrossStorageResults(data) {
+      const { summary, shows } = data;
+      
+      // Update KPIs
+      if (document.getElementById('cross-total-shows')) document.getElementById('cross-total-shows').innerText = summary.total_shows;
+      if (document.getElementById('cross-synced-both')) document.getElementById('cross-synced-both').innerText = summary.synced_both;
+      if (document.getElementById('cross-only-gdrive')) document.getElementById('cross-only-gdrive').innerText = summary.only_gdrive;
+      if (document.getElementById('cross-only-nas')) document.getElementById('cross-only-nas').innerText = summary.only_nas;
+
+      const tbody = document.getElementById('cross-storage-tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = shows.map(s => {
+        const gdriveBadge = s.in_gdrive ? 
+          `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold text-[10px]">🟢 Có Sẵn</span>` :
+          `<span class="px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-500 border border-zinc-700 text-[10px]">⚪ Chưa Có</span>`;
+
+        const nasBadge = s.in_nas ? 
+          `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold text-[10px]">🟢 Có Sẵn</span>` :
+          `<span class="px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-500 border border-zinc-700 text-[10px]">⚪ Chưa Có</span>`;
+
+        const localBadge = s.in_local ?
+          `<span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[9px] font-mono">📁 Buffer</span>` :
+          `<span class="text-zinc-600 text-[10px]">--</span>`;
+
+        const proposalBtns = s.proposals.map(p => {
+          if (p.action === 'sync_to_nas') {
+            return `
+              <button onclick="executeSingleProposal('${s.folder.replace(/'/g, "\'")}', '${p.action}')" class="px-2.5 py-1 bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition font-semibold text-[11px] shadow-sm flex items-center gap-1 shrink-0" title="${p.desc}">
+                <span>☁️➔🖥️</span> Sync NAS
+              </button>
+            `;
+          } else if (p.action === 'sync_to_drive') {
+            return `
+              <button onclick="executeSingleProposal('${s.folder.replace(/'/g, "\'")}', '${p.action}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition font-semibold text-[11px] shadow-sm flex items-center gap-1 shrink-0" title="${p.desc}">
+                <span>🖥️➔☁️</span> Sync Drive
+              </button>
+            `;
+          } else if (p.action === 'translate_vietsub') {
+            return `
+              <button onclick="executeSingleProposal('${s.folder.replace(/'/g, "\'")}', '${p.action}')" class="px-2.5 py-1 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition font-semibold text-[11px] shadow-sm flex items-center gap-1 shrink-0" title="${p.desc}">
+                <span>🇻🇳</span> Dịch Sub
+              </button>
+            `;
+          } else {
+            return `
+              <span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-bold">
+                ✓ Hoàn Hảo
+              </span>
+            `;
+          }
+        }).join('');
+
+        return `
+          <tr class="hover:bg-zinc-800/40 transition">
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-11 rounded-lg bg-zinc-800 bg-cover bg-center shrink-0 border border-zinc-700/60 shadow-sm flex items-center justify-center text-xs" style="background-image: url('${s.poster || ''}')">
+                  ${!s.poster ? '🎬' : ''}
+                </div>
+                <div class="min-w-0">
+                  <div class="font-bold text-white text-xs truncate max-w-xs sm:max-w-md">${s.title}</div>
+                  <div class="text-[10px] text-zinc-400 truncate">${s.vn || ''}</div>
+                  <div class="text-[9px] text-zinc-500 font-mono mt-0.5">${s.folder}</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-3 py-3 text-center">${gdriveBadge}</td>
+            <td class="px-3 py-3 text-center">${nasBadge}</td>
+            <td class="px-3 py-3 text-center">${localBadge}</td>
+            <td class="px-4 py-3 text-right">
+              <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                ${proposalBtns}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function executeSingleProposal(folder, action) {
+      showToast(`🚀 Đang kích hoạt tiến trình ${action} cho "${folder}"...`, 'info', 2500);
+      try {
+        const res = await fetch('/api/agent/command', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            command: `Thực thi đề xuất ${action} cho bộ phim: ${folder}`
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✅ Đã gửi lệnh thực thi thành công!`, 'success');
+        } else {
+          showToast(`❌ ${data.error || 'Lỗi gửi lệnh'}`, 'error');
+        }
+      } catch (e) {
+        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
+      }
+    }
+
+    async function executeAllProposals() {
+      if (!crossStorageData || !crossStorageData.shows) return;
+      const count = crossStorageData.summary.only_gdrive + crossStorageData.summary.only_nas;
+      if (!confirm(`Bạn có chắc muốn tự động thực thi toàn bộ ${count} đề xuất đồng bộ giữa các kho lưu trữ?`)) return;
+      showToast(`🚀 Đang gửi toàn bộ danh sách đề xuất cho AI Agent điều phối...`, 'info', 3000);
+      try {
+        const res = await fetch('/api/agent/command', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            command: `Tự động đồng bộ toàn diện tất cả các phim giữa Google Drive và NAS Storage để đạt 100% hoàn hảo`
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✅ Đã khởi động chuỗi đồng bộ toàn diện thành công!`, 'success');
+          closeModal('modal-cross-storage');
+        }
+      } catch (e) {
+        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
+      }
+    }
+
+</script>
   <style>
     body { background-color: #09090b; color: #f4f4f5; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -805,7 +1294,10 @@
             </div>
           </div>
 
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="openCrossStorageModal()" class="px-3.5 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-blue-600/20 flex items-center gap-1.5 shrink-0">
+              <span>🔄</span> <span class="hidden sm:inline">So Sánh &</span> Đồng Bộ Cloud
+            </button>
             <input type="text" id="plex-search" oninput="filterPlexShows()" placeholder="🔍 Tìm kiếm..." class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500 w-32 sm:w-48">
             <button onclick="triggerPlexScan()" class="px-3 py-1.5 sm:px-4 sm:py-2 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-xl transition shadow-md shadow-amber-500/20 flex items-center gap-1 shrink-0">
               <span>⚡</span> <span class="hidden sm:inline">Quét</span> Lại
@@ -3958,6 +4450,247 @@
     fetchSettings();
     renderPlexGrid(plexShowsData);
     setInterval(fetchData, 4000);
-  </script>
+  
+    let crossStorageData = null;
+
+    async function openCrossStorageModal() {
+      openModal('modal-cross-storage');
+      await scanAndCompareStorage();
+    }
+
+    async function scanAndCompareStorage() {
+      const tbody = document.getElementById('cross-storage-tbody');
+      if (tbody) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="p-8 text-center text-zinc-500">
+              <div class="animate-pulse flex items-center justify-center gap-2">
+                <span class="text-base">⏳</span> Đang kết nối SSH NAS & Google Drive để đối chiếu kho phim...
+              </div>
+            </td>
+          </tr>
+        `;
+      }
+
+      try {
+        const res = await fetch('/api/library/cross_check', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'}
+        });
+        const data = await res.json();
+        if (data.success) {
+          crossStorageData = data;
+          renderCrossStorageResults(data);
+        } else {
+          if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-red-400">❌ Lỗi: ${data.error || 'Không thể quét kho'}</td></tr>`;
+        }
+      } catch (e) {
+        if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-red-400">❌ Lỗi kết nối: ${e}</td></tr>`;
+      }
+    }
+
+    function renderCrossStorageResults(data) {
+      const { summary, shows } = data;
+      
+      // Update KPIs
+      if (document.getElementById('cross-total-shows')) document.getElementById('cross-total-shows').innerText = summary.total_shows;
+      if (document.getElementById('cross-synced-both')) document.getElementById('cross-synced-both').innerText = summary.synced_both;
+      if (document.getElementById('cross-only-gdrive')) document.getElementById('cross-only-gdrive').innerText = summary.only_gdrive;
+      if (document.getElementById('cross-only-nas')) document.getElementById('cross-only-nas').innerText = summary.only_nas;
+
+      const tbody = document.getElementById('cross-storage-tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = shows.map(s => {
+        const gdriveBadge = s.in_gdrive ? 
+          `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold text-[10px]">🟢 Có Sẵn</span>` :
+          `<span class="px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-500 border border-zinc-700 text-[10px]">⚪ Chưa Có</span>`;
+
+        const nasBadge = s.in_nas ? 
+          `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold text-[10px]">🟢 Có Sẵn</span>` :
+          `<span class="px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-500 border border-zinc-700 text-[10px]">⚪ Chưa Có</span>`;
+
+        const localBadge = s.in_local ?
+          `<span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[9px] font-mono">📁 Buffer</span>` :
+          `<span class="text-zinc-600 text-[10px]">--</span>`;
+
+        const proposalBtns = s.proposals.map(p => {
+          if (p.action === 'sync_to_nas') {
+            return `
+              <button onclick="executeSingleProposal('${s.folder.replace(/'/g, "\'")}', '${p.action}')" class="px-2.5 py-1 bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition font-semibold text-[11px] shadow-sm flex items-center gap-1 shrink-0" title="${p.desc}">
+                <span>☁️➔🖥️</span> Sync NAS
+              </button>
+            `;
+          } else if (p.action === 'sync_to_drive') {
+            return `
+              <button onclick="executeSingleProposal('${s.folder.replace(/'/g, "\'")}', '${p.action}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition font-semibold text-[11px] shadow-sm flex items-center gap-1 shrink-0" title="${p.desc}">
+                <span>🖥️➔☁️</span> Sync Drive
+              </button>
+            `;
+          } else if (p.action === 'translate_vietsub') {
+            return `
+              <button onclick="executeSingleProposal('${s.folder.replace(/'/g, "\'")}', '${p.action}')" class="px-2.5 py-1 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition font-semibold text-[11px] shadow-sm flex items-center gap-1 shrink-0" title="${p.desc}">
+                <span>🇻🇳</span> Dịch Sub
+              </button>
+            `;
+          } else {
+            return `
+              <span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-bold">
+                ✓ Hoàn Hảo
+              </span>
+            `;
+          }
+        }).join('');
+
+        return `
+          <tr class="hover:bg-zinc-800/40 transition">
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-11 rounded-lg bg-zinc-800 bg-cover bg-center shrink-0 border border-zinc-700/60 shadow-sm flex items-center justify-center text-xs" style="background-image: url('${s.poster || ''}')">
+                  ${!s.poster ? '🎬' : ''}
+                </div>
+                <div class="min-w-0">
+                  <div class="font-bold text-white text-xs truncate max-w-xs sm:max-w-md">${s.title}</div>
+                  <div class="text-[10px] text-zinc-400 truncate">${s.vn || ''}</div>
+                  <div class="text-[9px] text-zinc-500 font-mono mt-0.5">${s.folder}</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-3 py-3 text-center">${gdriveBadge}</td>
+            <td class="px-3 py-3 text-center">${nasBadge}</td>
+            <td class="px-3 py-3 text-center">${localBadge}</td>
+            <td class="px-4 py-3 text-right">
+              <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                ${proposalBtns}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function executeSingleProposal(folder, action) {
+      showToast(`🚀 Đang kích hoạt tiến trình ${action} cho "${folder}"...`, 'info', 2500);
+      try {
+        const res = await fetch('/api/agent/command', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            command: `Thực thi đề xuất ${action} cho bộ phim: ${folder}`
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✅ Đã gửi lệnh thực thi thành công!`, 'success');
+        } else {
+          showToast(`❌ ${data.error || 'Lỗi gửi lệnh'}`, 'error');
+        }
+      } catch (e) {
+        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
+      }
+    }
+
+    async function executeAllProposals() {
+      if (!crossStorageData || !crossStorageData.shows) return;
+      const count = crossStorageData.summary.only_gdrive + crossStorageData.summary.only_nas;
+      if (!confirm(`Bạn có chắc muốn tự động thực thi toàn bộ ${count} đề xuất đồng bộ giữa các kho lưu trữ?`)) return;
+      showToast(`🚀 Đang gửi toàn bộ danh sách đề xuất cho AI Agent điều phối...`, 'info', 3000);
+      try {
+        const res = await fetch('/api/agent/command', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            command: `Tự động đồng bộ toàn diện tất cả các phim giữa Google Drive và NAS Storage để đạt 100% hoàn hảo`
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✅ Đã khởi động chuỗi đồng bộ toàn diện thành công!`, 'success');
+          closeModal('modal-cross-storage');
+        }
+      } catch (e) {
+        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
+      }
+    }
+
+</script>
+  <!-- ==================== MODAL: CROSS-STORAGE SYNC & SCAN (GDRIVE VS NAS VS LOCAL) ==================== -->
+  <div id="modal-cross-storage" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 overflow-y-auto custom-scroll">
+    <div class="bg-zinc-950 border border-zinc-800 w-full max-w-5xl rounded-3xl p-5 sm:p-7 space-y-5 shadow-2xl relative animate-fade-in my-auto max-h-[90vh] flex flex-col">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-4 shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-lg shadow-blue-600/30">
+            🔄
+          </div>
+          <div>
+            <h3 class="font-bold text-base text-white flex items-center gap-2">
+              Đối Chiếu & Đề Xuất Đồng Bộ Đa Kho Lưu Trữ
+              <span class="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-[10px] border border-blue-500/20 font-mono font-bold">Cloud ⟷ NAS ⟷ Local</span>
+            </h3>
+            <p class="text-xs text-zinc-400">Quét kiểm tra phim đã có trên Google Drive, NAS Storage hay Máy tính và đưa ra các đề xuất hành động thông minh</p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-cross-storage')" class="w-8 h-8 rounded-full bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition text-sm">✕</button>
+      </div>
+
+      <!-- KPI Summary Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 shrink-0 text-xs font-mono" id="cross-kpi-container">
+        <div class="p-3 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-1">
+          <div class="text-zinc-500 text-[10px] uppercase font-bold">Tổng Phim Quét</div>
+          <div class="text-lg font-bold text-white" id="cross-total-shows">--</div>
+        </div>
+        <div class="p-3 rounded-2xl bg-emerald-950/20 border border-emerald-500/20 space-y-1">
+          <div class="text-emerald-400 text-[10px] uppercase font-bold">Đồng Bộ Cả 2 Kho</div>
+          <div class="text-lg font-bold text-emerald-400" id="cross-synced-both">--</div>
+        </div>
+        <div class="p-3 rounded-2xl bg-blue-950/20 border border-blue-500/20 space-y-1">
+          <div class="text-blue-400 text-[10px] uppercase font-bold">Chỉ Có Trên Drive</div>
+          <div class="text-lg font-bold text-blue-400" id="cross-only-gdrive">--</div>
+        </div>
+        <div class="p-3 rounded-2xl bg-amber-950/20 border border-amber-500/20 space-y-1">
+          <div class="text-amber-400 text-[10px] uppercase font-bold">Chỉ Có Trên NAS</div>
+          <div class="text-lg font-bold text-amber-400" id="cross-only-nas">--</div>
+        </div>
+      </div>
+
+      <!-- Table of Shows Comparison (Scrollable) -->
+      <div class="flex-1 overflow-y-auto custom-scroll border border-zinc-800/80 rounded-2xl bg-zinc-900/40 min-h-[300px]">
+        <table class="w-full text-left text-xs text-zinc-300">
+          <thead class="bg-zinc-950 text-zinc-400 uppercase text-[10px] tracking-wider sticky top-0 z-10 border-b border-zinc-800">
+            <tr>
+              <th class="px-4 py-3">Tên Phim & Series</th>
+              <th class="px-3 py-3 text-center">Google Drive</th>
+              <th class="px-3 py-3 text-center">NAS Storage</th>
+              <th class="px-3 py-3 text-center">Máy Cục Bộ</th>
+              <th class="px-4 py-3 text-right">Đề Xuất Hành Động</th>
+            </tr>
+          </thead>
+          <tbody id="cross-storage-tbody" class="divide-y divide-zinc-800/60">
+            <tr>
+              <td colspan="5" class="p-8 text-center text-zinc-500">
+                <div class="animate-pulse">⏳ Đang quét và đối chiếu dữ liệu giữa các kho lưu trữ...</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="flex items-center justify-between pt-2 shrink-0 border-t border-zinc-800 flex-wrap gap-2 text-xs">
+        <div class="text-zinc-400 text-[11px]">
+          💡 Hệ thống tự động so sánh hash tên thư mục chuẩn hóa TVDB ID giữa các kho lưu trữ.
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="executeAllProposals()" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl transition shadow-lg shadow-emerald-600/20 flex items-center gap-1.5 text-xs">
+            <span>⚡</span> Thực Thi Toàn Bộ Đề Xuất
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </body>
 </html>
