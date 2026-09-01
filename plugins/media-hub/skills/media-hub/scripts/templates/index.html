@@ -2743,12 +2743,25 @@
       }
     }
 
-    async function syncSingleTorrent(id, target, name) {
+        async function syncSingleTorrent(id, target, name) {
       const torrent = currentTorrents.find(t => t.id === id) || {};
       const locations = torrent.locations || [];
       const onLocal = locations.includes('local');
       const onDrive = locations.includes('gdrive') || (torrent.synced_destinations || []).includes('gdrive');
       const onNas = locations.includes('nas') || (torrent.synced_destinations || []).includes('nas');
+
+      // 1. Optimistic UI update: Instantly show "Đang Sync..." badge on this row
+      if (torrent) {
+        if (!torrent.sync_in_progress) {
+          torrent.sync_in_progress = { status: 'syncing', target: target, targets: [target] };
+        } else {
+          torrent.sync_in_progress.status = 'syncing';
+          if (!torrent.sync_in_progress.targets.includes(target)) {
+            torrent.sync_in_progress.targets.push(target);
+          }
+        }
+        applyTorboxFilter(); // Instant re-render
+      }
 
       let routeDescription = "";
       let commandPayload = "";
@@ -2777,7 +2790,7 @@
         }
       }
 
-      showToast(`🚀 Tuyến đồng bộ: ${routeDescription}...`, 'info', 4000);
+      showToast(`🚀 Tuyến đồng bộ: ${routeDescription}...`, 'info', 3500);
       
       try {
         const res = await fetch('/api/agent/command', {
@@ -2792,8 +2805,7 @@
         });
         const data = await res.json();
         if (data.success) {
-          showToast(`✅ Đã khởi chạy [${routeDescription}] thành công!`, 'success');
-          setTimeout(fetchTorrents, 1200);
+          showToast(`✅ Đã bắt đầu tiến trình [${routeDescription}]!`, 'success');
         } else {
           showToast(`❌ ${data.error || 'Lỗi đồng bộ'}`, 'error');
         }
@@ -2872,13 +2884,25 @@
         const sizeGb = t.size ? (t.size / (1024*1024*1024)).toFixed(2) : '0.00';
         const safeName = (t.name || '').replace(/'/g, "\'");
         
-                        const locations = t.locations || [];
+                                const locations = t.locations || [];
         const onLocal = locations.includes('local');
         const onDrive = locations.includes('gdrive');
         const onNas = locations.includes('nas');
+        const syncJob = t.sync_in_progress;
         
         let statusBadge = '';
-        if (onLocal && onDrive && onNas) {
+        
+        // Check if currently syncing in real time
+        if (syncJob && syncJob.status === 'syncing') {
+          const targets = syncJob.targets || [syncJob.target || 'drive'];
+          if (targets.includes('drive') && targets.includes('nas')) {
+            statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold text-[10px] animate-pulse flex items-center gap-1.5 justify-center whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-ping"></span> Đang Sync Cả 2...</span>`;
+          } else if (targets.includes('nas')) {
+            statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 font-bold text-[10px] animate-pulse flex items-center gap-1.5 justify-center whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span> Đang Sync NAS...</span>`;
+          } else {
+            statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-bold text-[10px] animate-pulse flex items-center gap-1.5 justify-center whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Đang Sync Drive...</span>`;
+          }
+        } else if (onLocal && onDrive && onNas) {
           statusBadge = `<span class="px-2 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold text-[10px] whitespace-nowrap">Cả 3 Nơi (Máy • Drive • NAS)</span>`;
         } else if (onDrive && onNas) {
           statusBadge = `<span class="px-2 py-0.5 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold text-[10px] whitespace-nowrap">Drive • NAS</span>`;
@@ -2900,6 +2924,9 @@
           statusBadge = `<span class="px-2 py-0.5 rounded-lg bg-zinc-800/80 text-zinc-400 border border-zinc-700/60 font-medium text-[10px] whitespace-nowrap">TorBox Cloud</span>`;
         }
 
+        const isSyncingDrive = syncJob && (syncJob.targets || [syncJob.target]).includes('drive');
+        const isSyncingNas = syncJob && (syncJob.targets || [syncJob.target]).includes('nas');
+
         return `
           <tr class="hover:bg-zinc-800/30 transition">
             <td class="px-3 py-3 text-center w-10">
@@ -2920,13 +2947,13 @@
             <td class="px-3 py-3 text-right whitespace-nowrap">
               <div class="flex items-center justify-end gap-1.5 whitespace-nowrap">
                 <!-- Sync to Google Drive Button -->
-                <button onclick="syncSingleTorrent(${t.id}, 'gdrive', '${safeName}')" class="px-2.5 py-1 ${onDrive ? 'bg-zinc-900 text-zinc-400 hover:text-emerald-300 border-zinc-800' : 'bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border-emerald-500/30'} border text-xs font-semibold rounded-xl transition shadow-sm shrink-0" title="Đồng bộ lên Google Drive">
-                  ${onDrive ? 'Re-Sync Drive' : 'Sync Drive'}
+                <button onclick="syncSingleTorrent(${t.id}, 'gdrive', '${safeName}')" class="px-2.5 py-1 ${isSyncingDrive ? 'bg-emerald-600/30 text-emerald-300 border-emerald-500/50 animate-pulse' : (onDrive ? 'bg-zinc-900 text-zinc-400 hover:text-emerald-300 border-zinc-800' : 'bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border-emerald-500/30')} border text-xs font-semibold rounded-xl transition shadow-sm shrink-0" title="Đồng bộ lên Google Drive">
+                  ${isSyncingDrive ? 'Đang Sync Drive...' : (onDrive ? 'Re-Sync Drive' : 'Sync Drive')}
                 </button>
 
                 <!-- Sync to NAS Storage Button -->
-                <button onclick="syncSingleTorrent(${t.id}, 'nas', '${safeName}')" class="px-2.5 py-1 ${onNas ? 'bg-zinc-900 text-zinc-400 hover:text-amber-300 border-zinc-800' : 'bg-amber-600/10 hover:bg-amber-600 text-amber-400 hover:text-white border-amber-500/30'} border text-xs font-semibold rounded-xl transition shadow-sm shrink-0" title="Đồng bộ qua SSH lên NAS Storage">
-                  ${onNas ? 'Re-Sync NAS' : 'Sync NAS'}
+                <button onclick="syncSingleTorrent(${t.id}, 'nas', '${safeName}')" class="px-2.5 py-1 ${isSyncingNas ? 'bg-amber-600/30 text-amber-300 border-amber-500/50 animate-pulse' : (onNas ? 'bg-zinc-900 text-zinc-400 hover:text-amber-300 border-zinc-800' : 'bg-amber-600/10 hover:bg-amber-600 text-amber-400 hover:text-white border-amber-500/30')} border text-xs font-semibold rounded-xl transition shadow-sm shrink-0" title="Đồng bộ qua SSH lên NAS Storage">
+                  ${isSyncingNas ? 'Đang Sync NAS...' : (onNas ? 'Re-Sync NAS' : 'Sync NAS')}
                 </button>
 
                 <!-- Local Download Zip Button -->

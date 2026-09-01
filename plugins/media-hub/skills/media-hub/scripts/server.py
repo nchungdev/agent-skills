@@ -239,7 +239,7 @@ class SyncPipelineCoordinator:
                 }
             else:
                 self.active_jobs[tid] = {
-                    "status": "queued",
+                    "status": "syncing",
                     "targets": {target},
                     "name": name,
                     "progress": 0.0,
@@ -247,7 +247,7 @@ class SyncPipelineCoordinator:
                 }
                 return {
                     "is_new_download": True,
-                    "status": "queued",
+                    "status": "syncing",
                     "targets": [target],
                     "message": f"Khởi động chuỗi tải 1 lần từ TorBox cho #{tid} và đẩy lên {target}"
                 }
@@ -373,12 +373,23 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                                 locations.append("nas")
                             break
 
-                    t["locations"] = locations
+                                        t["locations"] = locations
                     t["synced_destinations"] = [loc for loc in locations if loc in ["gdrive", "nas"]]
                     t["is_completed_and_synced"] = len(t["synced_destinations"]) > 0
                     t["is_on_local"] = "local" in locations
                     t["is_on_gdrive"] = "gdrive" in locations
                     t["is_on_nas"] = "nas" in locations
+                    
+                    # Attach in-progress sync jobs if active
+                    sync_job = sync_coordinator.get_job_status(t.get("id"))
+                    if sync_job:
+                        t["sync_in_progress"] = {
+                            "status": sync_job.get("status", "syncing"),
+                            "targets": list(sync_job.get("targets", [])),
+                            "target": list(sync_job.get("targets", []))[0] if sync_job.get("targets") else "drive"
+                        }
+                    else:
+                        t["sync_in_progress"] = None
                     
             _torbox_api_cache = res
             _torbox_api_cache_time = now
