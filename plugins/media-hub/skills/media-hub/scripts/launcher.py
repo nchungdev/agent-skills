@@ -13,6 +13,7 @@ import shutil
 import threading
 import argparse
 import socket
+import secrets
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_PORT = 8888
@@ -57,12 +58,20 @@ def start_hub(enable_tunnel=False, port=DEFAULT_PORT):
     time.sleep(0.5)
 
     # 2. Start Server
+    #    A public tunnel exposes every API (including staging purge and NAS scan) to the
+    #    internet, so require a token in that mode. Local/LAN mode is unchanged.
+    auth_token = secrets.token_urlsafe(24) if enable_tunnel else ""
+    server_env = dict(os.environ)
+    server_env["MEDIA_HUB_TOKEN"] = auth_token
+    server_env["MEDIA_HUB_PORT"] = str(port)
+
     server_script = os.path.join(BASE_DIR, "server.py")
     server_log_fp = open(SERVER_LOG, "a", encoding="utf-8")
     server_proc = subprocess.Popen(
         [sys.executable, server_script],
         stdout=server_log_fp,
         stderr=server_log_fp,
+        env=server_env,
         start_new_session=True
     )
     print(f"✅ Web Server đã khởi động tại: http://127.0.0.1:{port}", flush=True)
@@ -126,11 +135,14 @@ def start_hub(enable_tunnel=False, port=DEFAULT_PORT):
 
             if public_url_event.wait(timeout=15) and public_url_holder["url"]:
                 public_url = public_url_holder["url"]
+                if auth_token:
+                    public_url = f"{public_url}/?k={auth_token}"
                 with open(URL_FILE, "w", encoding="utf-8") as f:
                     f.write(public_url)
                 print("\n" + "=" * 64, flush=True)
                 print("🎉 LINK TRUY CẬP ONLINE TỪ XA (TRYCLOUDFLARE):", flush=True)
                 print(f"👉 {public_url}", flush=True)
+                print("🔒 Link đã kèm token truy cập; ai không có token sẽ nhận lỗi 401.", flush=True)
                 print("=" * 64 + "\n", flush=True)
             else:
                 print("⚠️ Không lấy được link trycloudflare kịp thời. Sử dụng link Local.", flush=True)

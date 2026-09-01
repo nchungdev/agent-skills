@@ -16,7 +16,9 @@ if SCRIPT_DIR not in sys.path:
 
 from core.intent_router import execute_scoped_command
 
-QUEUE_FILE = "/Volumes/512GB/AI Workspace/antigravity-media-hub/agent_command_queue.json"
+from core.agent_bridge import QUEUE_FILE as DEFAULT_QUEUE_FILE
+
+QUEUE_FILE = os.environ.get("MEDIA_HUB_QUEUE_FILE") or DEFAULT_QUEUE_FILE
 
 def watch_queue():
     print("🚀 Skill-Scoped Agent Command Watcher Daemon active...", flush=True)
