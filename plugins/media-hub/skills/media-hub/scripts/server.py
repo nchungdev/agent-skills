@@ -536,19 +536,39 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                 except Exception:
                     return {"connected": False, "detail": f"Aria2 RPC ({aria_host}:{aria_port}) Offline"}
 
-            with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+            def check_ytdlp():
+                ytdlp_bin = cfg.get("ytdlp_bin", "/opt/homebrew/bin/yt-dlp")
+                if not os.path.exists(ytdlp_bin):
+                    ytdlp_bin = "yt-dlp"
+                try:
+                    res = subprocess.run([ytdlp_bin, "--version"], capture_output=True, text=True, timeout=2)
+                    if res.returncode == 0:
+                        ver = res.stdout.strip()
+                        return {"connected": True, "detail": f"yt-dlp v{ver} Sẵn sàng"}
+                    return {"connected": False, "detail": "Chưa cài đặt yt-dlp"}
+                except Exception as e:
+                    return {"connected": False, "detail": str(e)}
+
+            def check_direct():
+                return {"connected": True, "detail": "Multi-stream HTTP/DDL Engine Sẵn sàng"}
+
+            with concurrent.futures.ThreadPoolExecutor(max_workers=7) as executor:
                 f_gdrive = executor.submit(check_gdrive)
                 f_nas = executor.submit(check_nas)
                 f_torbox = executor.submit(check_torbox)
                 f_tmdb = executor.submit(check_tmdb)
                 f_aria2 = executor.submit(check_aria2)
+                f_ytdlp = executor.submit(check_ytdlp)
+                f_direct = executor.submit(check_direct)
 
                 results = {
                     "gdrive": f_gdrive.result(),
                     "nas": f_nas.result(),
                     "torbox": f_torbox.result(),
                     "tmdb": f_tmdb.result(),
-                    "aria2": f_aria2.result()
+                    "aria2": f_aria2.result(),
+                    "ytdlp": f_ytdlp.result(),
+                    "direct": f_direct.result()
                 }
 
             return self._send_json({"success": True, "services": results})
@@ -661,6 +681,27 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                 "message": f"🚀 Đã tạo yêu cầu đồng bộ {len(ids)} mục lên {target_label} thành công!",
                 "command": item
             })
+
+        # 2.3 API: Start / Stop Aria2 Daemon
+        elif path == "/api/aria2/control":
+            op = req_data.get("operation", "start")
+            aria2_bin = "/opt/homebrew/bin/aria2c" if os.path.exists("/opt/homebrew/bin/aria2c") else "aria2c"
+            
+            if op == "start":
+                try:
+                    subprocess.Popen([
+                        aria2_bin, "--enable-rpc", "--rpc-listen-all=false", "--rpc-allow-origin-all", "-D"
+                    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    time.sleep(0.5)
+                    return self._send_json({"success": True, "message": "Đã khởi động Aria2c RPC Daemon thành công!"})
+                except Exception as e:
+                    return self._send_json({"success": False, "error": f"Không thể khởi động Aria2c: {e}"})
+            elif op == "stop":
+                try:
+                    subprocess.run(["pkill", "-f", "aria2c --enable-rpc"], capture_output=True)
+                    return self._send_json({"success": True, "message": "Đã dừng Aria2c Daemon."})
+                except Exception as e:
+                    return self._send_json({"success": False, "error": f"Lỗi khi dừng Aria2c: {e}"})
 
         # 3. API: Send Agent Command
         elif path == "/api/agent/command":
