@@ -769,35 +769,62 @@
 
         <div class="p-4 sm:p-6 pb-28 lg:pb-10 space-y-4 w-full">
           
-          <!-- Unified Clean Status Segmented Tab Bar -->
-          <div class="flex flex-wrap items-center justify-between gap-3 bg-zinc-900/60 border border-zinc-800/80 p-1.5 rounded-2xl">
-            <div class="flex items-center gap-1 bg-zinc-950 p-1 rounded-xl border border-zinc-800/80 text-xs font-semibold overflow-x-auto custom-scroll max-w-full">
-              <button onclick="filterTorboxStatus('all')" id="tbfilter-all" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-purple-600 text-white font-bold transition shadow-sm shrink-0">
-                Tất Cả (<span id="tbcount-all">25</span>)
-              </button>
-              <button onclick="filterTorboxStatus('ready')" id="tbfilter-ready" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center gap-1.5 shrink-0">
-                <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Sẵn Sàng (<span id="tbcount-ready">25</span>)
-              </button>
-              <button onclick="filterTorboxStatus('active')" id="tbfilter-active" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center gap-1.5 shrink-0">
-                <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span> Đang Tải (<span id="tbcount-active">0</span>)
-              </button>
-              <button onclick="filterTorboxStatus('queued')" id="tbfilter-queued" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center gap-1.5 shrink-0">
-                <span class="w-2 h-2 rounded-full bg-amber-400"></span> Hàng Đợi (<span id="tbcount-queued">0</span>)
-              </button>
+                    <!-- Dual Filter Bar: Engine Type + Dynamic Status Bar -->
+          <div class="space-y-2.5">
+            <!-- Row 1: Engine Filter Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-zinc-900/60 border border-zinc-800/80 p-1.5 rounded-2xl">
+              <div class="flex items-center gap-1 bg-zinc-950 p-1 rounded-xl border border-zinc-800/80 text-xs font-semibold overflow-x-auto custom-scroll max-w-full">
+                <span class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider px-2 shrink-0">Nguồn:</span>
+                <button onclick="setEngineFilter('all')" id="engine-btn-all" class="engine-tab-btn px-3 py-1.5 rounded-lg bg-purple-600 text-white font-bold transition shadow-sm shrink-0">
+                  Tất Cả
+                </button>
+                <button onclick="setEngineFilter('torbox')" id="engine-btn-torbox" class="engine-tab-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
+                  TorBox Cloud
+                </button>
+                <button onclick="setEngineFilter('aria2')" id="engine-btn-aria2" class="engine-tab-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
+                  Aria2c P2P
+                </button>
+                <button onclick="setEngineFilter('direct')" id="engine-btn-direct" class="engine-tab-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
+                  Direct / DDL
+                </button>
+              </div>
+
+              <!-- Batch Selection Toolbar (When checkboxes are checked) -->
+              <div id="torbox-batch-toolbar" class="hidden items-center gap-2 bg-zinc-950 border border-purple-500/30 rounded-xl px-3 py-1.5 text-xs shadow-md">
+                <span class="text-zinc-300 font-semibold font-mono text-[11px]" id="torbox-selected-count">0 chọn</span>
+                <div class="h-3.5 w-px bg-zinc-800 mx-0.5"></div>
+                <button onclick="syncSelectedTorbox('drive')" class="px-2.5 py-1 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 rounded-lg transition font-semibold">
+                  Sync Drive
+                </button>
+                <button onclick="syncSelectedTorbox('nas')" class="px-2.5 py-1 bg-amber-600/20 hover:bg-amber-600 text-amber-400 hover:text-white border border-amber-500/30 rounded-lg transition font-semibold">
+                  Sync NAS
+                </button>
+                <button onclick="deleteSelectedTorbox()" class="px-2 py-1 text-red-400 hover:bg-red-500/20 rounded-lg transition font-semibold">
+                  Xóa
+                </button>
+              </div>
             </div>
 
-            <!-- Batch Selection Toolbar (When checkboxes are checked) -->
-            <div id="torbox-batch-toolbar" class="hidden items-center gap-2 bg-zinc-950 border border-purple-500/30 rounded-xl px-3 py-1.5 text-xs shadow-md">
-              <span class="text-zinc-300 font-semibold font-mono text-[11px]" id="torbox-selected-count">0 chọn</span>
-              <div class="h-3.5 w-px bg-zinc-800 mx-0.5"></div>
-              <button onclick="syncSelectedTorbox('drive')" class="px-2.5 py-1 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 rounded-lg transition font-semibold flex items-center gap-1">
-                <span>☁️</span> Sync Drive
+            <!-- Row 2: Status Sub-Filter (Visible when All or TorBox is selected) -->
+            <div id="status-filter-container" class="flex items-center gap-1 bg-zinc-950/80 p-1 rounded-xl border border-zinc-800/80 text-xs font-semibold overflow-x-auto custom-scroll max-w-full">
+              <span class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider px-2 shrink-0">Trạng Thái:</span>
+              <button onclick="filterTorboxStatus('all')" id="tbfilter-all" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white font-bold transition shadow-sm shrink-0">
+                Tất Cả (<span id="tbcount-all">25</span>)
               </button>
-              <button onclick="syncSelectedTorbox('nas')" class="px-2.5 py-1 bg-amber-600/20 hover:bg-amber-600 text-amber-400 hover:text-white border border-amber-500/30 rounded-lg transition font-semibold flex items-center gap-1">
-                <span>🖥️</span> Sync NAS
+              <button onclick="filterTorboxStatus('ready')" id="tbfilter-ready" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
+                Sẵn Sàng (<span id="tbcount-ready">25</span>)
               </button>
-              <button onclick="deleteSelectedTorbox()" class="px-2 py-1 text-red-400 hover:bg-red-500/20 rounded-lg transition font-semibold">
-                <span>🗑️</span>
+              <button onclick="filterTorboxStatus('synced')" id="tbfilter-synced" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
+                Đã Lên Kho (<span id="tbcount-synced">21</span>)
+              </button>
+              <button onclick="filterTorboxStatus('unsynced')" id="tbfilter-unsynced" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
+                Chưa Sync (<span id="tbcount-unsynced">4</span>)
+              </button>
+              <button onclick="filterTorboxStatus('active')" id="tbfilter-active" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
+                Đang Tải (<span id="tbcount-active">0</span>)
+              </button>
+              <button onclick="filterTorboxStatus('queued')" id="tbfilter-queued" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0">
+                Hàng Đợi (<span id="tbcount-queued">0</span>)
               </button>
             </div>
           </div>
@@ -2612,16 +2639,41 @@
       sendQuickCommand(`Kiểm tra chi tiết tiến trình và phụ đề cho show ${selectedPipelineTask.title}`);
     }
 
-            let currentTorboxFilter = "all";
+                let currentEngineFilter = "all";
+    let currentTorboxFilter = "all";
+
+    function setEngineFilter(engine) {
+      currentEngineFilter = engine;
+      document.querySelectorAll('.engine-tab-btn').forEach(btn => {
+        btn.className = "engine-tab-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0";
+      });
+      const activeEngineBtn = document.getElementById(`engine-btn-${engine}`);
+      if (activeEngineBtn) {
+        activeEngineBtn.className = "engine-tab-btn px-3 py-1.5 rounded-lg bg-purple-600 text-white font-bold transition shadow-sm shrink-0";
+      }
+
+      const statusContainer = document.getElementById('status-filter-container');
+      if (statusContainer) {
+        if (engine === 'all' || engine === 'torbox') {
+          statusContainer.classList.remove('hidden');
+          statusContainer.classList.add('flex');
+        } else {
+          statusContainer.classList.remove('hidden');
+          statusContainer.classList.add('flex');
+        }
+      }
+
+      applyTorboxFilter();
+    }
 
     function filterTorboxStatus(status) {
       currentTorboxFilter = status;
       document.querySelectorAll('.torbox-filter-btn').forEach(btn => {
-        btn.className = "torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center gap-1.5 shrink-0";
+        btn.className = "torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition shrink-0";
       });
-      const activeBtn = document.getElementById(`tbfilter-${status}`);
-      if (activeBtn) {
-        activeBtn.className = "torbox-filter-btn px-3 py-1.5 rounded-lg bg-purple-600 text-white font-bold transition shadow-sm shrink-0 flex items-center gap-1.5";
+      const activeStatusBtn = document.getElementById(`tbfilter-${status}`);
+      if (activeStatusBtn) {
+        activeStatusBtn.className = "torbox-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white font-bold transition shadow-sm shrink-0";
       }
       applyTorboxFilter();
     }
@@ -2634,73 +2686,43 @@
       const q = (document.getElementById('torbox-search') ? document.getElementById('torbox-search').value : '').toLowerCase();
       let filtered = currentTorrents.filter(t => (t.name || '').toLowerCase().includes(q) || (t.id || '').toString().includes(q));
 
-      // Calculate category counts
+      // Filter by Engine
+      if (currentEngineFilter === 'torbox') {
+        filtered = filtered.filter(t => !t.engine || t.engine === 'torbox');
+      } else if (currentEngineFilter === 'aria2') {
+        filtered = filtered.filter(t => t.engine === 'aria2');
+      } else if (currentEngineFilter === 'direct') {
+        filtered = filtered.filter(t => t.engine === 'direct');
+      }
+
+      // Update TorBox Status Counts
+      const countReady = currentTorrents.filter(t => t.download_state === 'completed' || t.download_state === 'cached' || t.progress >= 1).length;
       const countSynced = currentTorrents.filter(t => t.is_completed_and_synced).length;
       const countUnsynced = currentTorrents.filter(t => !t.is_completed_and_synced && (t.download_state === 'completed' || t.download_state === 'cached' || t.progress >= 1)).length;
       const countActive = currentTorrents.filter(t => t.download_state === 'downloading' || (t.progress > 0 && t.progress < 1)).length;
+      const countQueued = currentTorrents.filter(t => t.download_state === 'queued' || t.is_queued || t.progress === 0).length;
 
       if (document.getElementById('tbcount-all')) document.getElementById('tbcount-all').innerText = currentTorrents.length;
+      if (document.getElementById('tbcount-ready')) document.getElementById('tbcount-ready').innerText = countReady;
       if (document.getElementById('tbcount-synced')) document.getElementById('tbcount-synced').innerText = countSynced;
       if (document.getElementById('tbcount-unsynced')) document.getElementById('tbcount-unsynced').innerText = countUnsynced;
       if (document.getElementById('tbcount-active')) document.getElementById('tbcount-active').innerText = countActive;
+      if (document.getElementById('tbcount-queued')) document.getElementById('tbcount-queued').innerText = countQueued;
 
-      if (currentTorboxFilter === 'synced') {
+      // Filter by TorBox Status
+      if (currentTorboxFilter === 'ready') {
+        filtered = filtered.filter(t => t.download_state === 'completed' || t.download_state === 'cached' || t.progress >= 1);
+      } else if (currentTorboxFilter === 'synced') {
         filtered = filtered.filter(t => t.is_completed_and_synced);
       } else if (currentTorboxFilter === 'unsynced') {
         filtered = filtered.filter(t => !t.is_completed_and_synced && (t.download_state === 'completed' || t.download_state === 'cached' || t.progress >= 1));
       } else if (currentTorboxFilter === 'active') {
         filtered = filtered.filter(t => t.download_state === 'downloading' || (t.progress > 0 && t.progress < 1));
+      } else if (currentTorboxFilter === 'queued') {
+        filtered = filtered.filter(t => t.download_state === 'queued' || t.is_queued || t.progress === 0);
       }
 
       renderTorbox(filtered);
-    }
-
-            async function syncAllTorrents(target) {
-      const targetLabel = (target === 'nas') ? '🖥️ NAS Storage (/srv/mergerfs/MainPool/Phim)' : '☁️ Google Drive (gdrive:Phim)';
-      if (!confirm(`Bạn có chắc chắn muốn kích hoạt chuỗi tự động đồng bộ TẤT CẢ các torrents lên ${targetLabel}?`)) return;
-      
-      showToast(`🚀 Đang gửi lệnh đồng bộ toàn bộ torrents lên ${targetLabel}...`, 'info', 3500);
-      try {
-        const res = await fetch('/api/agent/command', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            command: `Tự động đồng bộ toàn bộ torrents từ TorBox Cloud lên ${target === 'nas' ? 'NAS Storage' : 'Google Drive'}`
-          })
-        });
-        const data = await res.json();
-        if (data.success) {
-          showToast(`✅ Đã khởi động chuỗi đồng bộ toàn diện lên ${target === 'nas' ? 'NAS' : 'Google Drive'}!`, 'success');
-          setTimeout(fetchTorrents, 1200);
-        } else {
-          showToast(`❌ ${data.error || 'Lỗi đồng bộ'}`, 'error');
-        }
-      } catch (e) {
-        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
-      }
-    }
-
-    async function syncSingleTorrent(id, target, name) {
-      const targetLabel = (target === 'nas') ? '🖥️ NAS Storage (/srv/mergerfs/MainPool/Phim)' : '☁️ Google Drive (gdrive:Phim)';
-      showToast(`🚀 Đang khởi chạy chuỗi tải & đồng bộ "${name}" lên ${targetLabel}...`, 'info', 3000);
-      try {
-        const res = await fetch('/api/agent/command', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            command: `Tải và đồng bộ torrent ID #${id} (${name}) trực tiếp lên ${target === 'nas' ? 'NAS Storage' : 'Google Drive'}`
-          })
-        });
-        const data = await res.json();
-        if (data.success) {
-          showToast(`✅ Đã kích hoạt chuỗi đồng bộ lên ${target === 'nas' ? 'NAS' : 'Google Drive'} thành công!`, 'success');
-          setTimeout(fetchTorrents, 1000);
-        } else {
-          showToast(`❌ ${data.error || 'Lỗi đồng bộ'}`, 'error');
-        }
-      } catch (e) {
-        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
-      }
     }
 
     function renderTorbox(items) {
