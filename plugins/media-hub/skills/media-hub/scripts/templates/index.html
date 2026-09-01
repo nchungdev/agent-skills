@@ -2785,11 +2785,14 @@
         resBox.innerHTML = '<div class="text-amber-400 animate-pulse">⏳ Đang kết nối SSH và quét các thư mục Plex trên NAS...</div>';
       }
 
+      const key = document.getElementById('cfg-nas-ssh-key')?.value.trim() || '';
+      const customPath = document.getElementById('cfg-nas-path')?.value.trim() || '';
+
       try {
         const res = await fetch('/api/nas/scan', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({host, user, port})
+          body: JSON.stringify({host, user, port, key, path: customPath})
         });
         const data = await res.json();
         if (data.success && data.libraries && data.libraries.length > 0) {
