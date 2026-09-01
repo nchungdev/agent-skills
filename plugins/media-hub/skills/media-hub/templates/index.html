@@ -766,11 +766,11 @@
                     <th class="px-3 py-3.5 w-10 text-center">
                       <input type="checkbox" id="torbox-select-all" onchange="toggleSelectAllTorbox(this.checked)" class="w-4 h-4 rounded border-zinc-700 bg-zinc-900 text-purple-600 focus:ring-0 cursor-pointer">
                     </th>
-                    <th class="px-3 py-3.5">ID</th>
-                    <th class="px-4 py-3.5">Tên Phim / Torrent</th>
-                    <th class="px-4 py-3.5">Dung Lượng</th>
-                    <th class="px-4 py-3.5">Trạng Thái Cloud</th>
-                    <th class="px-4 py-3.5 text-right">Đồng Bộ & Thao Tác</th>
+                    <th class="px-3 py-3.5 w-24">ID</th>
+                    <th class="px-4 py-3.5 max-w-sm sm:max-w-md lg:max-w-lg">Tên Phim / Torrent</th>
+                    <th class="px-4 py-3.5 w-28 whitespace-nowrap">Dung Lượng</th>
+                    <th class="px-4 py-3.5 w-36 whitespace-nowrap">Trạng Thái</th>
+                    <th class="px-4 py-3.5 text-right w-80 whitespace-nowrap">Đồng Bộ & Thao Tác</th>
                   </tr>
                 </thead>
                 <tbody id="torbox-tbody" class="divide-y divide-zinc-800">
@@ -2258,15 +2258,15 @@
         return `
           <tr class="hover:bg-zinc-800/40 transition">
             <td class="px-4 py-3.5 font-mono text-[11px] text-zinc-500 font-semibold">#${t.id}</td>
-            <td class="px-4 py-3.5 font-medium text-white truncate" title="${t.name}">
+            <td class="px-4 py-3.5 font-medium text-white max-w-sm sm:max-w-md lg:max-w-lg truncate" title="${t.name}">
               <div class="font-semibold text-white truncate">${t.name}</div>
               <div class="text-[10px] text-zinc-500 mt-0.5 font-mono">${t.hash || ''}</div>
             </td>
-            <td class="px-4 py-3.5 font-mono text-zinc-300 font-semibold">${isQueued ? 'Chờ slot' : sizeGb + ' GB'}</td>
+            <td class="px-4 py-3.5 font-mono text-zinc-300 font-semibold w-28 whitespace-nowrap">${isQueued ? 'Chờ slot' : sizeGb + ' GB'}</td>
             <td class="px-4 py-3.5">
               ${statusBadge}
             </td>
-            <td class="px-4 py-3.5 text-right">
+            <td class="px-4 py-3.5 text-right w-80 whitespace-nowrap">
               <div class="flex items-center justify-end gap-2">
                 ${isQueued ? `
                   <button onclick="startQueuedDownload(${t.id})" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1 shadow-md shadow-emerald-600/20" title="Bắt đầu tải ngay lập tức">
