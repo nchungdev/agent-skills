@@ -27,6 +27,9 @@ class TorBoxManager:
                 print(f"[TorBoxManager] Config load error: {e}")
                 
         self.base_url = "https://api.torbox.app/v1/api"
+        self._list_cache = None
+        self._list_cache_time = 0
+
         
     def _request(self, endpoint, method="GET", data=None, is_json=True):
         if not self.api_key:
