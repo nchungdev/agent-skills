@@ -731,106 +731,93 @@
       </div>
 
       <!-- ==================== TAB 2: TẢI XUỐNG ==================== -->
+            <!-- ==================== TAB 2: QUẢN LÝ TẢI XUỐNG ==================== -->
       <div id="tab-torbox" class="hidden space-y-0">
         
         <!-- Pinned Header (Sticky Top-0 Flush) -->
         <div class="sticky top-0 z-30 w-full bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-3 min-h-16 flex flex-wrap items-center justify-between gap-3 shadow-sm">
           <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold text-base border border-purple-500/20 shrink-0">
+            <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold text-base border border-purple-500/20 shadow-inner shrink-0">
               📥
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <h3 class="font-bold text-sm text-white">Quản Lý Tải Xuống</h3>
-                <span class="px-1.5 py-0.2 text-[9px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/30 rounded" id="torbox-count">25 mục</span>
+                <h3 class="font-bold text-sm sm:text-base text-white">Quản Lý Tải Xuống</h3>
+                <span class="px-2 py-0.2 text-[9px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/30 rounded-full font-mono" id="torbox-count">25 mục</span>
               </div>
-              <p class="text-xs text-zinc-400 hidden sm:block">Đa engine (TorBox Cloud, Aria2) • Tải về máy • Đồng bộ trực tiếp lên Google Drive & NAS</p>
+              <p class="text-xs text-zinc-400 hidden sm:block">Kho dữ liệu TorBox Cloud & Aria2 • Đồng bộ cuốn chiếu 1-click lên Google Drive & NAS Storage</p>
             </div>
           </div>
 
+          <!-- Top Action Bar (Sync All Drive / NAS + Add Magnet) -->
           <div class="flex items-center gap-2 flex-wrap">
-            <input type="text" id="torbox-search" oninput="filterTorbox()" placeholder="🔍 Tìm torrent..." class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 w-32 sm:w-48">
-            <button onclick="openModal('modal-add-magnet')" class="px-3 py-1.5 sm:px-4 sm:py-2 bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs rounded-xl transition shadow-md shadow-purple-600/20 flex items-center gap-1 shrink-0">
-              <span>➕</span> <span class="hidden sm:inline">Thêm</span> Magnet
+            <input type="text" id="torbox-search" oninput="filterTorbox()" placeholder="🔍 Tìm kiếm..." class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 w-32 sm:w-44">
+            
+            <button onclick="syncAllTorrents('drive')" class="px-3 py-1.5 sm:px-3.5 sm:py-2 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 font-bold text-xs rounded-xl transition shadow-sm flex items-center gap-1.5 shrink-0" title="Tự động đồng bộ toàn bộ torrents lên Google Drive">
+              <span>☁️</span> <span class="hidden sm:inline">Sync Tất Cả</span> Drive
+            </button>
+
+            <button onclick="syncAllTorrents('nas')" class="px-3 py-1.5 sm:px-3.5 sm:py-2 bg-amber-600/10 hover:bg-amber-600 text-amber-400 hover:text-white border border-amber-500/30 font-bold text-xs rounded-xl transition shadow-sm flex items-center gap-1.5 shrink-0" title="Tự động đồng bộ toàn bộ torrents lên NAS Storage">
+              <span>🖥️</span> <span class="hidden sm:inline">Sync Tất Cả</span> NAS
+            </button>
+
+            <button onclick="openModal('modal-add-magnet')" class="px-3.5 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-purple-600/20 flex items-center gap-1.5 shrink-0">
+              <span>➕</span> Thêm Mới
             </button>
           </div>
         </div>
 
         <div class="p-4 sm:p-6 pb-28 lg:pb-10 space-y-4 w-full">
           
-          <!-- Dual Filter Bar: Engine Type + Status + Batch Action Toolbar -->
-          <div class="space-y-2.5">
-            <!-- Row 1: Engine Type Filter Pills -->
-            <div class="flex flex-wrap items-center justify-between gap-3 bg-zinc-900/40 border border-zinc-800/60 p-2.5 rounded-2xl">
-              <div class="flex items-center gap-2 overflow-x-auto custom-scroll pb-0.5 text-xs">
-                <span class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider pl-1 pr-1 shrink-0 flex items-center gap-1">
-                  <span>⚙️</span> Loại Download:
-                </span>
-                <button onclick="filterDownloadEngine('all')" class="engine-filter-btn px-3 py-1.5 rounded-xl bg-purple-600 text-white font-semibold shadow-md shadow-purple-600/20 transition shrink-0" id="engine-all">Tất Cả Loại</button>
-                <button onclick="filterDownloadEngine('torbox')" class="engine-filter-btn px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0 flex items-center gap-1" id="engine-torbox">
-                  <span>⚡</span> TorBox Cloud
-                </button>
-                <button onclick="filterDownloadEngine('aria2')" class="engine-filter-btn px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0 flex items-center gap-1" id="engine-aria2">
-                  <span>🧲</span> Aria2c P2P
-                </button>
-                <button onclick="filterDownloadEngine('direct')" class="engine-filter-btn px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0 flex items-center gap-1" id="engine-direct">
-                  <span>🌐</span> Direct / DDL
-                </button>
-              </div>
-
-              <!-- Batch Toolbar Docked on Right -->
-              <div id="torbox-batch-toolbar" class="hidden items-center gap-2 bg-zinc-900 border border-purple-500/40 rounded-xl px-3 py-1.5 shadow-lg shadow-purple-500/10 text-xs">
-                <span class="text-zinc-300 font-semibold font-mono" id="torbox-selected-count">Đã chọn 0 mục</span>
-                <div class="h-4 w-px bg-zinc-700 mx-1"></div>
-                <button onclick="syncSelectedTorbox('drive')" class="px-2.5 py-1 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 rounded-lg transition font-semibold flex items-center gap-1 shadow-sm" title="Đồng bộ tất cả mục đã chọn lên Google Drive">
-                  <span>☁️</span> Sync Lên Drive
-                </button>
-                <button onclick="syncSelectedTorbox('nas')" class="px-2.5 py-1 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/30 rounded-lg transition font-semibold flex items-center gap-1 shadow-sm" title="Đồng bộ tất cả mục đã chọn qua SSH lên NAS">
-                  <span>🖥️</span> Sync Lên NAS
-                </button>
-                <button onclick="deleteSelectedTorbox()" class="px-2.5 py-1 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 rounded-lg transition font-semibold flex items-center gap-1">
-                  <span>🗑️</span> Xóa
-                </button>
-                <button onclick="clearTorboxSelection()" class="text-zinc-500 hover:text-white px-1.5 py-1 text-xs" title="Bỏ chọn tất cả">
-                  ✕
-                </button>
-              </div>
+          <!-- Unified Clean Status Segmented Tab Bar -->
+          <div class="flex flex-wrap items-center justify-between gap-3 bg-zinc-900/60 border border-zinc-800/80 p-1.5 rounded-2xl">
+            <div class="flex items-center gap-1 bg-zinc-950 p-1 rounded-xl border border-zinc-800/80 text-xs font-semibold overflow-x-auto custom-scroll max-w-full">
+              <button onclick="filterTorboxStatus('all')" id="tbfilter-all" class="torbox-filter-btn px-3 py-1.5 rounded-lg bg-purple-600 text-white font-bold transition shadow-sm shrink-0">
+                Tất Cả (<span id="tbcount-all">25</span>)
+              </button>
+              <button onclick="filterTorboxStatus('ready')" id="tbfilter-ready" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center gap-1.5 shrink-0">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Sẵn Sàng (<span id="tbcount-ready">25</span>)
+              </button>
+              <button onclick="filterTorboxStatus('active')" id="tbfilter-active" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center gap-1.5 shrink-0">
+                <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span> Đang Tải (<span id="tbcount-active">0</span>)
+              </button>
+              <button onclick="filterTorboxStatus('queued')" id="tbfilter-queued" class="torbox-filter-btn px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center gap-1.5 shrink-0">
+                <span class="w-2 h-2 rounded-full bg-amber-400"></span> Hàng Đợi (<span id="tbcount-queued">0</span>)
+              </button>
             </div>
 
-            <!-- Row 2: Status Filter Pills -->
-            <div class="flex items-center gap-2 overflow-x-auto custom-scroll pb-0.5 text-xs">
-              <span class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider pl-1 pr-1 shrink-0 flex items-center gap-1">
-                <span>📊</span> Trạng Thái:
-              </span>
-              <button onclick="filterTorboxStatus('all')" class="status-filter-btn px-3 py-1.2 rounded-lg bg-zinc-800 text-white font-medium hover:bg-zinc-700 transition active shrink-0" id="tbfilter-all">Tất Cả</button>
-              <button onclick="filterTorboxStatus('ready')" class="status-filter-btn px-3 py-1.2 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0 flex items-center gap-1" id="tbfilter-ready">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Sẵn Sàng
+            <!-- Batch Selection Toolbar (When checkboxes are checked) -->
+            <div id="torbox-batch-toolbar" class="hidden items-center gap-2 bg-zinc-950 border border-purple-500/30 rounded-xl px-3 py-1.5 text-xs shadow-md">
+              <span class="text-zinc-300 font-semibold font-mono text-[11px]" id="torbox-selected-count">0 chọn</span>
+              <div class="h-3.5 w-px bg-zinc-800 mx-0.5"></div>
+              <button onclick="syncSelectedTorbox('drive')" class="px-2.5 py-1 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 rounded-lg transition font-semibold flex items-center gap-1">
+                <span>☁️</span> Sync Drive
               </button>
-              <button onclick="filterTorboxStatus('active')" class="status-filter-btn px-3 py-1.2 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0 flex items-center gap-1" id="tbfilter-active">
-                <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span> Đang Tải
+              <button onclick="syncSelectedTorbox('nas')" class="px-2.5 py-1 bg-amber-600/20 hover:bg-amber-600 text-amber-400 hover:text-white border border-amber-500/30 rounded-lg transition font-semibold flex items-center gap-1">
+                <span>🖥️</span> Sync NAS
               </button>
-              <button onclick="filterTorboxStatus('queued')" class="status-filter-btn px-3 py-1.2 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition shrink-0 flex items-center gap-1" id="tbfilter-queued">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Hàng Đợi
+              <button onclick="deleteSelectedTorbox()" class="px-2 py-1 text-red-400 hover:bg-red-500/20 rounded-lg transition font-semibold">
+                <span>🗑️</span>
               </button>
             </div>
           </div>
 
-          <div class="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl">
+          <!-- Clean Modern Table List -->
+          <div class="bg-zinc-900/60 border border-zinc-800/80 rounded-2xl overflow-hidden shadow-xl">
             <div class="overflow-x-auto">
               <table class="w-full text-left text-xs text-zinc-300">
-                <thead class="bg-zinc-950 text-zinc-400 uppercase text-[10px] tracking-wider border-b border-zinc-800">
+                <thead class="bg-zinc-950 text-zinc-400 uppercase text-[10px] tracking-wider border-b border-zinc-800/80">
                   <tr>
-                    <th class="px-3 py-3.5 w-10 text-center">
+                    <th class="px-4 py-3.5 w-12 text-center">
                       <input type="checkbox" id="torbox-select-all" onchange="toggleSelectAllTorbox(this.checked)" class="w-4 h-4 rounded border-zinc-700 bg-zinc-900 text-purple-600 focus:ring-0 cursor-pointer">
                     </th>
-                    <th class="px-3 py-3.5 w-24">ID</th>
-                    <th class="px-4 py-3.5 max-w-sm sm:max-w-md lg:max-w-lg">Tên Phim / Torrent</th>
+                    <th class="px-4 py-3.5">Tên Phim / Torrent</th>
                     <th class="px-4 py-3.5 w-28 whitespace-nowrap">Dung Lượng</th>
-                    <th class="px-4 py-3.5 w-36 whitespace-nowrap">Trạng Thái</th>
+                    <th class="px-4 py-3.5 w-40 whitespace-nowrap">Trạng Thái</th>
                     <th class="px-4 py-3.5 text-right w-80 whitespace-nowrap">Đồng Bộ & Thao Tác</th>
                   </tr>
                 </thead>
-                <tbody id="torbox-tbody" class="divide-y divide-zinc-800">
+                <tbody id="torbox-tbody" class="divide-y divide-zinc-800/60">
                   <!-- JS will populate -->
                 </tbody>
               </table>
@@ -2668,7 +2655,32 @@
       renderTorbox(filtered);
     }
 
-        async function syncSingleTorrent(id, target, name) {
+            async function syncAllTorrents(target) {
+      const targetLabel = (target === 'nas') ? '🖥️ NAS Storage (/srv/mergerfs/MainPool/Phim)' : '☁️ Google Drive (gdrive:Phim)';
+      if (!confirm(`Bạn có chắc chắn muốn kích hoạt chuỗi tự động đồng bộ TẤT CẢ các torrents lên ${targetLabel}?`)) return;
+      
+      showToast(`🚀 Đang gửi lệnh đồng bộ toàn bộ torrents lên ${targetLabel}...`, 'info', 3500);
+      try {
+        const res = await fetch('/api/agent/command', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            command: `Tự động đồng bộ toàn bộ torrents từ TorBox Cloud lên ${target === 'nas' ? 'NAS Storage' : 'Google Drive'}`
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✅ Đã khởi động chuỗi đồng bộ toàn diện lên ${target === 'nas' ? 'NAS' : 'Google Drive'}!`, 'success');
+          setTimeout(fetchTorrents, 1200);
+        } else {
+          showToast(`❌ ${data.error || 'Lỗi đồng bộ'}`, 'error');
+        }
+      } catch (e) {
+        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
+      }
+    }
+
+    async function syncSingleTorrent(id, target, name) {
       const targetLabel = (target === 'nas') ? '🖥️ NAS Storage (/srv/mergerfs/MainPool/Phim)' : '☁️ Google Drive (gdrive:Phim)';
       showToast(`🚀 Đang khởi chạy chuỗi tải & đồng bộ "${name}" lên ${targetLabel}...`, 'info', 3000);
       try {
