@@ -3,7 +3,7 @@ name: media-downloader
 description: Bộ tải dữ liệu đa nguồn chuyên nghiệp. Hỗ trợ tải Direct Download Link (HTTP/HTTPS), tải Torrent/Magnet nội bộ qua Aria2c (P2P Client), hoặc tải Torrent qua TorBox Debrid Cloud API (kéo DDL tốc độ cao, quản lý hàng đợi, ngưỡng 5GB và jitter backoff chống chặn bot).
 ---
 
-# Media Downloader Skill (Bộ Tải Đa Nguồn)
+# Media Downloader Skill (Quản Lý Tải Xuống)
 
 Kỹ năng quản trị và điều phối toàn bộ luồng kéo dữ liệu media về bộ đệm tạm thời (`Staging Buffer`) với **3 Provider cốt lõi**:
 1. 🔗 **`direct`**: Tải link trực tiếp HTTP/HTTPS/DDL qua multi-connection.
