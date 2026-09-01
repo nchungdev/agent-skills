@@ -491,7 +491,7 @@
               <!-- 1. The Three-Eyed One -->
               <div onclick="setTab('gdrive'); openPlexDetail('320122')" class="group cursor-pointer rounded-2xl bg-zinc-950 border border-zinc-800/80 hover:border-amber-500/50 p-2.5 transition space-y-2">
                 <div class="aspect-[2/3] rounded-xl overflow-hidden bg-zinc-900 relative">
-                  <img src="/static/posters/320122.jpg" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
+                  <img src="/api/poster?tvdb=320122" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
                   <span class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded bg-amber-500 text-black font-mono text-[9px] font-black">480p DVD</span>
                   <span class="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/80 backdrop-blur text-emerald-400 font-bold text-[9px]">🇻🇳 Vietsub</span>
                 </div>
@@ -504,7 +504,7 @@
               <!-- 2. Black Jack -->
               <div onclick="setTab('gdrive'); openPlexDetail('78864')" class="group cursor-pointer rounded-2xl bg-zinc-950 border border-zinc-800/80 hover:border-blue-500/50 p-2.5 transition space-y-2">
                 <div class="aspect-[2/3] rounded-xl overflow-hidden bg-zinc-900 relative">
-                  <img src="/static/posters/78864.jpg" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
+                  <img src="/api/poster?tvdb=78864" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
                   <span class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded bg-purple-600 text-white font-mono text-[9px] font-bold">1080p BDRip</span>
                   <span class="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/80 backdrop-blur text-emerald-400 font-bold text-[9px]">🇻🇳 Vietsub</span>
                 </div>
@@ -517,7 +517,7 @@
               <!-- 3. Monster -->
               <div onclick="setTab('gdrive'); openPlexDetail('74599')" class="group cursor-pointer rounded-2xl bg-zinc-950 border border-zinc-800/80 hover:border-blue-500/50 p-2.5 transition space-y-2">
                 <div class="aspect-[2/3] rounded-xl overflow-hidden bg-zinc-900 relative">
-                  <img src="/static/posters/74599.jpg" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
+                  <img src="/api/poster?tvdb=74599" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
                   <span class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded bg-blue-600 text-white font-mono text-[9px] font-bold">1080p BluRay</span>
                   <span class="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/80 backdrop-blur text-emerald-400 font-bold text-[9px]">🇻🇳 Vietsub</span>
                 </div>
@@ -530,7 +530,7 @@
               <!-- 4. Young Kindaichi -->
               <div onclick="setTab('gdrive'); openPlexDetail('79354')" class="group cursor-pointer rounded-2xl bg-zinc-950 border border-zinc-800/80 hover:border-blue-500/50 p-2.5 transition space-y-2">
                 <div class="aspect-[2/3] rounded-xl overflow-hidden bg-zinc-900 relative">
-                  <img src="/static/posters/79354.jpg" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
+                  <img src="/api/poster?tvdb=79354" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
                   <span class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded bg-emerald-600 text-white font-mono text-[9px] font-bold">480p DVD</span>
                   <span class="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/80 backdrop-blur text-emerald-400 font-bold text-[9px]">🇻🇳 Vietsub</span>
                 </div>
@@ -543,7 +543,7 @@
               <!-- 5. WUKONG -->
               <div onclick="setTab('gdrive'); openPlexDetail('454526')" class="group cursor-pointer rounded-2xl bg-zinc-950 border border-zinc-800/80 hover:border-blue-500/50 p-2.5 transition space-y-2">
                 <div class="aspect-[2/3] rounded-xl overflow-hidden bg-zinc-900 relative">
-                  <img src="/static/posters/454526.jpg" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
+                  <img src="/api/poster?tvdb=454526" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
                   <span class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded bg-amber-600 text-white font-mono text-[9px] font-bold">1080p WEB-DL</span>
                   <span class="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/80 backdrop-blur text-emerald-400 font-bold text-[9px]">🇻🇳 Vietsub</span>
                 </div>
@@ -893,10 +893,25 @@
               <span>🔄</span> <span class="hidden sm:inline">So Sánh &</span> Đồng Bộ Cloud
             </button>
             <input type="text" id="plex-search" oninput="filterPlexShows()" placeholder="🔍 Tìm kiếm..." class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500 w-32 sm:w-48">
-            <button onclick="triggerPlexScan()" class="px-3 py-1.5 sm:px-4 sm:py-2 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-xl transition shadow-md shadow-amber-500/20 flex items-center gap-1 shrink-0">
+            <button onclick="refreshLibraryIndex()" class="px-3 py-1.5 sm:px-4 sm:py-2 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-xl transition shadow-md shadow-amber-500/20 flex items-center gap-1 shrink-0">
               <span>⚡</span> <span class="hidden sm:inline">Quét</span> Lại
             </button>
+            <button onclick="buildLibraryMetadata()" id="btn-build-meta" class="px-3.5 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-purple-600/20 flex items-center gap-1.5 shrink-0" title="Tải poster/fanart/NFO còn thiếu từ TMDb và ghi vào thư viện">
+              <span>🖼️</span> <span class="hidden sm:inline">Dựng</span> Metadata
+            </button>
           </div>
+        </div>
+
+        <!-- Library index summary + metadata build progress -->
+        <div id="library-index-bar" class="mx-3 sm:mx-4 mb-3 p-3 rounded-2xl bg-zinc-950/70 border border-zinc-800 text-[11px] font-mono text-zinc-400 hidden">
+          <div class="flex items-center justify-between gap-3 flex-wrap">
+            <span id="library-index-stats">—</span>
+            <span id="library-build-state" class="text-purple-300"></span>
+          </div>
+          <div id="library-build-barwrap" class="w-full bg-zinc-900 h-2 rounded-full overflow-hidden border border-purple-500/20 mt-2 hidden">
+            <div id="library-build-bar" class="bg-gradient-to-r from-purple-500 to-fuchsia-400 h-full rounded-full transition-all duration-500" style="width:0%"></div>
+          </div>
+          <div id="library-build-log" class="mt-2 space-y-0.5 max-h-40 overflow-y-auto"></div>
         </div>
 
         <!-- Pinned Show Detail Top Header (Sticky Top-0 Flush) -->
@@ -1251,7 +1266,26 @@
                 </select>
               </div>
               <div>
-                <label class="block text-zinc-400 font-medium mb-1">Thư Mục Đệm Tạm Thời (Media Staging Buffer)</label>
+              <div>
+                <label class="block text-zinc-400 font-medium mb-1">Thư Mục Gốc Media Hub (<span class="font-mono">.media-hub</span>)</label>
+                <input type="text" id="cfg-hub-home" placeholder="(để trống = tự tìm .media-hub từ thư mục chạy)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-purple-500">
+                <p class="text-[10px] text-zinc-500 mt-1">Để trống thì skill tự đi ngược lên từ thư mục đang chạy để tìm <span class="font-mono">.media-hub</span> (như git tìm <span class="font-mono">.git</span>), không thấy thì tạo mới tại chỗ.</p>
+              </div>
+              <div>
+                <label class="block text-zinc-400 font-medium mb-1">Tên Thư Mục Phim Lẻ</label>
+                <input type="text" id="cfg-curation-dir" placeholder="(để trống = <Working Home>/curation)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-purple-500">
+                <p class="text-[10px] text-zinc-500 mt-1">Nằm trong mỗi collection: <span class="font-mono">&lt;gốc&gt;/&lt;Collection&gt;/Movies|TV Shows/&lt;Phim&gt;/</span></p>
+              </div>
+              <div>
+                <label class="block text-zinc-400 font-medium mb-1">Tên Thư Mục Phim Bộ</label>
+                <input type="text" id="cfg-tv-dir" placeholder="TV Shows" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-purple-500">
+              </div>
+              <div>
+                <label class="block text-zinc-400 font-medium mb-1">Thư Mục Log</label>
+                <input type="text" id="cfg-logs-dir" placeholder="(để trống = <Working Home>/logs)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-purple-500">
+              </div>
+              <div>
+                <label class="block text-zinc-400 font-medium mb-1">Thư Mục Đệm Tải Về (mặc định: &lt;gốc&gt;/.staging)</label>
                 <input type="text" id="cfg-staging-dir" value="/Volumes/512GB/AI Workspace/media_staging" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-purple-500">
               </div>
             </div>
@@ -1551,7 +1585,6 @@
             <div class="space-y-3.5 text-xs">
               <div>
                 <label class="block text-zinc-400 font-medium mb-1.5">Thư Mục Bộ Đệm Tạm Thời (Staging Buffer Directory)</label>
-                <input type="text" id="cfg-staging-dir" value="/Volumes/512GB/AI Workspace/media_staging" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono placeholder-zinc-500 focus:outline-none focus:border-rose-500">
                 <p class="text-[10px] text-zinc-500 mt-1">Nơi lưu file video tạm trong khi tải trước khi được đẩy lên NAS/Google Drive</p>
               </div>
 
@@ -2756,123 +2789,106 @@
       }
     }
 
-        async function syncSingleTorrent(id, target, name) {
-      const torrent = currentTorrents.find(t => t.id === id) || {};
-      const locations = torrent.locations || [];
-      const onLocal = locations.includes('local');
-      const onDrive = locations.includes('gdrive') || (torrent.synced_destinations || []).includes('gdrive');
-      const onNas = locations.includes('nas') || (torrent.synced_destinations || []).includes('nas');
-
-      // 1. Optimistic UI update: Instantly show "Đang Sync..." badge on this row
-      if (torrent) {
-        if (!torrent.sync_in_progress) {
-          torrent.sync_in_progress = { status: 'syncing', target: target, targets: [target] };
-        } else {
-          torrent.sync_in_progress.status = 'syncing';
-          if (!torrent.sync_in_progress.targets.includes(target)) {
-            torrent.sync_in_progress.targets.push(target);
-          }
-        }
-        applyTorboxFilter(); // Instant re-render
-      }
-
-      let routeDescription = "";
-      let commandPayload = "";
-
-      if (target === 'drive') {
-        if (onLocal) {
-          routeDescription = "💾 Máy Cục Bộ ➔ ☁️ Google Drive";
-          commandPayload = `Đồng bộ torrent "${name}" (ID #${id}) từ Máy Cục Bộ (Local) lên Google Drive (gdrive:Phim)`;
-        } else if (onNas) {
-          routeDescription = "🖥️ NAS Storage ➔ ☁️ Google Drive";
-          commandPayload = `Đồng bộ torrent "${name}" (ID #${id}) từ NAS Storage (/srv/mergerfs/MainPool/Phim) sang Google Drive (gdrive:Phim)`;
-        } else {
-          routeDescription = "⚡ TorBox Cloud ➔ 💾 Máy Đệm ➔ ☁️ Google Drive (Auto-Purge)";
-          commandPayload = `Kéo DDL từ TorBox torrent "${name}" (ID #${id}) về thư mục đệm rồi đẩy lên Google Drive (gdrive:Phim), sau đó tự động xóa buffer`;
-        }
-      } else if (target === 'nas') {
-        if (onLocal) {
-          routeDescription = "💾 Máy Cục Bộ ➔ 🖥️ NAS Storage (SSH/rsync)";
-          commandPayload = `Đồng bộ torrent "${name}" (ID #${id}) từ Máy Cục Bộ (Local) sang NAS Storage (/srv/mergerfs/MainPool/Phim)`;
-        } else if (onDrive) {
-          routeDescription = "☁️ Google Drive ➔ 🖥️ NAS Storage";
-          commandPayload = `Đồng bộ torrent "${name}" (ID #${id}) trực tiếp từ Google Drive (gdrive:Phim) sang NAS Storage (/srv/mergerfs/MainPool/Phim)`;
-        } else {
-          routeDescription = "⚡ TorBox Cloud ➔ 💾 Máy Đệm ➔ 🖥️ NAS Storage (Auto-Purge)";
-          commandPayload = `Kéo DDL từ TorBox torrent "${name}" (ID #${id}) về thư mục đệm rồi đẩy qua SSH lên NAS Storage (/srv/mergerfs/MainPool/Phim), sau đó tự động xóa buffer`;
-        }
-      }
-
-      showToast(`🚀 Tuyến đồng bộ: ${routeDescription}...`, 'info', 3500);
-      
+        // Queue a real job. The server de-duplicates by torrent id, so asking for the same
+    // torrent twice adds a destination instead of downloading it a second time.
+    async function queueSyncJob(ids, targets, names, routeLabel) {
       try {
-        const res = await fetch('/api/agent/command', {
+        const res = await fetch('/api/download/sync', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            command: commandPayload,
-            torrent_id: id,
-            target: target,
-            route: routeDescription
-          })
+          body: JSON.stringify({ ids: ids, targets: targets, names: names })
         });
         const data = await res.json();
         if (data.success) {
-          showToast(`✅ Đã bắt đầu tiến trình [${routeDescription}]!`, 'success');
+          showToast(data.message || `\u2705 \u0110\u00e3 x\u1ebfp h\u00e0ng ${routeLabel}!`, 'success', 4000);
+          setTimeout(fetchTorrents, 800);
         } else {
-          showToast(`❌ ${data.error || 'Lỗi đồng bộ'}`, 'error');
+          showToast(`\u274c ${data.error || 'L\u1ed7i x\u1ebfp h\u00e0ng \u0111\u1ed3ng b\u1ed9'}`, 'error');
         }
+        return data;
       } catch (e) {
-        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
+        showToast(`\u274c L\u1ed7i k\u1ebft n\u1ed1i: ${e}`, 'error');
+        return null;
       }
+    }
+
+    async function syncSingleTorrent(id, target, name) {
+      const label = target === 'nas' ? 'NAS Storage' : 'Google Drive';
+      showToast(`\ud83d\ude80 \u0110ang x\u1ebfp h\u00e0ng \u0111\u1ed3ng b\u1ed9 l\u00ean ${label}...`, 'info', 2500);
+      await queueSyncJob([id], [target], [name], label);
     }
 
     async function syncAllTorrents(target) {
-      const targetLabel = (target === 'nas') ? '🖥️ NAS Storage (/srv/mergerfs/MainPool/Phim)' : '☁️ Google Drive (gdrive:Phim)';
-      if (!confirm(`Bạn có chắc chắn muốn kích hoạt chuỗi tự động đồng bộ TẤT CẢ các torrents lên ${targetLabel}?`)) return;
-      
-      showToast(`🚀 Đang khởi động chuỗi đồng bộ toàn bộ lên ${targetLabel}...`, 'info', 3500);
-      try {
-        const res = await fetch('/api/agent/command', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            command: `Tự động đồng bộ toàn bộ torrents từ TorBox Cloud lên ${target === 'nas' ? 'NAS Storage' : 'Google Drive'}`
-          })
-        });
-        const data = await res.json();
-        if (data.success) {
-          showToast(`✅ Đã khởi chạy chuỗi đồng bộ toàn diện lên ${target === 'nas' ? 'NAS' : 'Google Drive'}!`, 'success');
-          setTimeout(fetchTorrents, 1200);
-        } else {
-          showToast(`❌ ${data.error || 'Lỗi đồng bộ'}`, 'error');
-        }
-      } catch (e) {
-        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
-      }
+      const label = target === 'nas' ? 'NAS Storage' : 'Google Drive';
+      const items = (currentTorrents || []);
+      if (items.length === 0) { showToast('Kh\u00f4ng c\u00f3 torrent n\u00e0o \u0111\u1ec3 \u0111\u1ed3ng b\u1ed9.', 'info'); return; }
+      if (!confirm(`\u0110\u1ed3ng b\u1ed9 to\u00e0n b\u1ed9 ${items.length} torrents l\u00ean ${label}?`)) return;
+      await queueSyncJob(items.map(t => t.id), [target], items.map(t => t.name || ''), label);
     }
 
     async function syncSelectedTorbox(target) {
-      const selected = Array.from(document.querySelectorAll('.torbox-item-cb:checked')).map(cb => cb.value);
-      if (selected.length === 0) return;
-      const targetLabel = (target === 'nas') ? 'NAS Storage' : 'Google Drive';
-      showToast(`🚀 Đang đồng bộ ${selected.length} mục đã chọn lên ${targetLabel}...`, 'info', 3000);
+      const boxes = Array.from(document.querySelectorAll('.torbox-item-cb:checked'));
+      if (boxes.length === 0) { showToast('Ch\u01b0a ch\u1ecdn m\u1ee5c n\u00e0o.', 'info'); return; }
+      const label = target === 'nas' ? 'NAS Storage' : 'Google Drive';
+      const ids = boxes.map(cb => parseInt(cb.value, 10));
+      const names = ids.map(id => (currentTorrents.find(t => t.id === id) || {}).name || '');
+      await queueSyncJob(ids, [target], names, label);
+    }
+
+    // ---- batch-selection helpers (referenced by onclick but previously never defined,
+    //      so every checkbox click threw a ReferenceError) ----
+    function updateTorboxSelection() {
+      const total = document.querySelectorAll('.torbox-item-cb').length;
+      const picked = document.querySelectorAll('.torbox-item-cb:checked').length;
+      const counter = document.getElementById('torbox-selected-count');
+      if (counter) counter.textContent = `${picked} chọn`;
+      const toolbar = document.getElementById('torbox-batch-toolbar');
+      if (toolbar) toolbar.classList.toggle('hidden', picked === 0);
+      const master = document.getElementById('torbox-select-all');
+      if (master) {
+        master.checked = picked > 0 && picked === total;
+        master.indeterminate = picked > 0 && picked < total;
+      }
+    }
+
+    function toggleSelectAllTorbox(checked) {
+      document.querySelectorAll('.torbox-item-cb').forEach(cb => { cb.checked = checked; });
+      updateTorboxSelection();
+    }
+
+    async function deleteSelectedTorbox() {
+      const boxes = Array.from(document.querySelectorAll('.torbox-item-cb:checked'));
+      if (boxes.length === 0) { showToast('Ch\u01b0a ch\u1ecdn m\u1ee5c n\u00e0o.', 'info'); return; }
+      if (!confirm(`X\u00f3a ${boxes.length} torrent kh\u1ecfi TorBox? Thao t\u00e1c n\u00e0y kh\u00f4ng ho\u00e0n t\u00e1c \u0111\u01b0\u1ee3c.`)) return;
+      let ok = 0, fail = 0;
+      for (const cb of boxes) {
+        try {
+          const res = await fetch('/api/torbox/delete', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ id: parseInt(cb.value, 10) })
+          });
+          ((await res.json()).success) ? ok++ : fail++;
+        } catch (e) { fail++; }
+      }
+      showToast(`\u0110\u00e3 x\u00f3a ${ok} torrent${fail ? `, ${fail} l\u1ed7i` : ''}.`, fail ? 'error' : 'success');
+      fetchTorrents();
+    }
+
+    // The episode rows call openVideoPlayer(); the real implementation is playEpisode().
+    function openVideoPlayer(show, season, filename) {
+      return playEpisode(decodeURIComponent(show), decodeURIComponent(season), decodeURIComponent(filename));
+    }
+
+    async function cancelSyncJob(jobId) {
       try {
-        const res = await fetch('/api/agent/command', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            command: `Đồng bộ các torrent ID [${selected.join(', ')}] lên ${targetLabel}`
-          })
+        const res = await fetch('/api/download/cancel', {
+          method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ job_id: jobId })
         });
         const data = await res.json();
-        if (data.success) {
-          showToast(`✅ Đã kích hoạt đồng bộ ${selected.length} mục lên ${targetLabel}!`, 'success');
-          setTimeout(fetchTorrents, 1200);
-        }
-      } catch (e) {
-        showToast(`❌ Lỗi kết nối: ${e}`, 'error');
-      }
+        showToast(data.message || (data.success ? '\u0110\u00e3 h\u1ee7y.' : '\u0110\u00e3 k\u1ebft th\u00fac.'), data.success ? 'success' : 'info');
+        setTimeout(fetchTorrents, 600);
+      } catch (e) { showToast(`\u274c ${e}`, 'error'); }
     }
 
     function renderTorbox(items) {
@@ -2895,7 +2911,7 @@
         const isSynced = !!t.is_completed_and_synced;
         const destinations = t.synced_destinations || [];
         const sizeGb = t.size ? (t.size / (1024*1024*1024)).toFixed(2) : '0.00';
-        const safeName = (t.name || '').replace(/'/g, "\'");
+        const safeName = (t.name || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
         
                                 const locations = t.locations || [];
         const onLocal = locations.includes('local');
@@ -2906,14 +2922,20 @@
         let statusBadge = '';
         
         // Check if currently syncing in real time
-        if (syncJob && syncJob.status === 'syncing') {
+        if (syncJob && (syncJob.status === 'syncing' || syncJob.status === 'queued')) {
           const targets = syncJob.targets || [syncJob.target || 'drive'];
+          const pct = Math.round(syncJob.progress || 0);
+          const phaseLabel = {
+            pending: 'Chờ', link: 'Lấy link', download: 'Tải về',
+            upload: 'Đẩy lên', verify: 'Đối chiếu', purge: 'Dọn đệm'
+          }[syncJob.phase] || 'Đang Sync';
+          const tip = (syncJob.message || '').replace(/"/g, '&quot;');
           if (targets.includes('drive') && targets.includes('nas')) {
-            statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold text-[10px] animate-pulse flex items-center gap-1.5 justify-center whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-ping"></span> Đang Sync Cả 2...</span>`;
+            statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold text-[10px] animate-pulse flex items-center gap-1.5 justify-center whitespace-nowrap" title="${tip}"><span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-ping"></span> ${phaseLabel} Cả 2 ${pct}%</span>`;
           } else if (targets.includes('nas')) {
-            statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 font-bold text-[10px] animate-pulse flex items-center gap-1.5 justify-center whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span> Đang Sync NAS...</span>`;
+            statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 font-bold text-[10px] animate-pulse flex items-center gap-1.5 justify-center whitespace-nowrap" title="${tip}"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span> ${phaseLabel} NAS ${pct}%</span>`;
           } else {
-            statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-bold text-[10px] animate-pulse flex items-center gap-1.5 justify-center whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Đang Sync Drive...</span>`;
+            statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-bold text-[10px] animate-pulse flex items-center gap-1.5 justify-center whitespace-nowrap" title="${tip}"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> ${phaseLabel} Drive ${pct}%</span>`;
           }
         } else if (onLocal && onDrive && onNas) {
           statusBadge = `<span class="px-2 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold text-[10px] whitespace-nowrap">Cả 3 Nơi (Máy • Drive • NAS)</span>`;
@@ -2960,7 +2982,7 @@
             <td class="px-3 py-3 text-right whitespace-nowrap">
               <div class="flex items-center justify-end gap-1.5 whitespace-nowrap">
                 <!-- Sync to Google Drive Button -->
-                <button onclick="syncSingleTorrent(${t.id}, 'gdrive', '${safeName}')" class="px-2.5 py-1 ${isSyncingDrive ? 'bg-emerald-600/30 text-emerald-300 border-emerald-500/50 animate-pulse' : (onDrive ? 'bg-zinc-900 text-zinc-400 hover:text-emerald-300 border-zinc-800' : 'bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border-emerald-500/30')} border text-xs font-semibold rounded-xl transition shadow-sm shrink-0" title="Đồng bộ lên Google Drive">
+                <button onclick="syncSingleTorrent(${t.id}, 'drive', '${safeName}')" class="px-2.5 py-1 ${isSyncingDrive ? 'bg-emerald-600/30 text-emerald-300 border-emerald-500/50 animate-pulse' : (onDrive ? 'bg-zinc-900 text-zinc-400 hover:text-emerald-300 border-zinc-800' : 'bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border-emerald-500/30')} border text-xs font-semibold rounded-xl transition shadow-sm shrink-0" title="Đồng bộ lên Google Drive">
                   ${isSyncingDrive ? 'Đang Sync Drive...' : (onDrive ? 'Re-Sync Drive' : 'Sync Drive')}
                 </button>
 
@@ -2988,6 +3010,7 @@
           </tr>
         `;
       }).join('');
+      updateTorboxSelection();
     }
 
     // ==================== TOAST NOTIFICATION ENGINE ====================
@@ -3494,7 +3517,11 @@
         
         if (document.getElementById('cfg-default-provider')) document.getElementById('cfg-default-provider').value = cfg.default_provider || 'torbox';
         if (document.getElementById('cfg-max-downloads')) document.getElementById('cfg-max-downloads').value = cfg.max_concurrent_downloads || 2;
-        if (document.getElementById('cfg-staging-dir')) document.getElementById('cfg-staging-dir').value = cfg.staging_dir || '/Volumes/512GB/AI Workspace/media_staging';
+        if (document.getElementById('cfg-staging-dir')) document.getElementById('cfg-staging-dir').value = cfg.staging_dir || '';
+        if (document.getElementById('cfg-hub-home')) document.getElementById('cfg-hub-home').value = cfg.media_hub_home || '';
+        if (document.getElementById('cfg-movies-dir')) document.getElementById('cfg-movies-dir').value = cfg.movies_dirname || '';
+        if (document.getElementById('cfg-tv-dir')) document.getElementById('cfg-tv-dir').value = cfg.tv_dirname || '';
+        if (document.getElementById('cfg-logs-dir')) document.getElementById('cfg-logs-dir').value = cfg.logs_dir || '';
         if (document.getElementById('cfg-torbox-token')) document.getElementById('cfg-torbox-token').value = cfg.torbox_token || '';
         if (document.getElementById('cfg-tmdb-key')) document.getElementById('cfg-tmdb-key').value = cfg.tmdb_api_key || '';
         if (document.getElementById('cfg-tmdb-lang')) document.getElementById('cfg-tmdb-lang').value = cfg.tmdb_lang || 'vi-VN';
@@ -3540,7 +3567,11 @@
       const payload = {
         default_provider: document.getElementById('cfg-default-provider')?.value || 'torbox',
         max_concurrent_downloads: parseInt(document.getElementById('cfg-max-downloads')?.value || 2),
-        staging_dir: document.getElementById('cfg-staging-dir')?.value || '/Volumes/512GB/AI Workspace/media_staging',
+        staging_dir: document.getElementById('cfg-staging-dir')?.value || '',
+        media_hub_home: document.getElementById('cfg-hub-home')?.value || '',
+        movies_dirname: document.getElementById('cfg-movies-dir')?.value || '',
+        tv_dirname: document.getElementById('cfg-tv-dir')?.value || '',
+        logs_dir: document.getElementById('cfg-logs-dir')?.value || '',
         torbox_token: document.getElementById('cfg-torbox-token')?.value || '',
         tmdb_api_key: document.getElementById('cfg-tmdb-key')?.value || '',
         tmdb_lang: document.getElementById('cfg-tmdb-lang')?.value || 'vi-VN',
@@ -4014,34 +4045,35 @@
     }
 
     const plexShowsData = [
-      { id: "78864", title: "Black Jack (1993)", vn: "Bác Sĩ Quái Dị Black Jack", year: "1993", seasons: "3 Seasons", files: 183, qual: "1080p BDRip", qualClass: "1080p", type: "anime", poster: "/static/posters/78864.jpg", backdrop: "https://media.kitsu.app/anime/cover_images/1364/large.jpg", path: "gdrive:Phim/TV Shows/Black Jack (1993) {tvdb-78864} [tvdbid-78864]", seasonList: ["Season 00 (OVA 1080p - 12 tập + 2 Movies)", "Season 01 (TV 2004 - 61 tập)", "Season 02 (Black Jack 21 - 17 tập)"], plot: "Black Jack là một bác sĩ phẫu thuật thiên tài nhưng hành nghề không có giấy phép. Ông đi khắp nơi chữa trị cho những ca bệnh nan y hiểm nghèo với mức chi phí phẫu thuật khổng lồ, nhưng luôn bảo vệ công lý và lòng nhân đạo.", studio: "Tezuka Productions", genres: ["Animation", "Drama", "Medical", "Mystery"] },
-      { id: "79354", title: "The File of Young Kindaichi (1997)", vn: "Thám Tử Kindaichi (Anime 1997)", year: "1997", seasons: "5 Seasons", files: 601, qual: "480p DVD", qualClass: "480p", type: "anime", poster: "/static/posters/79354.jpg", backdrop: "https://image.tmdb.org/t/p/original/7hM7v7P7f64g7t7y6x7hM7v7P7.jpg", path: "gdrive:Phim/TV Shows/The File of Young Kindaichi (1997) {tvdb-79354} [tvdbid-79354]", seasonList: ["Season 00 (Specials & Movies)", "Season 01 (Tập 1-73)", "Season 02 (Tập 74-148)", "Season 03 (SP)", "Season 04 (SP)"], plot: "Kindaichi Hajime, cháu trai của thám tử huyền thoại Kindaichi Kosuke, là một học sinh trung học vụng về nhưng sở hữu chỉ số IQ 180 và khả năng suy luận phi thường, chuyên giải mã những vụ án giết người bí ẩn và ly kỳ nhất.", studio: "Toei Animation", genres: ["Animation", "Mystery", "Detective", "Suspense"] },
-      { id: "279782", title: "The File of Young Kindaichi Returns (2014)", vn: "Thám Tử Kindaichi Returns (BDRip)", year: "2014", seasons: "2 Seasons", files: 320, qual: "1080p BDRip", qualClass: "1080p", type: "anime", poster: "/static/posters/279782.jpg", backdrop: "https://image.tmdb.org/t/p/original/r6K1vWkQ96Jp4f1yYf64g7t7y6x.jpg", path: "gdrive:Phim/TV Shows/The File of Young Kindaichi Returns (2014) {tvdb-279782} [tvdbid-279782]", seasonList: ["Season 01 (25 tập - 1080p BDRip)", "Season 02 (22 tập - 1080p BDRip)", "Featurettes (Creditless OP/ED)", "Other (Menu BDRip)"], plot: "Phần tiếp theo của loạt phim trinh thám Kindaichi với đồ họa HD hiện đại, đưa Hajime và Miyuki vào hàng loạt vụ án hóc búa, đối đầu với Đạo tặc Takato Yoichi.", studio: "Toei Animation", genres: ["Animation", "Mystery", "Detective", "Suspense"] },
-      { id: "79460", title: "The Files of the Young Kindaichi (1995)", vn: "Thám Tử Kindaichi (Live Action)", year: "1995", seasons: "2 Seasons", files: 13, qual: "1080p BDRip", qualClass: "1080p", type: "live", poster: "/static/posters/79460.jpg", backdrop: "https://image.tmdb.org/t/p/original/u6K1vWkQ96Jp4f1yYf64g7t7y6x.jpg", path: "gdrive:Phim/TV Shows/The Files of the Young Kindaichi (1995) {tvdb-79460} [tvdbid-79460]", seasonList: ["Season 00 (Movies)", "Season 03 (TV Series 1080p - Tsuyoshi Domoto)"], plot: "Series truyền hình người đóng kinh điển chuyển thể từ bộ truyện tranh Thám tử Kindaichi với sự tham gia của Tsuyoshi Domoto và Tomosaka Rie.", studio: "NIPPON TV", genres: ["Drama", "Mystery", "Crime"] },
-      { id: "227501", title: "Mashin Hero Wataru (1988)", vn: "Thần Long Đấu Sĩ Wataru", year: "1988", seasons: "5 Seasons", files: 720, qual: "1080p BDRip", qualClass: "1080p", type: "anime", poster: "/static/posters/227501.jpg", backdrop: "https://image.tmdb.org/t/p/original/w6K1vWkQ96Jp4f1yYf64g7t7y6x.jpg", path: "gdrive:Phim/TV Shows/Mashin Hero Wataru (1988) {tvdb-227501} [tvdbid-227501]", seasonList: ["Season 00 (OVAs)", "Season 01 (TV 1988)", "Season 02 (TV 1990)", "Season 03 (Chou Mashin Wataru - 51 tập)", "Season 04 (Seven Tamashii)", "Behind The Scenes & Featurettes"], plot: "Cậu bé 9 tuổi Ikusabe Wataru được đưa đến thế giới thần tiên Soukaizan, điều khiển robot Ryujinmaru (Thần Long Đấu Sĩ) chiến đấu giải cứu 7 tầng núi cầu vồng khỏi thế lực bóng tối Doakudar.", studio: "Sunrise", genres: ["Animation", "Action", "Adventure", "Mecha", "Fantasy"] },
-      { id: "74599", title: "Monster (2004)", vn: "Quái Vật Monster", year: "2004", seasons: "1 Season", files: 134, qual: "1080p BluRay", qualClass: "1080p", type: "anime", poster: "/static/posters/74599.jpg", backdrop: "https://media.kitsu.app/anime/cover_images/10/large.jpg", path: "gdrive:Phim/TV Shows/Monster (2004) {tvdb-74599} [tvdbid-74599]", seasonList: ["Season 01 (74 tập DVD 480p + 74 tập BluRay 1080p DUAL FLAC)"], plot: "Bác sĩ phẫu thuật não tài năng Kenzou Tenma đã cứu mạng một cậu bé mồ côi mang tên Johan Liebert thay vì thị trưởng thành phố. Nhiều năm sau, ông bàng hoàng nhận ra đứa trẻ mình từng cứu lại là một con quái vật tâm thần giết người hàng loạt máu lạnh.", studio: "Madhouse", genres: ["Animation", "Crime", "Drama", "Mystery", "Psychological", "Thriller"] },
-      { id: "75939", title: "Battle B-Daman (2004)", vn: "Chiến Binh B-Daman", year: "2004", seasons: "4 Seasons", files: 62, qual: "1080p / 480p", qualClass: "1080p", type: "anime", poster: "/static/posters/75939.jpg", backdrop: "https://image.tmdb.org/t/p/original/z6K1vWkQ96Jp4f1yYf64g7t7y6x.jpg", path: "gdrive:Phim/TV Shows/Battle B-Daman (2004) {tvdb-75939} [tvdbid-75939]", seasonList: ["Season 01 (52 tập)", "Season 02 (Fire Spirits - 51 tập)", "Season 03 (Cross Fight B-Daman 1080p)", "Season 04 (Cross Fight B-Daman eS)"], plot: "Cậu bé Yamato Delgado sở hữu B-Daman huyền thoại Cobalt Blade, bước vào hành trình trở thành B-Player vĩ đại nhất để bảo vệ thế giới B-Daman khỏi Shadow Alliance.", studio: "Nippon Animation", genres: ["Animation", "Action", "Adventure", "Kids"] },
-      { id: "79178", title: "Transformers - Car Robots (2000)", vn: "Transformers: Car Robots", year: "2000", seasons: "1 Season", files: 44, qual: "480p DVD", qualClass: "480p", type: "anime", poster: "/static/posters/79178.jpg", backdrop: "https://image.tmdb.org/t/p/original/b7K1vWkQ96Jp4f1yYf64g7t7y6x.jpg", path: "gdrive:Phim/TV Shows/Transformers - Car Robots (2000) {tvdb-79178} [tvdbid-79178]", seasonList: ["Season 01 (39/39 tập trọn bộ)", "Featurettes (Menu & Extras)"], plot: "Thủ lĩnh Autobot Fire Convoy (Optimus Prime) cùng đội quân Car Robots chiến đấu bảo vệ Trái Đất khỏi âm mưu xâm lăng của Gigatron và lực lượng Predacons/Decepticons.", studio: "Studio Gallop", genres: ["Animation", "Action", "Mecha", "Sci-Fi"] },
-      { id: "454526", title: "WUKONG: Đại Viên Hồn (2025)", vn: "Tây Hành Kỷ: Đại Viên Hồn (WUKONG)", year: "2025", seasons: "1 Season", files: 13, qual: "1080p WEB-DL", qualClass: "1080p", type: "anime", poster: "/static/posters/454526.jpg", backdrop: "https://image.tmdb.org/t/p/original/d7K1vWkQ96Jp4f1yYf64g7t7y6x.jpg", path: "gdrive:Phim/TV Shows/WUKONG (2025) {tvdb-454526} [tvdbid-454526]", seasonList: ["Season 01 (12/12 tập 1080p WEB-DL Tencent)"], plot: "Phần ngoại truyện chính thức của Tây Hành Kỷ về Tôn Ngộ Không, thức tỉnh sức mạnh Đại Viên Hồn tung hoành tam giới với đồ họa 3D đỉnh cao 1080p WEB-DL từ Tencent Video.", studio: "Tencent Video", genres: ["Animation", "Action", "Adventure", "Fantasy", "Mythology"] },
-      { id: "350711", title: "The Westward (2018)", vn: "Tây Hành Kỷ", year: "2018", seasons: "2 Seasons", files: 23, qual: "1080p WEB-DL", qualClass: "1080p", type: "anime", poster: "/static/posters/350711.jpg", backdrop: "https://image.tmdb.org/t/p/original/f7K1vWkQ96Jp4f1yYf64g7t7y6x.jpg", path: "gdrive:Phim/TV Shows/The Westward (2018) {tvdb-350711} [tvdbid-350711]", seasonList: ["Season 00 (Cuồng Vương - 9 tập)", "Season 04 (12 tập 1080p)"], plot: "16 năm sau khi thỉnh kinh thành công, Kỳ Kinh mang sức mạnh vô thượng bị Thiên đình tranh đoạt. Thầy trò Đường Tam Tạng một lần nữa tập hợp, mở ra hành trình Trả Kinh gian nan bảo vệ tam giới.", studio: "Tencent Penguin Pictures", genres: ["Animation", "Action", "Adventure", "Fantasy"] },
-      { id: "259259", title: "Kingdom (2012)", vn: "Vương Giả Thiên Hạ", year: "2012", seasons: "6 Seasons", files: 164, qual: "1080p BDRip", qualClass: "1080p", type: "anime", poster: "/static/posters/259259.jpg", backdrop: "https://media.kitsu.app/anime/cover_images/7696/large.jpg", path: "gdrive:Phim/TV Shows/Kingdom (2012) {tvdb-259259} [tvdbid-259259]", seasonList: ["Season 01 (38 tập)", "Season 02 (39 tập)", "Season 03 (26 tập)", "Season 04 (26 tập)", "Season 05 (13 tập)", "Season 06 (Upcoming)"], plot: "Thời Chiến Quốc Trung Hoa, cậu thiếu niên mồ côi Tín nuôi ước mơ trở thành Thiên Hạ Đại Tướng Quân, đồng hành cùng Doanh Chính trên con đường thống nhất thiên hạ.", studio: "Studio Pierrot", genres: ["Animation", "Action", "Drama", "Historical", "Military"] },
-      { id: "80674", title: "Furuhata Ninzaburo (1994)", vn: "Thám Tử Cổ Điển Furuhata", year: "1994", seasons: "4 Seasons", files: 44, qual: "480p DVD", qualClass: "480p", type: "live", poster: "/static/posters/80674.jpg", backdrop: "https://image.tmdb.org/t/p/original/j7K1vWkQ96Jp4f1yYf64g7t7y6x.jpg", path: "gdrive:Phim/TV Shows/Furuhata Ninzaburo (1994) {tvdb-80674} [tvdbid-80674]", seasonList: ["Season 00 (Toàn bộ Specials SP)", "Season 01 (12 tập)", "Season 02 (10 tập)", "Season 03 (11 tập)"], plot: "Thanh tra Furuhata Ninzaburo lịch thiệp, thông minh và dí dỏm, sử dụng tài quan sát và suy luận tâm lý sắc sảo để khiến những kẻ thủ ác hoàn hảo phải tự lộ sơ hở.", studio: "Fuji Television", genres: ["Drama", "Crime", "Mystery"] },
-      { id: "320122", title: "The Three-Eyed One (1990)", vn: "Cậu Bé 3 Mắt (Mitsume ga Tooru)", year: "1990", seasons: "1 Season", files: 292, qual: "480p DVD", qualClass: "480p", type: "anime", poster: "/static/posters/320122.jpg", backdrop: "https://image.tmdb.org/t/p/original/l7K1vWkQ96Jp4f1yYf64g7t7y6x.jpg", path: "gdrive:Phim/TV Shows/The Three-Eyed One (1990) {tvdb-320122} [tvdbid-320122]", seasonList: ["Season 01 (48/48 tập trọn bộ + Full Vietsub ASS/SRT)"], plot: "Sharaku Hosuke, hậu duệ cuối cùng của tộc Ba Mắt cổ xưa, khi được gỡ miếng băng dính trên trán sẽ thức tỉnh trí tuệ siêu phàm và ma thuật huyền bí giải mã các bí ẩn văn minh cổ đại.", studio: "Tezuka Productions", genres: ["Animation", "Adventure", "Fantasy", "Mystery", "Sci-Fi"] },
-      { id: "230211", title: "Tantei Gakuen Q (2003)", vn: "Học Viện Thám Tử Q", year: "2003", seasons: "1 Season", files: 47, qual: "480p DVD", qualClass: "480p", type: "anime", poster: "/static/posters/230211.jpg", backdrop: "https://media.kitsu.app/anime/cover_images/374/large.jpg", path: "gdrive:Phim/TV Shows/Tantei Gakuen Q (2003) {tvdb-230211} [tvdbid-230211]", seasonList: ["Season 01 (45/45 tập trọn bộ + Full Vietsub ASS)"], plot: "Kyuu cùng các bạn trẻ ưu tú tại Học viện Thám tử Dan Morihiko giải mã các vụ kỳ án, đối đầu với tổ chức tội phạm ngầm Minh vương tinh (Pluto).", studio: "Pierrot", genres: ["Animation", "Mystery", "Detective", "Shounen"] },
-      { id: "335191", title: "Hakyuu Houshin Engi (2018)", vn: "Bá Khí Phong Thần Diễn Nghĩa", year: "2018", seasons: "1 Season", files: 25, qual: "1080p BDRip", qualClass: "1080p", type: "anime", poster: "/static/posters/335191.jpg", backdrop: "https://image.tmdb.org/t/p/original/p7K1vWkQ96Jp4f1yYf64g7t7y6x.jpg", path: "gdrive:Phim/TV Shows/Hakyuu Houshin Engi (2018) {tvdb-335191} [tvdbid-335191]", seasonList: ["Season 01 (24/24 tập 1080p BDRip)"], plot: "Thái Công Vọng (Taikoubou) được giao sứ mệnh Phong Thần, tập hợp các đạo sĩ và thần khí tiêu diệt Đát Kỷ và triều đình Trụ Vương tàn bạo.", studio: "C-Station", genres: ["Animation", "Action", "Adventure", "Fantasy", "Mythology"] },
-      { id: "79284", title: "Houshin Engi (1999)", vn: "Phong Thần Bảng (1999)", year: "1999", seasons: "1 Season", files: 27, qual: "480p DVD", qualClass: "480p", type: "anime", poster: "/static/posters/79284.jpg", backdrop: "https://image.tmdb.org/t/p/original/r7K1vWkQ96Jp4f1yYf64g7t7y6x.jpg", path: "gdrive:Phim/TV Shows/Houshin Engi (1999) {tvdb-79284} [tvdbid-79284]", seasonList: ["Season 01 (26/26 tập 480p DVD)"], plot: "Bản anime kinh điển năm 1999 chuyển thể từ bộ truyện tranh Phong Thần Diễn Nghĩa của tác giả Ryu Fujisaki.", studio: "Studio Deen", genres: ["Animation", "Action", "Fantasy", "Shounen"] },
-      { id: "299770", title: "Young Black Jack (2015)", vn: "Bác Sĩ Black Jack Thời Trẻ", year: "2015", seasons: "1 Season", files: 25, qual: "1080p BDRip", qualClass: "1080p", type: "anime", poster: "/static/posters/299770.jpg", backdrop: "https://media.kitsu.app/anime/cover_images/10914/large.jpg", path: "gdrive:Phim/TV Shows/Young Black Jack (2015) {tvdb-299770} [tvdbid-299770]", seasonList: ["Season 01 (12/12 tập 1080p BDRip)"], plot: "Những năm 1960 trong bối cảnh phong trào sinh viên Nhật Bản và chiến tranh Việt Nam, chàng sinh viên y khoa Hazama Kuroo (Black Jack) bắt đầu thể hiện tài năng phẫu thuật xuất chúng.", studio: "Tezuka Productions", genres: ["Animation", "Drama", "Medical", "Psychological"] }
+      { id: "78864", title: "Black Jack (1993)", vn: "Bác Sĩ Quái Dị Black Jack", year: "1993", seasons: "3 Seasons", files: 183, qual: "1080p BDRip", qualClass: "1080p", type: "anime", poster: "/api/poster?tvdb=78864", backdrop: "https://media.kitsu.app/anime/cover_images/1364/large.jpg", path: "gdrive:Phim/TV Shows/Black Jack (1993) {tvdb-78864} [tvdbid-78864]", seasonList: ["Season 00 (OVA 1080p - 12 tập + 2 Movies)", "Season 01 (TV 2004 - 61 tập)", "Season 02 (Black Jack 21 - 17 tập)"], plot: "Black Jack là một bác sĩ phẫu thuật thiên tài nhưng hành nghề không có giấy phép. Ông đi khắp nơi chữa trị cho những ca bệnh nan y hiểm nghèo với mức chi phí phẫu thuật khổng lồ, nhưng luôn bảo vệ công lý và lòng nhân đạo.", studio: "Tezuka Productions", genres: ["Animation", "Drama", "Medical", "Mystery"] },
+      { id: "79354", title: "The File of Young Kindaichi (1997)", vn: "Thám Tử Kindaichi (Anime 1997)", year: "1997", seasons: "5 Seasons", files: 601, qual: "480p DVD", qualClass: "480p", type: "anime", poster: "/api/poster?tvdb=79354", backdrop: "", path: "gdrive:Phim/TV Shows/The File of Young Kindaichi (1997) {tvdb-79354} [tvdbid-79354]", seasonList: ["Season 00 (Specials & Movies)", "Season 01 (Tập 1-73)", "Season 02 (Tập 74-148)", "Season 03 (SP)", "Season 04 (SP)"], plot: "Kindaichi Hajime, cháu trai của thám tử huyền thoại Kindaichi Kosuke, là một học sinh trung học vụng về nhưng sở hữu chỉ số IQ 180 và khả năng suy luận phi thường, chuyên giải mã những vụ án giết người bí ẩn và ly kỳ nhất.", studio: "Toei Animation", genres: ["Animation", "Mystery", "Detective", "Suspense"] },
+      { id: "279782", title: "The File of Young Kindaichi Returns (2014)", vn: "Thám Tử Kindaichi Returns (BDRip)", year: "2014", seasons: "2 Seasons", files: 320, qual: "1080p BDRip", qualClass: "1080p", type: "anime", poster: "/api/poster?tvdb=279782", backdrop: "", path: "gdrive:Phim/TV Shows/The File of Young Kindaichi Returns (2014) {tvdb-279782} [tvdbid-279782]", seasonList: ["Season 01 (25 tập - 1080p BDRip)", "Season 02 (22 tập - 1080p BDRip)", "Featurettes (Creditless OP/ED)", "Other (Menu BDRip)"], plot: "Phần tiếp theo của loạt phim trinh thám Kindaichi với đồ họa HD hiện đại, đưa Hajime và Miyuki vào hàng loạt vụ án hóc búa, đối đầu với Đạo tặc Takato Yoichi.", studio: "Toei Animation", genres: ["Animation", "Mystery", "Detective", "Suspense"] },
+      { id: "79460", title: "The Files of the Young Kindaichi (1995)", vn: "Thám Tử Kindaichi (Live Action)", year: "1995", seasons: "2 Seasons", files: 13, qual: "1080p BDRip", qualClass: "1080p", type: "live", poster: "/api/poster?tvdb=79460", backdrop: "", path: "gdrive:Phim/TV Shows/The Files of the Young Kindaichi (1995) {tvdb-79460} [tvdbid-79460]", seasonList: ["Season 00 (Movies)", "Season 03 (TV Series 1080p - Tsuyoshi Domoto)"], plot: "Series truyền hình người đóng kinh điển chuyển thể từ bộ truyện tranh Thám tử Kindaichi với sự tham gia của Tsuyoshi Domoto và Tomosaka Rie.", studio: "NIPPON TV", genres: ["Drama", "Mystery", "Crime"] },
+      { id: "227501", title: "Mashin Hero Wataru (1988)", vn: "Thần Long Đấu Sĩ Wataru", year: "1988", seasons: "5 Seasons", files: 720, qual: "1080p BDRip", qualClass: "1080p", type: "anime", poster: "/api/poster?tvdb=227501", backdrop: "", path: "gdrive:Phim/TV Shows/Mashin Hero Wataru (1988) {tvdb-227501} [tvdbid-227501]", seasonList: ["Season 00 (OVAs)", "Season 01 (TV 1988)", "Season 02 (TV 1990)", "Season 03 (Chou Mashin Wataru - 51 tập)", "Season 04 (Seven Tamashii)", "Behind The Scenes & Featurettes"], plot: "Cậu bé 9 tuổi Ikusabe Wataru được đưa đến thế giới thần tiên Soukaizan, điều khiển robot Ryujinmaru (Thần Long Đấu Sĩ) chiến đấu giải cứu 7 tầng núi cầu vồng khỏi thế lực bóng tối Doakudar.", studio: "Sunrise", genres: ["Animation", "Action", "Adventure", "Mecha", "Fantasy"] },
+      { id: "74599", title: "Monster (2004)", vn: "Quái Vật Monster", year: "2004", seasons: "1 Season", files: 134, qual: "1080p BluRay", qualClass: "1080p", type: "anime", poster: "/api/poster?tvdb=74599", backdrop: "https://media.kitsu.app/anime/cover_images/10/large.jpg", path: "gdrive:Phim/TV Shows/Monster (2004) {tvdb-74599} [tvdbid-74599]", seasonList: ["Season 01 (74 tập DVD 480p + 74 tập BluRay 1080p DUAL FLAC)"], plot: "Bác sĩ phẫu thuật não tài năng Kenzou Tenma đã cứu mạng một cậu bé mồ côi mang tên Johan Liebert thay vì thị trưởng thành phố. Nhiều năm sau, ông bàng hoàng nhận ra đứa trẻ mình từng cứu lại là một con quái vật tâm thần giết người hàng loạt máu lạnh.", studio: "Madhouse", genres: ["Animation", "Crime", "Drama", "Mystery", "Psychological", "Thriller"] },
+      { id: "75939", title: "Battle B-Daman (2004)", vn: "Chiến Binh B-Daman", year: "2004", seasons: "4 Seasons", files: 62, qual: "1080p / 480p", qualClass: "1080p", type: "anime", poster: "/api/poster?tvdb=75939", backdrop: "", path: "gdrive:Phim/TV Shows/Battle B-Daman (2004) {tvdb-75939} [tvdbid-75939]", seasonList: ["Season 01 (52 tập)", "Season 02 (Fire Spirits - 51 tập)", "Season 03 (Cross Fight B-Daman 1080p)", "Season 04 (Cross Fight B-Daman eS)"], plot: "Cậu bé Yamato Delgado sở hữu B-Daman huyền thoại Cobalt Blade, bước vào hành trình trở thành B-Player vĩ đại nhất để bảo vệ thế giới B-Daman khỏi Shadow Alliance.", studio: "Nippon Animation", genres: ["Animation", "Action", "Adventure", "Kids"] },
+      { id: "79178", title: "Transformers - Car Robots (2000)", vn: "Transformers: Car Robots", year: "2000", seasons: "1 Season", files: 44, qual: "480p DVD", qualClass: "480p", type: "anime", poster: "/api/poster?tvdb=79178", backdrop: "", path: "gdrive:Phim/TV Shows/Transformers - Car Robots (2000) {tvdb-79178} [tvdbid-79178]", seasonList: ["Season 01 (39/39 tập trọn bộ)", "Featurettes (Menu & Extras)"], plot: "Thủ lĩnh Autobot Fire Convoy (Optimus Prime) cùng đội quân Car Robots chiến đấu bảo vệ Trái Đất khỏi âm mưu xâm lăng của Gigatron và lực lượng Predacons/Decepticons.", studio: "Studio Gallop", genres: ["Animation", "Action", "Mecha", "Sci-Fi"] },
+      { id: "454526", title: "WUKONG: Đại Viên Hồn (2025)", vn: "Tây Hành Kỷ: Đại Viên Hồn (WUKONG)", year: "2025", seasons: "1 Season", files: 13, qual: "1080p WEB-DL", qualClass: "1080p", type: "anime", poster: "/api/poster?tvdb=454526", backdrop: "", path: "gdrive:Phim/TV Shows/WUKONG (2025) {tvdb-454526} [tvdbid-454526]", seasonList: ["Season 01 (12/12 tập 1080p WEB-DL Tencent)"], plot: "Phần ngoại truyện chính thức của Tây Hành Kỷ về Tôn Ngộ Không, thức tỉnh sức mạnh Đại Viên Hồn tung hoành tam giới với đồ họa 3D đỉnh cao 1080p WEB-DL từ Tencent Video.", studio: "Tencent Video", genres: ["Animation", "Action", "Adventure", "Fantasy", "Mythology"] },
+      { id: "350711", title: "The Westward (2018)", vn: "Tây Hành Kỷ", year: "2018", seasons: "2 Seasons", files: 23, qual: "1080p WEB-DL", qualClass: "1080p", type: "anime", poster: "/api/poster?tvdb=350711", backdrop: "", path: "gdrive:Phim/TV Shows/The Westward (2018) {tvdb-350711} [tvdbid-350711]", seasonList: ["Season 00 (Cuồng Vương - 9 tập)", "Season 04 (12 tập 1080p)"], plot: "16 năm sau khi thỉnh kinh thành công, Kỳ Kinh mang sức mạnh vô thượng bị Thiên đình tranh đoạt. Thầy trò Đường Tam Tạng một lần nữa tập hợp, mở ra hành trình Trả Kinh gian nan bảo vệ tam giới.", studio: "Tencent Penguin Pictures", genres: ["Animation", "Action", "Adventure", "Fantasy"] },
+      { id: "259259", title: "Kingdom (2012)", vn: "Vương Giả Thiên Hạ", year: "2012", seasons: "6 Seasons", files: 164, qual: "1080p BDRip", qualClass: "1080p", type: "anime", poster: "/api/poster?tvdb=259259", backdrop: "https://media.kitsu.app/anime/cover_images/7696/large.jpg", path: "gdrive:Phim/TV Shows/Kingdom (2012) {tvdb-259259} [tvdbid-259259]", seasonList: ["Season 01 (38 tập)", "Season 02 (39 tập)", "Season 03 (26 tập)", "Season 04 (26 tập)", "Season 05 (13 tập)", "Season 06 (Upcoming)"], plot: "Thời Chiến Quốc Trung Hoa, cậu thiếu niên mồ côi Tín nuôi ước mơ trở thành Thiên Hạ Đại Tướng Quân, đồng hành cùng Doanh Chính trên con đường thống nhất thiên hạ.", studio: "Studio Pierrot", genres: ["Animation", "Action", "Drama", "Historical", "Military"] },
+      { id: "80674", title: "Furuhata Ninzaburo (1994)", vn: "Thám Tử Cổ Điển Furuhata", year: "1994", seasons: "4 Seasons", files: 44, qual: "480p DVD", qualClass: "480p", type: "live", poster: "/api/poster?tvdb=80674", backdrop: "", path: "gdrive:Phim/TV Shows/Furuhata Ninzaburo (1994) {tvdb-80674} [tvdbid-80674]", seasonList: ["Season 00 (Toàn bộ Specials SP)", "Season 01 (12 tập)", "Season 02 (10 tập)", "Season 03 (11 tập)"], plot: "Thanh tra Furuhata Ninzaburo lịch thiệp, thông minh và dí dỏm, sử dụng tài quan sát và suy luận tâm lý sắc sảo để khiến những kẻ thủ ác hoàn hảo phải tự lộ sơ hở.", studio: "Fuji Television", genres: ["Drama", "Crime", "Mystery"] },
+      { id: "320122", title: "The Three-Eyed One (1990)", vn: "Cậu Bé 3 Mắt (Mitsume ga Tooru)", year: "1990", seasons: "1 Season", files: 292, qual: "480p DVD", qualClass: "480p", type: "anime", poster: "/api/poster?tvdb=320122", backdrop: "", path: "gdrive:Phim/TV Shows/The Three-Eyed One (1990) {tvdb-320122} [tvdbid-320122]", seasonList: ["Season 01 (48/48 tập trọn bộ + Full Vietsub ASS/SRT)"], plot: "Sharaku Hosuke, hậu duệ cuối cùng của tộc Ba Mắt cổ xưa, khi được gỡ miếng băng dính trên trán sẽ thức tỉnh trí tuệ siêu phàm và ma thuật huyền bí giải mã các bí ẩn văn minh cổ đại.", studio: "Tezuka Productions", genres: ["Animation", "Adventure", "Fantasy", "Mystery", "Sci-Fi"] },
+      { id: "230211", title: "Tantei Gakuen Q (2003)", vn: "Học Viện Thám Tử Q", year: "2003", seasons: "1 Season", files: 47, qual: "480p DVD", qualClass: "480p", type: "anime", poster: "/api/poster?tvdb=230211", backdrop: "https://media.kitsu.app/anime/cover_images/374/large.jpg", path: "gdrive:Phim/TV Shows/Tantei Gakuen Q (2003) {tvdb-230211} [tvdbid-230211]", seasonList: ["Season 01 (45/45 tập trọn bộ + Full Vietsub ASS)"], plot: "Kyuu cùng các bạn trẻ ưu tú tại Học viện Thám tử Dan Morihiko giải mã các vụ kỳ án, đối đầu với tổ chức tội phạm ngầm Minh vương tinh (Pluto).", studio: "Pierrot", genres: ["Animation", "Mystery", "Detective", "Shounen"] },
+      { id: "335191", title: "Hakyuu Houshin Engi (2018)", vn: "Bá Khí Phong Thần Diễn Nghĩa", year: "2018", seasons: "1 Season", files: 25, qual: "1080p BDRip", qualClass: "1080p", type: "anime", poster: "/api/poster?tvdb=335191", backdrop: "", path: "gdrive:Phim/TV Shows/Hakyuu Houshin Engi (2018) {tvdb-335191} [tvdbid-335191]", seasonList: ["Season 01 (24/24 tập 1080p BDRip)"], plot: "Thái Công Vọng (Taikoubou) được giao sứ mệnh Phong Thần, tập hợp các đạo sĩ và thần khí tiêu diệt Đát Kỷ và triều đình Trụ Vương tàn bạo.", studio: "C-Station", genres: ["Animation", "Action", "Adventure", "Fantasy", "Mythology"] },
+      { id: "79284", title: "Houshin Engi (1999)", vn: "Phong Thần Bảng (1999)", year: "1999", seasons: "1 Season", files: 27, qual: "480p DVD", qualClass: "480p", type: "anime", poster: "/api/poster?tvdb=79284", backdrop: "", path: "gdrive:Phim/TV Shows/Houshin Engi (1999) {tvdb-79284} [tvdbid-79284]", seasonList: ["Season 01 (26/26 tập 480p DVD)"], plot: "Bản anime kinh điển năm 1999 chuyển thể từ bộ truyện tranh Phong Thần Diễn Nghĩa của tác giả Ryu Fujisaki.", studio: "Studio Deen", genres: ["Animation", "Action", "Fantasy", "Shounen"] },
+      { id: "299770", title: "Young Black Jack (2015)", vn: "Bác Sĩ Black Jack Thời Trẻ", year: "2015", seasons: "1 Season", files: 25, qual: "1080p BDRip", qualClass: "1080p", type: "anime", poster: "/api/poster?tvdb=299770", backdrop: "https://media.kitsu.app/anime/cover_images/10914/large.jpg", path: "gdrive:Phim/TV Shows/Young Black Jack (2015) {tvdb-299770} [tvdbid-299770]", seasonList: ["Season 01 (12/12 tập 1080p BDRip)"], plot: "Những năm 1960 trong bối cảnh phong trào sinh viên Nhật Bản và chiến tranh Việt Nam, chàng sinh viên y khoa Hazama Kuroo (Black Jack) bắt đầu thể hiện tài năng phẫu thuật xuất chúng.", studio: "Tezuka Productions", genres: ["Animation", "Drama", "Medical", "Psychological"] }
     ];
 
     let currentPlexFilter = "all";
 
     function renderPlexGrid(items) {
+      loadLibraryStats();
       const grid = document.getElementById('plex-poster-grid');
       grid.innerHTML = items.map(s => `
         <div onclick="openPlexDetail('${s.id}')" class="group cursor-pointer rounded-2xl bg-zinc-900/80 border border-zinc-800 hover:border-[#e5a00d]/80 transition-all duration-300 hover:shadow-2xl hover:shadow-[#e5a00d]/15 flex flex-col overflow-hidden">
           <!-- Poster Frame with Real Image (2:3 Aspect Ratio) -->
           <div class="aspect-[2/3] w-full bg-zinc-950 relative overflow-hidden">
-            <img src="${s.poster}" alt="${s.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" onerror="this.onerror=null; this.src='/static/posters/${s.id}.jpg';">
+            <img src="${s.poster}&title=${encodeURIComponent(s.title)}" alt="${s.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" onerror="this.onerror=null; this.src='/api/poster?title=' + encodeURIComponent(s.title);">
             
             <!-- Dark Gradient Vignette Overlay -->
             <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-black/40"></div>
@@ -4182,13 +4214,13 @@
       // Set Backdrop & Poster Image
       const backdrop = document.getElementById('show-backdrop-bg');
       if (backdrop) {
-        backdrop.style.backgroundImage = `url('${s.backdrop || s.poster || `/static/posters/${s.id}.jpg`}')`;
+        backdrop.style.backgroundImage = `url('${s.backdrop || s.poster || `/api/poster?tvdb=${s.id}`}&title=${encodeURIComponent(s.title)}')`;
       }
 
       const posterBox = document.getElementById('show-poster-box');
       if (posterBox) {
         posterBox.innerHTML = `
-          <img src="${s.poster}" alt="${s.title}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='/static/posters/${s.id}.jpg';">
+          <img src="${s.poster}&title=${encodeURIComponent(s.title)}" alt="${s.title}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='/api/poster?title=' + encodeURIComponent(s.title);">
           <span class="absolute bottom-2 px-2 py-0.5 rounded bg-[#e5a00d] text-black font-black text-[10px] shadow-md">${s.qual}</span>
         `;
       }
@@ -4588,6 +4620,86 @@
           container.innerHTML = `<div class="p-4 rounded-xl bg-red-900/20 text-red-400 text-xs">Lỗi tải danh sách: ${e}</div>`;
         }
       }
+    }
+
+    // ---- library index (SQLite) & metadata build ----
+    async function loadLibraryStats() {
+      try {
+        const d = await (await fetch('/api/library/stats')).json();
+        const bar = document.getElementById('library-index-bar');
+        const el = document.getElementById('library-index-stats');
+        if (!d.success || !el) return;
+        const s = d.drive;
+        const tb = (s.bytes / 1099511627776).toFixed(2);
+        const age = s.last_refresh ? Math.round((Date.now()/1000 - s.last_refresh)/60) : null;
+        el.textContent = `📚 ${s.shows} shows • ${s.files} file • ${tb} TB • poster ${s.with_poster}/${s.shows} • nfo ${s.with_nfo}/${s.shows}`
+          + (age !== null ? ` • cập nhật ${age} phút trước` : '');
+        if (bar) bar.classList.remove('hidden');
+        window.__missingAssets = d.missing_assets || [];
+      } catch (e) { /* index not ready yet */ }
+    }
+
+    async function refreshLibraryIndex() {
+      showToast('⚡ Đang lập chỉ mục lại thư viện Google Drive...', 'info', 3000);
+      try {
+        const d = await (await fetch('/api/library/refresh', {method:'POST', headers:{'Content-Type':'application/json'}, body:'{}'})).json();
+        showToast(d.message || 'Đã lập chỉ mục lại.', d.refreshed ? 'success' : 'info');
+        await loadLibraryStats();
+      } catch (e) { showToast(`❌ ${e}`, 'error'); }
+    }
+
+    async function buildLibraryMetadata() {
+      const missing = window.__missingAssets || [];
+      const n = missing.length;
+      if (n === 0) {
+        showToast('Mọi show đã có đủ poster / fanart / NFO.', 'success');
+        return;
+      }
+      const preview = missing.slice(0, 8).map(m => `• ${m.name} (${m.missing.join(', ')})`).join('\n');
+      if (!confirm(`Dựng metadata cho ${n} show còn thiếu?\n\n${preview}${n > 8 ? `\n… và ${n-8} show khác` : ''}\n\n` +
+                   `Sẽ tải poster/fanart/NFO từ TMDb và GHI vào thư mục phim trên Google Drive.\n` +
+                   `Show nào khớp TMDb không chắc chắn sẽ bị bỏ qua để chờ bạn duyệt.`)) return;
+      try {
+        const d = await (await fetch('/api/library/build', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ targets:['drive'], only_missing:true })
+        })).json();
+        if (!d.success) { showToast(`❌ ${d.error}`, 'error'); return; }
+        showToast(d.message, 'success');
+        pollLibraryBuild();
+      } catch (e) { showToast(`❌ ${e}`, 'error'); }
+    }
+
+    async function pollLibraryBuild() {
+      const btn  = document.getElementById('btn-build-meta');
+      const state = document.getElementById('library-build-state');
+      const wrap = document.getElementById('library-build-barwrap');
+      const bar  = document.getElementById('library-build-bar');
+      const log  = document.getElementById('library-build-log');
+      document.getElementById('library-index-bar')?.classList.remove('hidden');
+      if (wrap) wrap.classList.remove('hidden');
+      if (btn) btn.disabled = true;
+
+      const icon = { built:'✅', skipped:'⏭️', needs_review:'⚠️', error:'❌', canceled:'🛑' };
+      const tick = async () => {
+        let st;
+        try { st = await (await fetch('/api/library/build/status')).json(); }
+        catch (e) { return finish(); }
+        const pct = st.total ? Math.round(st.done / st.total * 100) : 0;
+        if (bar) bar.style.width = `${pct}%`;
+        if (state) state.textContent = st.error ? `❌ ${st.error}`
+          : st.running ? `${st.done}/${st.total} — ${st.current}` : `Hoàn tất ${st.done}/${st.total}`;
+        if (log) log.innerHTML = (st.results || []).slice(-12).reverse().map(r =>
+          `<div class="truncate"><span>${icon[r.status] || '•'}</span> <span class="text-zinc-300">${r.folder}</span>` +
+          `<span class="text-zinc-500"> — ${r.detail || r.status}</span></div>`).join('');
+        if (st.running) { setTimeout(tick, 1200); } else { finish(); }
+      };
+      const finish = async () => {
+        if (btn) btn.disabled = false;
+        await refreshLibraryIndex();
+        if (typeof fetchData === 'function') fetchData();
+      };
+      tick();
     }
 
     function triggerPlexScan() {

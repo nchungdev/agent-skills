@@ -1,114 +1,3 @@
-import threading
-_torbox_api_cache = None
-_torbox_api_cache_time = 0
-import re
-
-_last_overview_cache = {}
-_last_overview_time = 0
-
-def get_cached_overview_data():
-    global _last_overview_cache, _last_overview_time
-    now = time.time()
-    if _last_overview_cache and (now - _last_overview_time < 5):
-        return _last_overview_cache
-
-    cfg = load_unified_settings()
-    key = os.path.expanduser(cfg.get("nas_ssh_key", "~/.ssh/id_ed25519"))
-    user = cfg.get("nas_user", "chungnh")
-    host = cfg.get("nas_host", "192.168.1.37")
-    nas_path = cfg.get("nas_path", "/srv/mergerfs/MainPool/Phim/TV Shows")
-    staging_dir = cfg.get("staging_dir", "/Volumes/512GB/AI Workspace/media_staging")
-    
-    # 1. Machine Hardware Health
-    try:
-        vfs_ws = os.statvfs("/Volumes/512GB")
-        ws_total = (vfs_ws.f_blocks * vfs_ws.f_frsize) / (1024**3)
-        ws_avail = (vfs_ws.f_bavail * vfs_ws.f_frsize) / (1024**3)
-        ws_used = ws_total - ws_avail
-        ws_pct = int((ws_used / ws_total) * 100) if ws_total > 0 else 0
-    except Exception:
-        ws_total, ws_used, ws_avail, ws_pct = 512, 296, 180, 62
-
-    # RAM & CPU
-    try:
-        load1, _, _ = os.getloadavg()
-    except Exception:
-        load1 = 1.5
-    try:
-        res_mem = subprocess.run(["sysctl", "-n", "hw.memsize"], capture_output=True, text=True, timeout=1)
-        total_ram_gb = round(int(res_mem.stdout.strip()) / (1024**3), 1) if res_mem.stdout.strip() else 24.0
-    except Exception:
-        total_ram_gb = 24.0
-
-    # 2. NAS Storage Space (Fast with fallback)
-    nas_size_str = "4.5 TB"
-    nas_used_str = "4.0 TB"
-    nas_avail_str = "259 GB"
-    nas_use_pct = 95
-
-    # 3. Active Downloads & Uploads
-    active_downloads = []
-    active_uploads = []
-
-    # 4. Recently Added Media
-    recent_media = [
-        {"id": "320122", "title": "The Three-Eyed One (1990)", "vn": "Cậu Bé 3 Mắt", "year": "1990", "qual": "480p DVD", "episodes": "48/48 tập", "sub": "Vietsub Full", "dest": "NAS Storage", "time": "Vừa xong"},
-        {"id": "78864", "title": "Black Jack (1993)", "vn": "Bác Sĩ Quái Dị", "year": "1993", "qual": "1080p BDRip", "episodes": "12/12 tập", "sub": "Vietsub Full", "dest": "NAS & Drive", "time": "Hôm nay"},
-        {"id": "74599", "title": "Monster (2004)", "vn": "Quái Vật Monster", "year": "2004", "qual": "1080p BluRay", "episodes": "74/74 tập", "sub": "Vietsub Full", "dest": "Google Drive", "time": "Hôm qua"},
-        {"id": "79354", "title": "The File of Young Kindaichi", "vn": "Thám Tử Kindaichi", "year": "1997", "qual": "480p DVD", "episodes": "148 tập", "sub": "Vietsub Full", "dest": "Google Drive", "time": "2 ngày trước"},
-        {"id": "454526", "title": "WUKONG: Đại Viên Hồn", "vn": "Tây Hành Kỷ Wukong", "year": "2025", "qual": "1080p WEB-DL", "episodes": "12/12 tập", "sub": "Vietsub Full", "dest": "Google Drive", "time": "3 ngày trước"}
-    ]
-
-    result = {
-        "success": True,
-        "health": {
-            "cpu_load": round(load1, 2),
-            "ram_total_gb": total_ram_gb,
-            "ram_used_gb": round(total_ram_gb * 0.58, 1),
-            "ram_pct": 58,
-            "local_disk": {
-                "name": "Ổ Cứng Đệm (NVMe 512GB)",
-                "path": staging_dir,
-                "total_gb": round(ws_total, 1),
-                "used_gb": round(ws_used, 1),
-                "free_gb": round(ws_avail, 1),
-                "percent": ws_pct
-            }
-        },
-        "clouds": [
-            {
-                "id": "gdrive",
-                "icon": "☁️",
-                "name": "Google Drive (Rclone Cloud)",
-                "path": "gdrive:Phim",
-                "connected": True,
-                "used_str": "~1.8 TB",
-                "avail_str": "Không Giới Hạn",
-                "total_str": "Unlimited",
-                "percent": 35,
-                "badge": "Plex Main Cloud"
-            },
-            {
-                "id": "nas",
-                "icon": "🖥️",
-                "name": "NAS Storage (MergerFS Pool)",
-                "path": "/srv/mergerfs/MainPool/Phim",
-                "connected": True,
-                "used_str": nas_used_str,
-                "avail_str": f"{nas_avail_str} Trống",
-                "total_str": nas_size_str,
-                "percent": nas_use_pct,
-                "badge": "Mạng Nội Bộ"
-            }
-        ],
-        "active_downloads": active_downloads,
-        "active_uploads": active_uploads,
-        "recent_media": recent_media
-    }
-    _last_overview_cache = result
-    _last_overview_time = now
-    return result
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -117,11 +6,18 @@ Serves Web UI on port 8888 and provides REST APIs for live monitoring and comman
 """
 
 import os
+import re
 import sys
+import math
+import hmac
+import secrets
+import threading
 import json
 import time
 import shutil
 import urllib.parse
+import urllib.request
+import shlex
 import subprocess
 from pathlib import Path
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
@@ -134,12 +30,50 @@ from core.torbox_manager import TorBoxManager
 from core.monitor import PipelineMonitor
 from core.gdrive_manager import GDriveManager
 from core.agent_bridge import AgentBridge
+from core.settings import load_unified_settings
+from core.artwork import get_poster_bytes
+from core.library_builder import LibraryBuilder
+from core.job_store import JobStore
+from core.sync_worker import SyncWorker
 
 # Initialize Core Managers
 torbox_mgr = TorBoxManager()
 pipeline_mon = PipelineMonitor()
 gdrive_mgr = GDriveManager()
 agent_bridge = AgentBridge()
+
+# ---- module-level caches ----
+_torbox_api_cache = None
+_torbox_api_cache_time = 0
+_last_overview_cache = {}
+_last_overview_time = 0
+
+# Asset roots. Requests under /static/ are resolved against these and are rejected if
+# the resolved path escapes the root, so a "../" in the URL cannot read arbitrary files.
+SKILL_DIR = os.path.dirname(BASE_DIR)
+STATIC_ROOTS = [
+    os.path.join(SKILL_DIR, "static"),
+    os.path.join(BASE_DIR, "static"),
+]
+TEMPLATE_ROOTS = [
+    os.path.join(SKILL_DIR, "templates"),
+    os.path.join(BASE_DIR, "templates"),
+]
+
+PLUGINS_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(SKILL_DIR)))
+
+
+def sibling_skill_script(plugin_name, script_name):
+    """Locate a script in a sibling plugin, relative to this checkout rather than a
+    hard-coded /Volumes path that only exists on one machine."""
+    candidate = os.path.join(
+        PLUGINS_ROOT, plugin_name, "skills", plugin_name, "scripts", script_name
+    )
+    return candidate if os.path.isfile(candidate) else None
+
+
+# Set by launcher.py when a public tunnel is opened; empty means local/LAN mode.
+AUTH_TOKEN = os.environ.get("MEDIA_HUB_TOKEN", "").strip()
 
 CONFIG_FILE = os.path.join(BASE_DIR, "config.json")
 config = {"port": 8888, "host": "0.0.0.0"}
@@ -150,159 +84,396 @@ if os.path.exists(CONFIG_FILE):
     except Exception:
         pass
 
-PORT = int(config.get("port", 8888))
+# launcher.py passes --port through the environment; config.json is the fallback.
+PORT = int(os.environ.get("MEDIA_HUB_PORT") or config.get("port", 8888))
 HOST = str(config.get("host", "0.0.0.0"))
 
-def load_unified_settings():
-    """Load unified configuration from environment, ~/.env, and settings.json."""
-    settings_path = Path.home() / ".gemini" / "config" / "media_hub_settings.json"
-    env_file = Path.home() / ".env"
-    
-    env_dict = {}
-    if env_file.is_file():
-        try:
-            with open(env_file, "r", encoding="utf-8") as f:
-                for line in f:
-                    line = line.strip()
-                    if line and not line.startswith("#") and "=" in line:
-                        k, v = line.split("=", 1)
-                        env_dict[k.strip()] = v.strip().strip('"').strip("'")
-        except Exception:
-            pass
+# ==================== LIBRARY PRESENCE (measured, not assumed) ====================
+_nas_folder_cache = {"data": [], "at": 0.0}
+_NAS_FOLDER_TTL = 300
 
-    cfg = {
-        "default_provider": "torbox",
-        "max_concurrent_downloads": 2,
-        "staging_dir": "/Volumes/512GB/AI Workspace/media_staging",
-        "torbox_token": os.environ.get("TORBOX_API_TOKEN") or env_dict.get("TORBOX_API_TOKEN") or env_dict.get("TORBOX_TOKEN") or "",
-        "tmdb_api_key": os.environ.get("TMDB_API_KEY") or env_dict.get("TMDB_API_KEY") or "",
-        "tmdb_lang": "vi-VN",
-        "aria2_rpc_host": "127.0.0.1",
-        "aria2_rpc_port": 6800,
-        "aria2_rpc_secret": "",
-        "nas_host": "",
-        "nas_user": "admin",
-        "nas_port": 22,
-        "nas_ssh_key": "",
-        "nas_path": "/volume1/video/TV Shows",
-        "gdrive_remote": "gdrive",
-        "gdrive_root": "Phim",
-        "sync_targets": ["drive"],
-        "sync_transfers": 4,
-        "auto_purge": True
+
+def _clean_titles(names):
+    """Strip year/tvdb/bracket noise so folder names can be matched against release names."""
+    out = []
+    for raw in names or []:
+        c = re.sub(r"\{.*?\}|\[.*?\]|\(\d{4}\)", "", str(raw)).strip().lower()
+        if c:
+            out.append(c)
+    return out
+
+
+def _title_matches(release_name, titles):
+    for t in titles:
+        if len(t) >= 4 and (t in release_name
+                            or any(w in release_name for w in t.split() if len(w) > 4)):
+            return True
+    return False
+
+
+def list_nas_folders():
+    """Directory names under the configured NAS library path, cached for 5 minutes."""
+    now = time.time()
+    if _nas_folder_cache["data"] and now - _nas_folder_cache["at"] < _NAS_FOLDER_TTL:
+        return _nas_folder_cache["data"]
+
+    cfg = load_unified_settings()
+    host, user, nas_path = cfg.get("nas_host", ""), cfg.get("nas_user", ""), cfg.get("nas_path", "")
+    if not host or not nas_path:
+        return _nas_folder_cache["data"]
+
+    key = os.path.expanduser(cfg.get("nas_ssh_key") or "")
+    ssh_cmd = ["ssh", "-p", str(int(cfg.get("nas_port", 22))), "-o", "BatchMode=yes",
+               "-o", "ConnectTimeout=4", "-o", "StrictHostKeyChecking=no"]
+    if key and os.path.exists(key):
+        ssh_cmd += ["-i", key]
+    ssh_cmd += [f"{user}@{host}", f"ls -1 {shlex.quote(nas_path)}"]
+    try:
+        res = subprocess.run(ssh_cmd, capture_output=True, text=True, timeout=8)
+        if res.returncode != 0:
+            return _nas_folder_cache["data"]  # keep the last good listing
+        folders = [l.strip() for l in res.stdout.splitlines() if l.strip()]
+        _nas_folder_cache.update({"data": folders, "at": now})
+        return folders
+    except Exception:
+        return _nas_folder_cache["data"]
+
+
+def list_local_staging():
+    cfg = load_unified_settings()
+    staging = cfg.get("staging_dir", "")
+    try:
+        return [d for d in os.listdir(staging) if os.path.isdir(os.path.join(staging, d))]
+    except Exception:
+        return []
+
+
+# ==================== LIVE SYSTEM OVERVIEW ====================
+# Everything here is measured. When a probe fails the field reports "Không đo được"
+# rather than a plausible-looking constant, so the dashboard never shows numbers that
+# were never true.
+
+OVERVIEW_TTL = 20  # seconds; the NAS/Drive probes are network calls
+
+
+def _fmt_bytes(n):
+    if n is None:
+        return "Không rõ"
+    n = float(n)
+    for unit in ("B", "KB", "MB", "GB", "TB", "PB"):
+        if abs(n) < 1024.0:
+            return f"{n:.1f} {unit}"
+        n /= 1024.0
+    return f"{n:.1f} EB"
+
+
+def _probe_local_disk(staging_dir):
+    """Usage of the volume the staging buffer actually lives on."""
+    probe = staging_dir if os.path.exists(staging_dir) else os.path.dirname(staging_dir) or "/"
+    if not os.path.exists(probe):
+        probe = "/"
+    try:
+        vfs = os.statvfs(probe)
+        total = vfs.f_blocks * vfs.f_frsize
+        avail = vfs.f_bavail * vfs.f_frsize
+        used = total - (vfs.f_bfree * vfs.f_frsize)
+        return {
+            "name": f"Ổ đệm ({probe})",
+            "path": staging_dir,
+            "total_gb": round(total / 1024**3, 1),
+            "used_gb": round(used / 1024**3, 1),
+            "free_gb": round(avail / 1024**3, 1),
+            # used/(used+avail), the same convention df(1) prints, so the dashboard and
+            # the shell agree. used/total counts reserved blocks and reads low.
+            "percent": math.ceil(used / (used + avail) * 100) if (used + avail) else 0,
+            "measured": True,
+        }
+    except Exception as e:
+        return {"name": "Ổ đệm", "path": staging_dir, "total_gb": None, "used_gb": None,
+                "free_gb": None, "percent": 0, "measured": False, "error": str(e)}
+
+
+def _probe_memory():
+    """Real memory pressure on macOS via vm_stat; falls back to marking itself unmeasured."""
+    total = None
+    try:
+        res = subprocess.run(["sysctl", "-n", "hw.memsize"], capture_output=True, text=True, timeout=2)
+        total = int(res.stdout.strip())
+    except Exception:
+        pass
+
+    used = None
+    try:
+        vm = subprocess.run(["vm_stat"], capture_output=True, text=True, timeout=2)
+        if vm.returncode == 0:
+            page_size = 4096
+            m = re.search(r"page size of (\d+) bytes", vm.stdout)
+            if m:
+                page_size = int(m.group(1))
+            pages = {}
+            for line in vm.stdout.splitlines():
+                pm = re.match(r'"?([A-Za-z ][^:"]*)"?:\s+(\d+)', line.strip())
+                if pm:
+                    pages[pm.group(1).strip().lower()] = int(pm.group(2))
+            # "Used" the way Activity Monitor reports it: resident, non-reclaimable pages.
+            used_pages = (
+                pages.get("pages active", 0)
+                + pages.get("pages wired down", 0)
+                + pages.get("pages occupied by compressor", 0)
+            )
+            if used_pages:
+                used = used_pages * page_size
+    except Exception:
+        pass
+
+    if total and used:
+        return {"ram_total_gb": round(total / 1024**3, 1),
+                "ram_used_gb": round(used / 1024**3, 1),
+                "ram_pct": int(used / total * 100),
+                "measured": True}
+    return {"ram_total_gb": round(total / 1024**3, 1) if total else None,
+            "ram_used_gb": None, "ram_pct": 0, "measured": False}
+
+
+def _probe_nas(cfg):
+    """df on the NAS over SSH. Returns None when the host is unreachable."""
+    host, user = cfg.get("nas_host", ""), cfg.get("nas_user", "")
+    nas_path = cfg.get("nas_path", "")
+    if not host or not nas_path:
+        return None
+    key = os.path.expanduser(cfg.get("nas_ssh_key") or "")
+    ssh_cmd = ["ssh", "-p", str(int(cfg.get("nas_port", 22))), "-o", "BatchMode=yes",
+               "-o", "ConnectTimeout=4", "-o", "StrictHostKeyChecking=no"]
+    if key and os.path.exists(key):
+        ssh_cmd += ["-i", key]
+    ssh_cmd += [f"{user}@{host}", f"df -Pk {shlex.quote(nas_path)}"]
+    try:
+        res = subprocess.run(ssh_cmd, capture_output=True, text=True, timeout=8)
+        if res.returncode != 0:
+            return None
+        rows = [l.split() for l in res.stdout.strip().splitlines()[1:] if l.split()]
+        if not rows:
+            return None
+        parts = rows[-1]
+        total, used, avail = int(parts[1]) * 1024, int(parts[2]) * 1024, int(parts[3]) * 1024
+        return {"total": total, "used": used, "avail": avail,
+                "percent": math.ceil(used / (used + avail) * 100) if (used + avail) else 0}
+    except Exception:
+        return None
+
+
+def _probe_gdrive(cfg):
+    """`rclone about` for the configured remote. None when rclone/the remote is unavailable."""
+    remote = cfg.get("gdrive_remote", "gdrive")
+    try:
+        res = subprocess.run(
+            [gdrive_mgr.rclone_bin, "--config", gdrive_mgr.rclone_config,
+             "about", f"{remote}:", "--json"],
+            capture_output=True, text=True, timeout=10,
+        )
+        if res.returncode != 0:
+            return None
+        data = json.loads(res.stdout)
+        total, used = data.get("total"), data.get("used")
+        return {"total": total, "used": used, "free": data.get("free"),
+                "percent": math.ceil(used / total * 100) if (total and used) else 0}
+    except Exception:
+        return None
+
+
+def _jobs_to_transfers():
+    """Turn live worker jobs into the download/upload cards the dashboard renders."""
+    downloads, uploads = [], []
+    for j in job_store.list_active():
+        pct = round(j.get("progress") or 0, 1)
+        speed = j.get("speed_bps") or 0
+        done, total = j.get("bytes_done") or 0, j.get("bytes_total") or 0
+        eta = "—"
+        if speed > 0 and total > done:
+            secs = int((total - done) / speed)
+            eta = f"{secs // 60}m{secs % 60:02d}s" if secs >= 60 else f"{secs}s"
+
+        if j["phase"] in ("pending", "link", "download"):
+            downloads.append({
+                "job_id": j["id"],
+                "name": j["name"] or f"Torrent #{j['torrent_id']}",
+                "engine": "TorBox Cloud DDL",
+                "dest_path": j["staging_path"] or "",
+                "progress": pct,
+                "speed": f"{_fmt_bytes(speed)}/s" if speed else "—",
+                "eta": eta,
+                "message": j["message"],
+            })
+        else:
+            targets = j.get("targets") or []
+            label = " + ".join("Google Drive" if t == "drive" else "NAS Storage" for t in targets)
+            uploads.append({
+                "job_id": j["id"],
+                "title": j["name"] or f"Torrent #{j['torrent_id']}",
+                "dest": label or "Google Drive",
+                "dest_short": " + ".join("☁️ gdrive" if t == "drive" else "🖥️ NAS" for t in targets),
+                "progress": pct,
+                "current_ep": len(j.get("done_targets") or []),
+                "total_ep": len(targets) or 1,
+                "message": j["message"],
+            })
+    return downloads, uploads
+
+
+def _recent_from_jobs(limit=8):
+    """Recently finished transfers, from the job history rather than a fixed list."""
+    out = []
+    for j in job_store.list_recent(limit=40):
+        if j["status"] != "done":
+            continue
+        finished = j.get("finished_at") or j.get("updated_at") or 0
+        age = time.time() - finished
+        when = ("Vừa xong" if age < 300 else
+                f"{int(age // 60)} phút trước" if age < 3600 else
+                f"{int(age // 3600)} giờ trước" if age < 86400 else
+                f"{int(age // 86400)} ngày trước")
+        dests = j.get("done_targets") or j.get("targets") or []
+        out.append({
+            "id": j["torrent_id"],
+            "title": j["name"] or f"Torrent #{j['torrent_id']}",
+            "vn": j["name"] or "",
+            "year": "",
+            "qual": "",
+            "episodes": _fmt_bytes(j.get("bytes_total") or 0),
+            "sub": "",
+            "dest": " & ".join("Google Drive" if d == "drive" else "NAS Storage" for d in dests),
+            "time": when,
+        })
+        if len(out) >= limit:
+            break
+    return out
+
+
+def get_cached_overview_data():
+    global _last_overview_cache, _last_overview_time
+    now = time.time()
+    if _last_overview_cache and (now - _last_overview_time < OVERVIEW_TTL):
+        return _last_overview_cache
+
+    cfg = load_unified_settings()
+    staging_dir = cfg.get("staging_dir", "")
+
+    try:
+        load1 = round(os.getloadavg()[0], 2)
+    except Exception:
+        load1 = None
+
+    # Network probes run in parallel so the endpoint stays responsive.
+    import concurrent.futures
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as ex:
+        f_nas = ex.submit(_probe_nas, cfg)
+        f_gd = ex.submit(_probe_gdrive, cfg)
+        nas, gd = f_nas.result(), f_gd.result()
+
+    mem = _probe_memory()
+    downloads, uploads = _jobs_to_transfers()
+
+    clouds = [{
+        "id": "gdrive",
+        "icon": "☁️",
+        "name": f"Google Drive ({cfg.get('gdrive_remote', 'gdrive')}:)",
+        "path": f"{cfg.get('gdrive_remote', 'gdrive')}:{cfg.get('gdrive_root', 'Phim')}",
+        "connected": gd is not None,
+        "used_str": _fmt_bytes(gd["used"]) if gd else "Không đo được",
+        "avail_str": (_fmt_bytes(gd["free"]) if gd and gd.get("free") else "Không giới hạn") if gd else "Không kết nối",
+        "total_str": (_fmt_bytes(gd["total"]) if gd and gd.get("total") else "Unlimited") if gd else "—",
+        "percent": gd["percent"] if gd else 0,
+        "badge": "Plex Main Cloud",
+    }, {
+        "id": "nas",
+        "icon": "🖥️",
+        "name": "NAS Storage",
+        "path": cfg.get("nas_path", ""),
+        "connected": nas is not None,
+        "used_str": _fmt_bytes(nas["used"]) if nas else "Không đo được",
+        "avail_str": f"{_fmt_bytes(nas['avail'])} trống" if nas else "Không kết nối",
+        "total_str": _fmt_bytes(nas["total"]) if nas else "—",
+        "percent": nas["percent"] if nas else 0,
+        "badge": "Mạng Nội Bộ",
+    }]
+
+    result = {
+        "success": True,
+        "measured_at": now,
+        "health": {
+            "cpu_load": load1 if load1 is not None else "—",
+            "ram_total_gb": mem["ram_total_gb"] if mem["ram_total_gb"] else "—",
+            "ram_used_gb": mem["ram_used_gb"] if mem["measured"] else "—",
+            "ram_pct": mem["ram_pct"],
+            "local_disk": _probe_local_disk(staging_dir),
+        },
+        "clouds": clouds,
+        "active_downloads": downloads,
+        "active_uploads": uploads,
+        "recent_media": _recent_from_jobs(),
+        "job_counts": job_store.counts(),
     }
-
-    if settings_path.is_file():
-        try:
-            with open(settings_path, "r", encoding="utf-8") as f:
-                saved = json.load(f)
-                cfg.update(saved)
-        except Exception:
-            pass
-
-    # Fallback to env if empty
-    if not cfg.get("torbox_token"):
-        cfg["torbox_token"] = os.environ.get("TORBOX_API_TOKEN") or env_dict.get("TORBOX_API_TOKEN") or env_dict.get("TORBOX_TOKEN") or ""
-    if not cfg.get("tmdb_api_key"):
-        cfg["tmdb_api_key"] = os.environ.get("TMDB_API_KEY") or env_dict.get("TMDB_API_KEY") or ""
-
-    # Auto-detect SSH Key if empty
-    if not cfg.get("nas_ssh_key"):
-        ssh_dir = Path.home() / ".ssh"
-        for k in ["id_ed25519", "id_rsa", "id_ecdsa"]:
-            cand = ssh_dir / k
-            if cand.is_file():
-                cfg["nas_ssh_key"] = f"~/.ssh/{k}"
-                break
-
-    return cfg
+    _last_overview_cache = result
+    _last_overview_time = now
+    return result
 
 
-# ==================== PERSISTENT & DEDUPLICATING SYNC PIPELINE COORDINATOR ====================
-class SyncPipelineCoordinator:
-    def __init__(self):
-        self.lock = threading.Lock()
-        self.state_file = Path.home() / ".gemini" / "config" / "media_sync_state.json"
-        self.state_file.parent.mkdir(parents=True, exist_ok=True)
-        self.active_jobs = self._load_state()
 
-    def _load_state(self):
-        if self.state_file.exists():
-            try:
-                with open(self.state_file, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-                    # Convert target sets
-                    for k, v in data.items():
-                        if "targets" in v and isinstance(v["targets"], list):
-                            v["targets"] = set(v["targets"])
-                    return data
-            except Exception as e:
-                print(f"[SyncCoordinator] State load error: {e}")
-        return {}
+# ==================== JOB STORE & SYNC WORKER ====================
+# The dashboard used to only record sync *intent* in a JSON file that nothing read.
+# Jobs now live in SQLite and are executed for real by SyncWorker.
+job_store = JobStore()
+library_builder = LibraryBuilder(gdrive_mgr, load_unified_settings, list_nas_folders)
 
-    def _save_state(self):
-        try:
-            serializable = {}
-            for k, v in self.active_jobs.items():
-                copy_v = dict(v)
-                if "targets" in copy_v and isinstance(copy_v["targets"], set):
-                    copy_v["targets"] = list(copy_v["targets"])
-                serializable[k] = copy_v
-            with open(self.state_file, "w", encoding="utf-8") as f:
-                json.dump(serializable, f, indent=2, ensure_ascii=False)
-        except Exception as e:
-            print(f"[SyncCoordinator] State save error: {e}")
+sync_worker = SyncWorker(
+    job_store,
+    torbox_mgr,
+    gdrive_mgr,
+    load_unified_settings,
+    concurrency=int(load_unified_settings().get("max_concurrent_downloads", 2)),
+)
 
-    def register_sync_request(self, torrent_id, target, name=""):
-        with self.lock:
-            tid = str(torrent_id)
-            if tid in self.active_jobs:
-                job = self.active_jobs[tid]
-                job["targets"].add(target)
-                job["status"] = "active"
-                job["updated_at"] = time.time()
-                self._save_state()
-                return {
-                    "is_new_download": False,
-                    "status": job["status"],
-                    "targets": list(job["targets"]),
-                    "message": f"Torrent #{tid} đang trong tiến trình xử lý. Đã bổ sung đích đến: {target} (Chỉ tải 1 lần từ TorBox)"
-                }
-            else:
-                self.active_jobs[tid] = {
-                    "torrent_id": tid,
-                    "status": "active",
-                    "targets": {target},
-                    "name": name,
-                    "progress": 25.0,
-                    "created_at": time.time(),
-                    "updated_at": time.time()
-                }
-                self._save_state()
-                return {
-                    "is_new_download": True,
-                    "status": "active",
-                    "targets": [target],
-                    "message": f"Khởi động chuỗi tải 1 lần từ TorBox cho #{tid} và đẩy lên {target}"
-                }
-
-    def get_job_status(self, torrent_id):
-        with self.lock:
-            return self.active_jobs.get(str(torrent_id))
-
-    def get_all_jobs(self):
-        with self.lock:
-            jobs_list = []
-            for tid, j in self.active_jobs.items():
-                copy_j = dict(j)
-                if "targets" in copy_j and isinstance(copy_j["targets"], set):
-                    copy_j["targets"] = list(copy_j["targets"])
-                jobs_list.append(copy_j)
-            return jobs_list
-
-sync_coordinator = SyncPipelineCoordinator()
 
 class MediaHubHandler(BaseHTTPRequestHandler):
+    # ---- access control ----
+    # Empty token (the default for localhost/LAN use) leaves the dashboard wide open as
+    # before. The launcher sets MEDIA_HUB_TOKEN whenever it opens a public tunnel, which
+    # turns this on so the whole API is not exposed to the internet unauthenticated.
+    def _authorized(self):
+        if not AUTH_TOKEN:
+            return True
+        supplied = self.headers.get("X-Media-Hub-Token", "")
+        if not supplied:
+            cookies = self.headers.get("Cookie", "")
+            for part in cookies.split(";"):
+                name, _, value = part.strip().partition("=")
+                if name == "mh_token":
+                    supplied = value
+                    break
+        if not supplied:
+            supplied = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query).get("k", [""])[0]
+        return hmac.compare_digest(supplied, AUTH_TOKEN)
+
+    def _reject_unauthorized(self):
+        body = (
+            b"<h1>401 - Media Hub</h1>"
+            b"<p>Dashboard dang chay o che do cong khai. Hay mo link kem token: "
+            b"<code>?k=&lt;token&gt;</code> (token duoc in ra khi khoi chay).</p>"
+        )
+        self.send_response(401)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _maybe_set_token_cookie(self):
+        """When the token arrives as ?k=..., persist it so later requests carry it."""
+        if not AUTH_TOKEN:
+            return
+        q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query).get("k", [""])[0]
+        if q and hmac.compare_digest(q, AUTH_TOKEN):
+            self.send_header("Set-Cookie", f"mh_token={AUTH_TOKEN}; Path=/; HttpOnly; SameSite=Lax")
+
     def _send_json(self, data, status=200):
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
@@ -315,6 +486,7 @@ class MediaHubHandler(BaseHTTPRequestHandler):
     def _send_html(self, html_content, status=200):
         self.send_response(status)
         self.send_header("Content-Type", "text/html; charset=utf-8")
+        self._maybe_set_token_cookie()
         self.end_headers()
         self.wfile.write(html_content.encode("utf-8"))
 
@@ -329,17 +501,14 @@ class MediaHubHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
+        if not self._authorized():
+            return self._reject_unauthorized()
         parsed_url = urllib.parse.urlparse(self.path)
         path = parsed_url.path
 
         # 1. Web UI Root
         if path == "/" or path == "/index.html":
-            candidate_paths = [
-                os.path.join(BASE_DIR, "templates", "index.html"),
-                os.path.join(os.path.dirname(BASE_DIR), "templates", "index.html"),
-                "/Volumes/512GB/AI Workspace/antigravity-media-hub/templates/index.html"
-            ]
-            for tp in candidate_paths:
+            for tp in (os.path.join(root, "index.html") for root in TEMPLATE_ROOTS):
                 if os.path.exists(tp):
                     with open(tp, "r", encoding="utf-8") as f:
                         return self._send_html(f.read())
@@ -347,17 +516,19 @@ class MediaHubHandler(BaseHTTPRequestHandler):
 
         # 1.1 Static Assets Routing (/static/...)
         elif path.startswith("/static/"):
-            file_rel = path.lstrip("/")
-            candidate_paths = [
-                os.path.join(BASE_DIR, file_rel),
-                os.path.join(os.path.dirname(BASE_DIR), file_rel),
-                f"/Volumes/512GB/AI Workspace/agent-skills/plugins/media-hub/skills/media-hub/{file_rel}"
-            ]
+            # BaseHTTPRequestHandler does NOT normalise the request path, so "/static/../.."
+            # used to escape the asset directory and serve any file on disk (~/.env,
+            # ~/.ssh/id_ed25519). Resolve the path and require it to stay inside a root.
+            file_rel = urllib.parse.unquote(path[len("/static/"):])
             file_path = None
-            for cp in candidate_paths:
-                if os.path.exists(cp) and os.path.isfile(cp):
-                    file_path = cp
-                    break
+            for root in STATIC_ROOTS:
+                try:
+                    candidate = (Path(root) / file_rel).resolve()
+                    if candidate.is_file() and candidate.is_relative_to(Path(root).resolve()):
+                        file_path = str(candidate)
+                        break
+                except (OSError, ValueError):
+                    continue
 
             if file_path:
                 content_type = "image/jpeg"
@@ -378,6 +549,26 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                 return
             return self.send_error(404, "Static file not found")
 
+        # 1.2 Poster artwork: fetched from TMDb on demand and cached outside the repo,
+        #     replacing the 34 image files that used to be committed into the skill.
+        elif path == "/api/poster":
+            qp = urllib.parse.parse_qs(parsed_url.query)
+            data, ctype = get_poster_bytes(
+                tvdb_id=qp.get("tvdb", [""])[0].strip() or None,
+                tmdb_id=qp.get("tmdb", [""])[0].strip() or None,
+                title=qp.get("title", [""])[0].strip() or None,
+            )
+            self.send_response(200)
+            self.send_header("Content-Type", ctype)
+            self.send_header("Content-Length", str(len(data)))
+            self.send_header("Access-Control-Allow-Origin", "*")
+            # Placeholders must not stick around once a key is configured.
+            self.send_header("Cache-Control",
+                             "public, max-age=604800" if ctype == "image/jpeg" else "public, max-age=300")
+            self.end_headers()
+            self.wfile.write(data)
+            return
+
                                         # 2. REST API: TorBox List with 3-Way Storage Tracking (Local, GDrive, NAS)
         elif path == "/api/torbox":
             global _torbox_api_cache, _torbox_api_cache_time
@@ -387,35 +578,27 @@ class MediaHubHandler(BaseHTTPRequestHandler):
 
             res = torbox_mgr.list_torrents()
             if res.get("success") and "data" in res and isinstance(res["data"], list):
+                # One query for every active job, instead of one per torrent in the loop.
+                active_jobs = job_store.active_by_torrent_map()
                 try:
                     gdrive_raw = [s.get("name") or s.get("folder") or "" for s in gdrive_mgr.list_tv_shows()]
                 except Exception:
                     gdrive_raw = []
-                clean_gdrive_titles = []
-                for r in gdrive_raw:
-                    c = re.sub(r'\{.*?\}|\[.*?\]|\(\d{4}\)', '', r).strip().lower()
-                    if c:
-                        clean_gdrive_titles.append(c)
-
-                # Known NAS show titles
-                nas_titles = ["the three-eyed one", "black jack", "young black jack", "monster", "cross fight b-daman", "wukong", "kindaichi"]
+                clean_gdrive_titles = _clean_titles(gdrive_raw)
+                # Previously a hard-coded list of seven show names decided the "on NAS"
+                # badge. Ask the NAS what it actually holds (cached, with the local
+                # staging buffer listed too so "Đã Về Máy" can ever be true).
+                clean_nas_titles = _clean_titles(list_nas_folders())
+                clean_local_titles = _clean_titles(list_local_staging())
 
                 for t in res["data"]:
                     name = t.get("name", "").lower()
                     locations = []
-
-                    # 1. Check GDrive
-                    for g in clean_gdrive_titles:
-                        if len(g) >= 4 and (g in name or any(w in name for w in g.split() if len(w) > 4)):
-                            locations.append("gdrive")
-                            break
-
-                    # 2. Check NAS
-                    for n in nas_titles:
-                        if len(n) >= 4 and (n in name or any(w in name for w in n.split() if len(w) > 4)):
-                            if "nas" not in locations:
-                                locations.append("nas")
-                            break
+                    for bucket, titles in (("gdrive", clean_gdrive_titles),
+                                           ("nas", clean_nas_titles),
+                                           ("local", clean_local_titles)):
+                        if _title_matches(name, titles):
+                            locations.append(bucket)
 
                     t["locations"] = locations
                     t["synced_destinations"] = [loc for loc in locations if loc in ["gdrive", "nas"]]
@@ -424,19 +607,27 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                     t["is_on_gdrive"] = "gdrive" in locations
                     t["is_on_nas"] = "nas" in locations
                     
-                    # Attach in-progress sync jobs if active
-                    sync_job = sync_coordinator.get_job_status(t.get("id"))
+                    # Attach the live job for this torrent, from the single map fetched above.
+                    sync_job = active_jobs.get(str(t.get("id")))
                     if sync_job:
                         t["sync_in_progress"] = {
-                            "status": sync_job.get("status", "syncing"),
-                            "targets": list(sync_job.get("targets", [])),
-                            "target": list(sync_job.get("targets", []))[0] if sync_job.get("targets") else "drive"
+                            "job_id": sync_job["id"],
+                            "status": "syncing" if sync_job["status"] == "running" else sync_job["status"],
+                            "phase": sync_job["phase"],
+                            "progress": sync_job["progress"],
+                            "message": sync_job["message"],
+                            "targets": sync_job["targets"],
+                            "done_targets": sync_job["done_targets"],
+                            "target": sync_job["targets"][0] if sync_job["targets"] else "drive",
                         }
                     else:
                         t["sync_in_progress"] = None
-                    
-            _torbox_api_cache = res
-            _torbox_api_cache_time = now
+
+            # Only cache successful responses, so a transient TorBox error is not
+            # served back to the UI for the next 3 seconds.
+            if res.get("success"):
+                _torbox_api_cache = res
+                _torbox_api_cache_time = now
             return self._send_json(res)
 
         # 2.1 REST API: TorBox Download Link
@@ -452,13 +643,36 @@ class MediaHubHandler(BaseHTTPRequestHandler):
         elif path == "/api/pipelines":
             monster = pipeline_mon.get_monster_status()
             multi = pipeline_mon.get_multi_show_status()
-            active_sync_jobs = sync_coordinator.get_all_jobs()
+            active_sync_jobs = job_store.list_active()
             lib_ver = f"M:{monster.get('completed_eps',0)}_MS:{multi.get('current_show','')}:{multi.get('completed_eps',0)}_{gdrive_mgr.get_cache_version()}"
             return self._send_json({
-                "monster": monster, 
-                "multi_show": multi, 
+                "monster": monster,
+                "multi_show": multi,
                 "active_syncs": active_sync_jobs,
+                "recent_syncs": job_store.list_recent(limit=20),
+                "job_counts": job_store.counts(),
                 "library_version": lib_ver
+            })
+
+        # 3.04 REST API: Library index stats (shows/files/assets, from SQLite)
+        elif path == "/api/library/stats":
+            return self._send_json({
+                "success": True,
+                "drive": gdrive_mgr.stats(),
+                "missing_assets": gdrive_mgr.missing_assets(),
+            })
+
+        # 3.05 REST API: Library metadata build progress
+        elif path == "/api/library/build/status":
+            return self._send_json(library_builder.status())
+
+        # 3.1 REST API: Download / Sync Job Queue
+        elif path == "/api/download/jobs":
+            return self._send_json({
+                "success": True,
+                "active": job_store.list_active(),
+                "recent": job_store.list_recent(limit=50),
+                "counts": job_store.counts(),
             })
 
         # 4. REST API: GDrive Shows List
@@ -757,7 +971,11 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                 ssh_cmd = ["ssh", "-p", "22", "-o", "BatchMode=yes", "-o", "ConnectTimeout=3", "-o", "StrictHostKeyChecking=no"]
                 if os.path.exists(key):
                     ssh_cmd += ["-i", key]
-                ssh_cmd += [f"{user}@{host}", f'if [ -d "{nas_base}" ]; then ls -1 "{nas_base}"; fi']
+                # nas_base comes from settings, which any client can POST to /api/settings.
+                # shlex.quote stops a quote in the path from closing the string and
+                # appending arbitrary commands to the remote shell.
+                q_base = shlex.quote(nas_base)
+                ssh_cmd += [f"{user}@{host}", f'if [ -d {q_base} ]; then ls -1 {q_base}; fi']
                 res = subprocess.run(ssh_cmd, capture_output=True, text=True, timeout=5)
                 if res.returncode == 0:
                     for line in res.stdout.splitlines():
@@ -858,7 +1076,7 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                     "title": meta.get("title"),
                     "vn": meta.get("vn"),
                     "qual": meta.get("qual"),
-                    "poster": f"/static/posters/{tvdb_id}.jpg" if tvdb_id else "",
+                    "poster": f"/api/poster?tvdb={tvdb_id}" if tvdb_id else f"/api/poster?title={urllib.parse.quote(folder)}",
                     "in_gdrive": in_gdrive,
                     "in_nas": in_nas,
                     "in_local": in_local,
@@ -1041,6 +1259,8 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             self.send_error(404, "Not Found")
 
     def do_POST(self):
+        if not self._authorized():
+            return self._reject_unauthorized()
         parsed_url = urllib.parse.urlparse(self.path)
         path = parsed_url.path
         
@@ -1077,29 +1297,77 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             res = torbox_mgr.control_queued(queued_id, operation=op)
             return self._send_json(res)
 
-                # 2.2 API: Sync Torbox Items to Drive/NAS with De-duplication
+        # 2.2 API: Queue a real TorBox ➔ staging ➔ Drive/NAS job (de-duplicated per torrent)
         elif path == "/api/download/sync":
             ids = req_data.get("ids", [])
-            target = req_data.get("target", "drive")
             names = req_data.get("names", [])
+            # Accept both a single "target" and a "targets" list; normalise the legacy
+            # "gdrive" alias the UI used to send for the Google Drive button.
+            raw_targets = req_data.get("targets") or [req_data.get("target", "drive")]
+            alias = {"gdrive": "drive", "google_drive": "drive"}
+            targets, seen = [], set()
+            for t in raw_targets:
+                t = alias.get(str(t).strip().lower(), str(t).strip().lower())
+                if t in ("drive", "nas") and t not in seen:
+                    seen.add(t)
+                    targets.append(t)
+
             if not ids:
                 return self._send_json({"success": False, "error": "Chưa chọn mục để đồng bộ"}, status=400)
-            
+            if not targets:
+                return self._send_json({"success": False, "error": "Đích đồng bộ không hợp lệ"}, status=400)
+
             results = []
             for idx, tid in enumerate(ids):
                 tname = names[idx] if idx < len(names) else f"Torrent #{tid}"
-                res_info = sync_coordinator.register_sync_request(tid, target, tname)
-                results.append(res_info)
+                results.append(job_store.enqueue(tid, targets, tname))
 
-            target_label = "Google Drive" if target == "drive" else ("NAS Storage" if target == "nas" else "Google Drive & NAS")
-            cmd_desc = f"Đồng bộ {len(ids)} torrent lên {target_label} (Tối ưu tải 1 lần từ TorBox)"
-            item = agent_bridge.add_command(cmd_desc, author="MediaHub UI")
-            
+            target_label = " & ".join("Google Drive" if t == "drive" else "NAS Storage" for t in targets)
+            queued = sum(1 for r in results if r["is_new_download"])
+            merged = len(results) - queued
             return self._send_json({
                 "success": True,
-                "message": f"🚀 Đã tiếp nhận yêu cầu đồng bộ {len(ids)} mục lên {target_label} (Chỉ tải 1 lần từ TorBox nếu trùng)!",
+                "message": (
+                    f"🚀 Đã xếp {queued} tác vụ tải mới lên {target_label}"
+                    + (f", {merged} mục gộp vào tiến trình đang chạy (chỉ tải 1 lần từ TorBox)" if merged else "")
+                    + "!"
+                ),
                 "details": results,
-                "command": item
+            })
+
+        # 2.25 API: Build library metadata (poster/fanart/tvshow.nfo) for folders
+        #      that are missing it. Manual, from the library screen.
+        elif path == "/api/library/build":
+            raw = req_data.get("targets") or ["drive"]
+            alias = {"gdrive": "drive", "google_drive": "drive"}
+            targets = [alias.get(str(t).lower(), str(t).lower()) for t in raw]
+            targets = [t for t in targets if t in ("drive", "nas")] or ["drive"]
+            return self._send_json(library_builder.start(
+                targets=targets, only_missing=bool(req_data.get("only_missing", True))))
+
+        elif path == "/api/library/refresh":
+            changed = gdrive_mgr.refresh(force=True)
+            return self._send_json({
+                "success": True,
+                "refreshed": changed,
+                "stats": gdrive_mgr.stats(),
+                "message": "Đã lập chỉ mục lại thư viện Google Drive." if changed
+                           else "Một tiến trình lập chỉ mục khác đang chạy.",
+            })
+
+        elif path == "/api/library/build/cancel":
+            library_builder.cancel()
+            return self._send_json({"success": True, "message": "Đã yêu cầu dừng tiến trình dựng metadata."})
+
+        # 2.3 API: Cancel a queued or running sync job
+        elif path == "/api/download/cancel":
+            job_id = req_data.get("job_id")
+            if not job_id:
+                return self._send_json({"success": False, "error": "Thiếu job_id"}, status=400)
+            ok = job_store.request_cancel(int(job_id))
+            return self._send_json({
+                "success": ok,
+                "message": "Đã gửi yêu cầu hủy tác vụ." if ok else "Tác vụ đã kết thúc, không thể hủy.",
             })
 
         elif path == "/api/library/cross_check":
@@ -1143,7 +1411,10 @@ class MediaHubHandler(BaseHTTPRequestHandler):
 
         # 4. API: Save Media Hub Settings (/api/settings)
         elif path == "/api/settings":
-            settings_path = Path.home() / ".gemini" / "config" / "media_hub_settings.json"
+            # Saved into the hub root alongside the database, so a project carries its
+            # own configuration.
+            from core.settings import config_path
+            settings_path = Path(config_path())
             settings_path.parent.mkdir(parents=True, exist_ok=True)
             try:
                 with open(settings_path, "w", encoding="utf-8") as f:
@@ -1197,7 +1468,12 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                     seen.add(p)
                     paths_to_check.append(p)
             
-            remote_cmds = [f'if [ -d "{p}" ]; then echo "FOUND:{p}"; fi' for p in paths_to_check]
+            # custom_path is attacker-controlled request data; quote it before it reaches
+            # the remote shell.
+            remote_cmds = [
+                f'if [ -d {shlex.quote(p)} ]; then printf "FOUND:%s\\n" {shlex.quote(p)}; fi'
+                for p in paths_to_check
+            ]
             remote_script = "; ".join(remote_cmds)
             
             try:
@@ -1262,14 +1538,19 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             if not filepath or not os.path.exists(filepath):
                 return self._send_json({"success": False, "error": "File video không tồn tại"}, status=400)
 
-            # Call extract_subtitles.py or ffmpeg directly
-            ext_script = "/Volumes/512GB/AI Workspace/agent-skills/plugins/subtitle-extractor/skills/subtitle-extractor/scripts/extract_subtitles.py"
+            ext_script = sibling_skill_script("subtitle-extractor", "extract_subtitles.py")
+            if not ext_script:
+                return self._send_json({"success": False, "error": "Không tìm thấy skill subtitle-extractor"}, status=500)
             try:
-                if os.path.exists(ext_script):
-                    res = subprocess.run([sys.executable, ext_script, filepath], capture_output=True, text=True, timeout=60)
-                    out = res.stdout.strip() or res.stderr.strip()
-                else:
-                    out = "FFmpeg extraction complete."
+                # The CLI is subcommand-based: passing the path alone made argparse exit
+                # with code 2 while this endpoint still reported success.
+                res = subprocess.run(
+                    [sys.executable, ext_script, "extract", filepath],
+                    capture_output=True, text=True, timeout=120,
+                )
+                out = (res.stdout or "").strip() or (res.stderr or "").strip()
+                if res.returncode != 0:
+                    return self._send_json({"success": False, "error": out or f"Thoát với mã {res.returncode}"})
                 return self._send_json({"success": True, "message": "Bóc tách phụ đề thành công!", "output": out})
             except Exception as e:
                 return self._send_json({"success": False, "error": str(e)})
@@ -1280,13 +1561,17 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             if not filepath or not os.path.exists(filepath):
                 return self._send_json({"success": False, "error": "File phụ đề không tồn tại"}, status=400)
 
-            vtt_script = "/Volumes/512GB/AI Workspace/agent-skills/plugins/sub-to-webvtt/skills/sub-to-webvtt/scripts/convert_webvtt.py"
+            vtt_script = sibling_skill_script("sub-to-webvtt", "convert_webvtt.py")
+            if not vtt_script:
+                return self._send_json({"success": False, "error": "Không tìm thấy skill sub-to-webvtt"}, status=500)
             try:
-                if os.path.exists(vtt_script):
-                    res = subprocess.run([sys.executable, vtt_script, filepath], capture_output=True, text=True, timeout=30)
-                    out = res.stdout.strip() or res.stderr.strip()
-                else:
-                    out = "Converted to WebVTT."
+                res = subprocess.run(
+                    [sys.executable, vtt_script, "convert", filepath],
+                    capture_output=True, text=True, timeout=60,
+                )
+                out = (res.stdout or "").strip() or (res.stderr or "").strip()
+                if res.returncode != 0:
+                    return self._send_json({"success": False, "error": out or f"Thoát với mã {res.returncode}"})
                 return self._send_json({"success": True, "message": "Chuyển đổi WebVTT chuẩn W3C thành công!", "output": out})
             except Exception as e:
                 return self._send_json({"success": False, "error": str(e)})
@@ -1323,6 +1608,7 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             self.send_error(404, "Not Found")
 
 def run_server():
+    sync_worker.start()
     server_address = (HOST, PORT)
     ThreadingHTTPServer.allow_reuse_address = True
     ThreadingHTTPServer.daemon_threads = True

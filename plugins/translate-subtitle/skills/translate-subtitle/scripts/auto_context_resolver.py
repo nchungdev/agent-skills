@@ -21,6 +21,8 @@ import urllib.request
 import urllib.parse
 import urllib.error
 
+from hub_paths import workspace_for
+
 ENV_FILE = os.path.expanduser("~/.env")
 TMDB_BASE = "https://api.themoviedb.org/3"
 
@@ -213,7 +215,8 @@ def main():
     parser = argparse.ArgumentParser(description="TMDb Auto-Context & Metadata Resolver for translate-subtitle")
     parser.add_argument("query", help="Tên phim hoặc TMDb ID")
     parser.add_argument("--type", default="tv", choices=["tv", "movie"], help="Loại phim: tv hoặc movie")
-    parser.add_argument("--output-dir", "-o", help="Thư mục workspace cần khởi tạo")
+    parser.add_argument("--output-dir", "-o", default=None,
+                        help="Workspace (mặc định: thư mục của phim trong .media-hub)")
     parser.add_argument("--json", action="store_true", help="In kết quả dạng JSON")
 
     args = parser.parse_args()
@@ -242,8 +245,12 @@ def main():
     print(f"  • Dàn nhân vật:  {', '.join(list(context['characters'].keys())[:6])}...")
     print(f"  • Tóm tắt:       {context['synopsis'][:180]}...\n")
 
-    if args.output_dir:
-        init_workspace(context, args.output_dir)
+    # Always create a workspace; without a default the two-tier layout that the
+    # skill documents was simply never initialised.
+    ws = args.output_dir or workspace_for(
+        context.get("title") or args.query, kind=getattr(args, "type", "tv"))
+    init_workspace(context, ws)
+    print(f"📂 Workspace: {ws}")
 
 
 if __name__ == "__main__":

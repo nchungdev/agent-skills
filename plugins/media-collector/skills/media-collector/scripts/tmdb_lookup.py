@@ -20,6 +20,8 @@ import urllib.request
 import urllib.parse
 import urllib.error
 
+from hub_paths import output_for
+
 ENV_FILE = os.path.expanduser("~/.env")
 TMDB_BASE = "https://api.themoviedb.org/3"
 TMDB_IMG_BASE = "https://image.tmdb.org/t/p"
@@ -242,7 +244,8 @@ def main():
     sp_get.add_argument("--poster", action="store_true", help="Download poster")
     sp_get.add_argument("--fanart", action="store_true", help="Download fanart/backdrop")
     sp_get.add_argument("--nfo", action="store_true", help="Generate NFO file")
-    sp_get.add_argument("--output", "-o", default=".", help="Output directory")
+    sp_get.add_argument("--output", "-o", default=None,
+                        help="Output directory (default: the title's curation workspace)")
     sp_get.add_argument("--json", action="store_true", help="Output as JSON")
 
     args = parser.parse_args()
@@ -262,10 +265,15 @@ def main():
         if info:
             if args.json:
                 print(json.dumps(info, ensure_ascii=False, indent=2))
+            # Default to the title's curation workspace: "." would scatter
+            # poster.jpg / tvshow.nfo wherever the agent happened to be run.
+            out = args.output or output_for(
+                info.get("title") or info.get("name") or str(args.tmdb_id),
+                kind=args.media_type)
             if args.poster or args.fanart:
-                download_artwork(info, args.output)
+                download_artwork(info, out)
             if args.nfo:
-                generate_nfo(info, args.output)
+                generate_nfo(info, out)
     else:
         parser.print_help()
 

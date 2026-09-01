@@ -19,7 +19,7 @@ The agent **MUST** first inspect the user's prompt for inline options, flags, or
   - Short flags: `-s <langs>`, `--links-only` (Option A), `--download-video` (Option B)
   - `--estimate` — Dry-run: show disk estimation only, don't download
   - `--translate` — After curation, ask user to trigger Vietnamese subtitle translation
-  - `--nfo` — Generate NFO metadata + poster/fanart for Plex/Jellyfin/Kodi
+  - `--no-nfo` — Skip metadata generation (NFO + artwork are produced by default)
   - `--sync <gdrive|nas|both>` — Auto-sync completed output to cloud/NAS after download
   - `--aria2c` — Use aria2c for accelerated multi-connection downloads
 - **Natural language syntax**:
@@ -84,9 +84,14 @@ The agent **MUST** first inspect the user's prompt for inline options, flags, or
 
 ---
 
-## 📺 NFO Metadata & Artwork Generation (`--nfo`)
+## 📺 NFO Metadata & Artwork Generation (MANDATORY)
 
-When the `--nfo` flag is used (or user requests metadata), generate Plex/Jellyfin/Kodi-compatible NFO files and artwork.
+> [!IMPORTANT]
+> Every curated title **MUST** ship complete: `tvshow.nfo` (or `movie.nfo`),
+> `poster.jpg` and `fanart.jpg` written into the show folder alongside the media.
+> This is not an opt-in flag — a folder without them is an incomplete delivery, and
+> media-hub will list it under "thiếu metadata" until someone runs the manual
+> **Dựng Metadata** build to backfill it. Only skip when the user passes `--no-nfo`.
 
 ### 1. TV Series NFO Structure:
 ```
@@ -340,8 +345,15 @@ Build zero-guesswork folder hierarchy with `Season 00/` for specials and `Behind
 ### Step 6: Subtitle Engineering & Formatting
 Standardize to UTF-8 `.srt` or 1080p styled `.ass` using `scripts/srt_to_ass.py` (supports 7 style presets, batch mode, font fallback). Assign ISO language codes.
 
-### Step 7: NFO Metadata & Artwork (Optional)
-Generate `.nfo` files and download `poster.jpg` / `fanart.jpg` from TMDb/TVDB/Fanart.tv.
+### Step 7: NFO Metadata & Artwork (REQUIRED)
+Generate `.nfo` files and download `poster.jpg` / `fanart.jpg` from TMDb/TVDB/Fanart.tv
+into the show folder. Do this for every title, not on request — the library is the
+source of truth for artwork, and the dashboard reads it from there rather than
+re-fetching from TMDb on each page load.
+
+If TMDb cannot be matched confidently (external id does not round-trip and the title
+does not match), record the folder as needing review instead of writing metadata that
+belongs to a different show.
 
 ### Step 8: Blueprint Output, Cloud Sync & Translation Handoff
 1. Generate `DOWNLOAD_LINKS.txt` with quality badges, codecs, resolution, and subtitle delivery format.

@@ -13,6 +13,8 @@ import urllib.request
 import urllib.parse
 import urllib.error
 
+from hub_paths import output_for
+
 ENV_FILE = os.path.expanduser("~/.env")
 TMDB_BASE = "https://api.themoviedb.org/3"
 TMDB_IMG_BASE = "https://image.tmdb.org/t/p"
@@ -258,7 +260,8 @@ def main():
     p_get.add_argument("--poster", action="store_true", help="Tải poster.jpg")
     p_get.add_argument("--fanart", action="store_true", help="Tải fanart.jpg")
     p_get.add_argument("--nfo", action="store_true", help="Tạo file NFO chuẩn Plex/Jellyfin")
-    p_get.add_argument("--output", "-o", default=".", help="Thư mục xuất file")
+    p_get.add_argument("--output", "-o", default=None,
+                       help="Thư mục xuất (mặc định: workspace curation của phim)")
     p_get.add_argument("--json", action="store_true", help="In ra JSON")
 
     args = parser.parse_args()
@@ -277,10 +280,15 @@ def main():
                 print(json.dumps(info, ensure_ascii=False, indent=2))
             else:
                 print_info(info)
+            # Default to the title's curation workspace: "." would scatter
+            # poster.jpg / tvshow.nfo wherever the agent happened to be run.
+            out = args.output or output_for(
+                info.get("title") or info.get("name") or str(args.tmdb_id),
+                kind=args.media_type)
             if args.poster or args.fanart:
-                download_artwork(info, args.output)
+                download_artwork(info, out)
             if args.nfo:
-                generate_nfo(info, args.output)
+                generate_nfo(info, out)
     else:
         parser.print_help()
 
