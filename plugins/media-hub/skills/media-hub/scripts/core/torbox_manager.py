@@ -12,20 +12,33 @@ import urllib.error
 
 class TorBoxManager:
     def __init__(self, config_path=None):
-        if not config_path:
-            for p in ["/Users/chungnh/.config/torbox/config.json", "/Users/chungnh/.agy-account2/.config/torbox/config.json"]:
-                if os.path.exists(p):
-                    config_path = p
-                    break
         self.api_key = None
-        if config_path and os.path.exists(config_path):
-            try:
-                with open(config_path, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-                    self.api_key = data.get("api_key")
-            except Exception as e:
-                print(f"[TorBoxManager] Config load error: {e}")
-                
+        
+        # 1. Check TorBox specific config
+        candidates = [
+            config_path,
+            "/Users/chungnh/.config/torbox/config.json",
+            "/Users/chungnh/.agy-account2/.config/torbox/config.json",
+            os.path.expanduser("~/.config/torbox/config.json"),
+            os.path.expanduser("~/.gemini/config/media_hub_settings.json"),
+            os.path.expanduser("~/.agy-account2/.gemini/config/media_hub_settings.json")
+        ]
+        
+        for p in candidates:
+            if p and os.path.exists(p):
+                try:
+                    with open(p, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+                        tok = data.get("api_key") or data.get("torbox_token") or data.get("token")
+                        if tok and len(str(tok).strip()) > 10:
+                            self.api_key = str(tok).strip()
+                            break
+                except Exception as e:
+                    print(f"[TorBoxManager] Config load error ({p}): {e}")
+                    
+        # 2. Check Environment Variables
+        if not self.api_key:
+            self.api_key = os.environ.get("TORBOX_API_TOKEN") or os.environ.get("TORBOX_TOKEN") or os.environ.get("TORBOX_API_KEY")
         self.base_url = "https://api.torbox.app/v1/api"
         self._list_cache = None
         self._list_cache_time = 0
