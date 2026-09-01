@@ -2335,7 +2335,7 @@
     }
 
     
-        async function fetchDashboardOverview() {
+            async function fetchDashboardOverview() {
       try {
         const res = await fetch('/api/dashboard/overview');
         const data = await res.json();
@@ -2370,92 +2370,153 @@
           if (document.getElementById('gdrive-avail-val')) document.getElementById('gdrive-avail-val').innerText = gdCloud.avail_str;
         }
 
-        // 3. Render Active Downloads (Chỉ hiện khi ĐANG TẢI THẬT)
+        // 3. Render KHỐI TẢI XUỐNG (DOWNLOADING): Tải gì? Bằng engine gì? Tải về đâu?
         const dlContainer = document.getElementById('home-active-downloads-list');
         if (dlContainer) {
           if (data.active_downloads && data.active_downloads.length > 0) {
             dlContainer.innerHTML = data.active_downloads.map(d => `
-              <div class="p-4 rounded-2xl bg-zinc-950/90 border border-blue-500/40 space-y-2.5 shadow-lg">
-                <div class="flex items-center justify-between">
-                  <div class="min-w-0 pr-2">
-                    <span class="font-bold text-xs text-white truncate block">${d.name}</span>
-                    <span class="text-[10px] text-blue-400 font-mono">⚡ Đang tải về máy đệm (Staging)</span>
+              <div class="p-4 rounded-2xl bg-zinc-950/90 border border-blue-500/40 space-y-3 shadow-lg">
+                <!-- Row 1: Tải gì & Engine gì -->
+                <div class="flex items-start justify-between gap-2 flex-wrap">
+                  <div class="min-w-0 flex-1">
+                    <div class="text-[10px] text-zinc-500 uppercase font-bold tracking-wider">TẢI GÌ:</div>
+                    <span class="font-bold text-xs sm:text-sm text-white truncate block">${d.name}</span>
                   </div>
-                  <span class="text-[10px] font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20 font-bold shrink-0 animate-pulse">${d.progress}%</span>
+                  <div class="flex flex-col items-end gap-1 shrink-0">
+                    <span class="text-[10px] font-mono text-purple-300 bg-purple-500/10 px-2.5 py-0.5 rounded-full border border-purple-500/30 font-bold flex items-center gap-1">
+                      <span>⚡ Engine:</span> <strong>${d.engine || 'TorBox Cloud DDL'}</strong>
+                    </span>
+                  </div>
                 </div>
-                <div class="w-full bg-zinc-900 h-2 rounded-full overflow-hidden border border-blue-500/20">
-                  <div class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full rounded-full transition-all duration-500" style="width: ${d.progress}%;"></div>
+
+                <!-- Row 2: Tải về đâu (Local Buffer) -->
+                <div class="p-2 rounded-xl bg-zinc-900/80 border border-zinc-800 text-[11px] text-zinc-300 flex items-center justify-between gap-2 font-mono">
+                  <span class="text-zinc-400 flex items-center gap-1 shrink-0">
+                    <span>📁 Tải về đâu:</span>
+                  </span>
+                  <span class="text-blue-400 truncate text-right">${d.dest_path || '/Volumes/512GB/AI Workspace/media_staging'}</span>
                 </div>
-                <div class="flex items-center justify-between text-[10px] text-zinc-400 font-mono">
-                  <span>Tốc độ: <strong class="text-white">${d.speed}</strong></span>
-                  <span>Dung lượng: ${d.size} • ETA: ${d.eta}</span>
+
+                <!-- Progress Bar & Stats -->
+                <div class="space-y-1.5 pt-0.5">
+                  <div class="flex justify-between text-[11px] font-mono">
+                    <span class="text-blue-400 font-bold">⚡ Đang tải: ${d.progress}%</span>
+                    <span class="text-zinc-300">Tốc độ: <strong class="text-white">${d.speed}</strong> • ETA: ${d.eta}</span>
+                  </div>
+                  <div class="w-full bg-zinc-900 h-2.5 rounded-full overflow-hidden border border-blue-500/20">
+                    <div class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 h-full rounded-full transition-all duration-500" style="width: ${d.progress}%;"></div>
+                  </div>
                 </div>
               </div>
             `).join('');
           } else {
             dlContainer.innerHTML = `
-              <div class="p-4 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center justify-between gap-3 text-xs">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-base border border-emerald-500/20 shrink-0">
-                    ✓
+              <div class="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="font-bold text-xs text-white">Hàng Đợi Tải Xuống Đang Rảnh</span>
                   </div>
-                  <div>
-                    <div class="font-bold text-white text-xs">Hàng Đợi Tải Xuống Đang Rảnh</div>
-                    <div class="text-[11px] text-zinc-400 mt-0.5">Không có tác vụ nào đang tải • 32 Torrents sẵn sàng trên TorBox Cloud</div>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-bold">
+                    32 Torrents Sẵn Sàng
+                  </span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] font-mono">
+                  <div class="p-2 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
+                    <span class="text-zinc-500 block text-[9px] uppercase">Engine Tải Hoạt Động:</span>
+                    <span class="text-purple-300 font-bold">⚡ TorBox Cloud (Gigabit)</span>
+                  </div>
+                  <div class="p-2 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
+                    <span class="text-zinc-500 block text-[9px] uppercase">Thư Mục Đệm (Tải Về Đâu):</span>
+                    <span class="text-blue-400 truncate block">📁 .../media_staging</span>
                   </div>
                 </div>
-                <button onclick="setTab('torbox')" class="px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white font-medium transition text-xs flex items-center gap-1 shadow-sm shrink-0">
-                  <span>📥</span> Mở Kho Tải
-                </button>
+
+                <div class="flex items-center justify-between pt-1 text-[11px]">
+                  <span class="text-zinc-400">Bấm nút bên cạnh để nạp link hoặc bắt đầu kéo tập phim</span>
+                  <button onclick="setTab('torbox')" class="px-3 py-1.5 rounded-xl bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/30 font-semibold transition flex items-center gap-1 shadow-sm text-xs">
+                    <span>📥</span> Mở Kho Tải Xuống
+                  </button>
+                </div>
               </div>
             `;
           }
         }
 
-        // 4. Render Active Uploads & Sync with crystal clear DESTINATIONS (Google Drive vs NAS)
+        // 4. Render KHỐI ĐỒNG BỘ (SYNC / UPLOAD): Sync gì? Sync lên đâu?
         const ulContainer = document.getElementById('home-active-uploads-list');
         if (ulContainer) {
           if (data.active_uploads && data.active_uploads.length > 0) {
             ulContainer.innerHTML = data.active_uploads.map(u => `
-              <div class="p-4 rounded-2xl bg-zinc-950/90 border border-emerald-500/40 space-y-2.5 shadow-lg">
-                <div class="flex items-center justify-between flex-wrap gap-1">
-                  <div class="min-w-0 pr-2">
-                    <span class="font-bold text-xs text-white truncate block">${u.title}</span>
-                    <div class="text-[10px] text-zinc-400 flex items-center gap-1.5 mt-0.5 flex-wrap">
-                      <span>ĐÍCH ĐẾN:</span>
-                      <span class="px-2 py-0.2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold font-mono">
-                        ☁️ ${u.dest || 'Google Drive (gdrive:Phim)'}
-                      </span>
-                    </div>
+              <div class="p-4 rounded-2xl bg-zinc-950/90 border border-emerald-500/40 space-y-3 shadow-lg">
+                <!-- Row 1: Sync gì & Đích đến -->
+                <div class="flex items-start justify-between gap-2 flex-wrap">
+                  <div class="min-w-0 flex-1">
+                    <div class="text-[10px] text-zinc-500 uppercase font-bold tracking-wider">SYNC GÌ:</div>
+                    <span class="font-bold text-xs sm:text-sm text-white truncate block">${u.title}</span>
                   </div>
-                  <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 font-bold shrink-0 animate-pulse">
-                    ⚡ Đang Sync ${u.progress}%
-                  </span>
+                  <div class="flex flex-col items-end gap-1 shrink-0">
+                    <span class="text-[10px] font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-bold flex items-center gap-1">
+                      <span>☁️ SYNC LÊN ĐÂU:</span> <strong>${u.dest || 'Google Drive (gdrive:Phim)'}</strong>
+                    </span>
+                  </div>
                 </div>
-                <div class="w-full bg-zinc-900 h-2 rounded-full overflow-hidden border border-emerald-500/20">
-                  <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: ${u.progress}%;"></div>
+
+                <!-- Row 2: Lộ trình truyền tải (Breadcrumb) -->
+                <div class="p-2 rounded-xl bg-zinc-900/80 border border-zinc-800 text-[11px] text-zinc-300 flex items-center justify-between gap-2 font-mono flex-wrap">
+                  <span class="text-zinc-400">Lộ trình:</span>
+                  <div class="flex items-center gap-1.5 text-xs">
+                    <span class="text-purple-400">⚡ TorBox</span>
+                    <span class="text-zinc-600">➔</span>
+                    <span class="text-blue-400">💾 Máy Đệm</span>
+                    <span class="text-zinc-600">➔</span>
+                    <span class="text-emerald-400 font-bold">${u.dest_short || '☁️ gdrive:Phim'}</span>
+                  </div>
                 </div>
-                <div class="flex items-center justify-between text-[10px] text-zinc-400 font-mono">
-                  <span>Tiến trình: <strong class="text-white">Tập ${u.current_ep}/${u.total_ep}</strong></span>
-                  <span class="text-emerald-400">🗑️ Tự động xóa đệm sau mỗi tập</span>
+
+                <!-- Progress Bar & Stats -->
+                <div class="space-y-1.5 pt-0.5">
+                  <div class="flex justify-between text-[11px] font-mono">
+                    <span class="text-emerald-400 font-bold">⚡ Đang đồng bộ: ${u.progress}% (Tập ${u.current_ep}/${u.total_ep})</span>
+                    <span class="text-emerald-400">🗑️ Tự động xóa đệm sau mỗi tập</span>
+                  </div>
+                  <div class="w-full bg-zinc-900 h-2.5 rounded-full overflow-hidden border border-emerald-500/20">
+                    <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: ${u.progress}%;"></div>
+                  </div>
                 </div>
               </div>
             `).join('');
           } else {
             ulContainer.innerHTML = `
-              <div class="p-4 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-center justify-between gap-3 text-xs">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-base border border-emerald-500/20 shrink-0">
-                    ✓
+              <div class="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="font-bold text-xs text-white">Chuỗi Đồng Bộ Đang Nghỉ (Idle)</span>
                   </div>
-                  <div>
-                    <div class="font-bold text-white text-xs">Chuỗi Đồng Bộ Đang Nghỉ</div>
-                    <div class="text-[11px] text-zinc-400 mt-0.5">Toàn bộ media đã nằm an toàn trên ☁️ Google Drive & 🖥️ NAS Storage</div>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-bold">
+                    Đã Đồng Bộ 100%
+                  </span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] font-mono">
+                  <div class="p-2 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
+                    <span class="text-zinc-500 block text-[9px] uppercase">Sync Lên Kho Cloud:</span>
+                    <span class="text-emerald-400 font-bold">☁️ gdrive:Phim (31 Shows)</span>
+                  </div>
+                  <div class="p-2 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
+                    <span class="text-zinc-500 block text-[9px] uppercase">Sync Lên Kho NAS:</span>
+                    <span class="text-amber-400 font-bold">🖥️ /srv/mergerfs/MainPool/Phim</span>
                   </div>
                 </div>
-                <button onclick="setTab('pipelines')" class="px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white font-medium transition text-xs flex items-center gap-1 shadow-sm shrink-0">
-                  <span>🚀</span> Xem Pipeline
-                </button>
+
+                <div class="flex items-center justify-between pt-1 text-[11px]">
+                  <span class="text-zinc-400">Toàn bộ media đã nằm an toàn trên cả 2 kho lưu trữ</span>
+                  <button onclick="setTab('pipelines')" class="px-3 py-1.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/30 font-semibold transition flex items-center gap-1 shadow-sm text-xs">
+                    <span>🚀</span> Xem Tiến Trình
+                  </button>
+                </div>
               </div>
             `;
           }
