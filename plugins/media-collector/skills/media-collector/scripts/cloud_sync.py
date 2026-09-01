@@ -92,6 +92,10 @@ Examples:
             else:
                 print("❌ Google Drive sync failed!")
                 success = False
+        else:
+            # Skipping the upload is a failure, not a silent success.
+            print("❌ Google Drive sync skipped: rclone unavailable!")
+            success = False
 
     if args.nas:
         ok = sync_to_nas(args.local_dir, args.nas, args.nas_host, dry_run=args.dry_run)

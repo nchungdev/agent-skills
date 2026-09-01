@@ -5,3 +5,6 @@ plugins/translate-subtitle/skills/translate-subtitle/resources/glossaries/
 __pycache__/
 *.pyc
 .DS_Store
+
+# JetBrains IDE
+.idea/

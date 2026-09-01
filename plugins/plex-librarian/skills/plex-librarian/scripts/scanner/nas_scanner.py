@@ -33,6 +33,14 @@ def scan_nas_ssh(host, user, port=22, key_path=None):
     cmd = ssh_cmd + [target, remote_cmd]
     try:
         res = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        # Without this check a refused/timed-out SSH login returned success with an
+        # empty list, which is indistinguishable from "connected, no libraries".
+        if res.returncode != 0:
+            return {
+                "success": False,
+                "error": res.stderr.strip() or f"SSH thoát với mã {res.returncode}",
+                "host": host,
+            }
         found_paths = []
         for line in res.stdout.splitlines():
             if line.startswith("FOUND:"):
