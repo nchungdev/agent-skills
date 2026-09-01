@@ -75,7 +75,7 @@ def load_unified_settings():
         "nas_ssh_key": "",
         "nas_path": "/volume1/video/TV Shows",
         "gdrive_remote": "gdrive",
-        "gdrive_root": "Phim/TV Shows",
+        "gdrive_root": "Phim",
         "sync_targets": ["drive"],
         "sync_transfers": 4,
         "auto_purge": True

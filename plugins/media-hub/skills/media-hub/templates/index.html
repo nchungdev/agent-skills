@@ -1251,7 +1251,7 @@
 
                 <div>
                   <label class="block text-zinc-400 font-medium mb-1.5">Thư Mục Root Trên Drive</label>
-                  <input type="text" id="cfg-gdrive-root" value="Phim/TV Shows" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-emerald-500">
+                  <input type="text" id="cfg-gdrive-root" value="Phim" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-emerald-500">
                 </div>
 
                 <div>
@@ -2702,7 +2702,7 @@
         if (document.getElementById('cfg-nas-path')) document.getElementById('cfg-nas-path').value = cfg.nas_path || '/volume1/video/TV Shows';
 
         if (document.getElementById('cfg-gdrive-remote')) document.getElementById('cfg-gdrive-remote').value = cfg.gdrive_remote || 'gdrive';
-        if (document.getElementById('cfg-gdrive-root')) document.getElementById('cfg-gdrive-root').value = cfg.gdrive_root || 'Phim/TV Shows';
+        if (document.getElementById('cfg-gdrive-root')) document.getElementById('cfg-gdrive-root').value = cfg.gdrive_root || 'Phim';
         if (document.getElementById('cfg-sync-transfers')) document.getElementById('cfg-sync-transfers').value = cfg.sync_transfers || 4;
 
         const targets = cfg.sync_targets || ['drive'];
