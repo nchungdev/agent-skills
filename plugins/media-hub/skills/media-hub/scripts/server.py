@@ -606,23 +606,57 @@ class MediaHubHandler(BaseHTTPRequestHandler):
 
         # 5. API: Scan NAS Plex Directories (/api/nas/scan)
         elif path == "/api/nas/scan":
-            host = req_data.get("host")
-            user = req_data.get("user", "admin")
+            host = req_data.get("host", "").strip()
+            user = req_data.get("user", "admin").strip()
             port = int(req_data.get("port", 22))
+            key = req_data.get("key", "").strip()
+            custom_path = req_data.get("path", "").strip()
+            
             if not host:
                 return self._send_json({"success": False, "error": "Thiếu địa chỉ IP NAS"}, status=400)
             
-            common_nas_paths = [
-                "/volume1/video/TV Shows", "/volume1/video/Movies",
-                "/volume1/Media", "/volume1/Plex",
+            ssh_cmd = ["ssh", "-p", str(port), "-o", "BatchMode=yes", "-o", "ConnectTimeout=5", "-o", "StrictHostKeyChecking=no"]
+            if key:
+                expanded_key = os.path.expanduser(key)
+                if os.path.exists(expanded_key):
+                    ssh_cmd += ["-i", expanded_key]
+            else:
+                for k in ["id_ed25519", "id_rsa"]:
+                    cand = Path.home() / ".ssh" / k
+                    if cand.is_file():
+                        ssh_cmd += ["-i", str(cand)]
+                        break
+            
+            ssh_cmd.append(f"{user}@{host}")
+            
+            candidate_paths = [
+                custom_path,
+                "/srv/mergerfs/MainPool/Phim/TV Shows",
+                "/srv/mergerfs/MainPool/Phim/Movies",
+                "/srv/mergerfs/MainPool/Phim",
+                "/volume1/video/TV Shows",
+                "/volume1/video/Movies",
+                "/volume1/Media",
+                "/volume1/Plex",
                 "/share/CACHEDEV1_DATA/Multimedia/TV Shows",
-                "/share/Multimedia/Plex", "/srv/media"
+                "/share/Multimedia/Plex",
+                "/srv/media"
             ]
-            ssh_cmd = ["ssh", "-p", str(port), "-o", "BatchMode=yes", "-o", "ConnectTimeout=5", f"{user}@{host}"]
-            remote_script = f"for p in {' '.join(common_nas_paths)}; do if [ -d \"$p\" ]; then echo \"FOUND:$p\"; fi; done"
+            seen = set()
+            paths_to_check = []
+            for p in candidate_paths:
+                if p and p not in seen:
+                    seen.add(p)
+                    paths_to_check.append(p)
+            
+            remote_cmds = [f'if [ -d "{p}" ]; then echo "FOUND:{p}"; fi' for p in paths_to_check]
+            remote_script = "; ".join(remote_cmds)
             
             try:
                 res = subprocess.run(ssh_cmd + [remote_script], capture_output=True, text=True, timeout=8)
+                if res.returncode != 0 and not res.stdout.strip():
+                    err_msg = res.stderr.strip() or "SSH connection failed"
+                    return self._send_json({"success": False, "error": err_msg})
                 found = [line.split(":", 1)[1].strip() for line in res.stdout.splitlines() if line.startswith("FOUND:")]
                 return self._send_json({"success": True, "libraries": found})
             except Exception as e:
