@@ -529,10 +529,24 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             def check_aria2():
                 aria_host = cfg.get("aria2_rpc_host", "127.0.0.1")
                 aria_port = int(cfg.get("aria2_rpc_port", 6800))
+                secret = cfg.get("aria2_rpc_secret", "").strip()
                 try:
-                    s = socket.create_connection((aria_host, aria_port), timeout=1.5)
-                    s.close()
-                    return {"connected": True, "detail": f"Aria2 RPC ({aria_host}:{aria_port}) Online"}
+                    params = [f"token:{secret}"] if secret else []
+                    payload = json.dumps({
+                        "jsonrpc": "2.0",
+                        "id": "health",
+                        "method": "aria2.getVersion",
+                        "params": params
+                    }).encode("utf-8")
+                    req = urllib.request.Request(
+                        f"http://{aria_host}:{aria_port}/jsonrpc",
+                        data=payload,
+                        headers={"Content-Type": "application/json"}
+                    )
+                    with urllib.request.urlopen(req, timeout=2) as resp:
+                        data = json.loads(resp.read().decode("utf-8"))
+                        ver = data.get("result", {}).get("version", "")
+                        return {"connected": True, "detail": f"Aria2c RPC v{ver} Sẵn sàng"}
                 except Exception:
                     return {"connected": False, "detail": f"Aria2 RPC ({aria_host}:{aria_port}) Offline"}
 
