@@ -373,7 +373,7 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                                 locations.append("nas")
                             break
 
-                                        t["locations"] = locations
+                    t["locations"] = locations
                     t["synced_destinations"] = [loc for loc in locations if loc in ["gdrive", "nas"]]
                     t["is_completed_and_synced"] = len(t["synced_destinations"]) > 0
                     t["is_on_local"] = "local" in locations
