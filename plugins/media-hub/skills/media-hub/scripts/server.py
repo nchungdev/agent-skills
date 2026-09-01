@@ -482,11 +482,14 @@ class MediaHubHandler(BaseHTTPRequestHandler):
             cfg = load_unified_settings()
             
             def check_gdrive():
+                remote = cfg.get("gdrive_remote", "gdrive").strip()
                 try:
                     res = subprocess.run([
-                        gdrive_mgr.rclone_bin, "--config", gdrive_mgr.rclone_config, "lsd", "gdrive:Phim"
-                    ], capture_output=True, text=True, timeout=8)
-                    return {"connected": res.returncode == 0, "detail": "Rclone Google Drive Online" if res.returncode == 0 else (res.stderr.strip() or "Lỗi Rclone")}
+                        gdrive_mgr.rclone_bin, "--config", gdrive_mgr.rclone_config, "listremotes"
+                    ], capture_output=True, text=True, timeout=3)
+                    if res.returncode == 0 and f"{remote}:" in res.stdout:
+                        return {"connected": True, "detail": f"Remote '{remote}:' Sẵn sàng kết nối"}
+                    return {"connected": False, "detail": f"Không tìm thấy remote '{remote}:'"}
                 except Exception as e:
                     return {"connected": False, "detail": str(e)}
 
