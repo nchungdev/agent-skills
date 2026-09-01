@@ -1,3 +1,4 @@
+import re
 
 _last_overview_cache = {}
 _last_overview_time = 0
@@ -684,7 +685,6 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                 in_local = folder in local_folders
                 
                 # Extract ID or title
-                import re
                 m = re.search(r"\{tvdb-(\d+)\}", folder)
                 tvdb_id = m.group(1) if m else ""
                 meta = known_meta.get(tvdb_id, {
