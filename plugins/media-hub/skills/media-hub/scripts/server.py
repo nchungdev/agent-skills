@@ -1017,12 +1017,19 @@ class MediaHubHandler(BaseHTTPRequestHandler):
                 except Exception as e:
                     return self._send_json({"success": False, "error": f"Lỗi khi dừng Aria2c: {e}"})
 
-        # 3. API: Send Agent Command
+                # 3. API: Send Agent Command
         elif path == "/api/agent/command":
-            cmd = req_data.get("command")
-            if not cmd:
-                return self._send_json({"success": False, "error": "Empty command"}, status=400)
-            item = agent_bridge.add_command(cmd)
+            cmd = req_data.get("command") or req_data.get("cmd") or req_data.get("text") or req_data.get("message") or ""
+            if not str(cmd).strip():
+                # Provide a smart fallback rather than returning error 400
+                torrent_id = req_data.get("torrent_id")
+                target = req_data.get("target")
+                if torrent_id:
+                    cmd = f"Đồng bộ torrent ID #{torrent_id} lên {target or 'kho lưu trữ'}"
+                else:
+                    return self._send_json({"success": False, "error": "Vui lòng nhập nội dung lệnh"}, status=400)
+            
+            item = agent_bridge.add_command(str(cmd).strip(), author="MediaHub UI")
             return self._send_json({"success": True, "command": item})
 
         # 4. API: Save Media Hub Settings (/api/settings)
