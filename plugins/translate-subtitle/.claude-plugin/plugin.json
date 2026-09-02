@@ -1,0 +1,20 @@
+{
+  "name": "translate-subtitle",
+  "description": "Dịch phụ đề phim tự động kết hợp xây dựng từ điển (glossary) bối cảnh, xưng hô, thuật ngữ.",
+  "version": "1.0.0",
+  "author": {
+    "name": "nchungdev",
+    "url": "https://github.com/nchungdev"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/nchungdev/agent-skills",
+  "repository": "https://github.com/nchungdev/agent-skills",
+  "keywords": [
+    "subtitle",
+    "translation",
+    "glossary",
+    "anime",
+    "srt",
+    "ass"
+  ]
+}

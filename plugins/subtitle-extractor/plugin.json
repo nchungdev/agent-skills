@@ -1,9 +1,0 @@
-{
-  "name": "subtitle-extractor",
-  "version": "1.0.0",
-  "description": "Tự động phát hiện và bóc tách các track phụ đề nhúng (Muxed Subtitles) từ file MKV/MP4 ra file SRT/ASS rời chuẩn hóa Plex.",
-  "author": "Antigravity Media Hub Team",
-  "skills": [
-    "skills/subtitle-extractor"
-  ]
-}

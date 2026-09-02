@@ -1,0 +1,20 @@
+{
+  "name": "media-downloader",
+  "description": "Bộ tải dữ liệu đa nguồn: Hỗ trợ Direct DDL link, Torrent qua Aria2c P2P, hoặc Torrent qua TorBox Debrid Cloud API.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Antigravity Media Hub Team",
+    "url": "https://github.com/nchungdev"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/nchungdev/agent-skills",
+  "repository": "https://github.com/nchungdev/agent-skills",
+  "keywords": [
+    "download",
+    "torrent",
+    "aria2",
+    "torbox",
+    "debrid",
+    "media"
+  ]
+}

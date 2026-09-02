@@ -1,9 +1,0 @@
-{
-  "name": "media-downloader",
-  "version": "1.0.0",
-  "description": "Bộ tải dữ liệu đa nguồn: Hỗ trợ Direct DDL link, Torrent qua Aria2c P2P, hoặc Torrent qua TorBox Debrid Cloud API.",
-  "author": "Antigravity Media Hub Team",
-  "skills": [
-    "skills/media-downloader"
-  ]
-}

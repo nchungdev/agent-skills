@@ -1,0 +1,20 @@
+{
+  "name": "media-sync",
+  "description": "Đồng bộ đa đích thông minh: Đẩy dữ liệu đồng thời lên NAS qua SSH/SFTP và Google Drive qua Rclone, kèm cơ chế giải phóng đệm tự động (Auto-Purge).",
+  "version": "1.0.0",
+  "author": {
+    "name": "Antigravity Media Hub Team",
+    "url": "https://github.com/nchungdev"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/nchungdev/agent-skills",
+  "repository": "https://github.com/nchungdev/agent-skills",
+  "keywords": [
+    "sync",
+    "rclone",
+    "ssh",
+    "sftp",
+    "nas",
+    "google-drive"
+  ]
+}

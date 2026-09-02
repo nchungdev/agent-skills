@@ -24,3 +24,59 @@ Kho lưu trữ chuẩn hóa các bộ kỹ năng (**Agent Skills & Plugins**) ch
 ---
 
 ### 📦 3. TIỆN ÍCH MỞ RỘNG KHÁC
+* **`subtitle-glossary-hub`** ([nchungdev/subtitle-glossary-hub](https://github.com/nchungdev/subtitle-glossary-hub)): Kho tri thức tập trung của `translate-subtitle` — glossary, workflow và pitfalls tái sử dụng vĩnh viễn. Skill tự kéo về khi cần, không cần cài riêng.
+
+---
+
+## 📥 Cài Đặt
+
+### Claude Code — cài qua marketplace
+
+```bash
+/plugin marketplace add nchungdev/agent-skills
+/plugin install media-hub@antigravity-media
+```
+
+Cài từng plugin theo nhu cầu (`media-downloader@antigravity-media`, `plex-librarian@antigravity-media`, ...), hoặc mở `/plugin` để duyệt toàn bộ 9 plugin trong marketplace `antigravity-media`.
+
+### Gemini CLI / Antigravity CLI / Codex CLI — cài qua `install.sh`
+
+Ba CLI này nạp **Agent Skills** từ thư mục phẳng, nên script sẽ symlink 9 skill vào đúng vị trí:
+
+```bash
+git clone https://github.com/nchungdev/agent-skills.git
+cd agent-skills
+./install.sh all          # cả ba CLI
+./install.sh codex        # hoặc chỉ một: gemini | antigravity | codex
+./install.sh all --copy   # sao chép thay vì symlink
+```
+
+| CLI | Thư mục đích |
+|---|---|
+| Gemini CLI | `~/.gemini/skills/` |
+| Antigravity CLI | `~/.agents/skills/` |
+| Codex CLI | `~/.codex/skills/` |
+
+Mặc định script tạo **symlink**, nên `git pull` trong repo là mọi CLI nhận bản mới ngay. Dùng `--force` để ghi đè skill trùng tên đã có.
+
+> **Lưu ý:** Codex CLI cũng tự đọc thư mục skill của Claude Code, nên nếu đã cài qua marketplace ở trên thì có thể bỏ qua bước này cho Codex.
+
+### Quy ước `<skill_dir>` trong các SKILL.md
+
+Lệnh CLI trong tài liệu skill viết dưới dạng `python3 <skill_dir>/scripts/...`. Thay `<skill_dir>` bằng đường dẫn thật của skill sau khi cài:
+
+| Môi trường | `<skill_dir>` |
+|---|---|
+| Claude Code | `${CLAUDE_PLUGIN_ROOT}/skills/<tên-skill>` |
+| Gemini / Antigravity / Codex | `~/.gemini/skills/<tên-skill>` (hoặc `~/.agents/skills/`, `~/.codex/skills/`) |
+| Chạy trực tiếp từ repo | `plugins/<tên-plugin>/skills/<tên-skill>` |
+
+### Yêu cầu hệ thống
+
+Toàn bộ script chỉ dùng **Python 3 standard library** (không cần `pip install`). Một số skill gọi công cụ ngoài khi thực thi: `ffmpeg`/`ffprobe` (subtitle-extractor, media-hub), `aria2c` (media-downloader, media-hub), `rclone` (media-sync, media-collector, media-hub), `rsync`/`ssh` (media-sync, plex-librarian, media-collector, media-hub) và `yt-dlp` (media-hub).
+
+---
+
+## 📄 Giấy Phép
+
+Phát hành theo giấy phép [MIT](LICENSE) — © 2026 Chung Nguyen Hoai (nchungdev).

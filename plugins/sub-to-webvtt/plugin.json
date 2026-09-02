@@ -1,9 +1,0 @@
-{
-  "name": "sub-to-webvtt",
-  "version": "1.0.0",
-  "description": "Chuyển đổi và tối ưu hóa phụ đề (SRT, ASS, SSA) sang chuẩn WebVTT (.vtt) tương thích 100% với HTML5 Web Video Stream, Plex, Safari và Chrome.",
-  "author": "Antigravity Media Hub Team",
-  "skills": [
-    "skills/sub-to-webvtt"
-  ]
-}

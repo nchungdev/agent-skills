@@ -1,0 +1,145 @@
+{
+  "name": "antigravity-media",
+  "owner": {
+    "name": "nchungdev",
+    "url": "https://github.com/nchungdev"
+  },
+  "description": "Bộ 9 Agent Skills cho hệ sinh thái Antigravity Media Hub: điều phối dashboard, tải đa nguồn (DDL/Torrent/TorBox), chuẩn hóa thư viện Plex & Jellyfin, đồng bộ NAS/Google Drive, tra cứu TMDb và toàn bộ pipeline xử lý phụ đề.",
+  "plugins": [
+    {
+      "name": "media-hub",
+      "source": "./plugins/media-hub",
+      "description": "Antigravity Real-Time Media Hub & Agent Command Center Dashboard. Provides a unified web interface to monitor active skills/pipelines, TorBox cloud caching, Google Drive streaming library, and interactive AI Agent dispatching.",
+      "version": "2.4.0",
+      "license": "MIT",
+      "keywords": [
+        "media",
+        "dashboard",
+        "plex",
+        "torbox",
+        "google-drive",
+        "orchestration"
+      ]
+    },
+    {
+      "name": "media-downloader",
+      "source": "./plugins/media-downloader",
+      "description": "Bộ tải dữ liệu đa nguồn: Hỗ trợ Direct DDL link, Torrent qua Aria2c P2P, hoặc Torrent qua TorBox Debrid Cloud API.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "download",
+        "torrent",
+        "aria2",
+        "torbox",
+        "debrid",
+        "media"
+      ]
+    },
+    {
+      "name": "plex-librarian",
+      "source": "./plugins/plex-librarian",
+      "description": "Quản lý và chuẩn hóa thư viện phim Plex/Jellyfin: Tự động nhận diện cấu trúc thư viện trên NAS qua SSH và Google Drive, chuẩn hóa tên file Season/Episode TVDB, và duyệt thư viện phim trực quan.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "plex",
+        "jellyfin",
+        "library",
+        "nas",
+        "tvdb",
+        "media"
+      ]
+    },
+    {
+      "name": "media-sync",
+      "source": "./plugins/media-sync",
+      "description": "Đồng bộ đa đích thông minh: Đẩy dữ liệu đồng thời lên NAS qua SSH/SFTP và Google Drive qua Rclone, kèm cơ chế giải phóng đệm tự động (Auto-Purge).",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "sync",
+        "rclone",
+        "ssh",
+        "sftp",
+        "nas",
+        "google-drive"
+      ]
+    },
+    {
+      "name": "media-collector",
+      "source": "./plugins/media-collector",
+      "description": "Universal Film, TV Show & Anime Curator Plugin with disk estimation, duplicate detection, cloud sync, NFO metadata, aria2c integration, resume/checkpoint, and translate-subtitle handoff.",
+      "version": "2.0.0",
+      "license": "MIT",
+      "keywords": [
+        "media",
+        "curation",
+        "torrent",
+        "anime",
+        "plex",
+        "metadata"
+      ]
+    },
+    {
+      "name": "tmdb-lookup",
+      "source": "./plugins/tmdb-lookup",
+      "description": "The Movie Database (TMDb) API Integration Skill for metadata resolution, character casting, artwork downloads, and NFO generation for Movies, TV Shows & Anime.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "tmdb",
+        "metadata",
+        "nfo",
+        "artwork",
+        "movies",
+        "tv"
+      ]
+    },
+    {
+      "name": "translate-subtitle",
+      "source": "./plugins/translate-subtitle",
+      "description": "Dịch phụ đề phim tự động kết hợp xây dựng từ điển (glossary) bối cảnh, xưng hô, thuật ngữ.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "subtitle",
+        "translation",
+        "glossary",
+        "anime",
+        "srt",
+        "ass"
+      ]
+    },
+    {
+      "name": "subtitle-extractor",
+      "source": "./plugins/subtitle-extractor",
+      "description": "Tự động phát hiện và bóc tách các track phụ đề nhúng (Muxed Subtitles) từ file MKV/MP4 ra file SRT/ASS rời chuẩn hóa Plex.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "subtitle",
+        "mkv",
+        "ffmpeg",
+        "extraction",
+        "srt",
+        "ass"
+      ]
+    },
+    {
+      "name": "sub-to-webvtt",
+      "source": "./plugins/sub-to-webvtt",
+      "description": "Chuyển đổi và tối ưu hóa phụ đề (SRT, ASS, SSA) sang chuẩn WebVTT (.vtt) tương thích 100% với HTML5 Web Video Stream, Plex, Safari và Chrome.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "subtitle",
+        "webvtt",
+        "vtt",
+        "streaming",
+        "html5",
+        "plex"
+      ]
+    }
+  ]
+}

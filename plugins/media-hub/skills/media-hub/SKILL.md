@@ -164,18 +164,18 @@ một chỗ thay vì mỗi skill tự đặt tên:
 
 ### 1. Khởi Chạy Mặc Định (Chế Độ Nội Bộ / Localhost):
 ```bash
-python3 /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/launcher.py
+python3 <skill_dir>/scripts/launcher.py
 # Hoặc:
-bash /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/launch_dashboard.sh
+bash <skill_dir>/scripts/launch_dashboard.sh
 ```
 * Dashboard khởi động ngay tại `http://127.0.0.1:8888` và IP mạng LAN nội bộ.
 
 ### 2. Mở Rộng Truy Cập Online Từ Xa (Tùy Chọn `--tunnel`):
 Khi muốn truy cập Dashboard từ điện thoại di động 4G/5G hoặc máy tính bên ngoài, thêm cờ `--tunnel` (hoặc `--public`):
 ```bash
-python3 /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/launcher.py --tunnel
+python3 <skill_dir>/scripts/launcher.py --tunnel
 # Hoặc:
-bash /path/to/agent-skills/plugins/media-hub/skills/media-hub/scripts/launch_dashboard.sh --tunnel
+bash <skill_dir>/scripts/launch_dashboard.sh --tunnel
 ```
 Script sẽ tự động tạo đường truyền **TryCloudflare** miễn phí, bắt link và in ngay ra màn hình cho người dùng:
 ```text
