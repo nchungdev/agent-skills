@@ -1,5 +1,6 @@
 {
   "name": "media-downloader",
+  "displayName": "Media Downloader",
   "description": "Bộ tải dữ liệu đa nguồn: Hỗ trợ Direct DDL link, Torrent qua Aria2c P2P, hoặc Torrent qua TorBox Debrid Cloud API.",
   "version": "1.0.0",
   "author": {

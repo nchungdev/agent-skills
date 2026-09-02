@@ -1,5 +1,6 @@
 {
   "name": "media-hub",
+  "displayName": "Media Hub",
   "description": "Antigravity Real-Time Media Hub & Agent Command Center Dashboard. Provides a unified web interface to monitor active skills/pipelines, TorBox cloud caching, Google Drive streaming library, and interactive AI Agent dispatching.",
   "version": "2.4.0",
   "author": {

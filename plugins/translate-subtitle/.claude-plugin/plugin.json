@@ -1,5 +1,6 @@
 {
   "name": "translate-subtitle",
+  "displayName": "Translate Subtitle",
   "description": "Dịch phụ đề phim tự động kết hợp xây dựng từ điển (glossary) bối cảnh, xưng hô, thuật ngữ.",
   "version": "1.0.0",
   "author": {

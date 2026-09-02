@@ -8,6 +8,7 @@
   "plugins": [
     {
       "name": "media-hub",
+      "displayName": "Media Hub",
       "source": "./plugins/media-hub",
       "description": "Antigravity Real-Time Media Hub & Agent Command Center Dashboard. Provides a unified web interface to monitor active skills/pipelines, TorBox cloud caching, Google Drive streaming library, and interactive AI Agent dispatching.",
       "version": "2.4.0",
@@ -23,6 +24,7 @@
     },
     {
       "name": "media-downloader",
+      "displayName": "Media Downloader",
       "source": "./plugins/media-downloader",
       "description": "Bộ tải dữ liệu đa nguồn: Hỗ trợ Direct DDL link, Torrent qua Aria2c P2P, hoặc Torrent qua TorBox Debrid Cloud API.",
       "version": "1.0.0",
@@ -38,6 +40,7 @@
     },
     {
       "name": "plex-librarian",
+      "displayName": "Plex Librarian",
       "source": "./plugins/plex-librarian",
       "description": "Quản lý và chuẩn hóa thư viện phim Plex/Jellyfin: Tự động nhận diện cấu trúc thư viện trên NAS qua SSH và Google Drive, chuẩn hóa tên file Season/Episode TVDB, và duyệt thư viện phim trực quan.",
       "version": "1.0.0",
@@ -53,6 +56,7 @@
     },
     {
       "name": "media-sync",
+      "displayName": "Media Sync",
       "source": "./plugins/media-sync",
       "description": "Đồng bộ đa đích thông minh: Đẩy dữ liệu đồng thời lên NAS qua SSH/SFTP và Google Drive qua Rclone, kèm cơ chế giải phóng đệm tự động (Auto-Purge).",
       "version": "1.0.0",
@@ -68,6 +72,7 @@
     },
     {
       "name": "media-collector",
+      "displayName": "Media Collector",
       "source": "./plugins/media-collector",
       "description": "Universal Film, TV Show & Anime Curator Plugin with disk estimation, duplicate detection, cloud sync, NFO metadata, aria2c integration, resume/checkpoint, and translate-subtitle handoff.",
       "version": "2.0.0",
@@ -83,6 +88,7 @@
     },
     {
       "name": "tmdb-lookup",
+      "displayName": "TMDb Lookup",
       "source": "./plugins/tmdb-lookup",
       "description": "The Movie Database (TMDb) API Integration Skill for metadata resolution, character casting, artwork downloads, and NFO generation for Movies, TV Shows & Anime.",
       "version": "1.0.0",
@@ -98,6 +104,7 @@
     },
     {
       "name": "translate-subtitle",
+      "displayName": "Translate Subtitle",
       "source": "./plugins/translate-subtitle",
       "description": "Dịch phụ đề phim tự động kết hợp xây dựng từ điển (glossary) bối cảnh, xưng hô, thuật ngữ.",
       "version": "1.0.0",
@@ -113,6 +120,7 @@
     },
     {
       "name": "subtitle-extractor",
+      "displayName": "Subtitle Extractor",
       "source": "./plugins/subtitle-extractor",
       "description": "Tự động phát hiện và bóc tách các track phụ đề nhúng (Muxed Subtitles) từ file MKV/MP4 ra file SRT/ASS rời chuẩn hóa Plex.",
       "version": "1.0.0",
@@ -128,6 +136,7 @@
     },
     {
       "name": "sub-to-webvtt",
+      "displayName": "Sub to WebVTT",
       "source": "./plugins/sub-to-webvtt",
       "description": "Chuyển đổi và tối ưu hóa phụ đề (SRT, ASS, SSA) sang chuẩn WebVTT (.vtt) tương thích 100% với HTML5 Web Video Stream, Plex, Safari và Chrome.",
       "version": "1.0.0",
