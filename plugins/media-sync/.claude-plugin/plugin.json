@@ -4,7 +4,7 @@
   "description": "Đồng bộ đa đích thông minh: Đẩy dữ liệu đồng thời lên NAS qua SSH/SFTP và Google Drive qua Rclone, kèm cơ chế giải phóng đệm tự động (Auto-Purge).",
   "version": "1.0.0",
   "author": {
-    "name": "Antigravity Media Hub Team",
+    "name": "nchungdev",
     "url": "https://github.com/nchungdev"
   },
   "license": "MIT",

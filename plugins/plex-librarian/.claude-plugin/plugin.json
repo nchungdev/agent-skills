@@ -4,7 +4,7 @@
   "description": "Quản lý và chuẩn hóa thư viện phim Plex/Jellyfin: Tự động nhận diện cấu trúc thư viện trên NAS qua SSH và Google Drive, chuẩn hóa tên file Season/Episode TVDB, và duyệt thư viện phim trực quan.",
   "version": "1.0.0",
   "author": {
-    "name": "Antigravity Media Hub Team",
+    "name": "nchungdev",
     "url": "https://github.com/nchungdev"
   },
   "license": "MIT",

@@ -4,7 +4,7 @@
   "description": "Chuyển đổi và tối ưu hóa phụ đề (SRT, ASS, SSA) sang chuẩn WebVTT (.vtt) tương thích 100% với HTML5 Web Video Stream, Plex, Safari và Chrome.",
   "version": "1.0.0",
   "author": {
-    "name": "Antigravity Media Hub Team",
+    "name": "nchungdev",
     "url": "https://github.com/nchungdev"
   },
   "license": "MIT",
