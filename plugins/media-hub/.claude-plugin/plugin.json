@@ -17,5 +17,9 @@
     "torbox",
     "google-drive",
     "orchestration"
+  ],
+  "dependencies": [
+    "subtitle-extractor",
+    "sub-to-webvtt"
   ]
 }

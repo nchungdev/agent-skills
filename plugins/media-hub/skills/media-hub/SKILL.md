@@ -160,6 +160,27 @@ một chỗ thay vì mỗi skill tự đặt tên:
 
 ---
 
+## 🔗 Phụ Thuộc Skill Anh Em
+
+`media-hub` gọi trực tiếp 2 skill qua `subprocess`, khai trong `dependencies`:
+
+| Endpoint | Skill cần có | Script |
+|---|---|---|
+| `/api/subtitles/extract` | `subtitle-extractor` | `extract_subtitles.py` |
+| `/api/subtitles/convert` | `sub-to-webvtt` | `convert_webvtt.py` |
+
+Hàm `sibling_skill_script()` dò script theo mọi bố cục cài đặt: checkout repo
+(`plugins/<p>/skills/<p>/scripts`), thư mục skill phẳng (`~/.gemini/skills/<p>/scripts`,
+`~/.codex/skills/<p>/scripts`), và symlink do `install.sh` tạo. Nếu skill nằm ở nơi khác,
+trỏ `MEDIA_HUB_SKILLS_PATH` (ngăn cách bằng `:`) tới thư mục chứa chúng. Thiếu skill thì
+riêng endpoint đó báo lỗi rõ ràng, phần còn lại của dashboard vẫn chạy bình thường.
+
+Các skill khác trong pipeline (`media-downloader`, `cloud-librarian`, `media-sync`,
+`tmdb-lookup`, `translate-subtitle`) không phải phụ thuộc cứng: `media-hub` tự thực hiện
+phần tải/đồng bộ của nó, việc nối chuỗi do agent điều phối.
+
+---
+
 ## 💻 Cách Khởi Chạy Dashboard
 
 ### 1. Khởi Chạy Mặc Định (Chế Độ Nội Bộ / Localhost):

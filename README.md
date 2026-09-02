@@ -39,6 +39,10 @@ Kho lưu trữ chuẩn hóa các bộ kỹ năng (**Agent Skills & Plugins**) ch
 
 Cài từng plugin theo nhu cầu (`media-downloader@antigravity-media`, `cloud-librarian@antigravity-media`, ...), hoặc mở `/plugin` để duyệt toàn bộ 9 plugin trong marketplace `antigravity-media`.
 
+**Về phụ thuộc giữa các plugin:** `media-hub` khai `dependencies` là `subtitle-extractor` và `sub-to-webvtt` — hai skill duy nhất nó gọi trực tiếp qua `subprocess` (endpoint `/api/subtitles/extract` và `/api/subtitles/convert`), nên Claude Code sẽ tự kéo về khi cài `media-hub`. Các skill còn lại trong pipeline (`media-downloader`, `cloud-librarian`, `media-sync`, `tmdb-lookup`, `translate-subtitle`) **không phải phụ thuộc cứng**: `media-hub` tự làm phần tải và đồng bộ của nó, agent mới là bên điều phối chuỗi. Cài thêm khi cần dùng đúng khâu đó.
+
+Nếu để skill anh em ở chỗ khác hẳn (không cùng thư mục cài), trỏ biến môi trường `MEDIA_HUB_SKILLS_PATH` tới thư mục chứa chúng, ngăn cách bằng `:` — `media-hub` sẽ dò theo đó trước.
+
 ### Gemini CLI / Antigravity CLI / Codex CLI — cài qua `install.sh`
 
 Ba CLI này nạp **Agent Skills** từ thư mục phẳng, nên script sẽ symlink 9 skill vào đúng vị trí:
