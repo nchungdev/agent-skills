@@ -1,0 +1,21 @@
+{
+  "name": "cloud-librarian",
+  "displayName": "Cloud Librarian",
+  "description": "Nhìn các kho lưu trữ từ xa như một thư viện media kiểu Plex: dò tìm thư mục thư viện Plex/Jellyfin trên NAS qua SSH để lấy đường dẫn đích cho media-sync, và sinh đường dẫn đặt tên chuẩn Plex/TheTVDB sau khi làm sạch tag rác của torrent.",
+  "version": "1.0.0",
+  "author": {
+    "name": "nchungdev",
+    "url": "https://github.com/nchungdev"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/nchungdev/agent-skills",
+  "repository": "https://github.com/nchungdev/agent-skills",
+  "keywords": [
+    "nas",
+    "ssh",
+    "plex",
+    "jellyfin",
+    "library",
+    "tvdb"
+  ]
+}

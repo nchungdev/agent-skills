@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Plex Librarian CLI
-Scans NAS & Google Drive, structures standard Plex/Jellyfin naming.
+Cloud Librarian CLI
+Scans remote storage (NAS over SSH) and builds standard Plex/Jellyfin paths.
 """
 
 import sys
@@ -13,7 +13,7 @@ from scanner.nas_scanner import scan_nas_ssh
 from scanner.naming_rule import format_plex_episode
 
 def main():
-    parser = argparse.ArgumentParser(description="Plex Librarian - Standard Library Structuring & Detection Engine.")
+    parser = argparse.ArgumentParser(description="Cloud Librarian - Remote library detection & Plex/Jellyfin path builder.")
     subparsers = parser.add_subparsers(dest="command", help="Lệnh thực hiện")
 
     # Command: scan-nas

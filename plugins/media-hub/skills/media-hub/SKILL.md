@@ -5,7 +5,7 @@ description: Trung tâm điều phối & Quản trị cấu hình / tài khoản
 
 # 🚀 Antigravity Media Hub & Centralized Configuration Hub
 
-Kỹ năng cốt lõi đóng vai trò là **Trung Tâm Điều Phối & Quản Trị Cấu Hình / Tài Khoản Tập Trung (Centralized Credential & Config Hub)** cho toàn bộ hệ sinh thái Media Skills (`media-downloader`, `plex-librarian`, `media-sync`, `tmdb-lookup`, `translate-subtitle`), đồng thời cung cấp giao diện Web thời gian thực (**Real-Time Dashboard cổng 8888**).
+Kỹ năng cốt lõi đóng vai trò là **Trung Tâm Điều Phối & Quản Trị Cấu Hình / Tài Khoản Tập Trung (Centralized Credential & Config Hub)** cho toàn bộ hệ sinh thái Media Skills (`media-downloader`, `cloud-librarian`, `media-sync`, `tmdb-lookup`, `translate-subtitle`), đồng thời cung cấp giao diện Web thời gian thực (**Real-Time Dashboard cổng 8888**).
 
 ---
 
@@ -15,8 +15,8 @@ Media Hub tự động quét, gộp và đồng bộ cấu hình từ **Biến m
 1. ⚡ **TorBox Token**: Dùng chung cho `media-downloader` và `torbox`.
 2. 🎬 **TMDb API Key**: Dùng chung cho `tmdb-lookup` và `media-collector`.
 3. 🌐 **Gemini API Key**: Dùng chung cho `translate-subtitle` và `ai-agent`.
-4. 🖥️ **NAS SSH Credentials**: Dùng chung cho `media-sync` và `plex-librarian` (tự động nhận diện thư mục Plex).
-5. ☁️ **Google Drive Rclone**: Dùng chung cho `media-sync` và `plex-librarian`.
+4. 🖥️ **NAS SSH Credentials**: Dùng chung cho `media-sync` và `cloud-librarian` (tự động nhận diện thư mục Plex).
+5. ☁️ **Google Drive Rclone**: Dùng chung cho `media-sync` và `cloud-librarian`.
 6. ⚙️ **Download & Sync Policy**: Tự động load lên UI và lưu trữ phản hồi tức thì qua REST API `/api/settings`.
 
 ---

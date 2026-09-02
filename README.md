@@ -9,7 +9,7 @@ Kho lưu trữ chuẩn hóa các bộ kỹ năng (**Agent Skills & Plugins**) ch
 ### 🚀 1. TẦNG QUY TRÌNH CHÍNH (CORE PIPELINE)
 * **`media-hub`**: Trung tâm điều phối & Quản trị cấu hình/tài khoản tập trung (Centralized Credential Hub), đồng thời là Dashboard Web UI thời gian thực cổng 8888 kết nối AI Command Center.
 * **`media-downloader`**: Bộ tải dữ liệu đa nguồn (Direct HTTP/DDL, Torrent qua Aria2c Client P2P, hoặc Torrent qua TorBox Debrid Cloud API).
-* **`plex-librarian`**: Quản lý & chuẩn hóa cấu trúc thư viện Plex/Jellyfin, tự động nhận diện thư mục lưu trữ qua SSH NAS và Google Drive.
+* **`cloud-librarian`**: Nhìn các kho lưu trữ từ xa (NAS qua SSH, Google Drive) như một thư viện kiểu Plex — dò tìm thư mục thư viện đích và sinh tên file chuẩn Plex/Jellyfin.
 * **`media-sync`**: Đồng bộ đa đích chuyên nghiệp qua Rclone và SSH/SFTP (hỗ trợ đẩy đồng thời lên NAS & Google Drive, kèm cơ chế Auto-Purge giải phóng 100% bộ đệm sau khi hoàn tất).
 
 ---
@@ -37,7 +37,7 @@ Kho lưu trữ chuẩn hóa các bộ kỹ năng (**Agent Skills & Plugins**) ch
 /plugin install media-hub@antigravity-media
 ```
 
-Cài từng plugin theo nhu cầu (`media-downloader@antigravity-media`, `plex-librarian@antigravity-media`, ...), hoặc mở `/plugin` để duyệt toàn bộ 9 plugin trong marketplace `antigravity-media`.
+Cài từng plugin theo nhu cầu (`media-downloader@antigravity-media`, `cloud-librarian@antigravity-media`, ...), hoặc mở `/plugin` để duyệt toàn bộ 9 plugin trong marketplace `antigravity-media`.
 
 ### Gemini CLI / Antigravity CLI / Codex CLI — cài qua `install.sh`
 
@@ -73,7 +73,7 @@ Lệnh CLI trong tài liệu skill viết dưới dạng `python3 <skill_dir>/sc
 
 ### Yêu cầu hệ thống
 
-Toàn bộ script chỉ dùng **Python 3 standard library** (không cần `pip install`). Một số skill gọi công cụ ngoài khi thực thi: `ffmpeg`/`ffprobe` (subtitle-extractor, media-hub), `aria2c` (media-downloader, media-hub), `rclone` (media-sync, media-collector, media-hub), `rsync`/`ssh` (media-sync, plex-librarian, media-collector, media-hub) và `yt-dlp` (media-hub).
+Toàn bộ script chỉ dùng **Python 3 standard library** (không cần `pip install`). Một số skill gọi công cụ ngoài khi thực thi: `ffmpeg`/`ffprobe` (subtitle-extractor, media-hub), `aria2c` (media-downloader, media-hub), `rclone` (media-sync, media-collector, media-hub), `rsync`/`ssh` (media-sync, cloud-librarian, media-collector, media-hub) và `yt-dlp` (media-hub).
 
 ---
 

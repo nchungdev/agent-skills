@@ -39,19 +39,19 @@
       ]
     },
     {
-      "name": "plex-librarian",
-      "displayName": "Plex Librarian",
-      "source": "./plugins/plex-librarian",
-      "description": "Quản lý và chuẩn hóa thư viện phim Plex/Jellyfin: Tự động nhận diện cấu trúc thư viện trên NAS qua SSH và Google Drive, chuẩn hóa tên file Season/Episode TVDB, và duyệt thư viện phim trực quan.",
+      "name": "cloud-librarian",
+      "displayName": "Cloud Librarian",
+      "source": "./plugins/cloud-librarian",
+      "description": "Nhìn các kho lưu trữ từ xa như một thư viện media kiểu Plex: dò tìm thư mục thư viện Plex/Jellyfin trên NAS qua SSH để lấy đường dẫn đích cho media-sync, và sinh đường dẫn đặt tên chuẩn Plex/TheTVDB sau khi làm sạch tag rác của torrent.",
       "version": "1.0.0",
       "license": "MIT",
       "keywords": [
+        "nas",
+        "ssh",
         "plex",
         "jellyfin",
         "library",
-        "nas",
-        "tvdb",
-        "media"
+        "tvdb"
       ]
     },
     {

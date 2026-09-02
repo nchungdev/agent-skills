@@ -168,7 +168,7 @@ output_for = title_dir
 
 
 # --- Plex/Jellyfin layout inside a title folder --------------------------------
-# Kept here so every skill derives the same paths. Previously only plex-librarian
+# Kept here so every skill derives the same paths. Previously only cloud-librarian
 # knew the convention, and each other skill invented its own destination — which is
 # how the NAS and Drive copies ended up with different layouts.
 
