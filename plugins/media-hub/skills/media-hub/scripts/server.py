@@ -8,6 +8,7 @@ Serves Web UI on port 8888 and provides REST APIs for live monitoring and comman
 import os
 import re
 import sys
+import glob
 import math
 import hmac
 import secrets
@@ -61,36 +62,44 @@ TEMPLATE_ROOTS = [
 ]
 
 def sibling_skill_script(plugin_name, script_name):
-    """Locate a script in a sibling skill. This used to assume the repo checkout
-    layout only (plugins/<p>/skills/<p>/scripts), so installing plugins one by one
-    from the marketplace, or flat into ~/.gemini/skills, always came up empty.
-    Try every layout, and let MEDIA_HUB_SKILLS_PATH override when a user keeps the
-    sibling skills somewhere else entirely."""
+    """Locate a script in a sibling skill. There is no single layout to assume:
+    a repo checkout nests plugins/<p>/skills/<p>/scripts, Gemini and Codex install
+    skills flat, and Claude Code installs each plugin under its own version
+    directory (<marketplace>/<p>/<version>/skills/<p>/scripts) — the version is why
+    walking a fixed number of parents finds nothing. Try each shape, and let
+    MEDIA_HUB_SKILLS_PATH override when the sibling skills live somewhere else."""
     rel = os.path.join("scripts", script_name)
-    candidates = []
+    patterns = []
 
     for extra in os.environ.get("MEDIA_HUB_SKILLS_PATH", "").split(os.pathsep):
         extra = extra.strip()
         if extra:
-            candidates.append(os.path.join(extra, plugin_name, rel))
-            candidates.append(os.path.join(extra, plugin_name, "skills", plugin_name, rel))
+            patterns.append(os.path.join(extra, plugin_name, rel))
+            patterns.append(os.path.join(extra, plugin_name, "skills", plugin_name, rel))
 
-    # realpath too: install.sh symlinks the skill dir, and the sibling skills sit
-    # next to the real directory, not next to the symlink.
+    # realpath too: install.sh symlinks the skill dir, and the siblings sit next to
+    # the real directory rather than next to the symlink.
     roots = []
     for skill_dir in (SKILL_DIR, os.path.realpath(SKILL_DIR)):
         if skill_dir not in roots:
             roots.append(skill_dir)
-    for skill_dir in roots:
-        plugins_root = os.path.dirname(os.path.dirname(os.path.dirname(skill_dir)))
-        # repo / marketplace: plugins/<p>/skills/<p>/scripts
-        candidates.append(os.path.join(plugins_root, plugin_name, "skills", plugin_name, rel))
-        # flat skill dirs: ~/.gemini/skills/<p>/scripts, ~/.codex/skills/<p>/scripts
-        candidates.append(os.path.join(os.path.dirname(skill_dir), plugin_name, rel))
 
-    for candidate in candidates:
-        if os.path.isfile(candidate):
-            return candidate
+    for skill_dir in roots:
+        skills_root = os.path.dirname(skill_dir)          # .../skills
+        plugin_root = os.path.dirname(skills_root)        # .../<plugin> or .../<version>
+        # flat skill dirs: ~/.gemini/skills/<p>/scripts, ~/.codex/skills/<p>/scripts
+        patterns.append(os.path.join(skills_root, plugin_name, rel))
+        # repo or marketplace checkout: plugins/<p>/skills/<p>/scripts
+        patterns.append(os.path.join(os.path.dirname(plugin_root), plugin_name, "skills", plugin_name, rel))
+        # Claude Code install cache: <marketplace>/<p>/<version>/skills/<p>/scripts
+        patterns.append(os.path.join(
+            os.path.dirname(os.path.dirname(plugin_root)), plugin_name, "*", "skills", plugin_name, rel))
+
+    for pattern in patterns:
+        # reverse sort so the highest-looking version wins when several are cached
+        for candidate in sorted(glob.glob(pattern), reverse=True):
+            if os.path.isfile(candidate):
+                return candidate
     return None
 
 

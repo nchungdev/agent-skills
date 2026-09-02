@@ -169,9 +169,12 @@ một chỗ thay vì mỗi skill tự đặt tên:
 | `/api/subtitles/extract` | `subtitle-extractor` | `extract_subtitles.py` |
 | `/api/subtitles/convert` | `sub-to-webvtt` | `convert_webvtt.py` |
 
-Hàm `sibling_skill_script()` dò script theo mọi bố cục cài đặt: checkout repo
-(`plugins/<p>/skills/<p>/scripts`), thư mục skill phẳng (`~/.gemini/skills/<p>/scripts`,
-`~/.codex/skills/<p>/scripts`), và symlink do `install.sh` tạo. Nếu skill nằm ở nơi khác,
+Hàm `sibling_skill_script()` dò script theo mọi bố cục cài đặt:
+
+* Checkout repo / clone marketplace: `plugins/<p>/skills/<p>/scripts`
+* Cache cài đặt của Claude Code: `<marketplace>/<p>/<version>/skills/<p>/scripts` (có thư mục version xen giữa)
+* Thư mục skill phẳng: `~/.gemini/skills/<p>/scripts`, `~/.codex/skills/<p>/scripts`
+* Symlink do `install.sh` tạo (dò thêm theo `realpath`) Nếu skill nằm ở nơi khác,
 trỏ `MEDIA_HUB_SKILLS_PATH` (ngăn cách bằng `:`) tới thư mục chứa chúng. Thiếu skill thì
 riêng endpoint đó báo lỗi rõ ràng, phần còn lại của dashboard vẫn chạy bình thường.
 
