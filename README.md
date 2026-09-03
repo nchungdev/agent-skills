@@ -1,13 +1,14 @@
 # 🪐 Antigravity Agent Skills & Media Ecosystem
 
-Kho lưu trữ chuẩn hóa các bộ kỹ năng (**Agent Skills & Plugins**) chuyên biệt cho hệ sinh thái **Antigravity Media Hub & AI Agent**.
+Kho lưu trữ chuẩn hóa bộ **8 Agent Skills & Plugins** chuyên biệt cho hệ sinh thái **AI Agent & Media Automation**.
+
+> 🚀 **Media Hub Standalone App**: Ứng dụng Desktop & Web Dashboard điều phối trung tâm đã được tách thành repository riêng biệt tại [**nchungdev/media-hub**](https://github.com/nchungdev/media-hub). Bộ kỹ năng trong repository này cung cấp toàn bộ năng lực AI Agent xử lý ngầm cho Media Hub.
 
 ---
 
-## 🏛️ Kiến Trúc Hệ Sinh Thái (Two-Tier Standard)
+## 🏛️ Danh Sách 8 Agent Skills
 
 ### 🚀 1. TẦNG QUY TRÌNH CHÍNH (CORE PIPELINE)
-* **`media-hub`**: Trung tâm điều phối & Quản trị cấu hình/tài khoản tập trung (Centralized Credential Hub), đồng thời là Dashboard Web UI thời gian thực cổng 8888 kết nối AI Command Center.
 * **`media-downloader`**: Bộ tải dữ liệu đa nguồn (Direct HTTP/DDL, Torrent qua Aria2c Client P2P, hoặc Torrent qua TorBox Debrid Cloud API).
 * **`cloud-librarian`**: Nhìn các kho lưu trữ từ xa (NAS qua SSH, Google Drive) như một thư viện kiểu Plex — dò tìm thư mục thư viện đích và sinh tên file chuẩn Plex/Jellyfin.
 * **`media-sync`**: Đồng bộ đa đích chuyên nghiệp qua Rclone và SSH/SFTP (hỗ trợ đẩy đồng thời lên NAS & Google Drive, kèm cơ chế Auto-Purge giải phóng 100% bộ đệm sau khi hoàn tất).
@@ -23,8 +24,9 @@ Kho lưu trữ chuẩn hóa các bộ kỹ năng (**Agent Skills & Plugins**) ch
 
 ---
 
-### 📦 3. TIỆN ÍCH MỞ RỘNG KHÁC
-* **`subtitle-glossary-hub`** ([nchungdev/subtitle-glossary-hub](https://github.com/nchungdev/subtitle-glossary-hub)): Kho tri thức tập trung của `translate-subtitle` — glossary, workflow và pitfalls tái sử dụng vĩnh viễn. Skill tự kéo về khi cần, không cần cài riêng.
+### 📦 3. HỆ SINH THÁI LIÊN KẾT (RELATED REPOSITORIES)
+* 🪐 [**nchungdev/media-hub**](https://github.com/nchungdev/media-hub): Ứng dụng Desktop Native Electron & Web Dashboard điều phối tập trung, quản lý hàng đợi, Subtitle Studio và giám sát CLI Console realtime.
+* 📚 [**nchungdev/subtitle-glossary-hub**](https://github.com/nchungdev/subtitle-glossary-hub): Kho tri thức tập trung của `translate-subtitle` — glossary, workflow và quy chuẩn thuật ngữ phim/anime tái sử dụng vĩnh viễn.
 
 ---
 
@@ -34,24 +36,20 @@ Kho lưu trữ chuẩn hóa các bộ kỹ năng (**Agent Skills & Plugins**) ch
 
 ```bash
 /plugin marketplace add nchungdev/agent-skills
-/plugin install media-hub@antigravity-media
+/plugin install translate-subtitle@antigravity-media
 ```
 
-Cài từng plugin theo nhu cầu (`media-downloader@antigravity-media`, `cloud-librarian@antigravity-media`, ...), hoặc mở `/plugin` để duyệt toàn bộ 9 plugin trong marketplace `antigravity-media`.
-
-**Về phụ thuộc giữa các plugin:** `media-hub` khai `dependencies` là `subtitle-extractor` và `sub-to-webvtt` — hai skill duy nhất nó gọi trực tiếp qua `subprocess` (endpoint `/api/subtitles/extract` và `/api/subtitles/convert`), nên Claude Code sẽ tự kéo về khi cài `media-hub`. Các skill còn lại trong pipeline (`media-downloader`, `cloud-librarian`, `media-sync`, `tmdb-lookup`, `translate-subtitle`) **không phải phụ thuộc cứng**: `media-hub` tự làm phần tải và đồng bộ của nó, agent mới là bên điều phối chuỗi. Cài thêm khi cần dùng đúng khâu đó.
-
-Nếu để skill anh em ở chỗ khác hẳn (không cùng thư mục cài), trỏ biến môi trường `MEDIA_HUB_SKILLS_PATH` tới thư mục chứa chúng, ngăn cách bằng `:` — `media-hub` sẽ dò theo đó trước.
+Cài từng plugin theo nhu cầu (`media-downloader@antigravity-media`, `cloud-librarian@antigravity-media`, ...), hoặc mở `/plugin` để duyệt toàn bộ 8 plugin trong marketplace `antigravity-media`.
 
 ### Gemini CLI / Antigravity CLI / Codex CLI — cài qua `install.sh`
 
-Ba CLI này nạp **Agent Skills** từ thư mục phẳng, nên script sẽ symlink 9 skill vào đúng vị trí:
+Ba CLI này nạp **Agent Skills** từ thư mục phẳng, script sẽ symlink 8 skill vào đúng vị trí:
 
 ```bash
 git clone https://github.com/nchungdev/agent-skills.git
 cd agent-skills
 ./install.sh all          # cả ba CLI
-./install.sh codex        # hoặc chỉ một: gemini | antigravity | codex
+./install.sh antigravity  # hoặc chỉ một: gemini | antigravity | codex
 ./install.sh all --copy   # sao chép thay vì symlink
 ```
 
@@ -62,8 +60,6 @@ cd agent-skills
 | Codex CLI | `~/.codex/skills/` |
 
 Mặc định script tạo **symlink**, nên `git pull` trong repo là mọi CLI nhận bản mới ngay. Dùng `--force` để ghi đè skill trùng tên đã có.
-
-> **Lưu ý:** Codex CLI cũng tự đọc thư mục skill của Claude Code, nên nếu đã cài qua marketplace ở trên thì có thể bỏ qua bước này cho Codex.
 
 ### Quy ước `<skill_dir>` trong các SKILL.md
 
@@ -77,7 +73,7 @@ Lệnh CLI trong tài liệu skill viết dưới dạng `python3 <skill_dir>/sc
 
 ### Yêu cầu hệ thống
 
-Toàn bộ script chỉ dùng **Python 3 standard library** (không cần `pip install`). Một số skill gọi công cụ ngoài khi thực thi: `ffmpeg`/`ffprobe` (subtitle-extractor, media-hub), `aria2c` (media-downloader, media-hub), `rclone` (media-sync, media-collector, media-hub), `rsync`/`ssh` (media-sync, cloud-librarian, media-collector, media-hub) và `yt-dlp` (media-hub).
+Toàn bộ script chỉ dùng **Python 3 standard library** (không cần `pip install`). Một số skill gọi công cụ ngoài khi thực thi: `ffmpeg`/`ffprobe` (subtitle-extractor), `aria2c` (media-downloader), `rclone` (media-sync, media-collector), `rsync`/`ssh` (media-sync, cloud-librarian, media-collector).
 
 ---
 

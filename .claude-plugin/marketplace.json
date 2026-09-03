@@ -4,24 +4,8 @@
     "name": "nchungdev",
     "url": "https://github.com/nchungdev"
   },
-  "description": "Bộ 9 Agent Skills cho hệ sinh thái Antigravity Media Hub: điều phối dashboard, tải đa nguồn (DDL/Torrent/TorBox), chuẩn hóa thư viện Plex & Jellyfin, đồng bộ NAS/Google Drive, tra cứu TMDb và toàn bộ pipeline xử lý phụ đề.",
+  "description": "Bộ 8 Agent Skills chuyên sâu cho hệ sinh thái Media AI: tải đa nguồn (DDL/Torrent/TorBox), chuẩn hóa thư viện Plex & Jellyfin, đồng bộ NAS/Google Drive, tra cứu TMDb và pipeline dịch thuật & xử lý phụ đề. Đồng hành cùng ứng dụng Media Hub (https://github.com/nchungdev/media-hub).",
   "plugins": [
-    {
-      "name": "media-hub",
-      "displayName": "Media Hub",
-      "source": "./plugins/media-hub",
-      "description": "Antigravity Real-Time Media Hub & Agent Command Center Dashboard. Provides a unified web interface to monitor active skills/pipelines, TorBox cloud caching, Google Drive streaming library, and interactive AI Agent dispatching.",
-      "version": "2.4.0",
-      "license": "MIT",
-      "keywords": [
-        "media",
-        "dashboard",
-        "plex",
-        "torbox",
-        "google-drive",
-        "orchestration"
-      ]
-    },
     {
       "name": "media-downloader",
       "displayName": "Media Downloader",

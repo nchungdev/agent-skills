@@ -48,6 +48,24 @@ translate-subtitle <tên_phim/tmdbid/tvdbid> <đường_dẫn_subtitle> <ngôn_n
 
 ---
 
+## ⚡ QUY TẮC PHÂN BATCH & THỰC THI NỀN TUẦN TỰ (BATCHING & SEQUENTIAL EXECUTION)
+
+Nhằm đảm bảo tính ổn định, kiểm soát hạn mức quota API (tránh lỗi `429 / RESOURCE_EXHAUSTED`) và duy trì chất lượng dịch thuật cao nhất:
+
+1. **Giới Hạn Kích Thước Batch**:
+   - Mỗi batch chỉ dịch **tối đa 5 file / 5 tập** (`MAX_FILES_PER_BATCH = 5`).
+2. **Bắt Buộc Chuyển Sang Tác Vụ Ngầm Khi > 1 File**:
+   - Nếu yêu cầu dịch từ 2 file trở lên (hoặc dịch trọn bộ/mùa phim), **Agent bắt buộc phải chuyển sang tác vụ ngầm (Background Task / Subagent)** thay vì xử lý chặn giao diện chính.
+3. **Thực Thi Tuần Tự Từng Batch (Sequential Batch Execution)**:
+   - Các batch phải được thực thi **tuần tự lần lượt (Batch 1 xong ➔ mới chạy Batch 2 ➔ Batch 3...)**.
+   - **Tuyệt đối KHÔNG khởi chạy ồ ạt nhiều batch song song cùng một lúc** để chống tràn bộ nhớ và bảo vệ quota API.
+4. **Quy Trình Hoàn Tất Mỗi Batch**:
+   - Xuất đủ 3 định dạng phụ đề: `.vi.ass` (Styling), `.vi.srt` (Chuẩn), `.vi.vtt` (WebVTT qua skill `sub-to-webvtt`).
+   - Cập nhật checklist tiến độ vào `PROGRESS.md` và kiểm định kỹ thuật vào `AUDIT_REPORT.md`.
+   - Tự động kích hoạt đồng bộ cuốn chiếu các file đã dịch sang NAS Storage và Google Drive.
+
+---
+
 ## 🏛️ PHÂN ĐỊNH CHI TIẾT 2 TẦNG
 
 ### 1. TẦNG RIÊNG (LOCAL PROJECT WORKSPACE):
@@ -65,3 +83,5 @@ translate-subtitle <tên_phim/tmdbid/tvdbid> <đường_dẫn_subtitle> <ngôn_n
 * 📋 **`WORKFLOW.md`:** Cẩm nang phương pháp dịch và bối cảnh đặc thù để người dịch sau tiếp nối nhất quán.
 * 🚨 **`ERRORS_AND_PITFALLS.md`:** Nhật ký các cạm bẫy lỗi đã trả giá và phương án sửa để tránh lặp lại.
 * 🏷️ **`metadata.json`:** Thông tin định danh TheTVDB `{tvdb-ID}` và TMDb `{tmdb-ID}`.
+
+

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Cài 9 Agent Skills của repo này vào Gemini CLI / Antigravity / Codex CLI.
+# Cài 8 Agent Skills của repo này vào Gemini CLI / Antigravity / Codex CLI.
 # Claude Code KHÔNG dùng script này — xem README (/plugin marketplace add).
 set -euo pipefail
 
