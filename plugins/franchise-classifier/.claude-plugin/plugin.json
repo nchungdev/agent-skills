@@ -1,0 +1,21 @@
+{
+  "name": "franchise-classifier",
+  "displayName": "Franchise Classifier",
+  "description": "Gom nhóm phim lẻ & series thành franchise (vũ trụ chung) từ TMDb ID / TheTVDB ID, dùng TMDb Collection cho phim lẻ và suy luận AI + tra cứu web cho series (TMDb/TVDB không có khái niệm collection cho series).",
+  "version": "1.0.0",
+  "author": {
+    "name": "nchungdev",
+    "url": "https://github.com/nchungdev"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/nchungdev/agent-skills",
+  "repository": "https://github.com/nchungdev/agent-skills",
+  "keywords": [
+    "franchise",
+    "tmdb",
+    "tvdb",
+    "collection",
+    "media-hub",
+    "classification"
+  ]
+}
