@@ -36,8 +36,31 @@ Ví dụ: các phim của đạo diễn **Makoto Shinkai** (*5 Centimet Trên Gi
 
 **Cách đặt tên**: dùng đúng tên đạo diễn/tác giả, có thể thêm hậu tố rõ nghĩa để phân biệt với franchise-IP, ví dụ **"Makoto Shinkai Collection"** hoặc **"Đạo diễn Makoto Shinkai"** — nhất quán một kiểu trong toàn bộ output, không trộn lẫn 2 cách đặt tên cho cùng 1 tác giả giữa các lần gọi khác nhau (nếu caller đã cache tên cũ, giữ nguyên format đó).
 
+### 🏛️ Loại thứ 3: Franchise theo Hãng Phim/Studio (Studio Collection)
+
+Loại này rút ra từ dữ liệu thật: một thư viện có **17 phim Studio Ghibli** (*Vùng Đất Linh Hồn*, *Totoro*, *Mononoke*, *Howl*, *Kiki*, *Mộ Đom Đóm*, *Chỉ Còn Ngày Hôm Qua*, *Marnie*, *Arrietty*, *Kaguya*...) nằm rải rác thành 17 nhóm độc lập vì:
+- Chúng **không chia sẻ IP/nhân vật/cốt truyện** nào → không phải franchise loại 1.
+- Chúng **KHÔNG cùng một đạo diễn** → cũng không phải Auteur Collection loại 2. Miyazaki Hayao đạo diễn phần lớn, nhưng Takahata Isao đạo diễn *Mộ Đom Đóm*/*Chỉ Còn Ngày Hôm Qua*/*Gia Đình Nhà Yamada*, Yonebayashi Hiromasa đạo diễn *Marnie*/*Arrietty*.
+
+Nhưng ai cũng gom chúng lại thành "phim Ghibli" — vì thương hiệu **hãng sản xuất** đủ mạnh để bản thân nó là một bộ sưu tập. Đây là loại thứ 3: **cùng một studio/hãng phim có bản sắc thương hiệu rõ rệt**.
+
+**Cách nhận diện**: 2+ title không có quan hệ IP (loại 1) lẫn không cùng đạo diễn (loại 2), NHƯNG cùng một studio mà studio đó nổi tiếng đến mức khán giả sưu tầm theo hãng — điển hình: Studio Ghibli, Pixar, Aardman, Kyoto Animation, Disney Animated Classics. **KHÔNG** áp dụng cho hãng phát hành đại trà không mang bản sắc tuyển tập (Warner Bros., Universal, Netflix... — gom theo mấy hãng này là vô nghĩa vì gần như phim nào cũng thuộc một hãng lớn nào đó).
+
+**Cách đặt tên**: dùng đúng tên studio, ví dụ **"Studio Ghibli"**, **"Pixar"**.
+
 > [!IMPORTANT]
-> Đây KHÔNG phải là gán thể loại (genre) hay độ nổi tiếng. Franchise chỉ được gom khi có **MỘT trong hai** loại quan hệ thật: (1) **quan hệ thương hiệu/IP**: sequel, prequel, spin-off, reboot, chuyển thể (anime ↔ live-action), các mùa/season khác nhau của cùng gốc, hoặc chính thức cùng chia sẻ nhân vật/thế giới truyện gốc; HOẶC (2) **cùng đạo diễn/tác giả** đủ nổi bật (xem mục Auteur Collection ở trên). Không suy đoán bừa — thà để một title đứng độc lập còn hơn gom sai.
+> Đây KHÔNG phải là gán thể loại (genre) hay độ nổi tiếng. Franchise chỉ được gom khi có **MỘT trong ba** loại quan hệ thật:
+> 1. **Quan hệ thương hiệu/IP**: sequel, prequel, spin-off, reboot, chuyển thể (anime ↔ live-action), các mùa/season khác nhau của cùng gốc, hoặc chính thức cùng chia sẻ nhân vật/thế giới truyện gốc.
+> 2. **Cùng đạo diễn/tác giả** đủ nổi bật (Auteur Collection).
+> 3. **Cùng hãng phim/studio** có bản sắc tuyển tập rõ rệt (Studio Collection).
+>
+> Thứ tự ưu tiên khi một title thoả nhiều loại: (1) > (2) > (3) — vd một phim Ghibli thuộc series *Totoro* thì xếp vào franchise IP "Totoro" trước, không xếp thẳng vào "Studio Ghibli". Không suy đoán bừa — thà để một title đứng độc lập còn hơn gom sai.
+
+### 🔁 Luôn đối chiếu với franchise ĐÃ TỒN TẠI trước khi kết luận độc lập
+
+Rút ra từ dữ liệu thật: rất nhiều title bị bỏ sót chỉ vì **tên khác ngôn ngữ** so với franchise đã có sẵn trong thư viện — 8 phim *"One Piece: Episode of..."* đứng lẻ trong khi franchise *"Loạt phim Đảo Hải Tặc"* (15 title) đã tồn tại; *"Thor: Truyền Thuyết Về Asgard"* đứng lẻ trong khi franchise *"Thor"* đã có; hàng loạt *"Kindaichi Case Files"* / *"The Files of Young Kindaichi"* / *"Thám tử Kindaichi"* nằm rời nhau. So khớp chuỗi thuần **không bao giờ** bắt được các trường hợp này.
+
+**Quy tắc**: nếu caller cung cấp danh sách franchise đã tồn tại (mục `existing_franchises` trong Input), thì với MỖI title, luôn kiểm tra "nó có thuộc về một franchise nào trong danh sách đó không" — kể cả khi tên hoàn toàn khác ngôn ngữ — TRƯỚC khi kết luận độc lập hay đặt tên franchise mới. Khi khớp, trả về **chính xác tên franchise cũ** (copy y nguyên), không tự đặt tên biến thể mới, để không tạo thêm nhóm trùng nghĩa.
 
 ---
 
@@ -57,6 +80,16 @@ Một danh sách title, mỗi phần tử cần **ít nhất một trong hai ID*
 - `type`: `"movie"` hoặc `"tv"`. Nếu không chắc, để trống — bước 1 sẽ tự xác định qua `find`.
 - `ref` (tuỳ chọn nhưng **khuyến nghị mạnh** khi gọi từ chương trình khác, vd media-hub): chuỗi định danh do caller tự đặt, skill không đọc/diễn giải giá trị này — chỉ **echo nguyên văn** lại trên item tương ứng trong Output. Giúp caller map kết quả về đúng bản ghi nội bộ (vd `root_key` union-find) mà không cần tự suy luận ngược từ tmdb_id/tvdb_id trả về, tránh sai lệch khi một title có cả hai ID nhưng response chỉ mang một loại.
 - Có thể truyền thêm `title` thô (tên thư mục cục bộ, tên đã biết...) nếu có — dùng để đối chiếu/gỡ rối khi tra cứu ra kết quả mơ hồ, nhưng **ID luôn là nguồn sự thật**, không tin tên thư mục.
+- `existing_franchises` (tuỳ chọn nhưng **rất nên truyền**): danh sách tên các franchise ĐÃ TỒN TẠI trong thư viện của caller. Truyền kèm ở cấp ngoài cùng, song song với mảng title:
+
+```json
+{
+  "existing_franchises": ["Loạt phim Đảo Hải Tặc", "Thor", "Thám Tử Lừng Danh Conan"],
+  "items": [ { "ref": "tmdb-...", "tmdb_id": 123, "type": "movie" } ]
+}
+```
+
+  Skill BẮT BUỘC đối chiếu mỗi title với danh sách này trước khi kết luận độc lập (xem mục "Luôn đối chiếu với franchise ĐÃ TỒN TẠI" ở trên) và **copy y nguyên tên cũ** khi khớp.
 
 ## 📤 Output
 

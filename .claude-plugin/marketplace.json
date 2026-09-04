@@ -90,8 +90,8 @@
       "name": "franchise-classifier",
       "displayName": "Franchise Classifier",
       "source": "./plugins/franchise-classifier",
-      "description": "Gom nhóm phim lẻ, series, anime, live-action thành franchise (thương hiệu/IP tổng thể) từ TMDb ID / TheTVDB ID. TMDb Collection chỉ là một tín hiệu hẹp hơn franchise nhiều -- một franchise có thể trải dài nhiều Collection cộng cả series/anime không Collection nào có. Dùng AI + tra cứu web để gom xuyên suốt mọi hình thức.",
-      "version": "2.1.0",
+      "description": "Gom nhóm phim lẻ, series, anime, live-action thành franchise từ TMDb ID / TheTVDB ID. Hỗ trợ 3 loại franchise: (1) thương hiệu/IP tổng thể -- TMDb Collection chỉ là một tín hiệu hẹp hơn nhiều; (2) Auteur Collection -- cùng đạo diễn/tác giả; (3) Studio Collection -- cùng hãng phim có bản sắc tuyển tập (vd Studio Ghibli, nhiều đạo diễn khác nhau). Luôn đối chiếu với danh sách franchise đã tồn tại của caller trước khi kết luận độc lập, để không tạo nhóm trùng nghĩa khác ngôn ngữ.",
+      "version": "2.2.0",
       "license": "MIT",
       "keywords": [
         "franchise",
