@@ -18,7 +18,7 @@ Kho lưu trữ chuẩn hóa bộ **9 Agent Skills & Plugins** chuyên biệt cho
 ### 🧰 2. TẦNG HỘP CÔNG CỤ (MEDIA TOOLBOX & UTILITIES)
 * **`media-collector`**: Sưu tầm, tìm nguồn torrent/magnet, lập Census bản quyền và ước tính dung lượng.
 * **`tmdb-lookup`**: Tra cứu siêu dữ liệu The Movie Database (TMDb v3), tải Poster/Fanart HD và tạo file NFO chuẩn.
-* **`franchise-classifier`**: Gom nhóm phim lẻ & series thành franchise (vũ trụ chung) từ TMDb ID/TheTVDB ID — dùng TMDb Collection cho phim lẻ, suy luận AI + tra cứu web cho series (TMDb/TVDB không có "collection" cho series).
+* **`franchise-classifier`**: Gom nhóm phim lẻ, series, anime, live-action thành franchise (thương hiệu/IP tổng thể) từ TMDb ID/TheTVDB ID — TMDb Collection chỉ là một tín hiệu hẹp hơn franchise nhiều, dùng AI + tra cứu web để gom xuyên suốt mọi hình thức.
 * **`translate-subtitle`**: Động cơ dịch thuật phụ đề 2 tầng chuyên sâu cho phim và anime (kèm `subtitle-glossary-hub`).
 * **`subtitle-extractor`**: Bóc tách phụ đề nhúng (Muxed Subtitles) từ video container (MKV, MP4, M4V) ra file `.srt`, `.ass`.
 * **`sub-to-webvtt`**: Chuyển đổi và làm sạch phụ đề sang chuẩn WebVTT (`.vtt`) tối ưu phát trực tuyến trên trình duyệt.

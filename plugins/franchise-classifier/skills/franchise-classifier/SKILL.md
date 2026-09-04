@@ -1,14 +1,33 @@
 ---
 name: franchise-classifier
-description: Gom nhóm một danh sách phim lẻ & series (nhận diện qua TMDb ID / TheTVDB ID / IMDb ID) thành các franchise (vũ trụ chung) — ví dụ "Bảy Viên Ngọc Rồng"/"GT"/"Kai" cùng một franchise, các mùa Super Sentai khác nhau cùng một franchise. Ưu tiên TMDb Collection có sẵn cho phim lẻ; nếu phim chưa được TMDb gắn Collection thì tra web tìm franchise rồi tìm ngược trên TMDb xem Collection đã tồn tại chưa (gán lại nếu có, tự tạo nhóm cục bộ nếu chưa); với series (TMDb/TVDB không có "collection" cho series) luôn suy luận AI + tra cứu web. Trả về franchise name + danh sách phim/series thuộc franchise đó.
+description: Gom nhóm một danh sách phim lẻ, series, anime, live-action (nhận diện qua TMDb ID / TheTVDB ID / IMDb ID) thành các franchise — thương hiệu/IP tổng thể, không phải TMDb Collection (Collection chỉ là MỘT tín hiệu, hẹp hơn franchise nhiều). Ví dụ franchise "Spider-Man" gồm cả 3 bộ ba phim live-action KHÁC TMDb Collection lẫn phim hoạt hình Spider-Verse; franchise "Dragon Ball" gồm cả anime (Dragon Ball/Z/GT/Kai/Super) lẫn phim live-action "Dragonball Evolution". Dùng AI suy luận + tra cứu web để gom xuyên suốt mọi hình thức (movie/series/anime/live-action), không chỉ dựa vào Collection có sẵn. Trả về franchise name + danh sách toàn bộ nội dung thuộc franchise đó.
 ---
 
-# Franchise Classifier Skill (Gom Nhóm Vũ Trụ Phim & Series)
+# Franchise Classifier Skill (Gom Nhóm Thương Hiệu/IP Xuyên Suốt Mọi Hình Thức)
 
-Kỹ năng nhận một danh sách title (phim lẻ hoặc series, nhận diện qua **TMDb ID** và/hoặc **TheTVDB ID**), tra cứu metadata thật qua skill `tmdb-lookup`, rồi gom chúng thành các nhóm **franchise** (vũ trụ chung) — dùng cho việc tổ chức thư viện kiểu Plex/Jellyfin theo "một franchise = một thư mục cha".
+Kỹ năng nhận một danh sách title (phim lẻ, series, anime, live-action — nhận diện qua **TMDb ID** và/hoặc **TheTVDB ID**), tra cứu metadata thật qua skill `tmdb-lookup`, rồi gom chúng thành các nhóm **franchise** (thương hiệu/IP tổng thể) — dùng cho việc tổ chức thư viện kiểu Plex/Jellyfin theo "một franchise = một thư mục cha".
+
+## 🧭 Franchise Là Gì?
 
 > [!IMPORTANT]
-> Đây KHÔNG phải là gán thể loại (genre) hay độ nổi tiếng. Franchise chỉ được gom khi có **quan hệ thật** giữa các title: sequel, prequel, spin-off, reboot, các mùa/season khác nhau của cùng một series, hoặc cùng chia sẻ nhân vật/thế giới truyện chính thức. Không suy đoán bừa — thà để một title đứng độc lập còn hơn gom sai.
+> **Franchise = thương hiệu/IP tổng thể**, cái tên chung mà khán giả bình thường gọi khi nhắc tới cả một "vũ trụ" tác phẩm — bất kể có bao nhiêu đạo diễn, dàn diễn viên, mốc thời gian, reboot, hay hình thức thể hiện (anime, live-action, phim lẻ, series, OVA, phim chuyển thể...) khác nhau. Ví dụ: "Batman", "Spider-Man", "Dragon Ball", "Fast & Furious", "Godzilla".
+
+### ⚠️ TMDb Collection KHÔNG PHẢI là Franchise — chỉ là một tín hiệu hẹp hơn nhiều
+
+TMDb Collection chỉ gom các phim **cùng một mạch truyện liên tục** (thường là một bộ ba/series sequel trực tiếp do cùng ê-kíp), **không** gom xuyên suốt cả thương hiệu. Một franchise thật sự thường trải dài trên **NHIỀU** TMDb Collection khác nhau, cộng thêm cả series/anime hoàn toàn không có khái niệm Collection.
+
+Ví dụ franchise **Spider-Man** nằm rải trong ít nhất 4 TMDb Collection riêng biệt cộng thêm series/anime không TMDb Collection nào bao trùm hết:
+- *Sam Raimi's Spider-Man Trilogy* (Collection A — 3 phim)
+- *The Amazing Spider-Man Collection* (Collection B — 2 phim)
+- *Spider-Man (MCU) Collection* (Collection C)
+- *Spider-Man: Into/Across the Spider-Verse Collection* (Collection D — hoạt hình)
+
+Ví dụ franchise **Dragon Ball** còn rõ hơn: anime (Dragon Ball, Z, GT, Kai, Super — series, TMDb không có Collection cho series) + phim live-action *Dragonball Evolution* (2009, một phim lẻ độc lập, KHÔNG nằm trong Collection nào vì không có sequel) — tất cả đều thuộc CÙNG MỘT franchise "Dragon Ball" dù không có bất kỳ TMDb Collection nào gom đủ cả.
+
+**Hệ quả**: skill này KHÔNG được lấy thẳng `collection.name` làm tên franchise rồi dừng lại. TMDb Collection chỉ là một **bằng chứng đầu vào** cho bước suy luận — luôn phải hỏi tiếp "có nội dung nào khác (hình thức khác, Collection khác) cùng thương hiệu này không?" trước khi chốt tên và thành viên franchise.
+
+> [!IMPORTANT]
+> Đây KHÔNG phải là gán thể loại (genre) hay độ nổi tiếng. Franchise chỉ được gom khi có **quan hệ thương hiệu/IP thật**: sequel, prequel, spin-off, reboot, chuyển thể (anime ↔ live-action), các mùa/season khác nhau của cùng gốc, hoặc chính thức cùng chia sẻ nhân vật/thế giới truyện gốc. Không suy đoán bừa — thà để một title đứng độc lập còn hơn gom sai.
 
 ---
 
@@ -26,7 +45,7 @@ Một danh sách title, mỗi phần tử cần **ít nhất một trong hai ID*
 ```
 
 - `type`: `"movie"` hoặc `"tv"`. Nếu không chắc, để trống — bước 1 sẽ tự xác định qua `find`.
-- `ref` (tuỳ chọn nhưng **khuyến nghị mạnh** khi gọi từ chương trình khác, vd media-hub): chuỗi định danh do caller tự đặt, skill không đọc/diễn giải giá trị này — chỉ **echo nguyên văn** lại trên item tương ứng trong Output (mục Bước 4). Giúp caller map kết quả về đúng bản ghi nội bộ (vd `root_key` union-find) mà không cần tự suy luận ngược từ tmdb_id/tvdb_id trả về, tránh sai lệch khi một title có cả hai ID nhưng response chỉ mang một loại.
+- `ref` (tuỳ chọn nhưng **khuyến nghị mạnh** khi gọi từ chương trình khác, vd media-hub): chuỗi định danh do caller tự đặt, skill không đọc/diễn giải giá trị này — chỉ **echo nguyên văn** lại trên item tương ứng trong Output. Giúp caller map kết quả về đúng bản ghi nội bộ (vd `root_key` union-find) mà không cần tự suy luận ngược từ tmdb_id/tvdb_id trả về, tránh sai lệch khi một title có cả hai ID nhưng response chỉ mang một loại.
 - Có thể truyền thêm `title` thô (tên thư mục cục bộ, tên đã biết...) nếu có — dùng để đối chiếu/gỡ rối khi tra cứu ra kết quả mơ hồ, nhưng **ID luôn là nguồn sự thật**, không tin tên thư mục.
 
 ## 📤 Output
@@ -35,35 +54,24 @@ Một danh sách title, mỗi phần tử cần **ít nhất một trong hai ID*
 {
   "franchises": [
     {
-      "name": "The Dark Knight Collection",
-      "source": "tmdb_collection",
-      "tmdb_collection_id": 263,
+      "name": "Spider-Man",
+      "source": "ai_verified",
+      "tmdb_collection_ids": [556, 531241, 573848],
       "items": [
-        { "ref": "tmdb-272", "tmdb_id": 272, "type": "movie", "title": "Batman Begins" },
-        { "ref": "tmdb-155", "tmdb_id": 155, "type": "movie", "title": "The Dark Knight" },
-        { "ref": "tmdb-49026", "tmdb_id": 49026, "type": "movie", "title": "The Dark Knight Rises" }
+        { "ref": "tmdb-557", "tmdb_id": 557, "type": "movie", "title": "Spider-Man" },
+        { "ref": "tmdb-1930", "tmdb_id": 1930, "type": "movie", "title": "The Amazing Spider-Man" },
+        { "ref": "tmdb-324857", "tmdb_id": 324857, "type": "movie", "title": "Spider-Man: Into the Spider-Verse" }
       ]
     },
     {
-      "name": "The Fast and the Furious Collection",
-      "source": "tmdb_collection_recovered",
-      "tmdb_collection_id": 9485,
-      "items": [
-        { "ref": "tmdb-385687", "tmdb_id": 385687, "type": "movie", "title": "Fast X" }
-      ],
-      "also_in_tmdb_collection_not_in_input": [
-        { "tmdb_id": 9799, "title": "The Fast and the Furious" },
-        { "tmdb_id": 584, "title": "2 Fast 2 Furious" }
-      ]
-    },
-    {
-      "name": "Bảy Viên Ngọc Rồng",
-      "source": "local_collection",
+      "name": "Dragon Ball",
+      "source": "ai_verified",
       "items": [
         { "ref": "tmdb-12609", "tmdb_id": 12609, "type": "tv", "title": "Dragon Ball" },
         { "ref": "tmdb-12610", "tmdb_id": 12610, "type": "tv", "title": "Dragon Ball Z" },
         { "ref": "tvdb-76666", "tvdb_id": 76666, "type": "tv", "title": "Dragon Ball GT" },
-        { "ref": "tmdb-32380", "tmdb_id": 32380, "type": "tv", "title": "Dragon Ball Kai" }
+        { "ref": "tmdb-32380", "tmdb_id": 32380, "type": "tv", "title": "Dragon Ball Kai" },
+        { "ref": "tmdb-14210", "tmdb_id": 14210, "type": "movie", "title": "Dragonball Evolution" }
       ]
     },
     {
@@ -81,13 +89,11 @@ Một danh sách title, mỗi phần tử cần **ít nhất một trong hai ID*
 ```
 
 Quy tắc bắt buộc:
-- **Mọi title đầu vào phải xuất hiện đúng 1 lần** trong `franchises` (trừ khi rơi vào `unresolved`) — kể cả khi nó độc lập, không thuộc vũ trụ nào: tạo một franchise `source: "standalone"` chỉ chứa chính nó, **KHÔNG** dồn các title độc lập vào một nhóm "chưa phân loại" chung chung.
-- `source` cho biết franchise được xác định bằng cách nào — 4 giá trị, xem chi tiết ở Bước 2/3:
-  - `tmdb_collection`: phim đã có sẵn `collection` từ TMDb, chắc chắn nhất, không cần AI/web.
-  - `tmdb_collection_recovered`: phim KHÔNG có sẵn `collection`, nhưng tra web xác định được franchise rồi tìm ngược ra TMDb thì Collection đó **đã tồn tại** trên TMDb (chỉ là TMDb chưa gắn phim này vào) — dùng đúng `name`/`tmdb_collection_id` của TMDb.
-  - `local_collection`: xác định được quan hệ franchise thật qua AI + web, nhưng KHÔNG có TMDb Collection nào tương ứng (luôn đúng với series, vì TMDb/TVDB không có "collection" cho series; cũng áp dụng cho phim lẻ mà franchise của nó chưa từng được TMDb curator tạo) — tự đặt tên, không có `tmdb_collection_id`.
+- **Mọi title đầu vào phải xuất hiện đúng 1 lần** trong `franchises` (trừ khi rơi vào `unresolved`) — kể cả khi nó độc lập, không thuộc thương hiệu nào: tạo một franchise `source: "standalone"` chỉ chứa chính nó, **KHÔNG** dồn các title độc lập vào một nhóm "chưa phân loại" chung chung.
+- `source` chỉ còn 2 giá trị:
+  - `ai_verified`: xác định được quan hệ thương hiệu/IP thật qua suy luận + tra cứu web (áp dụng cho MỌI trường hợp có gom nhóm — kể cả khi trong nhóm có phim đã sẵn TMDb Collection, vì bước suy luận vẫn phải chạy để kiểm tra có nội dung nào khác thuộc cùng thương hiệu không).
   - `standalone`: không tìm được bằng chứng liên kết nào, đứng một mình.
-- `tmdb_collection` và `tmdb_collection_recovered` nên kèm `tmdb_collection_id` để caller tiện tra cứu lại sau. `also_in_tmdb_collection_not_in_input` (tuỳ chọn) liệt kê các phim TMDb ghi nhận thuộc cùng Collection nhưng KHÔNG có trong input ban đầu — thông tin thêm hữu ích, không bắt buộc phải xử lý.
+- `tmdb_collection_ids` (tuỳ chọn, mảng): liệt kê TẤT CẢ TMDb Collection ID đã gặp trong quá trình gom nhóm franchise này (một franchise có thể trải dài nhiều Collection) — thông tin tham khảo thêm cho caller, không quyết định tên/thành viên franchise.
 - Nếu input có `ref`, **BẮT BUỘC** echo nguyên văn giá trị đó trên item tương ứng ở output (kể cả trong `unresolved`) — caller dùng field này để map kết quả về đúng bản ghi nội bộ, sai lệch `ref` sẽ làm caller ghi nhầm franchise cho title khác.
 
 ---
@@ -109,50 +115,46 @@ python3 <tmdb-lookup_skill_dir>/scripts/tmdb_client.py find <imdb_id> --source i
 # rồi lấy chi tiết bằng tmdb_id vừa tra ra như trên
 ```
 
-Với mỗi title, giữ lại: `tmdb_id`, `type`, `title`, `original_title`, `year`, và với phim lẻ là field `collection` (đã có sẵn trong `tmdb-lookup` — không cần tự gọi API TMDb thô).
+Với mỗi title, giữ lại: `tmdb_id`, `type`, `title`, `original_title`, `year`, và với phim lẻ là field `collection` (nếu có — chỉ dùng làm TÍN HIỆU cho Bước 2, không phải kết luận cuối).
 
 Nếu `find`/`get` không trả kết quả nào, đưa title đó vào `unresolved` với lý do rõ ràng, không đoán mò.
 
-### Bước 2 — Gom theo TMDb Collection có sẵn (chắc chắn, ưu tiên cao nhất, chỉ áp dụng cho phim lẻ)
+### Bước 2 — Suy luận franchise (thương hiệu/IP) cho MỌI title, xuyên suốt mọi hình thức
 
-TMDb chỉ có khái niệm "Collection" cho **phim lẻ**. Nếu field `collection` (từ bước 1) khác `null`, gom title đó vào franchise tên = `collection.name`, `source: "tmdb_collection"`, `tmdb_collection_id = collection.id`. Không cần AI/web cho nhóm này — đây là dữ liệu do TMDb curator xác nhận sẵn.
+Áp dụng đồng nhất cho cả phim lẻ (có hoặc không có TMDb Collection) và series/anime — vì Collection không bao giờ là câu trả lời cuối cùng, chỉ là một manh mối.
 
-### Bước 3 — Xử lý phần còn lại: series (luôn thiếu) + phim lẻ chưa được TMDb gắn Collection
+> [!NOTE]
+> **Các title cùng `collection.id` chắc chắn cùng nội dung/franchise với nhau** — khỏi cần tra web để xác nhận QUAN HỆ GIỮA CHÚNG (TMDb curator đã xác nhận rồi). Việc còn lại chỉ là tra web xem Collection đó có phải TOÀN BỘ franchise hay chỉ một phần (vd còn anime/series/Collection khác cùng thương hiệu) — xem bước 2 dưới.
 
-Lấy danh sách title còn lại sau Bước 2. Với **series**, TMDb/TheTVDB không bao giờ có sẵn collection nên luôn đi hết quy trình dưới đây. Với **phim lẻ có `collection: null`**, đừng vội kết luận "độc lập" — có 2 khả năng: phim thật sự độc lập, HOẶC phim thuộc franchise nhưng TMDb curator chưa gắn nó vào Collection (dữ liệu TMDb không đầy đủ, đặc biệt với phim mới ra rạp hoặc phim ít phổ biến).
-
-1. **Tra web tìm quan hệ franchise**: với mỗi title (hoặc cặp/nhóm title có tên gợi ý liên quan — cùng từ khóa chính, cùng studio, cùng nằm trong thư viện người dùng đang quản lý), dùng `search_web`:
-   - `search_web("<title> franchise Wikipedia")`
-   - `search_web("<title A> and <title B> same universe sequel")`
-   - `search_web("<title> part of which film series collection")`
+1. **Gom nhóm ứng viên**: (a) mọi title cùng `collection.id` gộp sẵn một nhóm ứng viên (chắc chắn cùng nhau, xem NOTE trên); (b) các title còn lại trong cùng batch có chung từ khóa chính trong tên (vd "Spider-Man", "Dragon Ball", "Godzilla") là ứng viên cùng franchise — xét chung để đỡ tra web lặp lại.
+2. **Tra web xác định franchise thật sự trải rộng tới đâu**, dùng `search_web`:
+   - `search_web("<tên chung> franchise all movies anime tv series list")`
+   - `search_web("<title> part of which franchise")`
+   - `search_web("<title A> and <title B> same franchise universe")`
+   - Nếu title là phim có sẵn `collection` (từ Bước 1): đừng dừng lại ở đó — hỏi thêm `search_web("<collection name> franchise other movies series anime")` để biết Collection này có phải toàn bộ franchise hay chỉ một phần (vd chỉ 1 trong 4 collection của Spider-Man).
 
    > [!IMPORTANT]
-   > **CHỈ dùng `search_web`, KHÔNG tự `curl`/`urllib`/`fetch` trực tiếp vào một trang web** (IMDb, Wikipedia, ...) qua `run_command`. Các trang này có thể tải chậm, chặn bot, hoặc yêu cầu render JS — một lệnh treo lâu có thể kéo timeout cả cuộc hội thoại (đã từng xảy ra: một lần `curl imdb.com` trực tiếp treo gần 5 phút làm toàn bộ batch bị huỷ giữa chừng). `search_web` đã đủ nhanh và đủ thông tin cho hầu hết trường hợp; nếu thật sự cần đọc nguyên trang, dùng công cụ đọc URL chuyên dụng của agent (nếu có) thay vì tự viết script fetch.
-   - Ưu tiên nguồn đáng tin: Wikipedia, trang chính thức của studio, chính TMDb/TVDB (overview đôi khi nhắc franchise).
-   - Chỉ xác nhận khi có **bằng chứng cụ thể**: sequel/prequel/spin-off/reboot chính thức, cùng nhân vật/thế giới chính, hoặc cùng series gốc chia mùa khác tên (vd "Dragon Ball" → "Dragon Ball Z" → "Dragon Ball GT" → "Dragon Ball Kai"). **Không** gom chỉ vì cùng thể loại.
-   - Không tìm được bằng chứng nào → title đó **độc lập** (`source: "standalone"`) — im lặng-là-đúng tốt hơn đoán sai. Dừng ở đây cho title này.
-2. **Nếu tìm được tên franchise VÀ title đang xét là phim lẻ**: tìm ngược lại trên TMDb xem Collection này đã tồn tại chưa, dùng chính tên franchise vừa xác định qua web:
-   ```sh
-   python3 <tmdb-lookup_skill_dir>/scripts/tmdb_client.py search-collection "<tên franchise>" --json
-   ```
-   - **Có kết quả khớp** (so tên cẩn thận, TMDb có thể đặt tên hơi khác vd "The Fast and the Furious Collection" thay vì "Fast and Furious"): gọi tiếp `collection <collection_id> --json` để lấy danh sách `parts` đầy đủ, xác nhận phim đang xét thật sự nằm trong đó (so theo `tmdb_id` hoặc tên+năm). Nếu khớp → gán franchise này cho phim, `source: "tmdb_collection_recovered"`, dùng đúng `name`/`id` của TMDb (không tự đặt tên khác). Các phim khác trong `parts` mà không có trong input thì liệt kê vào `also_in_tmdb_collection_not_in_input`, không cần tra cứu tiếp cho chúng.
-   - **Không có kết quả khớp nào** (Collection thật sự chưa tồn tại trên TMDb): tự tạo nhóm cục bộ, `source: "local_collection"`, đặt tên franchise theo kết quả tra web ở bước 1.
-3. **Nếu title đang xét là series** (hoặc phim lẻ nhưng bước 2 xác nhận TMDb không có Collection tương ứng): `source: "local_collection"`, không cần gọi `search-collection`/`collection` (series chắc chắn không có trên TMDb theo dạng Collection).
-4. Đặt tên franchise (`local_collection`) theo tên gốc/tên chung phổ biến nhất được xác nhận qua web (thường là tên title đầu tiên trong bộ, không phải tên season cụ thể — vd đặt "Bảy Viên Ngọc Rồng" chứ không phải "Bảy Viên Ngọc Rồng Kai").
+   > **CHỈ dùng `search_web`, KHÔNG tự `curl`/`urllib`/`fetch` trực tiếp vào một trang web** (IMDb, Wikipedia, ...) qua `run_command`. Các trang này có thể tải chậm, chặn bot, hoặc yêu cầu render JS — một lệnh treo lâu có thể kéo timeout cả cuộc hội thoại (đã từng xảy ra: một lần `curl imdb.com` trực tiếp treo gần 5 phút làm toàn bộ batch bị huỷ giữa chừng). `search_web` đã đủ nhanh và đủ thông tin cho hầu hết trường hợp.
 
-### Bước 4 — Gộp kết quả & trả về đúng schema Output ở trên
+   - Ưu tiên nguồn đáng tin: Wikipedia, trang chính thức của studio/nhà xuất bản, chính TMDb/TVDB (overview đôi khi nhắc franchise).
+   - Chỉ xác nhận khi có **bằng chứng cụ thể**: sequel/prequel/spin-off/reboot/chuyển thể chính thức, cùng nhân vật/thế giới chính, hoặc cùng series gốc chia mùa/hình thức khác (vd anime ↔ live-action cùng IP). **Không** gom chỉ vì cùng thể loại hay tình cờ trùng từ trong tên.
+   - Không tìm được bằng chứng nào → title đó **độc lập** (`source: "standalone"`) — im lặng-là-đúng tốt hơn đoán sai.
+3. **Đặt tên franchise** theo tên thương hiệu gốc phổ biến nhất, KHÔNG phải tên một Collection cụ thể hay tên một season/phần cụ thể (vd đặt "Spider-Man" chứ không phải "The Amazing Spider-Man Collection"; đặt "Dragon Ball" chứ không phải "Dragon Ball Kai").
+4. Nếu trong quá trình tra cứu gặp `tmdb_collection_id` (từ field `collection` ở Bước 1, hoặc tự tìm thêm qua `search-collection`/`collection` của `tmdb-lookup` khi cần xác minh thành viên một Collection cụ thể), gom hết vào mảng `tmdb_collection_ids` của franchise — chỉ mang tính tham khảo, KHÔNG dùng để đặt tên.
 
-Đảm bảo mọi title input đều có mặt đúng 1 lần trong `franchises` hoặc `unresolved`. Các title cùng `local_collection`/`tmdb_collection_recovered` do AI xác định phải được gộp chung một entry (so khớp theo tên franchise đã chuẩn hoá), không tạo nhiều franchise trùng tên chỉ khác cách viết.
+### Bước 3 — Gộp kết quả & trả về đúng schema Output ở trên
+
+Đảm bảo mọi title input đều có mặt đúng 1 lần trong `franchises` hoặc `unresolved`. Các title cùng franchise do AI xác định phải được gộp chung một entry (so khớp theo tên thương hiệu đã chuẩn hoá), không tạo nhiều franchise trùng nghĩa chỉ khác cách viết (vd "Spider Man" và "Spider-Man" phải là MỘT franchise).
 
 ---
 
 ## 💾 Gợi Ý Cache (khuyến nghị cho caller, không bắt buộc)
 
-Bước 3 (search_web + suy luận AI) tốn thời gian và token — caller nên cache kết quả theo khóa `tmdb_id`/`tvdb_id` đã xử lý (vd bảng `franchise_ai_cache` phía media-hub: `root_key TEXT PRIMARY KEY, franchise TEXT, checked_at REAL`), để lần gọi sau chỉ xử lý các title **mới** chưa từng được phân loại, tránh hỏi lại toàn bộ thư viện mỗi lần.
+Bước 2 (search_web + suy luận AI) tốn thời gian và token — caller nên cache kết quả theo khóa `tmdb_id`/`tvdb_id` đã xử lý (vd bảng `franchise_ai_cache` phía media-hub: `root_key TEXT PRIMARY KEY, franchise TEXT, checked_at REAL`), để lần gọi sau chỉ xử lý các title **mới** chưa từng được phân loại, tránh hỏi lại toàn bộ thư viện mỗi lần.
 
 ## ⚠️ Giới Hạn Đã Biết
 
 - Không tự bịa franchise cho title hoàn toàn mới/hiếm không có thông tin trên web — trả về `standalone`.
 - `search_web` có thể trả kết quả nhiễu (fan theory, clickbait) — luôn ưu tiên nguồn chính thống, và khi nghi ngờ, thiên về **không gom** thay vì gom sai.
-- `search-collection`/`collection` là API TMDb công khai, chỉ **đọc** — skill này không (và không thể) tự PATCH ngược field `collection` lên TMDb thật. `tmdb_collection_recovered` nghĩa là "TMDb đã có Collection này, ta chỉ tự nối phim vào ở phía caller/local", không phải TMDb đã cập nhật dữ liệu của họ.
+- `search-collection`/`collection` (của `tmdb-lookup`) chỉ là API TMDb công khai, chỉ **đọc**, chỉ dùng để lấy `tmdb_collection_ids` tham khảo — không dùng để quyết định tên hay thành viên franchise.
 - Không xử lý phát hiện trùng lặp title (title đã tồn tại 2 lần với 2 ID khác nhau) — đó là việc của bước dedupe phía caller (vd union-find theo `item_uid` như media-hub đang làm), skill này chỉ nhận input đã dedupe.
