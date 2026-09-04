@@ -125,6 +125,9 @@ Lấy danh sách title còn lại sau Bước 2. Với **series**, TMDb/TheTVDB 
    - `search_web("<title> franchise Wikipedia")`
    - `search_web("<title A> and <title B> same universe sequel")`
    - `search_web("<title> part of which film series collection")`
+
+   > [!IMPORTANT]
+   > **CHỈ dùng `search_web`, KHÔNG tự `curl`/`urllib`/`fetch` trực tiếp vào một trang web** (IMDb, Wikipedia, ...) qua `run_command`. Các trang này có thể tải chậm, chặn bot, hoặc yêu cầu render JS — một lệnh treo lâu có thể kéo timeout cả cuộc hội thoại (đã từng xảy ra: một lần `curl imdb.com` trực tiếp treo gần 5 phút làm toàn bộ batch bị huỷ giữa chừng). `search_web` đã đủ nhanh và đủ thông tin cho hầu hết trường hợp; nếu thật sự cần đọc nguyên trang, dùng công cụ đọc URL chuyên dụng của agent (nếu có) thay vì tự viết script fetch.
    - Ưu tiên nguồn đáng tin: Wikipedia, trang chính thức của studio, chính TMDb/TVDB (overview đôi khi nhắc franchise).
    - Chỉ xác nhận khi có **bằng chứng cụ thể**: sequel/prequel/spin-off/reboot chính thức, cùng nhân vật/thế giới chính, hoặc cùng series gốc chia mùa khác tên (vd "Dragon Ball" → "Dragon Ball Z" → "Dragon Ball GT" → "Dragon Ball Kai"). **Không** gom chỉ vì cùng thể loại.
    - Không tìm được bằng chứng nào → title đó **độc lập** (`source: "standalone"`) — im lặng-là-đúng tốt hơn đoán sai. Dừng ở đây cho title này.
