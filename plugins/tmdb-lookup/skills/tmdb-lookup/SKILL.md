@@ -27,6 +27,13 @@ python3 <skill_dir>/scripts/tmdb_client.py get <movie|tv> <tmdb_id> --json
 # 5. Chưa có tmdb_id, chỉ có ID hệ thống khác (TheTVDB/IMDb) -> tra ngược ra tmdb_id:
 python3 <skill_dir>/scripts/tmdb_client.py find <external_id> --source tvdb_id --json
 python3 <skill_dir>/scripts/tmdb_client.py find <external_id> --source imdb_id --json
+
+# 6. Tìm TMDb Collection theo tên franchise (vd để gán lại collection cho
+#    phim TMDb chưa gắn sẵn -- xem skill franchise-classifier):
+python3 <skill_dir>/scripts/tmdb_client.py search-collection "<tên franchise>" --json
+
+# 7. Lấy chi tiết + toàn bộ phim (parts) thuộc một Collection theo ID:
+python3 <skill_dir>/scripts/tmdb_client.py collection <collection_id> --json
 ```
 
 ---
@@ -56,10 +63,16 @@ Chiều ngược lại (chưa có tmdb_id, chỉ có tvdb_id/imdb_id) dùng lệ
 ### 1b. Collection (Franchise cho Phim Lẻ):
 `get movie <tmdb_id> --json` trả thêm field `collection: {id, name}` khi
 phim thuộc một TMDb Collection (vd "The Dark Knight" → collection "The Dark
-Knight Collection"). `null` nếu phim độc lập. **Lưu ý**: TMDb chỉ có khái
-niệm Collection cho **phim lẻ** — TV series không có field này, nên việc
-gom nhóm series cùng vũ trụ (nhiều mùa/spin-off) cần suy luận thêm, xem
-skill `franchise-classifier`.
+Knight Collection"). `null` nếu TMDb chưa gắn phim này vào Collection nào
+(có thể phim thật sự độc lập, hoặc TMDb chỉ đơn giản là chưa curator kịp).
+Khi đó dùng `search-collection "<tên>"` (mục 6) để tìm xem Collection đã
+tồn tại trên TMDb chưa, rồi `collection <id>` (mục 7) để lấy toàn bộ phim
+thuộc Collection đó và xác nhận phim đang xét có thật sự nằm trong không.
+
+**Lưu ý**: TMDb chỉ có khái niệm Collection cho **phim lẻ** — TV series
+không bao giờ có field này, nên việc gom nhóm series cùng vũ trụ (nhiều
+mùa/spin-off) luôn cần suy luận AI + tra web, xem skill `franchise-classifier`
+(cũng là nơi quy trình đầy đủ ở trên được dùng tới).
 
 ### 2. Trích Xuất Dàn Nhân Vật (Cast & Character Mapping):
 - Trích xuất tên nhân vật gốc + diễn viên lồng tiếng/thủ vai.

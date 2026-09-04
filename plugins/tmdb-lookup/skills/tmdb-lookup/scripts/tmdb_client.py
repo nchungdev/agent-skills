@@ -80,6 +80,41 @@ def search(query, media_type="multi", api_key=None, language="en-US"):
     return results
 
 
+def search_collection(query, api_key=None, language="en-US"):
+    """Tim TMDb Collection theo ten (vd 'Fast and Furious Collection').
+
+    Dung khi mot phim KHONG co san field collection nhung tra web xac
+    dinh duoc no thuoc mot franchise -- tra nguoc xem TMDb da co san
+    collection do chua (chi TMDb chua GAN phim nay vao, khong phai la
+    collection chua ton tai).
+    """
+    data = api_get("/search/collection", {"query": query, "language": language}, api_key)
+    if not data or "results" not in data:
+        return []
+    return data["results"]
+
+
+def get_collection(collection_id, api_key=None, language="en-US"):
+    """Lay chi tiet mot TMDb Collection: ten + toan bo phim (parts) thuoc no."""
+    data = api_get(f"/collection/{collection_id}", {"language": language}, api_key)
+    if not data:
+        return None
+    parts = [
+        {
+            "tmdb_id": p.get("id"),
+            "title": p.get("title"),
+            "year": (p.get("release_date") or "")[:4],
+        }
+        for p in data.get("parts", [])
+    ]
+    return {
+        "id": data.get("id"),
+        "name": data.get("name"),
+        "overview": data.get("overview"),
+        "parts": parts,
+    }
+
+
 def find_by_external_id(external_id, source="tvdb_id", api_key=None, language="en-US"):
     """Resolve a TMDb ID from another database's ID (TheTVDB, IMDb, ...).
 
@@ -301,6 +336,18 @@ def main():
     p_find.add_argument("--lang", default="en-US", help="Ngôn ngữ")
     p_find.add_argument("--json", action="store_true", help="In ra JSON")
 
+    # Search Collection (tìm TMDb Collection theo tên)
+    p_sc = sub.add_parser("search-collection", help="Tìm TMDb Collection theo tên franchise")
+    p_sc.add_argument("query", help="Tên franchise, vd 'Fast and Furious'")
+    p_sc.add_argument("--lang", default="en-US", help="Ngôn ngữ")
+    p_sc.add_argument("--json", action="store_true", help="In ra JSON")
+
+    # Collection (lấy chi tiết + danh sách phim thuộc 1 collection)
+    p_col = sub.add_parser("collection", help="Lấy chi tiết một TMDb Collection theo ID")
+    p_col.add_argument("collection_id", type=int, help="TMDb Collection ID")
+    p_col.add_argument("--lang", default="en-US", help="Ngôn ngữ")
+    p_col.add_argument("--json", action="store_true", help="In ra JSON")
+
     args = parser.parse_args()
 
     api_key = load_api_key()
@@ -340,6 +387,25 @@ def main():
                 print(f"🎬 movie  tmdb_id={r['id']}  {r.get('title')} ({(r.get('release_date') or '')[:4]})")
             for r in result["tv_results"]:
                 print(f"📺 tv     tmdb_id={r['id']}  {r.get('name')} ({(r.get('first_air_date') or '')[:4]})")
+    elif args.command == "search-collection":
+        results = search_collection(args.query, api_key, args.lang)
+        if args.json:
+            print(json.dumps(results, ensure_ascii=False, indent=2))
+        else:
+            if not results:
+                print(f"❌ Không tìm thấy Collection nào khớp '{args.query}'")
+            for r in results:
+                print(f"📦 collection_id={r['id']}  {r.get('name')}")
+    elif args.command == "collection":
+        info = get_collection(args.collection_id, api_key, args.lang)
+        if info is None:
+            sys.exit(1)
+        if args.json:
+            print(json.dumps(info, ensure_ascii=False, indent=2))
+        else:
+            print(f"\n📦 {info['name']} (collection_id {info['id']}) — {len(info['parts'])} phim:")
+            for p in info["parts"]:
+                print(f"  🎬 tmdb_id={p['tmdb_id']}  {p['title']} ({p['year']})")
     else:
         parser.print_help()
 

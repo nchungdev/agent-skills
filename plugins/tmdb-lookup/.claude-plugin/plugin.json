@@ -2,7 +2,7 @@
   "name": "tmdb-lookup",
   "displayName": "TMDb Lookup",
   "description": "The Movie Database (TMDb) API Integration Skill for metadata resolution, character casting, artwork downloads, and NFO generation for Movies, TV Shows & Anime.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": {
     "name": "nchungdev",
     "url": "https://github.com/nchungdev"
