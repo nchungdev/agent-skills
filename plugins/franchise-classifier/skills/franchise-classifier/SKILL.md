@@ -18,14 +18,15 @@ Một danh sách title, mỗi phần tử cần **ít nhất một trong hai ID*
 
 ```json
 [
-  { "tmdb_id": 1930, "type": "tv" },
-  { "tvdb_id": 74581, "type": "tv" },
-  { "tmdb_id": 155, "type": "movie" },
-  { "tvdb_id": 74599, "type": "tv" }
+  { "ref": "tmdb-1930", "tmdb_id": 1930, "type": "tv" },
+  { "ref": "tvdb-74581", "tvdb_id": 74581, "type": "tv" },
+  { "ref": "tmdb-155", "tmdb_id": 155, "type": "movie" },
+  { "ref": "tvdb-74599", "tvdb_id": 74599, "type": "tv" }
 ]
 ```
 
 - `type`: `"movie"` hoặc `"tv"`. Nếu không chắc, để trống — bước 1 sẽ tự xác định qua `find`.
+- `ref` (tuỳ chọn nhưng **khuyến nghị mạnh** khi gọi từ chương trình khác, vd media-hub): chuỗi định danh do caller tự đặt, skill không đọc/diễn giải giá trị này — chỉ **echo nguyên văn** lại trên item tương ứng trong Output (mục Bước 4). Giúp caller map kết quả về đúng bản ghi nội bộ (vd `root_key` union-find) mà không cần tự suy luận ngược từ tmdb_id/tvdb_id trả về, tránh sai lệch khi một title có cả hai ID nhưng response chỉ mang một loại.
 - Có thể truyền thêm `title` thô (tên thư mục cục bộ, tên đã biết...) nếu có — dùng để đối chiếu/gỡ rối khi tra cứu ra kết quả mơ hồ, nhưng **ID luôn là nguồn sự thật**, không tin tên thư mục.
 
 ## 📤 Output
@@ -38,9 +39,9 @@ Một danh sách title, mỗi phần tử cần **ít nhất một trong hai ID*
       "source": "tmdb_collection",
       "tmdb_collection_id": 263,
       "items": [
-        { "tmdb_id": 272, "type": "movie", "title": "Batman Begins" },
-        { "tmdb_id": 155, "type": "movie", "title": "The Dark Knight" },
-        { "tmdb_id": 49026, "type": "movie", "title": "The Dark Knight Rises" }
+        { "ref": "tmdb-272", "tmdb_id": 272, "type": "movie", "title": "Batman Begins" },
+        { "ref": "tmdb-155", "tmdb_id": 155, "type": "movie", "title": "The Dark Knight" },
+        { "ref": "tmdb-49026", "tmdb_id": 49026, "type": "movie", "title": "The Dark Knight Rises" }
       ]
     },
     {
@@ -48,7 +49,7 @@ Một danh sách title, mỗi phần tử cần **ít nhất một trong hai ID*
       "source": "tmdb_collection_recovered",
       "tmdb_collection_id": 9485,
       "items": [
-        { "tmdb_id": 385687, "type": "movie", "title": "Fast X" }
+        { "ref": "tmdb-385687", "tmdb_id": 385687, "type": "movie", "title": "Fast X" }
       ],
       "also_in_tmdb_collection_not_in_input": [
         { "tmdb_id": 9799, "title": "The Fast and the Furious" },
@@ -59,22 +60,22 @@ Một danh sách title, mỗi phần tử cần **ít nhất một trong hai ID*
       "name": "Bảy Viên Ngọc Rồng",
       "source": "local_collection",
       "items": [
-        { "tmdb_id": 12609, "type": "tv", "title": "Dragon Ball" },
-        { "tmdb_id": 12610, "type": "tv", "title": "Dragon Ball Z" },
-        { "tvdb_id": 76666, "type": "tv", "title": "Dragon Ball GT" },
-        { "tmdb_id": 32380, "type": "tv", "title": "Dragon Ball Kai" }
+        { "ref": "tmdb-12609", "tmdb_id": 12609, "type": "tv", "title": "Dragon Ball" },
+        { "ref": "tmdb-12610", "tmdb_id": 12610, "type": "tv", "title": "Dragon Ball Z" },
+        { "ref": "tvdb-76666", "tvdb_id": 76666, "type": "tv", "title": "Dragon Ball GT" },
+        { "ref": "tmdb-32380", "tmdb_id": 32380, "type": "tv", "title": "Dragon Ball Kai" }
       ]
     },
     {
       "name": "Perfect Blue",
       "source": "standalone",
       "items": [
-        { "tmdb_id": 10494, "type": "movie", "title": "Perfect Blue" }
+        { "ref": "tmdb-10494", "tmdb_id": 10494, "type": "movie", "title": "Perfect Blue" }
       ]
     }
   ],
   "unresolved": [
-    { "tvdb_id": 999999, "reason": "khong tim thay tren TMDb" }
+    { "ref": "tvdb-999999", "tvdb_id": 999999, "reason": "khong tim thay tren TMDb" }
   ]
 }
 ```
@@ -87,6 +88,7 @@ Quy tắc bắt buộc:
   - `local_collection`: xác định được quan hệ franchise thật qua AI + web, nhưng KHÔNG có TMDb Collection nào tương ứng (luôn đúng với series, vì TMDb/TVDB không có "collection" cho series; cũng áp dụng cho phim lẻ mà franchise của nó chưa từng được TMDb curator tạo) — tự đặt tên, không có `tmdb_collection_id`.
   - `standalone`: không tìm được bằng chứng liên kết nào, đứng một mình.
 - `tmdb_collection` và `tmdb_collection_recovered` nên kèm `tmdb_collection_id` để caller tiện tra cứu lại sau. `also_in_tmdb_collection_not_in_input` (tuỳ chọn) liệt kê các phim TMDb ghi nhận thuộc cùng Collection nhưng KHÔNG có trong input ban đầu — thông tin thêm hữu ích, không bắt buộc phải xử lý.
+- Nếu input có `ref`, **BẮT BUỘC** echo nguyên văn giá trị đó trên item tương ứng ở output (kể cả trong `unresolved`) — caller dùng field này để map kết quả về đúng bản ghi nội bộ, sai lệch `ref` sẽ làm caller ghi nhầm franchise cho title khác.
 
 ---
 

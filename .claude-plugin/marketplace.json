@@ -91,7 +91,7 @@
       "displayName": "Franchise Classifier",
       "source": "./plugins/franchise-classifier",
       "description": "Gom nhóm phim lẻ & series thành franchise (vũ trụ chung) từ TMDb ID / TheTVDB ID. Ưu tiên TMDb Collection có sẵn; nếu phim chưa được TMDb gắn Collection thì tra web tìm franchise rồi tìm ngược trên TMDb (gán lại nếu đã tồn tại, tự tạo nhóm cục bộ nếu chưa); series luôn suy luận AI + tra cứu web (TMDb/TVDB không có collection cho series).",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "license": "MIT",
       "keywords": [
         "franchise",
