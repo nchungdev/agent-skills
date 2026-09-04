@@ -1,8 +1,8 @@
 {
   "name": "franchise-classifier",
   "displayName": "Franchise Classifier",
-  "description": "Gom nhóm phim lẻ, series, anime, live-action thành franchise (thương hiệu/IP tổng thể) từ TMDb ID / TheTVDB ID. TMDb Collection chỉ la mot tin hieu hep hon franchise nhieu -- mot franchise co the trai dai nhieu Collection cong ca series/anime khong Collection nao co. Dung AI + tra cuu web de gom xuyen suot moi hinh thuc.",
-  "version": "2.0.0",
+  "description": "Gom nhóm phim lẻ, series, anime, live-action thành franchise từ TMDb ID / TheTVDB ID. Hỗ trợ 2 loại franchise: (1) thương hiệu/IP tổng thể -- TMDb Collection chỉ là một tín hiệu hẹp hơn nhiều, một franchise có thể trải dài nhiều Collection cộng cả series/anime không Collection nào có; (2) Auteur Collection -- tuyển tập tác phẩm cùng một đạo diễn/tác giả dù không chia sẻ IP/cốt truyện. Dùng AI + tra cứu web để gom xuyên suốt mọi hình thức.",
+  "version": "2.1.0",
   "author": {
     "name": "nchungdev",
     "url": "https://github.com/nchungdev"

@@ -1,6 +1,6 @@
 ---
 name: franchise-classifier
-description: Gom nhóm một danh sách phim lẻ, series, anime, live-action (nhận diện qua TMDb ID / TheTVDB ID / IMDb ID) thành các franchise — thương hiệu/IP tổng thể, không phải TMDb Collection (Collection chỉ là MỘT tín hiệu, hẹp hơn franchise nhiều). Ví dụ franchise "Spider-Man" gồm cả 3 bộ ba phim live-action KHÁC TMDb Collection lẫn phim hoạt hình Spider-Verse; franchise "Dragon Ball" gồm cả anime (Dragon Ball/Z/GT/Kai/Super) lẫn phim live-action "Dragonball Evolution". Dùng AI suy luận + tra cứu web để gom xuyên suốt mọi hình thức (movie/series/anime/live-action), không chỉ dựa vào Collection có sẵn. Trả về franchise name + danh sách toàn bộ nội dung thuộc franchise đó.
+description: Gom nhóm một danh sách phim lẻ, series, anime, live-action (nhận diện qua TMDb ID / TheTVDB ID / IMDb ID) thành các franchise. Hỗ trợ 2 loại: (1) franchise thương hiệu/IP tổng thể — không phải TMDb Collection (Collection chỉ là MỘT tín hiệu hẹp hơn nhiều); ví dụ "Spider-Man" gồm cả 3 bộ ba phim live-action KHÁC TMDb Collection lẫn phim hoạt hình Spider-Verse, "Dragon Ball" gồm cả anime (Dragon Ball/Z/GT/Kai/Super) lẫn phim live-action "Dragonball Evolution". (2) Auteur Collection — tuyển tập tác phẩm cùng một đạo diễn/tác giả dù không chia sẻ IP/cốt truyện, ví dụ "Makoto Shinkai Collection". Dùng AI suy luận + tra cứu web để gom xuyên suốt mọi hình thức, không chỉ dựa vào Collection có sẵn. Trả về franchise name + danh sách toàn bộ nội dung thuộc franchise đó.
 ---
 
 # Franchise Classifier Skill (Gom Nhóm Thương Hiệu/IP Xuyên Suốt Mọi Hình Thức)
@@ -26,8 +26,18 @@ Ví dụ franchise **Dragon Ball** còn rõ hơn: anime (Dragon Ball, Z, GT, Kai
 
 **Hệ quả**: skill này KHÔNG được lấy thẳng `collection.name` làm tên franchise rồi dừng lại. TMDb Collection chỉ là một **bằng chứng đầu vào** cho bước suy luận — luôn phải hỏi tiếp "có nội dung nào khác (hình thức khác, Collection khác) cùng thương hiệu này không?" trước khi chốt tên và thành viên franchise.
 
+### 🎬 Loại thứ 2: Franchise theo Tác Giả/Đạo Diễn (Auteur Collection)
+
+Ngoài franchise theo IP/thương hiệu ở trên, còn một loại **hoàn toàn khác bản chất** nhưng vẫn được công nhận là franchise cho mục đích gom thư viện: **tuyển tập tác phẩm của cùng MỘT đạo diễn/tác giả**, dù các tác phẩm đó **KHÔNG chia sẻ nhân vật, thế giới truyện, hay bất kỳ liên kết cốt truyện nào**. Đây là cách tổ chức phổ biến với các đạo diễn có phong cách riêng, hay được xem/sưu tầm trọn bộ như một "tác giả" (auteur) hơn là từng phim rời rạc.
+
+Ví dụ: các phim của đạo diễn **Makoto Shinkai** (*5 Centimet Trên Giây*, *Tên Cậu Là Gì?*, *Khu Vườn Ngôn Từ*, *Đứa Con Của Thời Tiết*...) không phim nào là sequel/liên quan cốt truyện của phim khác, nhưng vẫn nên gom chung 1 franchise vì cùng một đạo diễn và thường được khán giả/thư viện phim sưu tầm trọn bộ theo tác giả.
+
+**Cách nhận diện**: khi 2+ title không có bất kỳ quan hệ IP/thương hiệu nào (đã xác nhận qua Bước 2 dưới), NHƯNG bạn biết chắc chúng cùng một đạo diễn/tác giả (dựa vào kiến thức có sẵn hoặc `search_web`), và đạo diễn/tác giả đó đủ nổi bật để tác phẩm của họ thường được sưu tầm/nhắc tới như một "tuyển tập" (không áp dụng cho đạo diễn chỉ làm 1 phim duy nhất trong danh sách, hay đạo diễn commercial làm phim không có phong cách/thương hiệu tác giả rõ rệt).
+
+**Cách đặt tên**: dùng đúng tên đạo diễn/tác giả, có thể thêm hậu tố rõ nghĩa để phân biệt với franchise-IP, ví dụ **"Makoto Shinkai Collection"** hoặc **"Đạo diễn Makoto Shinkai"** — nhất quán một kiểu trong toàn bộ output, không trộn lẫn 2 cách đặt tên cho cùng 1 tác giả giữa các lần gọi khác nhau (nếu caller đã cache tên cũ, giữ nguyên format đó).
+
 > [!IMPORTANT]
-> Đây KHÔNG phải là gán thể loại (genre) hay độ nổi tiếng. Franchise chỉ được gom khi có **quan hệ thương hiệu/IP thật**: sequel, prequel, spin-off, reboot, chuyển thể (anime ↔ live-action), các mùa/season khác nhau của cùng gốc, hoặc chính thức cùng chia sẻ nhân vật/thế giới truyện gốc. Không suy đoán bừa — thà để một title đứng độc lập còn hơn gom sai.
+> Đây KHÔNG phải là gán thể loại (genre) hay độ nổi tiếng. Franchise chỉ được gom khi có **MỘT trong hai** loại quan hệ thật: (1) **quan hệ thương hiệu/IP**: sequel, prequel, spin-off, reboot, chuyển thể (anime ↔ live-action), các mùa/season khác nhau của cùng gốc, hoặc chính thức cùng chia sẻ nhân vật/thế giới truyện gốc; HOẶC (2) **cùng đạo diễn/tác giả** đủ nổi bật (xem mục Auteur Collection ở trên). Không suy đoán bừa — thà để một title đứng độc lập còn hơn gom sai.
 
 ---
 
@@ -132,12 +142,13 @@ Nếu `find`/`get` không trả kết quả nào, đưa title đó vào `unresol
    - `search_web("<title> part of which franchise")`
    - `search_web("<title A> and <title B> same franchise universe")`
    - Nếu title là phim có sẵn `collection` (từ Bước 1): đừng dừng lại ở đó — hỏi thêm `search_web("<collection name> franchise other movies series anime")` để biết Collection này có phải toàn bộ franchise hay chỉ một phần (vd chỉ 1 trong 4 collection của Spider-Man).
+   - **Không tìm được quan hệ IP nào**: trước khi kết luận độc lập, kiểm tra thêm khả năng **Auteur Collection** (xem mục "Loại thứ 2" ở trên) — `search_web("<title> director")` rồi `search_web("<tên đạo diễn> filmography")` xem có title KHÁC trong cùng batch cũng của đạo diễn đó không.
 
    > [!IMPORTANT]
    > **CHỈ dùng `search_web`, KHÔNG tự `curl`/`urllib`/`fetch` trực tiếp vào một trang web** (IMDb, Wikipedia, ...) qua `run_command`. Các trang này có thể tải chậm, chặn bot, hoặc yêu cầu render JS — một lệnh treo lâu có thể kéo timeout cả cuộc hội thoại (đã từng xảy ra: một lần `curl imdb.com` trực tiếp treo gần 5 phút làm toàn bộ batch bị huỷ giữa chừng). `search_web` đã đủ nhanh và đủ thông tin cho hầu hết trường hợp.
 
    - Ưu tiên nguồn đáng tin: Wikipedia, trang chính thức của studio/nhà xuất bản, chính TMDb/TVDB (overview đôi khi nhắc franchise).
-   - Chỉ xác nhận khi có **bằng chứng cụ thể**: sequel/prequel/spin-off/reboot/chuyển thể chính thức, cùng nhân vật/thế giới chính, hoặc cùng series gốc chia mùa/hình thức khác (vd anime ↔ live-action cùng IP). **Không** gom chỉ vì cùng thể loại hay tình cờ trùng từ trong tên.
+   - Chỉ xác nhận khi có **bằng chứng cụ thể**: sequel/prequel/spin-off/reboot/chuyển thể chính thức, cùng nhân vật/thế giới chính, cùng series gốc chia mùa/hình thức khác (vd anime ↔ live-action cùng IP) — HOẶC cùng đạo diễn/tác giả đủ nổi bật (Auteur Collection). **Không** gom chỉ vì cùng thể loại hay tình cờ trùng từ trong tên.
    - Không tìm được bằng chứng nào → title đó **độc lập** (`source: "standalone"`) — im lặng-là-đúng tốt hơn đoán sai.
 3. **Đặt tên franchise** theo tên thương hiệu gốc phổ biến nhất, KHÔNG phải tên một Collection cụ thể hay tên một season/phần cụ thể (vd đặt "Spider-Man" chứ không phải "The Amazing Spider-Man Collection"; đặt "Dragon Ball" chứ không phải "Dragon Ball Kai").
 4. Nếu trong quá trình tra cứu gặp `tmdb_collection_id` (từ field `collection` ở Bước 1, hoặc tự tìm thêm qua `search-collection`/`collection` của `tmdb-lookup` khi cần xác minh thành viên một Collection cụ thể), gom hết vào mảng `tmdb_collection_ids` của franchise — chỉ mang tính tham khảo, KHÔNG dùng để đặt tên.

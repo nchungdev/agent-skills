@@ -91,7 +91,7 @@
       "displayName": "Franchise Classifier",
       "source": "./plugins/franchise-classifier",
       "description": "Gom nhóm phim lẻ, series, anime, live-action thành franchise (thương hiệu/IP tổng thể) từ TMDb ID / TheTVDB ID. TMDb Collection chỉ là một tín hiệu hẹp hơn franchise nhiều -- một franchise có thể trải dài nhiều Collection cộng cả series/anime không Collection nào có. Dùng AI + tra cứu web để gom xuyên suốt mọi hình thức.",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "license": "MIT",
       "keywords": [
         "franchise",
