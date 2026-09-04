@@ -23,6 +23,10 @@ python3 <skill_dir>/scripts/tmdb_client.py get <movie|tv> <tmdb_id> --poster --f
 
 # 4. Xuất JSON có cấu trúc cho các skill khác (media-collector, translate-subtitle):
 python3 <skill_dir>/scripts/tmdb_client.py get <movie|tv> <tmdb_id> --json
+
+# 5. Chưa có tmdb_id, chỉ có ID hệ thống khác (TheTVDB/IMDb) -> tra ngược ra tmdb_id:
+python3 <skill_dir>/scripts/tmdb_client.py find <external_id> --source tvdb_id --json
+python3 <skill_dir>/scripts/tmdb_client.py find <external_id> --source imdb_id --json
 ```
 
 ---
@@ -45,6 +49,17 @@ Từ một TMDb ID, skill tự động truy vấn và ánh xạ sang:
 - **TheTVDB ID** (dành cho TV Series / Anime)
 - **IMDb ID** (dành cho Hollywood / Quốc tế)
 - **Wikidata ID** (nếu có)
+
+Chiều ngược lại (chưa có tmdb_id, chỉ có tvdb_id/imdb_id) dùng lệnh `find`
+(mục 5 ở trên) — tra qua endpoint `/find` của TMDb.
+
+### 1b. Collection (Franchise cho Phim Lẻ):
+`get movie <tmdb_id> --json` trả thêm field `collection: {id, name}` khi
+phim thuộc một TMDb Collection (vd "The Dark Knight" → collection "The Dark
+Knight Collection"). `null` nếu phim độc lập. **Lưu ý**: TMDb chỉ có khái
+niệm Collection cho **phim lẻ** — TV series không có field này, nên việc
+gom nhóm series cùng vũ trụ (nhiều mùa/spin-off) cần suy luận thêm, xem
+skill `franchise-classifier`.
 
 ### 2. Trích Xuất Dàn Nhân Vật (Cast & Character Mapping):
 - Trích xuất tên nhân vật gốc + diễn viên lồng tiếng/thủ vai.

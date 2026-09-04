@@ -80,6 +80,24 @@ def search(query, media_type="multi", api_key=None, language="en-US"):
     return results
 
 
+def find_by_external_id(external_id, source="tvdb_id", api_key=None, language="en-US"):
+    """Resolve a TMDb ID from another database's ID (TheTVDB, IMDb, ...).
+
+    Dung khi ban dau chi co tvdb_id/imdb_id, chua co tmdb_id -- vd
+    franchise-classifier skill nhan dau vao la tvdb_id cua mot series.
+    """
+    data = api_get(f"/find/{external_id}", {
+        "external_source": source,
+        "language": language,
+    }, api_key)
+    if not data:
+        return None
+    return {
+        "movie_results": data.get("movie_results", []),
+        "tv_results": data.get("tv_results", []),
+    }
+
+
 def get_details(media_type, tmdb_id, api_key=None, language="en-US"):
     """Get complete metadata, external IDs, and cast for a show/movie."""
     data = api_get(f"/{media_type}/{tmdb_id}", {
@@ -127,6 +145,7 @@ def get_details(media_type, tmdb_id, api_key=None, language="en-US"):
             "vote_average": data.get("vote_average"),
         }
     else:
+        collection = data.get("belongs_to_collection")
         info = {
             "type": "movie",
             "tmdb_id": data["id"],
@@ -142,6 +161,13 @@ def get_details(media_type, tmdb_id, api_key=None, language="en-US"):
             "poster_path": data.get("poster_path"),
             "backdrop_path": data.get("backdrop_path"),
             "vote_average": data.get("vote_average"),
+            # TMDb chi co khai niem "collection" cho PHIM LE, khong co cho
+            # series -- franchise-classifier skill dung field nay lam nguon
+            # dang tin cay nhat truoc khi phai suy luan bang AI.
+            "collection": {
+                "id": collection.get("id"),
+                "name": collection.get("name"),
+            } if collection else None,
         }
 
     return info
@@ -165,6 +191,8 @@ def print_info(info):
         print(f"  • Thời lượng:    {info['runtime']} phút")
     if info.get("studios"):
         print(f"  • Studio:        {', '.join(info['studios'])}")
+    if info.get("collection"):
+        print(f"  • Collection:    {info['collection']['name']} (id {info['collection']['id']})")
     if info.get("characters"):
         chars_str = ", ".join([f"{c['character']} ({c['actor']})" for c in info['characters'][:5]])
         print(f"  • Dàn nhân vật:  {chars_str}...")
@@ -264,6 +292,15 @@ def main():
                        help="Thư mục xuất (mặc định: workspace curation của phim)")
     p_get.add_argument("--json", action="store_true", help="In ra JSON")
 
+    # Find (resolve TMDb ID from an external database ID)
+    p_find = sub.add_parser("find", help="Tra cứu TMDb ID từ ID hệ thống khác (TheTVDB/IMDb)")
+    p_find.add_argument("external_id", help="Giá trị ID nguồn khác, vd 74599")
+    p_find.add_argument("--source", default="tvdb_id",
+                         choices=["imdb_id", "tvdb_id", "facebook_id", "instagram_id", "twitter_id"],
+                         help="Hệ thống ID nguồn (mặc định: tvdb_id)")
+    p_find.add_argument("--lang", default="en-US", help="Ngôn ngữ")
+    p_find.add_argument("--json", action="store_true", help="In ra JSON")
+
     args = parser.parse_args()
 
     api_key = load_api_key()
@@ -289,6 +326,20 @@ def main():
                 download_artwork(info, out)
             if args.nfo:
                 generate_nfo(info, out)
+    elif args.command == "find":
+        result = find_by_external_id(args.external_id, args.source, api_key, args.lang)
+        if result is None:
+            sys.exit(1)
+        if args.json:
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+        else:
+            hits = result["movie_results"] + result["tv_results"]
+            if not hits:
+                print(f"❌ Không tìm thấy TMDb match cho {args.source}={args.external_id}")
+            for r in result["movie_results"]:
+                print(f"🎬 movie  tmdb_id={r['id']}  {r.get('title')} ({(r.get('release_date') or '')[:4]})")
+            for r in result["tv_results"]:
+                print(f"📺 tv     tmdb_id={r['id']}  {r.get('name')} ({(r.get('first_air_date') or '')[:4]})")
     else:
         parser.print_help()
 
