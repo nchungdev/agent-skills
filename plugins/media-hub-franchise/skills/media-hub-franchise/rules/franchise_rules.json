@@ -1,17 +1,26 @@
 {
   "disambiguation": {
+    "The Westward": [
+      {
+        "franchise": "The Westward",
+        "match": {
+          "keywords": ["The Westward", "Tây Hành Kỷ", "Đại Viên Hồn", "Da Yuan Hun", "WUKONG", "大猿魂", "西行纪"],
+          "ids": ["tvdb-371131", "tmdb-83031", "tmdb-262330", "tvdb-453871"]
+        }
+      }
+    ],
     "Kingdom": [
       {
         "franchise": "Kingdom: Ashin of the North",
         "match": {
-          "keywords": ["Ashin", "Vương Triều Xác Sống"],
+          "keywords": ["Ashin", "Vương Triều Xác Sống", "킹덤"],
           "ids": ["tvdb-286533", "tmdb-845222"]
         }
       },
       {
         "franchise": "Kingdom",
         "match": {
-          "keywords": ["Kingdom (2012)"],
+          "keywords": ["Kingdom (2012)", "キングダム"],
           "ids": ["tvdb-259635", "tmdb-46437"]
         }
       }
@@ -66,13 +75,6 @@
     ],
     "Journey to the West": [
       {
-        "franchise": "The Westward",
-        "match": {
-          "keywords": ["The Westward", "Tây Hành Kỷ"],
-          "ids": ["tvdb-371131", "tmdb-83031"]
-        }
-      },
-      {
         "franchise": "A Chinese Odyssey",
         "match": {
           "keywords": ["A Chinese Odyssey", "Đại Thoại Tây Du"],
@@ -80,17 +82,73 @@
         }
       },
       {
-        "franchise": "WUKONG",
-        "match": {
-          "keywords": ["WUKONG"],
-          "ids": ["tvdb-453871", "tmdb-262330"]
-        }
-      },
-      {
         "franchise": "Journey to the West",
         "match": {
-          "keywords": ["Tây Du Ký", "Tay Du Ky"],
+          "keywords": ["Tây Du Ký (1996)", "Tay Du Ky (1996)"],
           "ids": ["tvdb-81456", "tmdb-13922"]
+        }
+      }
+    ],
+    "Mashin Hero Wataru": [
+      {
+        "franchise": "Mashin Hero Wataru",
+        "match": {
+          "keywords": ["Mashin Hero Wataru", "Mashin Creator Wataru", "Kiếm Thần Tí Hon", "Live Nude Comedy", "The Voice South Africa"],
+          "ids": ["tvdb-227501", "tmdb-39744", "tmdb-1015361", "tmdb-248102"]
+        }
+      }
+    ],
+    "The Three Eyed One": [
+      {
+        "franchise": "The Three Eyed One",
+        "match": {
+          "keywords": ["The Three-Eyed One", "The Three Eyed One", "Clockwork Orange County", "Prince of Devil Island", "Primitive Recall"],
+          "ids": ["tvdb-320122", "tmdb-298418", "tmdb-564755", "tmdb-39745"]
+        }
+      }
+    ],
+    "Kindaichi": [
+      {
+        "franchise": "Kindaichi",
+        "match": {
+          "keywords": ["Kindaichi", "A Distant Trumpet", "Freak Encounters", "Sphinx – Secrets of the History", "Trials: Finding the Medal"],
+          "ids": ["tvdb-248458", "tvdb-79460", "tmdb-36366", "tmdb-123617", "tmdb-69355", "tmdb-69472", "tmdb-69474", "tmdb-1929789", "tmdb-1929790", "tmdb-912832", "tvdb-37552", "tvdb-282806"]
+        }
+      }
+    ],
+    "Houshin Engi": [
+      {
+        "franchise": "Houshin Engi",
+        "match": {
+          "keywords": ["Houshin Engi", "HAKYU HOSHIN ENGI", "Trinny & Susannah: Stylar om Sverige"],
+          "ids": ["tvdb-337121", "tvdb-81785", "tmdb-75863", "tmdb-39031"]
+        }
+      }
+    ],
+    "Tantei Gakuen Q": [
+      {
+        "franchise": "Tantei Gakuen Q",
+        "match": {
+          "keywords": ["Tantei Gakuen Q", "Angelo Rules"],
+          "ids": ["tvdb-230211", "tmdb-38965"]
+        }
+      }
+    ],
+    "Transformers": [
+      {
+        "franchise": "Transformers",
+        "match": {
+          "keywords": ["Transformers", "Bumblebee", "Ricos y Famosos", "Car Robots"],
+          "ids": ["tvdb-77087", "tmdb-39023"]
+        }
+      }
+    ],
+    "Black Jack": [
+      {
+        "franchise": "Black Jack",
+        "match": {
+          "keywords": ["Black Jack", "DM i stand-up 2008"],
+          "ids": ["tmdb-41249", "tvdb-72281", "tvdb-81092", "tmdb-38933", "tmdb-27213", "tmdb-87270", "tvdb-299770"]
         }
       }
     ]

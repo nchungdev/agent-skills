@@ -42,24 +42,61 @@ def match_keyword(kw, title, text):
     pattern = r'(?i)(?:\b|_)' + re.escape(kw_lower) + r'(?:\b|_)'
     return bool(re.search(pattern, text))
 
-def classify_title(title, folder_plex, all_ids_str, root_key_str, rules):
-    text = f"{title} {folder_plex}".lower()
+def get_tmdb_meta(media_type, tmdb_id):
+    cache_file = SKILL_DIR / "data" / "tmdb_cache.json"
+    cache = {}
+    if cache_file.exists():
+        try:
+            with open(cache_file, "r", encoding="utf-8") as f:
+                cache = json.load(f)
+        except Exception:
+            pass
+
+    key = f"{media_type}_{tmdb_id}"
+    if key in cache:
+        return cache[key]
+
+    # Tra cứu qua tmdb_client nếu có
+    client = SKILL_DIR.parent.parent / "tmdb-lookup" / "skills" / "tmdb-lookup" / "scripts" / "tmdb_client.py"
+    if client.exists():
+        import subprocess
+        try:
+            res = subprocess.run(
+                ["python3", str(client), "get", media_type, str(tmdb_id), "--json"],
+                capture_output=True, text=True, timeout=5
+            )
+            data = json.loads(res.stdout)
+            meta = {
+                "original_title": data.get("original_title", ""),
+                "overview": data.get("overview", ""),
+                "studios": data.get("studios", []),
+                "collection": data.get("collection", {})
+            }
+            cache[key] = meta
+            with open(cache_file, "w", encoding="utf-8") as f:
+                json.dump(cache, f, ensure_ascii=False, indent=2)
+            return meta
+        except Exception:
+            pass
+
+    return {}
+
+def classify_title(title, folders_str, all_ids_str, root_key_str, extra_text, rules):
+    text = f"{title} {folders_str} {extra_text}".lower()
     ids_text = f"{all_ids_str} {root_key_str}".lower()
     
     # 1. BỘ LỌC BẢN CHẤT IP (Disambiguation): Phân tách các tựa phim trùng/gần giống nhưng khác IP
-    for base_name, branches in rules.get("disambiguation", {}).items():
-        pattern = r'(?i)(?:\b|_)' + re.escape(base_name.lower()) + r'(?:\b|_)'
-        if re.search(pattern, text) or re.search(pattern, ids_text):
-            for branch in branches:
-                m = branch.get("match", {})
-                # Check IDs match
-                for target_id in m.get("ids", []):
-                    if target_id.lower() in ids_text:
-                        return branch["franchise"]
-                # Check keyword match
-                for kw in m.get("keywords", []):
-                    if match_keyword(kw, title, text):
-                        return branch["franchise"]
+    for group_name, branches in rules.get("disambiguation", {}).items():
+        for branch in branches:
+            m = branch.get("match", {})
+            # So khớp theo ID (độ chính xác 100%)
+            for target_id in m.get("ids", []):
+                if target_id.lower() in ids_text:
+                    return branch["franchise"]
+            # So khớp theo từ khóa / tên gốc / tên tiếng Việt
+            for kw in m.get("keywords", []):
+                if match_keyword(kw, title, text):
+                    return branch["franchise"]
 
     # 2. Umbrella rules (Vũ trụ lớn: Marvel, DC, Ghibli, Shinkai, Higashino Keigo, Super Sentai...)
     for franchise, keywords in rules.get("umbrella_rules", {}).items():
@@ -158,15 +195,32 @@ def build_catalog(csv_file=None):
         if not title:
             continue
         folder_plex = (row.get("folder_plex") or "").strip()
+        folder_local = (row.get("folder_local") or "").strip()
+        folder_jellyfin = (row.get("folder_jellyfin") or "").strip()
+        folder_gdrive = (row.get("folder_gdrive") or "").strip()
+        all_folders = f"{folder_plex} {folder_local} {folder_jellyfin} {folder_gdrive}"
+        
         all_ids = (row.get("all_ids") or "").strip()
         root_key = (row.get("root_key") or "").strip()
-        
-        # BƯỚC 2: PHÂN LOẠI THEO IP & FRANCHISE
-        franchise = classify_title(title, folder_plex, all_ids, root_key, rules)
-        
         ids = extract_ids(all_ids, root_key)
+        
         episodes = (row.get("episodes") or "").strip()
         media_type = "series" if (episodes.isdigit() and int(episodes) > 1) else (row.get("type", "").strip() or "movie")
+        
+        # BƯỚC 2: TRA CỨU METADATA ENRICHMENT (TMDb)
+        extra_meta = ""
+        if ids["tmdb"]:
+            m_meta = get_tmdb_meta(media_type if media_type == "tv" else "movie", ids["tmdb"][0])
+            if not m_meta and media_type != "tv":
+                m_meta = get_tmdb_meta("tv", ids["tmdb"][0])
+            if m_meta:
+                ot = m_meta.get("original_title", "")
+                studios = " ".join(m_meta.get("studios", []))
+                coll = m_meta.get("collection", {}).get("name", "") if isinstance(m_meta.get("collection"), dict) else ""
+                extra_meta = f"{ot} {studios} {coll}"
+        
+        # BƯỚC 3: PHÂN LOẠI THEO IP & FRANCHISE
+        franchise = classify_title(title, all_folders, all_ids, root_key, extra_meta, rules)
         
         item = {
             "title": title,
@@ -277,7 +331,7 @@ def categorize_list(titles_or_file):
 
     grouped = {}
     for t in titles:
-        franchise = classify_title(t, "", "", "", rules)
+        franchise = classify_title(t, "", "", "", "", rules)
         if franchise not in grouped:
             grouped[franchise] = []
         grouped[franchise].append(t)

@@ -62,7 +62,26 @@
       "sources": "plex"
     }
   ],
-  "A Distant Trumpet": [
+  "Kindaichi": [
+    {
+      "title": "The Files of the Young Kindaichi",
+      "year": "1995",
+      "type": "series",
+      "viet_title": "The Files of Young Kindaichi",
+      "root_key": "tvdb-248458",
+      "tmdb_ids": [
+        "36366"
+      ],
+      "tvdb_ids": [
+        "248458"
+      ],
+      "imdb_ids": [
+        "tt21035364"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex+local"
+    },
     {
       "title": "A Distant Trumpet",
       "year": "1996",
@@ -82,6 +101,182 @@
       "thuyet_minh_vn": false,
       "sub_langs": "",
       "sources": "jellyfin+plex"
+    },
+    {
+      "title": "The Files of Young Kindaichi: Legend of the Shanghai Mermaid",
+      "year": "1997",
+      "type": "movie",
+      "viet_title": "Thám tử trung học Kindaichi: Truyền thuyết nàng tiên cá Thượng Hải",
+      "root_key": "tmdb-320786",
+      "tmdb_ids": [
+        "320786"
+      ],
+      "tvdb_ids": [],
+      "imdb_ids": [
+        "tt0298384"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
+    },
+    {
+      "title": "The Files of the Young Kindaichi (Live Action)",
+      "year": "1997",
+      "type": "series",
+      "viet_title": "Thám tử Kindaichi",
+      "root_key": "tmdb-123617",
+      "tmdb_ids": [
+        "123617",
+        "23587"
+      ],
+      "tvdb_ids": [
+        "79460"
+      ],
+      "imdb_ids": [
+        "tt0348952"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "eng,ind,jpn,vie",
+      "sources": "jellyfin+plex+gdrive"
+    },
+    {
+      "title": "Kindaichi Case Files Movie 2: Deep Blue Massacre",
+      "year": "1999",
+      "type": "movie",
+      "viet_title": "Kindaichi Shounen No Jikenbo Deep Blue Massacre",
+      "root_key": "tmdb-69474",
+      "tmdb_ids": [
+        "535915",
+        "69474"
+      ],
+      "tvdb_ids": [],
+      "imdb_ids": [
+        "tt14170110"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
+    },
+    {
+      "title": "Kindaichi Case Files: Legendary Vampire Murders",
+      "year": "2007",
+      "type": "movie",
+      "viet_title": "Kindaichi Case Files SP Legendary Vampire Murders",
+      "root_key": "tmdb-1929789",
+      "tmdb_ids": [
+        "1929789",
+        "263954"
+      ],
+      "tvdb_ids": [],
+      "imdb_ids": [
+        "tt18548394"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
+    },
+    {
+      "title": "The File of Young Kindaichi Returns",
+      "year": "2014",
+      "type": "series",
+      "viet_title": "Thám tử Kindaichi trở lại",
+      "root_key": "tmdb-69355",
+      "tmdb_ids": [
+        "69355"
+      ],
+      "tvdb_ids": [],
+      "imdb_ids": [
+        "tt3620020"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
+    },
+    {
+      "title": "Trials: Finding the Medal",
+      "year": "2014",
+      "type": "movie",
+      "viet_title": "Trials: Finding the Medal",
+      "root_key": "tvdb-282806",
+      "tmdb_ids": [
+        "411979"
+      ],
+      "tvdb_ids": [
+        "282806"
+      ],
+      "imdb_ids": [
+        "tt2960600",
+        "tt3481622"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
+    },
+    {
+      "title": "Kindaichi Case Files: The Opera House Murders 3",
+      "year": "2024",
+      "type": "movie",
+      "viet_title": "",
+      "root_key": "tmdb-1929790",
+      "tmdb_ids": [
+        "1929790"
+      ],
+      "tvdb_ids": [],
+      "imdb_ids": [],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "jellyfin"
+    },
+    {
+      "title": "Freak Encounters",
+      "year": "",
+      "type": "movie",
+      "viet_title": "",
+      "root_key": "tmdb-45851",
+      "tmdb_ids": [
+        "45851"
+      ],
+      "tvdb_ids": [
+        "79354"
+      ],
+      "imdb_ids": [],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "gdrive"
+    },
+    {
+      "title": "Kindaichi Case Files: The Third Opera House Murders",
+      "year": "",
+      "type": "movie",
+      "viet_title": "Kindaichi Case Files SP the Third Opera House Murders",
+      "root_key": "tmdb-912832",
+      "tmdb_ids": [
+        "912832"
+      ],
+      "tvdb_ids": [],
+      "imdb_ids": [
+        "tt18548444"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "plex"
+    },
+    {
+      "title": "Sphinx – Secrets of the History",
+      "year": "",
+      "type": "movie",
+      "viet_title": "",
+      "root_key": "tmdb-61099",
+      "tmdb_ids": [
+        "61099"
+      ],
+      "tvdb_ids": [
+        "279782"
+      ],
+      "imdb_ids": [],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "gdrive"
     }
   ],
   "A Step Into The Past": [
@@ -124,7 +319,7 @@
       "sources": "jellyfin"
     }
   ],
-  "Angelo Rules": [
+  "Tantei Gakuen Q": [
     {
       "title": "Angelo Rules",
       "year": "",
@@ -1639,6 +1834,25 @@
   ],
   "Avatar": [
     {
+      "title": "Case Closed: Countdown to Heaven",
+      "year": "2001",
+      "type": "movie",
+      "viet_title": "Thám Tử Lừng Danh Conan: Những Giây Cuối Cùng Tới Thiên Đường",
+      "root_key": "tvdb-16551",
+      "tmdb_ids": [
+        "32022"
+      ],
+      "tvdb_ids": [
+        "16551"
+      ],
+      "imdb_ids": [
+        "tt1073223"
+      ],
+      "thuyet_minh_vn": true,
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
+    },
+    {
       "title": "Avatar",
       "year": "2009",
       "type": "movie",
@@ -1655,6 +1869,25 @@
       ],
       "thuyet_minh_vn": false,
       "sub_langs": "",
+      "sources": "jellyfin+plex"
+    },
+    {
+      "title": "Detective Conan: The Darkest Nightmare",
+      "year": "2016",
+      "type": "movie",
+      "viet_title": "Thám Tử Lừng Danh Conan: Cơn Ác Mộng Đen Tối",
+      "root_key": "tvdb-16525",
+      "tmdb_ids": [
+        "374856"
+      ],
+      "tvdb_ids": [
+        "16525"
+      ],
+      "imdb_ids": [
+        "tt4954660"
+      ],
+      "thuyet_minh_vn": true,
+      "sub_langs": "eng,vie",
       "sources": "jellyfin+plex"
     },
     {
@@ -1675,6 +1908,25 @@
       "thuyet_minh_vn": false,
       "sub_langs": "",
       "sources": "jellyfin+plex"
+    },
+    {
+      "title": "Masquerade Night",
+      "year": "",
+      "type": "movie",
+      "viet_title": "Masquerade Night",
+      "root_key": "tvdb-165837",
+      "tmdb_ids": [
+        "824202"
+      ],
+      "tvdb_ids": [
+        "165837"
+      ],
+      "imdb_ids": [
+        "tt13582738"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "Avatar Aang: The Last Airbender Collection": [
@@ -3266,6 +3518,23 @@
       "sources": "jellyfin+plex+local+gdrive"
     },
     {
+      "title": "DM i stand-up 2008",
+      "year": "1996",
+      "type": "movie",
+      "viet_title": "DM i stand-up 2008",
+      "root_key": "tmdb-41249",
+      "tmdb_ids": [
+        "41249"
+      ],
+      "tvdb_ids": [],
+      "imdb_ids": [
+        "tt0106421"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
+    },
+    {
       "title": "Black Jack",
       "year": "2005",
       "type": "series",
@@ -4160,6 +4429,23 @@
       "sources": "jellyfin+plex"
     },
     {
+      "title": "Ricos y Famosos",
+      "year": "",
+      "type": "movie",
+      "viet_title": "",
+      "root_key": "tmdb-39023",
+      "tmdb_ids": [
+        "39023"
+      ],
+      "tvdb_ids": [
+        "79178"
+      ],
+      "imdb_ids": [],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "gdrive"
+    },
+    {
       "title": "Transformers - Car Robots (2000)",
       "year": "",
       "type": "movie",
@@ -4247,25 +4533,6 @@
       ],
       "imdb_ids": [
         "tt1068773"
-      ],
-      "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie",
-      "sources": "jellyfin+plex"
-    },
-    {
-      "title": "Case Closed: Countdown to Heaven",
-      "year": "2001",
-      "type": "movie",
-      "viet_title": "Thám Tử Lừng Danh Conan: Những Giây Cuối Cùng Tới Thiên Đường",
-      "root_key": "tvdb-16551",
-      "tmdb_ids": [
-        "32022"
-      ],
-      "tvdb_ids": [
-        "16551"
-      ],
-      "imdb_ids": [
-        "tt1073223"
       ],
       "thuyet_minh_vn": true,
       "sub_langs": "eng,vie",
@@ -4538,25 +4805,6 @@
       "sources": "jellyfin+plex"
     },
     {
-      "title": "Detective Conan: The Darkest Nightmare",
-      "year": "2016",
-      "type": "movie",
-      "viet_title": "Thám Tử Lừng Danh Conan: Cơn Ác Mộng Đen Tối",
-      "root_key": "tvdb-16525",
-      "tmdb_ids": [
-        "374856"
-      ],
-      "tvdb_ids": [
-        "16525"
-      ],
-      "imdb_ids": [
-        "tt4954660"
-      ],
-      "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie",
-      "sources": "jellyfin+plex"
-    },
-    {
       "title": "Case Closed: The Crimson Love Letter",
       "year": "2017",
       "type": "movie",
@@ -4768,7 +5016,7 @@
       "sources": "jellyfin+plex"
     }
   ],
-  "Clockwork Orange County": [
+  "The Three Eyed One": [
     {
       "title": "Clockwork Orange County",
       "year": "1985",
@@ -4788,6 +5036,41 @@
       "thuyet_minh_vn": false,
       "sub_langs": "eng",
       "sources": "jellyfin+plex"
+    },
+    {
+      "title": "Primitive Recall",
+      "year": "1990",
+      "type": "series",
+      "viet_title": "The Three-eyed One (1990)",
+      "root_key": "tmdb-39745",
+      "tmdb_ids": [
+        "34853",
+        "39745"
+      ],
+      "tvdb_ids": [
+        "320122"
+      ],
+      "imdb_ids": [
+        "tt3704852"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex+local+gdrive"
+    },
+    {
+      "title": "The Three-Eyed One: The Prince of Devil Island",
+      "year": "",
+      "type": "movie",
+      "viet_title": "",
+      "root_key": "tmdb-564755",
+      "tmdb_ids": [
+        "564755"
+      ],
+      "tvdb_ids": [],
+      "imdb_ids": [],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "gdrive"
     }
   ],
   "Dan Da Dan": [
@@ -4945,25 +5228,6 @@
       ],
       "imdb_ids": [
         "tt32820897"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "jellyfin+plex"
-    }
-  ],
-  "DM i stand-up 2008": [
-    {
-      "title": "DM i stand-up 2008",
-      "year": "1996",
-      "type": "movie",
-      "viet_title": "DM i stand-up 2008",
-      "root_key": "tmdb-41249",
-      "tmdb_ids": [
-        "41249"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [
-        "tt0106421"
       ],
       "thuyet_minh_vn": false,
       "sub_langs": "",
@@ -6359,25 +6623,6 @@
       "sources": "plex"
     }
   ],
-  "Freak Encounters": [
-    {
-      "title": "Freak Encounters",
-      "year": "",
-      "type": "movie",
-      "viet_title": "",
-      "root_key": "tmdb-45851",
-      "tmdb_ids": [
-        "45851"
-      ],
-      "tvdb_ids": [
-        "79354"
-      ],
-      "imdb_ids": [],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "gdrive"
-    }
-  ],
   "Studio Ghibli": [
     {
       "title": "Warriors of the Wind",
@@ -7013,7 +7258,7 @@
       "sources": "jellyfin+plex"
     }
   ],
-  "HAKYU HOSHIN ENGI": [
+  "Houshin Engi": [
     {
       "title": "HAKYU HOSHIN ENGI",
       "year": "",
@@ -7030,6 +7275,23 @@
       "thuyet_minh_vn": false,
       "sub_langs": "",
       "sources": "local+gdrive"
+    },
+    {
+      "title": "Trinny & Susannah: Stylar om Sverige",
+      "year": "",
+      "type": "movie",
+      "viet_title": "",
+      "root_key": "tmdb-39031",
+      "tmdb_ids": [
+        "39031"
+      ],
+      "tvdb_ids": [
+        "79284"
+      ],
+      "imdb_ids": [],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "gdrive"
     }
   ],
   "Harry Potter": [
@@ -7262,7 +7524,7 @@
       "sources": "jellyfin+plex"
     }
   ],
-  "I Am Nezha 2": [
+  "I Am Nezha": [
     {
       "title": "I Am Nezha 2",
       "year": "",
@@ -7618,149 +7880,6 @@
       "sources": "jellyfin+plex"
     }
   ],
-  "Kindaichi": [
-    {
-      "title": "The Files of the Young Kindaichi",
-      "year": "1995",
-      "type": "series",
-      "viet_title": "The Files of Young Kindaichi",
-      "root_key": "tvdb-248458",
-      "tmdb_ids": [
-        "36366"
-      ],
-      "tvdb_ids": [
-        "248458"
-      ],
-      "imdb_ids": [
-        "tt21035364"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "vie",
-      "sources": "jellyfin+plex+local"
-    },
-    {
-      "title": "The Files of Young Kindaichi: Legend of the Shanghai Mermaid",
-      "year": "1997",
-      "type": "movie",
-      "viet_title": "Thám tử trung học Kindaichi: Truyền thuyết nàng tiên cá Thượng Hải",
-      "root_key": "tmdb-320786",
-      "tmdb_ids": [
-        "320786"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [
-        "tt0298384"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "vie",
-      "sources": "jellyfin+plex"
-    },
-    {
-      "title": "The Files of the Young Kindaichi (Live Action)",
-      "year": "1997",
-      "type": "series",
-      "viet_title": "Thám tử Kindaichi",
-      "root_key": "tmdb-123617",
-      "tmdb_ids": [
-        "123617",
-        "23587"
-      ],
-      "tvdb_ids": [
-        "79460"
-      ],
-      "imdb_ids": [
-        "tt0348952"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "eng,ind,jpn,vie",
-      "sources": "jellyfin+plex+gdrive"
-    },
-    {
-      "title": "Kindaichi Case Files Movie 2: Deep Blue Massacre",
-      "year": "1999",
-      "type": "movie",
-      "viet_title": "Kindaichi Shounen No Jikenbo Deep Blue Massacre",
-      "root_key": "tmdb-69474",
-      "tmdb_ids": [
-        "535915",
-        "69474"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [
-        "tt14170110"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "jellyfin+plex"
-    },
-    {
-      "title": "Kindaichi Case Files: Legendary Vampire Murders",
-      "year": "2007",
-      "type": "movie",
-      "viet_title": "Kindaichi Case Files SP Legendary Vampire Murders",
-      "root_key": "tmdb-1929789",
-      "tmdb_ids": [
-        "1929789",
-        "263954"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [
-        "tt18548394"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "jellyfin+plex"
-    },
-    {
-      "title": "The File of Young Kindaichi Returns",
-      "year": "2014",
-      "type": "series",
-      "viet_title": "Thám tử Kindaichi trở lại",
-      "root_key": "tmdb-69355",
-      "tmdb_ids": [
-        "69355"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [
-        "tt3620020"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "vie",
-      "sources": "jellyfin+plex"
-    },
-    {
-      "title": "Kindaichi Case Files: The Opera House Murders 3",
-      "year": "2024",
-      "type": "movie",
-      "viet_title": "",
-      "root_key": "tmdb-1929790",
-      "tmdb_ids": [
-        "1929790"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "jellyfin"
-    },
-    {
-      "title": "Kindaichi Case Files: The Third Opera House Murders",
-      "year": "",
-      "type": "movie",
-      "viet_title": "Kindaichi Case Files SP the Third Opera House Murders",
-      "root_key": "tmdb-912832",
-      "tmdb_ids": [
-        "912832"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [
-        "tt18548444"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "plex"
-    }
-  ],
   "Kingdom": [
     {
       "title": "Kingdom",
@@ -7801,7 +7920,7 @@
       "sources": "jellyfin+plex"
     }
   ],
-  "Live Nude Comedy": [
+  "Mashin Hero Wataru": [
     {
       "title": "Live Nude Comedy",
       "year": "1988",
@@ -7821,6 +7940,36 @@
       "thuyet_minh_vn": false,
       "sub_langs": "eng,vie,zho",
       "sources": "jellyfin+plex+gdrive"
+    },
+    {
+      "title": "Mashin Hero Wataru: The Seven Spirits Of Ryujinmaru－Reunion－",
+      "year": "2022",
+      "type": "movie",
+      "viet_title": "Mashin Hero Wataru: The Seven Spirits Of Ryujinmaru－Reunion－",
+      "root_key": "tmdb-1015361",
+      "tmdb_ids": [
+        "1015361"
+      ],
+      "tvdb_ids": [],
+      "imdb_ids": [],
+      "thuyet_minh_vn": false,
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex+gdrive"
+    },
+    {
+      "title": "The Voice South Africa",
+      "year": "2025",
+      "type": "series",
+      "viet_title": "Mashin Creator Wataru",
+      "root_key": "tmdb-248102",
+      "tmdb_ids": [
+        "248102"
+      ],
+      "tvdb_ids": [],
+      "imdb_ids": [],
+      "thuyet_minh_vn": false,
+      "sub_langs": "vie,zho",
+      "sources": "jellyfin+plex"
     }
   ],
   "One Piece": [
@@ -8412,23 +8561,6 @@
       "sources": "local"
     }
   ],
-  "Mashin Hero Wataru": [
-    {
-      "title": "Mashin Hero Wataru: The Seven Spirits Of Ryujinmaru－Reunion－",
-      "year": "2022",
-      "type": "movie",
-      "viet_title": "Mashin Hero Wataru: The Seven Spirits Of Ryujinmaru－Reunion－",
-      "root_key": "tmdb-1015361",
-      "tmdb_ids": [
-        "1015361"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [],
-      "thuyet_minh_vn": false,
-      "sub_langs": "vie",
-      "sources": "jellyfin+plex+gdrive"
-    }
-  ],
   "Higashino Keigo: Masquerade": [
     {
       "title": "Masquerade Hotel",
@@ -8448,25 +8580,6 @@
       "thuyet_minh_vn": false,
       "sub_langs": "",
       "sources": "jellyfin+plex"
-    },
-    {
-      "title": "Masquerade Night",
-      "year": "",
-      "type": "movie",
-      "viet_title": "Masquerade Night",
-      "root_key": "tvdb-165837",
-      "tmdb_ids": [
-        "824202"
-      ],
-      "tvdb_ids": [
-        "165837"
-      ],
-      "imdb_ids": [
-        "tt13582738"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "plex"
     }
   ],
   "Higashino Keigo: Galileo": [
@@ -9055,25 +9168,6 @@
       "sources": "jellyfin+plex"
     },
     {
-      "title": "Pokémon: Lucario and the Mystery of Mew",
-      "year": "2005",
-      "type": "movie",
-      "viet_title": "Pokémon: Mew Và Người Hùng Của Ngọn Sóng Lucario",
-      "root_key": "tvdb-7189",
-      "tmdb_ids": [
-        "34067"
-      ],
-      "tvdb_ids": [
-        "7189"
-      ],
-      "imdb_ids": [
-        "tt0875609"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "jellyfin+plex"
-    },
-    {
       "title": "Pokémon Ranger and the Temple of the Sea",
       "year": "2006",
       "type": "movie",
@@ -9376,6 +9470,84 @@
       "sources": "jellyfin+plex"
     }
   ],
+  "Sherlock Holmes": [
+    {
+      "title": "Spellbinder",
+      "year": "1995",
+      "type": "series",
+      "viet_title": "Spellbinder: Vùng Đất của Những Nhà Thông Thái",
+      "root_key": "tvdb-71894",
+      "tmdb_ids": [
+        "1455"
+      ],
+      "tvdb_ids": [
+        "71894"
+      ],
+      "imdb_ids": [
+        "tt0112174"
+      ],
+      "thuyet_minh_vn": true,
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
+    },
+    {
+      "title": "Pokémon: Lucario and the Mystery of Mew",
+      "year": "2005",
+      "type": "movie",
+      "viet_title": "Pokémon: Mew Và Người Hùng Của Ngọn Sóng Lucario",
+      "root_key": "tvdb-7189",
+      "tmdb_ids": [
+        "34067"
+      ],
+      "tvdb_ids": [
+        "7189"
+      ],
+      "imdb_ids": [
+        "tt0875609"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
+    },
+    {
+      "title": "Sherlock Holmes",
+      "year": "2009",
+      "type": "movie",
+      "viet_title": "Thám Tử Sherlock Holmes",
+      "root_key": "tvdb-718",
+      "tmdb_ids": [
+        "10528"
+      ],
+      "tvdb_ids": [
+        "718"
+      ],
+      "imdb_ids": [
+        "tt0988045"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
+    },
+    {
+      "title": "Sherlock Holmes: A Game of Shadows",
+      "year": "2011",
+      "type": "movie",
+      "viet_title": "Thám Tử Sherlock Holmes: Trò Chơi Của Bóng Đêm",
+      "root_key": "tvdb-980",
+      "tmdb_ids": [
+        "58574"
+      ],
+      "tvdb_ids": [
+        "980"
+      ],
+      "imdb_ids": [
+        "tt1515091"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
+    }
+  ],
   "Pom Poko": [
     {
       "title": "Pom Poko",
@@ -9395,62 +9567,6 @@
       "thuyet_minh_vn": false,
       "sub_langs": "",
       "sources": "plex"
-    }
-  ],
-  "The Three Eyed One": [
-    {
-      "title": "Primitive Recall",
-      "year": "1990",
-      "type": "series",
-      "viet_title": "The Three-eyed One (1990)",
-      "root_key": "tmdb-39745",
-      "tmdb_ids": [
-        "34853",
-        "39745"
-      ],
-      "tvdb_ids": [
-        "320122"
-      ],
-      "imdb_ids": [
-        "tt3704852"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie",
-      "sources": "jellyfin+plex+local+gdrive"
-    },
-    {
-      "title": "The Three-Eyed One: The Prince of Devil Island",
-      "year": "",
-      "type": "movie",
-      "viet_title": "",
-      "root_key": "tmdb-564755",
-      "tmdb_ids": [
-        "564755"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "gdrive"
-    }
-  ],
-  "Ricos y Famosos": [
-    {
-      "title": "Ricos y Famosos",
-      "year": "",
-      "type": "movie",
-      "viet_title": "",
-      "root_key": "tmdb-39023",
-      "tmdb_ids": [
-        "39023"
-      ],
-      "tvdb_ids": [
-        "79178"
-      ],
-      "imdb_ids": [],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "gdrive"
     }
   ],
   "Royal Tramp": [
@@ -9514,46 +9630,6 @@
       "sources": "jellyfin+plex"
     }
   ],
-  "Sherlock Holmes": [
-    {
-      "title": "Sherlock Holmes",
-      "year": "2009",
-      "type": "movie",
-      "viet_title": "Thám Tử Sherlock Holmes",
-      "root_key": "tvdb-718",
-      "tmdb_ids": [
-        "10528"
-      ],
-      "tvdb_ids": [
-        "718"
-      ],
-      "imdb_ids": [
-        "tt0988045"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie",
-      "sources": "jellyfin+plex"
-    },
-    {
-      "title": "Sherlock Holmes: A Game of Shadows",
-      "year": "2011",
-      "type": "movie",
-      "viet_title": "Thám Tử Sherlock Holmes: Trò Chơi Của Bóng Đêm",
-      "root_key": "tvdb-980",
-      "tmdb_ids": [
-        "58574"
-      ],
-      "tvdb_ids": [
-        "980"
-      ],
-      "imdb_ids": [
-        "tt1515091"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "jellyfin+plex"
-    }
-  ],
   "Shippû! 'Konoha gakuen' den": [
     {
       "title": "Shippû! 'Konoha gakuen' den",
@@ -9613,46 +9689,6 @@
       "thuyet_minh_vn": false,
       "sub_langs": "",
       "sources": "jellyfin+plex"
-    }
-  ],
-  "Spellbinder": [
-    {
-      "title": "Spellbinder",
-      "year": "1995",
-      "type": "series",
-      "viet_title": "Spellbinder: Vùng Đất của Những Nhà Thông Thái",
-      "root_key": "tvdb-71894",
-      "tmdb_ids": [
-        "1455"
-      ],
-      "tvdb_ids": [
-        "71894"
-      ],
-      "imdb_ids": [
-        "tt0112174"
-      ],
-      "thuyet_minh_vn": true,
-      "sub_langs": "eng",
-      "sources": "jellyfin+plex"
-    }
-  ],
-  "Sphinx – Secrets of the History": [
-    {
-      "title": "Sphinx – Secrets of the History",
-      "year": "",
-      "type": "movie",
-      "viet_title": "",
-      "root_key": "tmdb-61099",
-      "tmdb_ids": [
-        "61099"
-      ],
-      "tvdb_ids": [
-        "279782"
-      ],
-      "imdb_ids": [],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "gdrive"
     }
   ],
   "Super Fishing Grander Musashi": [
@@ -9919,23 +9955,6 @@
       "sources": "jellyfin+plex"
     }
   ],
-  "The Voice South Africa": [
-    {
-      "title": "The Voice South Africa",
-      "year": "2025",
-      "type": "series",
-      "viet_title": "Mashin Creator Wataru",
-      "root_key": "tmdb-248102",
-      "tmdb_ids": [
-        "248102"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [],
-      "thuyet_minh_vn": false,
-      "sub_langs": "vie,zho",
-      "sources": "jellyfin+plex"
-    }
-  ],
   "The Westward": [
     {
       "title": "The Westward",
@@ -9953,6 +9972,23 @@
       "thuyet_minh_vn": false,
       "sub_langs": "",
       "sources": "local+gdrive"
+    },
+    {
+      "title": "WUKONG",
+      "year": "",
+      "type": "movie",
+      "viet_title": "",
+      "root_key": "tmdb-262330",
+      "tmdb_ids": [
+        "262330"
+      ],
+      "tvdb_ids": [
+        "453871"
+      ],
+      "imdb_ids": [],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "gdrive"
     }
   ],
   "The Young Detective": [
@@ -9995,47 +10031,6 @@
       "sources": "jellyfin"
     }
   ],
-  "Trials": [
-    {
-      "title": "Trials: Finding the Medal",
-      "year": "2014",
-      "type": "movie",
-      "viet_title": "Trials: Finding the Medal",
-      "root_key": "tvdb-282806",
-      "tmdb_ids": [
-        "411979"
-      ],
-      "tvdb_ids": [
-        "282806"
-      ],
-      "imdb_ids": [
-        "tt2960600",
-        "tt3481622"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "jellyfin+plex"
-    }
-  ],
-  "Trinny & Susannah": [
-    {
-      "title": "Trinny & Susannah: Stylar om Sverige",
-      "year": "",
-      "type": "movie",
-      "viet_title": "",
-      "root_key": "tmdb-39031",
-      "tmdb_ids": [
-        "39031"
-      ],
-      "tvdb_ids": [
-        "79284"
-      ],
-      "imdb_ids": [],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "gdrive"
-    }
-  ],
   "Troy": [
     {
       "title": "Troy",
@@ -10076,25 +10071,6 @@
       "thuyet_minh_vn": true,
       "sub_langs": "chi,cze,dan,dut,eng,fin,fre,ger,gre,hun,ita,jpn,kor,nor,pol,por,rum,slo,spa,swe,vie",
       "sources": "jellyfin+plex"
-    }
-  ],
-  "WUKONG": [
-    {
-      "title": "WUKONG",
-      "year": "",
-      "type": "movie",
-      "viet_title": "",
-      "root_key": "tmdb-262330",
-      "tmdb_ids": [
-        "262330"
-      ],
-      "tvdb_ids": [
-        "453871"
-      ],
-      "imdb_ids": [],
-      "thuyet_minh_vn": false,
-      "sub_langs": "",
-      "sources": "gdrive"
     }
   ],
   "Your Name.": [
