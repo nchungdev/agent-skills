@@ -1,0 +1,21 @@
+{
+  "name": "media-hub-franchise",
+  "displayName": "Media Hub Franchise",
+  "description": "Tra cứu franchise phim từ kho Media Hub, liệt kê các franchise trong list phim, xem danh sách phim trong từng franchise (kèm ID tmdb/tvdb để map với file input CSV), và tự động sắp xếp/phân loại một danh sách phim bất kỳ vào đúng franchise.",
+  "version": "1.0.0",
+  "author": {
+    "name": "nchungdev",
+    "url": "https://github.com/nchungdev"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/nchungdev/agent-skills",
+  "repository": "https://github.com/nchungdev/agent-skills",
+  "keywords": [
+    "franchise",
+    "media-hub",
+    "tmdb",
+    "tvdb",
+    "catalog",
+    "movies"
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "umbrella_rules": {
+    "Marvel Universe": [
+      "Spider-Man", "Iron Man", "Avengers", "X-Men", "X2", "Wolverine", "Logan",
+      "Deadpool", "Thor", "Captain America", "Ant-Man", "Black Panther", "Doctor Strange",
+      "Hulk", "Guardians of the Galaxy", "Loki", "WandaVision", "Moon Knight",
+      "Eternals", "Shang-Chi", "The Falcon and the Winter Soldier", "Thunderbolts",
+      "The Punisher", "Dark Phoenix", "Black Widow", "Captain Marvel", "Big Hero 6",
+      "Marvel Rising", "Marvel Super Hero Adventures"
+    ],
+    "DC Universe": [
+      "The Dark Knight", "Zack Snyder's Justice League", "Superman", "Batman"
+    ],
+    "Studio Ghibli": [
+      "Totoro", "Spirited Away", "Howl's Moving Castle", "Princess Mononoke",
+      "Kiki's Delivery Service", "Ponyo", "Porco Rosso", "Laputa", "The Wind Rises",
+      "The Secret World of Arrietty", "From Up on Poppy Hill", "The Tale of The Princess Kaguya",
+      "When Marnie Was There", "Grave of the Fireflies", "Only Yesterday", "Ocean Waves",
+      "Whisper of the Heart", "Warriors of the Wind", "My Neighbors the Yamadas",
+      "The Cat Returns", "Tales from Earthsea"
+    ],
+    "The Makoto Shinkai Collection": [
+      "Voices of a Distant Star", "The Place Promised in Our Early Days",
+      "Children Who Chase Lost Voices", "The Garden of Words", "Your Name.",
+      "Weathering with You", "Suzume"
+    ],
+    "Higashino Keigo: Galileo": [
+      "Midsummer's Equation", "The Devotion of Suspect X", "Silent Parade", "Suspect X"
+    ],
+    "Higashino Keigo: Kaga Kyoichiro (Shinzanmono)": [
+      "The Wings of the Kirin", "The Crimes That Bind"
+    ],
+    "Higashino Keigo: Masquerade": [
+      "Masquerade Hotel", "Masquerade Night"
+    ],
+    "Higashino Keigo: Standalone Novels": [
+      "Into the White Night", "The Letters", "The Hovering Blade", "Brutus's Heart",
+      "Broken", "Platinum Data", "The Miracles of the Namiya General Store",
+      "Laplace's Witch", "Perfect Number", "Secret", "g@me."
+    ],
+    "Super Sentai": [
+      "Sentai", "Timeranger", "Gaoranger", "Hurricaneger", "Abaranger", "Abarenjā",
+      "Dekaranger", "Magiranger", "Boukenger", "Gekiranger", "Go-Onger", "Shinkenger",
+      "Goseiger", "Gokaiger", "Go-Busters", "Kyoryuger", "ToQger", "Ninninger",
+      "Zyuohger", "Kyuranger", "Ryusoulger", "Zenkaiger", "Donbrothers", "King-Ohger",
+      "Boonboomger", "Gozyuger", "Twokaizer"
+    ],
+    "Space Squad Collection": [
+      "Girls in Trouble: Space Squad", "Space Squad", "Space Sheriff Gavan"
+    ]
+  },
+  "keyword_franchises": [
+    "Doraemon",
+    "One Piece",
+    "Dragon Ball",
+    "Detective Conan",
+    "Case Closed",
+    "Naruto",
+    "Pokémon",
+    "Pokemon",
+    "Transformers",
+    "Bumblebee",
+    "Kindaichi",
+    "B-Daman",
+    "Bottleman",
+    "Harry Potter",
+    "Mission: Impossible",
+    "Black Jack",
+    "Ice Age",
+    "Gintama",
+    "InuYasha",
+    "Pirates of the Caribbean",
+    "Planet of the Apes",
+    "How to Train Your Dragon",
+    "A Chinese Odyssey",
+    "Avatar",
+    "Demon Slayer",
+    "Mashin Hero Wataru",
+    "Ne Zha",
+    "Royal Tramp",
+    "Sherlock Holmes",
+    "The Three Eyed One",
+    "The Three-Eyed One",
+    "Primitive Recall"
+  ],
+  "canonical_name_map": {
+    "Case Closed": "Detective Conan",
+    "Pokemon": "Pokémon",
+    "Bumblebee": "Transformers",
+    "Bottleman": "B-Daman",
+    "The Three-Eyed One": "The Three Eyed One",
+    "Primitive Recall": "The Three Eyed One",
+    "Gintama": "Gintama Series"
+  }
+}

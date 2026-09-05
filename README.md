@@ -1,12 +1,12 @@
 # 🪐 Antigravity Agent Skills & Media Ecosystem
 
-Kho lưu trữ chuẩn hóa bộ **9 Agent Skills & Plugins** chuyên biệt cho hệ sinh thái **AI Agent & Media Automation**.
+Kho lưu trữ chuẩn hóa bộ **10 Agent Skills & Plugins** chuyên biệt cho hệ sinh thái **AI Agent & Media Automation**.
 
 > 🚀 **Media Hub Standalone App**: Ứng dụng Desktop & Web Dashboard điều phối trung tâm đã được tách thành repository riêng biệt tại [**nchungdev/media-hub**](https://github.com/nchungdev/media-hub). Bộ kỹ năng trong repository này cung cấp toàn bộ năng lực AI Agent xử lý ngầm cho Media Hub.
 
 ---
 
-## 🏛️ Danh Sách 9 Agent Skills
+## 🏛️ Danh Sách 10 Agent Skills
 
 ### 🚀 1. TẦNG QUY TRÌNH CHÍNH (CORE PIPELINE)
 * **`media-downloader`**: Bộ tải dữ liệu đa nguồn (Direct HTTP/DDL, Torrent qua Aria2c Client P2P, hoặc Torrent qua TorBox Debrid Cloud API).
@@ -19,6 +19,7 @@ Kho lưu trữ chuẩn hóa bộ **9 Agent Skills & Plugins** chuyên biệt cho
 * **`media-collector`**: Sưu tầm, tìm nguồn torrent/magnet, lập Census bản quyền và ước tính dung lượng.
 * **`tmdb-lookup`**: Tra cứu siêu dữ liệu The Movie Database (TMDb v3), tải Poster/Fanart HD và tạo file NFO chuẩn.
 * **`franchise-classifier`**: Gom nhóm phim lẻ, series, anime, live-action thành franchise (thương hiệu/IP tổng thể) từ TMDb ID/TheTVDB ID — TMDb Collection chỉ là một tín hiệu hẹp hơn franchise nhiều, dùng AI + tra cứu web để gom xuyên suốt mọi hình thức.
+* **`media-hub-franchise`**: Tra cứu và quản lý franchise phim từ kho Media Hub, liệt kê franchise, xem danh sách phim kèm mã tmdb/tvdb để map với CSV, và tự động sắp xếp danh sách phim vào từng franchise.
 * **`translate-subtitle`**: Động cơ dịch thuật phụ đề 2 tầng chuyên sâu cho phim và anime (kèm `subtitle-glossary-hub`).
 * **`subtitle-extractor`**: Bóc tách phụ đề nhúng (Muxed Subtitles) từ video container (MKV, MP4, M4V) ra file `.srt`, `.ass`.
 * **`sub-to-webvtt`**: Chuyển đổi và làm sạch phụ đề sang chuẩn WebVTT (`.vtt`) tối ưu phát trực tuyến trên trình duyệt.
