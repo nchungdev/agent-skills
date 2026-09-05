@@ -1,4 +1,100 @@
 {
+  "disambiguation": {
+    "Kingdom": [
+      {
+        "franchise": "Kingdom: Ashin of the North",
+        "match": {
+          "keywords": ["Ashin", "Vương Triều Xác Sống"],
+          "ids": ["tvdb-286533", "tmdb-845222"]
+        }
+      },
+      {
+        "franchise": "Kingdom",
+        "match": {
+          "keywords": ["Kingdom (2012)"],
+          "ids": ["tvdb-259635", "tmdb-46437"]
+        }
+      }
+    ],
+    "Avatar": [
+      {
+        "franchise": "Avatar Aang: The Last Airbender Collection",
+        "match": {
+          "keywords": ["Aang", "Airbender", "Tiết Khí Sư"],
+          "ids": ["tvdb-354041", "tmdb-980431"]
+        }
+      },
+      {
+        "franchise": "Avatar",
+        "match": {
+          "keywords": ["Thế Thân", "Fire and Ash", "Way of Water"],
+          "ids": ["tvdb-165", "tvdb-30126", "tmdb-19995", "tmdb-83533"]
+        }
+      }
+    ],
+    "Ne Zha": [
+      {
+        "franchise": "I Am Nezha",
+        "match": {
+          "keywords": ["I Am Nezha", "I Am Ne Zha"],
+          "ids": ["tmdb-1173900"]
+        }
+      },
+      {
+        "franchise": "Ne Zha",
+        "match": {
+          "keywords": ["Ma Đồng Giáng Thế", "Ne Zha"],
+          "ids": ["tvdb-131155", "tmdb-615453", "tmdb-980477"]
+        }
+      }
+    ],
+    "Sherlock": [
+      {
+        "franchise": "Sherlock Holmes",
+        "match": {
+          "keywords": ["Sherlock Holmes", "Game of Shadows", "Trò Chơi Của Bóng Đêm"],
+          "ids": ["tvdb-718", "tvdb-980", "tmdb-10528", "tmdb-58574"]
+        }
+      },
+      {
+        "franchise": "Sherlock",
+        "match": {
+          "keywords": ["Sherlock (2010)", "Thám Tử Sherlock"],
+          "ids": ["tvdb-176941", "tmdb-19885"]
+        }
+      }
+    ],
+    "Journey to the West": [
+      {
+        "franchise": "The Westward",
+        "match": {
+          "keywords": ["The Westward", "Tây Hành Kỷ"],
+          "ids": ["tvdb-371131", "tmdb-83031"]
+        }
+      },
+      {
+        "franchise": "A Chinese Odyssey",
+        "match": {
+          "keywords": ["A Chinese Odyssey", "Đại Thoại Tây Du"],
+          "ids": ["tvdb-6861", "tvdb-10459"]
+        }
+      },
+      {
+        "franchise": "WUKONG",
+        "match": {
+          "keywords": ["WUKONG"],
+          "ids": ["tvdb-453871", "tmdb-262330"]
+        }
+      },
+      {
+        "franchise": "Journey to the West",
+        "match": {
+          "keywords": ["Tây Du Ký", "Tay Du Ky"],
+          "ids": ["tvdb-81456", "tmdb-13922"]
+        }
+      }
+    ]
+  },
   "umbrella_rules": {
     "Marvel Universe": [
       "Spider-Man", "Iron Man", "Avengers", "X-Men", "X2", "Wolverine", "Logan",
@@ -38,15 +134,21 @@
       "Broken", "Platinum Data", "The Miracles of the Namiya General Store",
       "Laplace's Witch", "Perfect Number", "Secret", "g@me."
     ],
+    "Space Squad Collection": [
+      "Girls in Trouble: Space Squad", "Space Squad", "Space Sheriff Gavan"
+    ],
+    "Super Hero Taisen Series": [
+      "Super Hero Taisen", "Super Hero Wars"
+    ],
+    "Toho Unused Special Effects Complete Collection": [
+      "Toho Unused Special Effects Complete Collection"
+    ],
     "Super Sentai": [
       "Sentai", "Timeranger", "Gaoranger", "Hurricaneger", "Abaranger", "Abarenjā",
       "Dekaranger", "Magiranger", "Boukenger", "Gekiranger", "Go-Onger", "Shinkenger",
       "Goseiger", "Gokaiger", "Go-Busters", "Kyoryuger", "ToQger", "Ninninger",
       "Zyuohger", "Kyuranger", "Ryusoulger", "Zenkaiger", "Donbrothers", "King-Ohger",
       "Boonboomger", "Gozyuger", "Twokaizer"
-    ],
-    "Space Squad Collection": [
-      "Girls in Trouble: Space Squad", "Space Squad", "Space Sheriff Gavan"
     ]
   },
   "keyword_franchises": [
@@ -73,12 +175,11 @@
     "Planet of the Apes",
     "How to Train Your Dragon",
     "A Chinese Odyssey",
-    "Avatar",
+    "The Westward",
+    "Journey to the West",
     "Demon Slayer",
     "Mashin Hero Wataru",
-    "Ne Zha",
     "Royal Tramp",
-    "Sherlock Holmes",
     "The Three Eyed One",
     "The Three-Eyed One",
     "Primitive Recall"

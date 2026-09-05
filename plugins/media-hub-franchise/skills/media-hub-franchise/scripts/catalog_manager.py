@@ -12,7 +12,7 @@ CATALOG_PATH = SKILL_DIR / "data" / "catalog.json"
 
 def load_rules():
     if not RULES_PATH.exists():
-        return {"umbrella_rules": {}, "keyword_franchises": [], "canonical_name_map": {}}
+        return {"disambiguation": {}, "umbrella_rules": {}, "keyword_franchises": [], "canonical_name_map": {}}
     with open(RULES_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
 
@@ -33,33 +33,110 @@ def extract_ids(all_ids_str, root_key_str):
         "root_key": root_key_str.strip()
     }
 
-def classify_title(title, folder_plex, rules):
+def match_keyword(kw, title, text):
+    kw_lower = kw.lower().strip()
+    clean_title = re.sub(r'\s*\(\d{4}\)', '', title).strip().lower()
+    # Các từ đơn thông dụng cần so khớp chính xác tên phim thay vì substring
+    if kw_lower in ["secret", "broken", "game", "g@me.", "oldboy", "troy"]:
+        return clean_title == kw_lower or title.lower().strip() == kw_lower
+    pattern = r'(?i)(?:\b|_)' + re.escape(kw_lower) + r'(?:\b|_)'
+    return bool(re.search(pattern, text))
+
+def classify_title(title, folder_plex, all_ids_str, root_key_str, rules):
     text = f"{title} {folder_plex}".lower()
+    ids_text = f"{all_ids_str} {root_key_str}".lower()
     
-    # 1. Umbrella universe rules (highest priority)
+    # 1. BỘ LỌC BẢN CHẤT IP (Disambiguation): Phân tách các tựa phim trùng/gần giống nhưng khác IP
+    for base_name, branches in rules.get("disambiguation", {}).items():
+        pattern = r'(?i)(?:\b|_)' + re.escape(base_name.lower()) + r'(?:\b|_)'
+        if re.search(pattern, text) or re.search(pattern, ids_text):
+            for branch in branches:
+                m = branch.get("match", {})
+                # Check IDs match
+                for target_id in m.get("ids", []):
+                    if target_id.lower() in ids_text:
+                        return branch["franchise"]
+                # Check keyword match
+                for kw in m.get("keywords", []):
+                    if match_keyword(kw, title, text):
+                        return branch["franchise"]
+
+    # 2. Umbrella rules (Vũ trụ lớn: Marvel, DC, Ghibli, Shinkai, Higashino Keigo, Super Sentai...)
     for franchise, keywords in rules.get("umbrella_rules", {}).items():
         for kw in keywords:
-            # Word boundary or case-insensitive phrase match
-            pattern = r'(?i)(?:\b|_)' + re.escape(kw.lower()) + r'(?:\b|_)'
-            if re.search(pattern, text):
+            if match_keyword(kw, title, text):
                 return franchise
 
-    # 2. Keyword-based franchises
+    # 3. Keyword-based franchises (Chuỗi theo tên thương hiệu/đồ chơi: Doraemon, One Piece, B-Daman...)
     canonical_map = rules.get("canonical_name_map", {})
     for kw in rules.get("keyword_franchises", []):
-        pattern = r'(?i)(?:\b|_)' + re.escape(kw.lower()) + r'(?:\b|_)'
-        if re.search(pattern, text):
+        if match_keyword(kw, title, text):
             return canonical_map.get(kw, kw)
 
-    # 3. Colon prefix heuristic: e.g. "Ne Zha: Something"
+    # 4. Heuristic dấu hai chấm (vd: "Ne Zha: ...")
     if ":" in title:
         candidate = title.split(":")[0].strip()
         if len(candidate) > 2 and candidate.lower() not in ["the", "a", "an"]:
             return canonical_map.get(candidate, candidate)
 
-    # 4. Standalone / Title itself
+    # 5. Phim độc lập (Standalone)
     clean_title = re.sub(r'\s*\(\d{4}\)', '', title).strip()
     return clean_title
+
+def deduplicate_rows(rows):
+    """
+    Chống trùng thông minh:
+    Gộp các bản ghi thuộc cùng 1 tác phẩm bị chia làm nhiều dòng (do nguồn Jellyfin/Plex/Drive khác nhau)
+    nhưng giữ nguyên các bản remake/khác năm (như Doraemon 1980 vs 2006).
+    """
+    by_title = {}
+    for r in rows:
+        t = r.get("title", "").strip().lower()
+        if not t:
+            continue
+        by_title.setdefault(t, []).append(r)
+
+    deduped = []
+    for t, group in by_title.items():
+        if len(group) == 1:
+            deduped.append(group[0])
+            continue
+
+        # Có nhiều dòng trùng title -> kiểm tra năm
+        years = {g.get("year") for g in group if g.get("year")}
+        
+        # Nếu có nhiều năm khác nhau rõ rệt (vd 1980 và 2006) -> Là phim remake/phần khác -> Giữ riêng
+        if len(years) > 1:
+            for y in sorted(years):
+                sub = [g for g in group if g.get("year") == y]
+                merged_item = dict(sub[0])
+                for other in sub[1:]:
+                    merged_item["all_ids"] = (merged_item.get("all_ids", "") + " " + other.get("all_ids", "")).strip()
+                deduped.append(merged_item)
+            # Dòng nào không có năm thì gộp vào dòng đầu tiên hoặc giữ riêng
+            empty = [g for g in group if not g.get("year")]
+            for em in empty:
+                deduped.append(em)
+        else:
+            # Cùng 1 phim xuất hiện ở nhiều server (1 dòng Jellyfin, 1 dòng Plex...) -> GỘP NGUỒN
+            merged_item = dict(group[0])
+            for other in group[1:]:
+                if not merged_item.get("year") and other.get("year"):
+                    merged_item["year"] = other["year"]
+                if not merged_item.get("folder_plex") and other.get("folder_plex"):
+                    merged_item["folder_plex"] = other["folder_plex"]
+                merged_item["all_ids"] = (merged_item.get("all_ids", "") + " " + other.get("all_ids", "")).strip()
+                if other.get("thuyet_minh_vn") == "1":
+                    merged_item["thuyet_minh_vn"] = "1"
+                if other.get("sub_langs"):
+                    merged_item["sub_langs"] = other["sub_langs"]
+                # Gộp sources
+                s1 = set((merged_item.get("sources") or "").split("+"))
+                s2 = set((other.get("sources") or "").split("+"))
+                merged_item["sources"] = "+".join(sorted(filter(None, s1 | s2)))
+            deduped.append(merged_item)
+
+    return deduped
 
 def build_catalog(csv_file=None):
     source_csv = Path(csv_file) if csv_file else CSV_PATH
@@ -68,39 +145,48 @@ def build_catalog(csv_file=None):
         sys.exit(1)
         
     rules = load_rules()
-    catalog = {}
-
+    
     with open(source_csv, "r", encoding="utf-8-sig") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            title = (row.get("title") or "").strip()
-            if not title:
-                continue
-            folder_plex = (row.get("folder_plex") or "").strip()
-            franchise = classify_title(title, folder_plex, rules)
-            
-            ids = extract_ids(row.get("all_ids", ""), row.get("root_key", ""))
-            episodes = row.get("episodes", "").strip()
-            media_type = "series" if (episodes.isdigit() and int(episodes) > 1) else (row.get("type", "").strip() or "movie")
-            
-            item = {
-                "title": title,
-                "year": (row.get("year") or "").strip(),
-                "type": media_type,
-                "viet_title": folder_plex,
-                "root_key": ids["root_key"],
-                "tmdb_ids": ids["tmdb"],
-                "tvdb_ids": ids["tvdb"],
-                "imdb_ids": ids["imdb"],
-                "thuyet_minh_vn": row.get("thuyet_minh_vn") == "1",
-                "sub_langs": (row.get("sub_langs") or "").strip()
-            }
-            
-            if franchise not in catalog:
-                catalog[franchise] = []
-            catalog[franchise].append(item)
+        raw_rows = list(csv.DictReader(f))
 
-    # Sort movies within each franchise by year
+    # BƯỚC 1: CHỐNG TRÙNG CÁC DÒNG MEDIA
+    deduped_rows = deduplicate_rows(raw_rows)
+    
+    catalog = {}
+    for row in deduped_rows:
+        title = (row.get("title") or "").strip()
+        if not title:
+            continue
+        folder_plex = (row.get("folder_plex") or "").strip()
+        all_ids = (row.get("all_ids") or "").strip()
+        root_key = (row.get("root_key") or "").strip()
+        
+        # BƯỚC 2: PHÂN LOẠI THEO IP & FRANCHISE
+        franchise = classify_title(title, folder_plex, all_ids, root_key, rules)
+        
+        ids = extract_ids(all_ids, root_key)
+        episodes = (row.get("episodes") or "").strip()
+        media_type = "series" if (episodes.isdigit() and int(episodes) > 1) else (row.get("type", "").strip() or "movie")
+        
+        item = {
+            "title": title,
+            "year": (row.get("year") or "").strip(),
+            "type": media_type,
+            "viet_title": folder_plex,
+            "root_key": ids["root_key"],
+            "tmdb_ids": ids["tmdb"],
+            "tvdb_ids": ids["tvdb"],
+            "imdb_ids": ids["imdb"],
+            "thuyet_minh_vn": row.get("thuyet_minh_vn") == "1",
+            "sub_langs": (row.get("sub_langs") or "").strip(),
+            "sources": row.get("sources", "")
+        }
+        
+        if franchise not in catalog:
+            catalog[franchise] = []
+        catalog[franchise].append(item)
+
+    # Sắp xếp phim trong từng franchise theo năm
     for f_name in catalog:
         catalog[f_name].sort(key=lambda x: (x["year"] if x["year"].isdigit() else "9999", x["title"]))
 
@@ -108,7 +194,7 @@ def build_catalog(csv_file=None):
         json.dump(catalog, f, ensure_ascii=False, indent=2)
 
     total_movies = sum(len(v) for v in catalog.values())
-    print(f"Build catalog thành công: {total_movies} tác phẩm trong {len(catalog)} franchise.")
+    print(f"Build catalog thành công (sau khi chống trùng): {total_movies} tác phẩm trong {len(catalog)} franchise.")
 
 def load_catalog():
     if not CATALOG_PATH.exists():
@@ -140,7 +226,6 @@ def get_franchise(target_name):
     catalog = load_catalog()
     target_lower = target_name.lower().strip()
     
-    # Exact match first, then substring match
     matches = [k for k in catalog if k.lower() == target_lower]
     if not matches:
         matches = [k for k in catalog if target_lower in k.lower()]
@@ -156,7 +241,6 @@ def get_franchise(target_name):
             year_str = f"({m['year']})" if m['year'] else "(?)"
             type_str = m['type']
             
-            # Format IDs for mapping with input
             id_parts = []
             if m['tmdb_ids']:
                 id_parts.append(f"[tmdb-{','.join(m['tmdb_ids'])}]")
@@ -193,8 +277,7 @@ def categorize_list(titles_or_file):
 
     grouped = {}
     for t in titles:
-        # Match with catalog if possible
-        franchise = classify_title(t, "", rules)
+        franchise = classify_title(t, "", "", "", rules)
         if franchise not in grouped:
             grouped[franchise] = []
         grouped[franchise].append(t)

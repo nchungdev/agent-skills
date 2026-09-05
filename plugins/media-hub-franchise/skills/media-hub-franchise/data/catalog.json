@@ -4,35 +4,22 @@
       "title": "5 Centimeters per Second",
       "year": "2025",
       "type": "movie",
-      "viet_title": "",
+      "viet_title": "5 Centimet Trên Giây",
       "root_key": "tmdb-1359916",
       "tmdb_ids": [
-        "1359916"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [
-        "tt33477484"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": ""
-    },
-    {
-      "title": "5 Centimeters per Second",
-      "year": "",
-      "type": "movie",
-      "viet_title": "5 Centimet Trên Giây",
-      "root_key": "tvdb-3000",
-      "tmdb_ids": [
+        "1359916",
         "38142"
       ],
       "tvdb_ids": [
         "3000"
       ],
       "imdb_ids": [
+        "tt33477484",
         "tt0983213"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "A Chinese Odyssey": [
@@ -52,7 +39,8 @@
         "tt0112778"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "A Chinese Odyssey Part Two: Cinderella",
@@ -70,7 +58,8 @@
         "tt0114996"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "A Distant Trumpet": [
@@ -91,7 +80,8 @@
         "tt12428476"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "A Step Into The Past": [
@@ -111,7 +101,8 @@
         "tt0855326"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "America's Game": [
@@ -129,7 +120,8 @@
         "tt0338459"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin"
     }
   ],
   "Angelo Rules": [
@@ -147,7 +139,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "local+gdrive"
     }
   ],
   "Marvel Universe": [
@@ -165,7 +158,8 @@
         "tt0285761"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin"
     },
     {
       "title": "Spider-Man",
@@ -183,7 +177,8 @@
         "tt0145487"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,fre,por,spa,tur"
+      "sub_langs": "eng,fre,por,spa,tur",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "X2 Global Webcast Highlights",
@@ -199,7 +194,8 @@
         "tt5508780"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin"
     },
     {
       "title": "Spider-Man 2",
@@ -217,7 +213,8 @@
         "tt0316654"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "ara,chi,cze,dan,dut,eng,fin,fre,ger,gre,heb,hin,hun,ice,ind,ita,jpn,kor,nor,pol,por,rum,rus,spa,swe,tha,tur,ukr,vie"
+      "sub_langs": "ara,chi,cze,dan,dut,eng,fin,fre,ger,gre,heb,hin,hun,ice,ind,ita,jpn,kor,nor,pol,por,rum,rus,spa,swe,tha,tur,ukr,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ultimate Avengers 2",
@@ -235,7 +232,8 @@
         "tt0803093"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ultimate Avengers: The Movie",
@@ -253,7 +251,8 @@
         "tt0491703"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "X-Men: The Last Stand",
@@ -271,7 +270,8 @@
         "tt0376994"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Spider-Man 3",
@@ -289,7 +289,8 @@
         "tt0413300"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "bul,cze,dan,dut,eng,fin,hrv,hun,pol,slv,swe"
+      "sub_langs": "bul,cze,dan,dut,eng,fin,hrv,hun,pol,slv,swe",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Invincible Iron Man",
@@ -307,7 +308,8 @@
         "tt0903135"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Iron Man",
@@ -325,7 +327,8 @@
         "tt0371746"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,cze,dan,dut,eng,fin,fre,ger,gre,hun,ice,ita,kor,nor,pol,por,rum,slo,spa,swe,tur,vie"
+      "sub_langs": "chi,cze,dan,dut,eng,fin,fre,ger,gre,hun,ice,ita,kor,nor,pol,por,rum,slo,spa,swe,tur,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Next Avengers: Heroes of Tomorrow",
@@ -343,7 +346,8 @@
         "tt1259998"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Incredible Hulk",
@@ -361,7 +365,8 @@
         "tt0800080"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Hulk vs. Thor",
@@ -375,7 +380,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Hulk vs. Wolverine",
@@ -389,7 +395,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin"
     },
     {
       "title": "X-Men Origins: Wolverine",
@@ -407,7 +414,8 @@
         "tt0458525"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Iron Man 2",
@@ -425,7 +433,8 @@
         "tt1228705"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Planet Hulk",
@@ -443,7 +452,8 @@
         "tt1483025"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Captain America: The First Avenger",
@@ -461,7 +471,8 @@
         "tt0458339"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Thor",
@@ -479,7 +490,8 @@
         "tt0800369"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Thor: Tales of Asgard",
@@ -497,7 +509,8 @@
         "tt1667903"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "X-Men: First Class",
@@ -515,7 +528,8 @@
         "tt1270798"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Amazing Spider-Man",
@@ -533,7 +547,8 @@
         "tt0948470"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,fre,spa,vie"
+      "sub_langs": "eng,fre,spa,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Avengers",
@@ -551,7 +566,8 @@
         "tt0848228"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,por,spa,tur"
+      "sub_langs": "eng,por,spa,tur",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Iron Man & Hulk: Heroes United",
@@ -569,7 +585,8 @@
         "tt3221698"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Iron Man 3",
@@ -587,7 +604,8 @@
         "tt1300854"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Iron Man: Rise of Technovore",
@@ -605,7 +623,8 @@
         "tt2654124"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Wolverine",
@@ -623,7 +642,8 @@
         "tt1430132"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,fre,vie"
+      "sub_langs": "eng,fre,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Thor: The Dark World",
@@ -641,7 +661,8 @@
         "tt1981115"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Avengers Confidential: Black Widow & Punisher",
@@ -659,7 +680,8 @@
         "tt3482378"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Big Hero 6",
@@ -677,7 +699,8 @@
         "tt2245084"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Captain America: The Winter Soldier",
@@ -695,7 +718,8 @@
         "tt1843866"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,fre,vie"
+      "sub_langs": "eng,fre,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Guardians of the Galaxy",
@@ -713,7 +737,8 @@
         "tt2015381"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie"
+      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Iron Man & Captain America: Heroes United",
@@ -731,7 +756,8 @@
         "tt3911200"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Amazing Spider-Man 2",
@@ -749,7 +775,8 @@
         "tt1872181"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "X-Men: Days of Future Past",
@@ -767,7 +794,8 @@
         "tt1877832"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,spa,vie"
+      "sub_langs": "eng,spa,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ant-Man",
@@ -785,7 +813,8 @@
         "tt0478970"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Avengers: Age of Ultron",
@@ -803,7 +832,8 @@
         "tt2395427"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Captain America: Civil War",
@@ -821,7 +851,8 @@
         "tt3498820"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie"
+      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Deadpool",
@@ -839,7 +870,8 @@
         "tt1431045"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "ara,chi,dan,dut,eng,fin,fre,ger,gre,heb,nor,por,spa,swe,tur,vie"
+      "sub_langs": "ara,chi,dan,dut,eng,fin,fre,ger,gre,heb,nor,por,spa,swe,tur,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doctor Strange",
@@ -848,16 +880,20 @@
       "viet_title": "Phù Thuỷ Tối Thượng",
       "root_key": "tvdb-145",
       "tmdb_ids": [
-        "284052"
+        "284052",
+        "14830"
       ],
       "tvdb_ids": [
-        "145"
+        "145",
+        "4251"
       ],
       "imdb_ids": [
-        "tt1211837"
+        "tt1211837",
+        "tt0910865"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie"
+      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Hulk: Where Monsters Dwell",
@@ -875,7 +911,8 @@
         "tt6173902"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "X-Men: Apocalypse",
@@ -893,7 +930,8 @@
         "tt3385516"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Guardians of the Galaxy Vol. 2",
@@ -911,7 +949,8 @@
         "tt3896198"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie"
+      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Logan",
@@ -929,7 +968,8 @@
         "tt3315342"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Spider-Man: Homecoming",
@@ -947,7 +987,8 @@
         "tt2250912"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,fre,spa,vie"
+      "sub_langs": "eng,fre,spa,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Thor: Ragnarok",
@@ -965,7 +1006,8 @@
         "tt3501632"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie"
+      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ant-Man and the Wasp",
@@ -983,7 +1025,8 @@
         "tt5095030"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Avengers: Infinity War",
@@ -1001,7 +1044,8 @@
         "tt4154756"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie"
+      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Black Panther",
@@ -1019,7 +1063,8 @@
         "tt1825683"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,fre,spa,vie"
+      "sub_langs": "eng,fre,spa,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Deadpool 2",
@@ -1037,7 +1082,8 @@
         "tt5463162"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "dut,eng,fre,por,spa,vie"
+      "sub_langs": "dut,eng,fre,por,spa,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Marvel Rising: Secret Warriors",
@@ -1055,7 +1101,8 @@
         "tt7728344"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Spider-Man: Into the Spider-Verse",
@@ -1073,7 +1120,8 @@
         "tt4633694"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "ara,chi,eng,fre,heb,por,spa,vie"
+      "sub_langs": "ara,chi,eng,fre,heb,por,spa,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Avengers: Endgame",
@@ -1091,7 +1139,8 @@
         "tt4154796"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,dan,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie"
+      "sub_langs": "chi,dan,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Captain Marvel",
@@ -1109,7 +1158,8 @@
         "tt4154664"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie"
+      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ice,ita,jpn,kor,nor,por,spa,swe,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dark Phoenix",
@@ -1127,7 +1177,8 @@
         "tt6565702"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Spider-Man: Far From Home",
@@ -1145,7 +1196,8 @@
         "tt6320628"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Black Widow",
@@ -1163,7 +1215,8 @@
         "tt3480822"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ita,jpn,kor,nor,por,spa,swe,vie"
+      "sub_langs": "chi,dan,dut,eng,fin,fre,ger,ita,jpn,kor,nor,por,spa,swe,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Eternals",
@@ -1181,7 +1234,8 @@
         "tt9032400"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,dan,dut,eng,fin,fre,gre,ice,jpn,nor,pol,por,swe,vie"
+      "sub_langs": "chi,dan,dut,eng,fin,fre,gre,ice,jpn,nor,pol,por,swe,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Loki",
@@ -1199,7 +1253,8 @@
         "tt9140554"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "chi,cze,dan,dut,eng,fin,fre,ger,gre,hun,ita,jpn,kor,nor,pol,por,rum,slo,spa,swe,tur,vie"
+      "sub_langs": "chi,cze,dan,dut,eng,fin,fre,ger,gre,hun,ita,jpn,kor,nor,pol,por,rum,slo,spa,swe,tur,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Shang-Chi and the Legend of the Ten Rings",
@@ -1217,7 +1272,8 @@
         "tt9376612"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Spider-Man: No Way Home",
@@ -1235,7 +1291,8 @@
         "tt10872600"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Falcon and the Winter Soldier",
@@ -1253,7 +1310,8 @@
         "tt9208876"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin"
     },
     {
       "title": "WandaVision",
@@ -1271,7 +1329,8 @@
         "tt9140560"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "dan,dut,eng,fin,fre,ger,ita,nor,por,spa,swe,vie"
+      "sub_langs": "dan,dut,eng,fin,fre,ger,ita,nor,por,spa,swe,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Black Panther: Wakanda Forever",
@@ -1289,7 +1348,8 @@
         "tt9114286"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,spa,vie"
+      "sub_langs": "eng,spa,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doctor Strange in the Multiverse of Madness",
@@ -1307,7 +1367,8 @@
         "tt9419884"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Moon Knight",
@@ -1325,7 +1386,8 @@
         "tt10234724"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Guardians of the Galaxy Holiday Special",
@@ -1343,7 +1405,8 @@
         "tt13623136"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,cze,dan,dut,eng,fin,fre,ger,gre,hun,ita,jpn,kor,nor,pol,por,rum,slo,spa,swe,tur,vie"
+      "sub_langs": "chi,cze,dan,dut,eng,fin,fre,ger,gre,hun,ita,jpn,kor,nor,pol,por,rum,slo,spa,swe,tur,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Thor: Love and Thunder",
@@ -1361,7 +1424,8 @@
         "tt10648342"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ant-Man and the Wasp: Quantumania",
@@ -1379,7 +1443,8 @@
         "tt10954600"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,fre,spa,vie"
+      "sub_langs": "eng,fre,spa,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Guardians of the Galaxy Vol. 3",
@@ -1397,7 +1462,8 @@
         "tt6791350"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Spider-Man: Across the Spider-Verse",
@@ -1415,7 +1481,8 @@
         "tt9362722"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "ara,bul,chi,cze,dan,dut,eng,est,fre,ger,gre,heb,hun,ind,ita,jpn,kor,lav,lit,may,nor,pol,por,slo,slv,spa,swe,tha,ukr,vie"
+      "sub_langs": "ara,bul,chi,cze,dan,dut,eng,est,fre,ger,gre,heb,hun,ind,ita,jpn,kor,lav,lit,may,nor,pol,por,slo,slv,spa,swe,tha,ukr,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Deadpool & Wolverine",
@@ -1433,7 +1500,8 @@
         "tt6263850"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,fre,spa,vie"
+      "sub_langs": "eng,fre,spa,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "X-Men '97",
@@ -1451,7 +1519,8 @@
         "tt16026746"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,cze,dan,dut,eng,fin,fre,ger,gre,hun,ita,jpn,kor,nor,pol,por,rum,slo,spa,swe"
+      "sub_langs": "chi,cze,dan,dut,eng,fin,fre,ger,gre,hun,ita,jpn,kor,nor,pol,por,rum,slo,spa,swe",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Captain America: Brave New World",
@@ -1469,7 +1538,8 @@
         "tt14513804"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,fre,rum,spa,vie"
+      "sub_langs": "eng,fre,rum,spa,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Thunderbolts*",
@@ -1487,7 +1557,8 @@
         "tt20969586"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,fre,spa"
+      "sub_langs": "eng,fre,spa",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Punisher: One Last Kill",
@@ -1505,25 +1576,8 @@
         "tt36042156"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
-    },
-    {
-      "title": "Doctor Strange",
-      "year": "",
-      "type": "movie",
-      "viet_title": "Phù Thủy Tối Thượng",
-      "root_key": "tvdb-4251",
-      "tmdb_ids": [
-        "14830"
-      ],
-      "tvdb_ids": [
-        "4251"
-      ],
-      "imdb_ids": [
-        "tt0910865"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Marvel Super Hero Adventures: Frost Fight!",
@@ -1541,7 +1595,8 @@
         "tt5272052"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "X-Men",
@@ -1559,7 +1614,8 @@
         "tt0120903"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "X2",
@@ -1577,7 +1633,8 @@
         "tt0290334"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "Avatar": [
@@ -1597,7 +1654,8 @@
         "tt0499549"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Avatar: Fire and Ash",
@@ -1615,8 +1673,11 @@
         "tt1757678"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
-    },
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
+    }
+  ],
+  "Avatar Aang: The Last Airbender Collection": [
     {
       "title": "Avatar Aang: The Last Airbender",
       "year": "2026",
@@ -1633,7 +1694,8 @@
         "tt18259538"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Super Sentai": [
@@ -1653,7 +1715,8 @@
         "tt0236910"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Hyakujuu Sentai Gaoranger VS Super Sentai",
@@ -1671,7 +1734,8 @@
         "tt0291255"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Hyakujuu Sentai Gaoranger: The Fire Mountain Roars",
@@ -1689,7 +1753,8 @@
         "tt0861351"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ninpuu Sentai Hurricaneger",
@@ -1703,7 +1768,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ninpuu Sentai Hurricaneger Shushuuto: The Movie",
@@ -1721,7 +1787,8 @@
         "tt2523882"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Bakuryu Sentai Abaranger DELUXE: Abare Summer is Freezing Cold!",
@@ -1739,7 +1806,8 @@
         "tt0860893"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Bakuryuu Sentai Abaranger Super Video: All Bakuryuu Roaring Laughter Battle",
@@ -1753,7 +1821,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ninpuu Sentai Hurricaneger vs. Gaoranger",
@@ -1771,7 +1840,8 @@
         "tt0846719"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Bakuryuu Sentai Abaranger vs. Hurricaneger",
@@ -1789,7 +1859,8 @@
         "tt0846669"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Tokusou Sentai Dekaranger",
@@ -1807,7 +1878,8 @@
         "tt0409634"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Tokusou Sentai Dekaranger THE MOVIE: Full Blast Action",
@@ -1825,7 +1897,8 @@
         "tt0816680"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Mahou Sentai Magiranger the Movie: Bride of Infershia",
@@ -1843,7 +1916,8 @@
         "tt0791182"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Tokusou Sentai Dekaranger VS Abaranger",
@@ -1861,7 +1935,8 @@
         "tt0846736"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Tokusou Sentai Dekaranger: Super Finisher Match! Deka Red vs. Deka Break",
@@ -1875,7 +1950,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "GoGo Sentai Boukenger The Movie: The Greatest Precious",
@@ -1893,7 +1969,8 @@
         "tt0824339"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Mahou Sentai Magiranger vs. Dekaranger",
@@ -1911,7 +1988,8 @@
         "tt0776789"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "GoGo Sentai Boukenger vs. Super Sentai",
@@ -1929,21 +2007,25 @@
         "tt1038025"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Juken Sentai Gekiranger: Gyun-Gyun! Fist Sage Great Athletic Meet",
       "year": "2007",
       "type": "movie",
-      "viet_title": "",
+      "viet_title": "Juken Sentai Gekiranger: Gyun-Gyun! Fist Sage Great Athletic Meet",
       "root_key": "tmdb-984846",
       "tmdb_ids": [
         "984846"
       ],
       "tvdb_ids": [],
-      "imdb_ids": [],
+      "imdb_ids": [
+        "tt8968038"
+      ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Juken Sentai Gekiranger: Nei-Nei! Hou-Hou! Hong Kong Decisive Battle",
@@ -1961,7 +2043,8 @@
         "tt1320270"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Engine Sentai Go-Onger Special DVD: It's a Seminar! Everyone GO-ON!!",
@@ -1975,7 +2058,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Juken Sentai Gekiranger vs. Boukenger",
@@ -1993,7 +2077,8 @@
         "tt1267173"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Engine Sentai Go-Onger vs. Gekiranger",
@@ -2011,7 +2096,8 @@
         "tt1344712"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Samurai Sentai Shinkenger the Movie: The Fateful War",
@@ -2029,7 +2115,8 @@
         "tt1467295"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Come Back! Samurai Sentai Shinkenger: Special Act",
@@ -2047,7 +2134,8 @@
         "tt2365867"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Samurai Sentai Shinkenger vs. Go-Onger: GinmakuBang!!",
@@ -2065,7 +2153,8 @@
         "tt1567735"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Tensou Sentai Goseiger: Epic on The Movie",
@@ -2083,7 +2172,8 @@
         "tt1667123"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Gokaiger Goseiger Super Sentai 199 Hero Great Battle",
@@ -2101,7 +2191,8 @@
         "tt1869453"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kaizoku Sentai Gokaiger",
@@ -2119,7 +2210,8 @@
         "tt1806294"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kaizoku Sentai Gokaiger: Let's Make an Extremely GOLDEN Show of it! The 36-Stage Gokai Change!!",
@@ -2137,7 +2229,8 @@
         "tt2196242"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kaizoku Sentai Gokaiger: The Movie - The Flying Ghost Ship",
@@ -2155,7 +2248,8 @@
         "tt1980997"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Tensou Sentai Goseiger vs Shinkenger: Epic on the Silver Screen",
@@ -2173,25 +2267,8 @@
         "tt1764632"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
-    },
-    {
-      "title": "Kaizoku Sentai Gokaiger vs. Space Sheriff Gavan: The Movie",
-      "year": "2012",
-      "type": "movie",
-      "viet_title": "Kaizoku Sentai Gokaiger vs. Space Sheriff Gavan: The Movie",
-      "root_key": "tvdb-57913",
-      "tmdb_ids": [
-        "200424"
-      ],
-      "tvdb_ids": [
-        "57913"
-      ],
-      "imdb_ids": [
-        "tt2099643"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kaizoku Sentai Gokaiger: Final Live Tour 2012",
@@ -2205,25 +2282,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
-    },
-    {
-      "title": "Kamen Rider × Super Sentai: Super Hero Wars",
-      "year": "2012",
-      "type": "movie",
-      "viet_title": "Kamen Rider × Super Sentai: Super Hero Taisen",
-      "root_key": "tvdb-25062",
-      "tmdb_ids": [
-        "241697"
-      ],
-      "tvdb_ids": [
-        "25062"
-      ],
-      "imdb_ids": [
-        "tt2210717"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Tokumei Sentai Go-Busters the Movie: Protect the Tokyo Enetower!",
@@ -2241,7 +2301,8 @@
         "tt2194402"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Tokumei Sentai Go-Busters vs. Beet Buster vs. J",
@@ -2259,7 +2320,8 @@
         "tt2385324"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ninpuu Sentai Hurricaneger: 10 YEARS AFTER",
@@ -2277,7 +2339,8 @@
         "tt2944060"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "They're Back! Tokumei Sentai Go-Busters vs. Doubutsu Sentai Go-Busters",
@@ -2295,7 +2358,8 @@
         "tt2754918"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Tokumei Sentai Go-Busters VS Kaizoku Sentai Gokaiger: The Movie",
@@ -2313,7 +2377,8 @@
         "tt2553376"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Zyuden Sentai Kyoryuger the Movie:  Gaburincho of Music",
@@ -2331,7 +2396,8 @@
         "tt3067504"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Zyuden Sentai Kyoryuger: It's Here! Armed On Midsummer Festival!!",
@@ -2347,7 +2413,8 @@
         "tt3128912"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ressha Sentai ToQger The Movie: Galaxy Line S.O.S.",
@@ -2365,7 +2432,8 @@
         "tt3758512"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Zyuden Sentai Kyoryuger vs. Go-Busters: The Great Dinosaur War",
@@ -2383,7 +2451,8 @@
         "tt3295046"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Zyuden Sentai Kyoryuger: 100 Years After",
@@ -2401,7 +2470,8 @@
         "tt3643996"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ressha Sentai ToQger vs. Kyoryuger: The Movie",
@@ -2419,7 +2489,8 @@
         "tt4152148"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Shuriken Sentai Ninninger: AkaNinger vs. StarNinger Hundred Nin Battle!",
@@ -2437,7 +2508,8 @@
         "tt4816046"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Tokusou Sentai Dekaranger: 10 Years After",
@@ -2455,7 +2527,8 @@
         "tt4688160"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doubutsu Sentai Zyuohger vs. Ninninger the Movie: Super Sentai's Message from the Future from Super Sentai",
@@ -2473,7 +2546,8 @@
         "tt6342418"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "From Episode of Stinger: Uchu Sentai Kyuranger - High School Wars",
@@ -2491,25 +2565,8 @@
         "tt7516348"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
-    },
-    {
-      "title": "Space Squad: Space Sheriff Gavan VS Tokusou Sentai Dekaranger",
-      "year": "2017",
-      "type": "movie",
-      "viet_title": "Space Squad: Gavan vs. Dekaranger",
-      "root_key": "tvdb-46726",
-      "tmdb_ids": [
-        "434025"
-      ],
-      "tvdb_ids": [
-        "46726"
-      ],
-      "imdb_ids": [
-        "tt6195584"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Uchu Sentai Kyuranger The Movie: The Geth Indaver Strikes Back!",
@@ -2527,7 +2584,8 @@
         "tt7094438"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Uchu Sentai Kyuranger: Episode of Stinger",
@@ -2545,7 +2603,8 @@
         "tt6967952"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Engine Sentai Go-Onger: 10 Years Grand Prix",
@@ -2563,25 +2622,8 @@
         "tt8223260"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
-    },
-    {
-      "title": "Uchu Sentai Kyuranger vs. Space Squad",
-      "year": "2018",
-      "type": "movie",
-      "viet_title": "Uchu Sentai Kyuranger vs. Space Squad",
-      "root_key": "tvdb-4252",
-      "tmdb_ids": [
-        "504897"
-      ],
-      "tvdb_ids": [
-        "4252"
-      ],
-      "imdb_ids": [
-        "tt8041572"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Zyuden Sentai Kyoryuger Brave 33.5: This is Brave! Battle Frontier",
@@ -2595,7 +2637,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kishiryu Sentai Ryusoulger The Movie: Time Slip! Dinosaur Panic!!",
@@ -2613,7 +2656,8 @@
         "tt10379466"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kishiryu Sentai Ryusoulger VS Lupinranger VS Patranger",
@@ -2631,7 +2675,8 @@
         "tt11478014"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kaizoku Sentai: Ten Gokaiger",
@@ -2649,7 +2694,8 @@
         "tt14879560"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kikai Sentai Zenkaiger Spin-Off: Zenkai Red Great Introduction",
@@ -2667,7 +2713,8 @@
         "tt14303562"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kikai Sentai Zenkaiger The Movie: Red Battle! All Sentai Rally!!",
@@ -2685,7 +2732,8 @@
         "tt13711080"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kishiryu Sentai Ryusoulger Special Chapter: Memory of Soulmates",
@@ -2701,7 +2749,8 @@
         "tt13681618"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Avataro Sentai Donbrothers",
@@ -2719,7 +2768,8 @@
         "tt15776622"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Avataro Sentai Donbrothers The Movie: New First Love Hero",
@@ -2737,7 +2787,8 @@
         "tt18347074"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kikai Sentai Zenkaiger Final Live Tour 2022",
@@ -2751,7 +2802,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kikai Sentai Zenkaiger vs. Kiramager vs. Senpaiger",
@@ -2769,7 +2821,8 @@
         "tt18342066"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Twokaizer × Gokaiger: The June Bride is Tanuki-Flavored!",
@@ -2785,7 +2838,8 @@
         "tt20724720"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Zenkai!! Twokai!? Need for Development!! G-Rosso Last Fight!!: Kikai Sentai Zenkaiger Show Series Level 4",
@@ -2799,7 +2853,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Avataro Sentai Donbrothers vs. Avataro Sentai Donburies",
@@ -2815,7 +2870,8 @@
         "tt29706409"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Avataro Sentai Donbrothers vs. Zenkaiger",
@@ -2833,7 +2889,8 @@
         "tt26920166"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Bakuryū Sentai Abarenjā 20th: Yurusa Rezaru Abare",
@@ -2849,7 +2906,8 @@
         "tt23138370"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ninpu Sentai Hurricaneger Degozaru! Shushuuto 20th Anniversary",
@@ -2867,7 +2925,8 @@
         "tt23812736"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ohsama Sentai King-Ohger: Adventure Heaven",
@@ -2885,7 +2944,8 @@
         "tt27877106"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Bakuage Sentai Boonboomger GekijoBOON! Promise The Circuit",
@@ -2903,7 +2963,8 @@
         "tt32632087"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ohsama Sentai King-Ohger Final Three Episodes TTFC Special Version",
@@ -2917,7 +2978,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ohsama Sentai King-Ohger IN SPACE",
@@ -2933,7 +2995,8 @@
         "tt32731495"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ohsama Sentai King-Ohger vs. Donbrothers",
@@ -2951,7 +3014,8 @@
         "tt30990872"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ohsama Sentai King-Ohger vs. Kyoryuger",
@@ -2969,7 +3033,8 @@
         "tt30990790"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Tokusou Sentai Dekaranger 20th: Fireball Booster",
@@ -2985,7 +3050,8 @@
         "tt29742220"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Bakuage Sentai Boonboomger VS King-Ohger",
@@ -3003,7 +3069,8 @@
         "tt35680447"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "No. 1 Sentai Gozyuger",
@@ -3021,7 +3088,8 @@
         "tt34382036"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "No. 1 Sentai Gozyuger: TegaSword of Resurrection",
@@ -3039,21 +3107,8 @@
         "tt37122012"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
-    },
-    {
-      "title": "Juken Sentai Gekiranger: Gyun-Gyun! Fist Sage Great Athletic Meet",
-      "year": "",
-      "type": "movie",
-      "viet_title": "Juken Sentai Gekiranger: Gyun-Gyun! Fist Sage Great Athletic Meet",
-      "root_key": "imdb-tt8968038",
-      "tmdb_ids": [],
-      "tvdb_ids": [],
-      "imdb_ids": [
-        "tt8968038"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Samurai Sentai Shinkenger: The Light Samurai's Surprise Transformation",
@@ -3071,7 +3126,8 @@
         "tt2393955"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "B-Daman": [
@@ -3079,17 +3135,19 @@
       "title": "Bomberman B-Daman Bakugaiden",
       "year": "1998",
       "type": "series",
-      "viet_title": "",
+      "viet_title": "Bomberman B-Daman Bakugaiden",
       "root_key": "tvdb-72904",
       "tmdb_ids": [
-        "16823"
+        "16823",
+        "202560"
       ],
       "tvdb_ids": [
         "72904"
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+local+plex"
     },
     {
       "title": "Bomberman B-Daman Bakugaiden Victory",
@@ -3103,7 +3161,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex+local"
     },
     {
       "title": "Battle B-Daman (2004)",
@@ -3122,21 +3181,8 @@
         "tt0455244"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
-    },
-    {
-      "title": "Bomberman B-Daman Bakugaiden",
-      "year": "",
-      "type": "movie",
-      "viet_title": "Bomberman B-Daman Bakugaiden",
-      "root_key": "tmdb-202560",
-      "tmdb_ids": [
-        "202560"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [],
-      "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex+local+gdrive"
     },
     {
       "title": "Cap Revolution Bottleman (2020)",
@@ -3150,7 +3196,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "local"
     },
     {
       "title": "Crash B-Daman",
@@ -3164,7 +3211,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "local"
     },
     {
       "title": "Cross Fight B-Daman (2011)",
@@ -3178,7 +3226,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "local"
     },
     {
       "title": "Super B-Daman",
@@ -3192,7 +3241,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "local"
     }
   ],
   "Black Jack": [
@@ -3212,7 +3262,8 @@
         "tt5778326"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex+local+gdrive"
     },
     {
       "title": "Black Jack",
@@ -3231,7 +3282,8 @@
         "tt7150338"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex+local"
     },
     {
       "title": "Black Jack - Two Doctors of Darkness (2005) {tmdb-38933} [tmdbid-38933]",
@@ -3245,7 +3297,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin"
     },
     {
       "title": "Young Black Jack",
@@ -3264,7 +3317,8 @@
         "tt5289354"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex+local+gdrive"
     },
     {
       "title": "Black Jack: The Movie",
@@ -3278,7 +3332,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "local"
     },
     {
       "title": "Black Jack: The Two Doctors in Black",
@@ -3292,7 +3347,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "local"
     }
   ],
   "Naruto": [
@@ -3312,7 +3368,8 @@
         "tt5162894"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto: The Lost Story - Mission: Protect the Waterfall Village!",
@@ -3330,7 +3387,8 @@
         "tt3634858"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto OVA 3: Hidden Leaf Village Grand Sports Festival!",
@@ -3348,7 +3406,8 @@
         "tt1298761"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto the Movie: Ninja Clash in the Land of Snow",
@@ -3366,7 +3425,8 @@
         "tt0476680"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto OVA 4: Finally a Clash! Jounin VS Genin!! Indiscriminate Grand Melee Tournament!! (2005)",
@@ -3382,7 +3442,8 @@
         "tt15006294"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin"
     },
     {
       "title": "Naruto the Movie: Legend of the Stone of Gelel",
@@ -3400,7 +3461,8 @@
         "tt0791188"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto the Movie: Guardians of the Crescent Moon Kingdom",
@@ -3418,7 +3480,8 @@
         "tt1071815"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto Shippuden the Movie",
@@ -3436,7 +3499,8 @@
         "tt0988982"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto OVA 5: Hurricane! Konoha Academy Chronicles",
@@ -3450,7 +3514,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin"
     },
     {
       "title": "Naruto Shippuden the Movie: Bonds",
@@ -3468,7 +3533,8 @@
         "tt1160524"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto OVA 6: The Cross Roads",
@@ -3486,7 +3552,8 @@
         "tt6163076"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto Shippuden the Movie: The Will of Fire",
@@ -3504,7 +3571,8 @@
         "tt1481363"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto OVA 7: Naruto, the Genie, and the Three Wishes, Believe It!",
@@ -3522,7 +3590,8 @@
         "tt6163022"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto Shippuden the Movie: The Lost Tower",
@@ -3540,7 +3609,8 @@
         "tt1703048"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto OVA 8: Naruto x UT",
@@ -3558,7 +3628,8 @@
         "tt6163032"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto OVA 9: Chunin Exam on Fire! and Naruto vs. Konohamaru!",
@@ -3576,7 +3647,8 @@
         "tt6163050"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto Shippuden the Movie: Blood Prison",
@@ -3594,7 +3666,8 @@
         "tt1999167"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto OVA 10: Uchiha Madara vs Senju Hashirama",
@@ -3610,7 +3683,8 @@
         "tt5235126"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Road to Ninja: Naruto the Movie",
@@ -3628,7 +3702,8 @@
         "tt2290828"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto OVA 11: Sunny Side Battle",
@@ -3646,7 +3721,8 @@
         "tt6163054"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Last: Naruto the Movie",
@@ -3664,7 +3740,8 @@
         "tt3717532"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Boruto: Naruto the Movie",
@@ -3682,7 +3759,8 @@
         "tt4618398"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto OVA 12: The Day Naruto Became Hokage",
@@ -3700,7 +3778,8 @@
         "tt5866090"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Naruto OVA 4 - Finally a clash! Jonin VS Genin!! Indiscriminate grand melee tournament meeting!!",
@@ -3714,44 +3793,11 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "Higashino Keigo: Standalone Novels": [
-    {
-      "title": "The Secret Garden",
-      "year": "1993",
-      "type": "movie",
-      "viet_title": "",
-      "root_key": "tmdb-11236",
-      "tmdb_ids": [
-        "11236"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [
-        "tt0108071"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": ""
-    },
-    {
-      "title": "One Piece: Baron Omatsuri and the Secret Island",
-      "year": "2005",
-      "type": "movie",
-      "viet_title": "One Piece: Nam Tước Omatsuri Và Hòn Đảo Bí Mật",
-      "root_key": "tvdb-6656",
-      "tmdb_ids": [
-        "44729"
-      ],
-      "tvdb_ids": [
-        "6656"
-      ],
-      "imdb_ids": [
-        "tt1018764"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": "vie"
-    },
     {
       "title": "Into the White Night",
       "year": "2006",
@@ -3768,7 +3814,8 @@
         "tt0983950"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Letters",
@@ -3784,7 +3831,8 @@
         "tt0882809"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Hovering Blade",
@@ -3802,7 +3850,8 @@
         "tt1415224"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Brutus's Heart",
@@ -3820,7 +3869,8 @@
         "tt1941471"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Broken",
@@ -3838,25 +3888,8 @@
         "tt3554976"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
-    },
-    {
-      "title": "Doraemon: Nobita's Secret Gadget Museum",
-      "year": "2013",
-      "type": "movie",
-      "viet_title": "Doraemon: Nobita và Viện Bảo Tàng Bảo Bối",
-      "root_key": "tvdb-29954",
-      "tmdb_ids": [
-        "218726"
-      ],
-      "tvdb_ids": [
-        "29954"
-      ],
-      "imdb_ids": [
-        "tt2768084"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Platinum Data",
@@ -3874,7 +3907,8 @@
         "tt2282917"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Miracles of the Namiya General Store",
@@ -3892,7 +3926,8 @@
         "tt6298600"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Laplace's Witch",
@@ -3910,7 +3945,8 @@
         "tt6686358"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Perfect Number",
@@ -3928,7 +3964,8 @@
         "tt2411024"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "Secret",
@@ -3946,7 +3983,27 @@
         "tt0211413"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
+    },
+    {
+      "title": "g@me.",
+      "year": "",
+      "type": "movie",
+      "viet_title": "Game",
+      "root_key": "tvdb-46304",
+      "tmdb_ids": [
+        "61492"
+      ],
+      "tvdb_ids": [
+        "46304"
+      ],
+      "imdb_ids": [
+        "tt0431077"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "Transformers": [
@@ -3966,7 +4023,8 @@
         "tt0418279"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Transformers: Revenge of the Fallen",
@@ -3984,7 +4042,8 @@
         "tt1055369"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Transformers: Dark of the Moon",
@@ -4002,7 +4061,8 @@
         "tt1399103"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Transformers: Age of Extinction",
@@ -4020,7 +4080,8 @@
         "tt2109248"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Transformers: The Last Knight",
@@ -4038,7 +4099,8 @@
         "tt3371366"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Bumblebee",
@@ -4056,7 +4118,8 @@
         "tt4701182"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Transformers: Rise of the Beasts",
@@ -4074,7 +4137,8 @@
         "tt5090568"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Transformers One",
@@ -4092,7 +4156,8 @@
         "tt8864596"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,fre,vie"
+      "sub_langs": "eng,fre,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Transformers - Car Robots (2000)",
@@ -4106,7 +4171,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "local"
     }
   ],
   "Detective Conan": [
@@ -4126,7 +4192,8 @@
         "tt0131479"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "chi,eng,vie"
+      "sub_langs": "chi,eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Case Closed: The Fourteenth Target",
@@ -4144,7 +4211,8 @@
         "tt0965649"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: The Last Wizard of the Century",
@@ -4162,7 +4230,8 @@
         "tt1067920"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: Captured in Her Eyes",
@@ -4180,7 +4249,8 @@
         "tt1068773"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Case Closed: Countdown to Heaven",
@@ -4198,7 +4268,8 @@
         "tt1073223"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: The Phantom of Baker Street",
@@ -4216,7 +4287,8 @@
         "tt0990372"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: Crossroad in the Ancient Capital",
@@ -4234,7 +4306,8 @@
         "tt1133935"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: Magician of the Silver Sky",
@@ -4252,7 +4325,8 @@
         "tt1133559"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: Strategy Above the Depths",
@@ -4270,7 +4344,8 @@
         "tt1133936"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: The Private Eyes' Requiem",
@@ -4288,7 +4363,8 @@
         "tt0498536"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: Jolly Roger in the Deep Azure",
@@ -4306,7 +4382,8 @@
         "tt1146290"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: Full Score of Fear",
@@ -4324,7 +4401,8 @@
         "tt1155696"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: The Raven Chaser",
@@ -4342,7 +4420,8 @@
         "tt1343046"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: The Lost Ship in the Sky",
@@ -4360,7 +4439,8 @@
         "tt1636815"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: Quarter of Silence",
@@ -4378,7 +4458,8 @@
         "tt1840372"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: The Eleventh Striker",
@@ -4396,7 +4477,8 @@
         "tt2131586"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: Private Eye in the Distant Sea",
@@ -4414,7 +4496,8 @@
         "tt3303446"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: Dimensional Sniper",
@@ -4432,7 +4515,8 @@
         "tt3455204"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: Sunflowers of Inferno",
@@ -4450,7 +4534,8 @@
         "tt3737650"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: The Darkest Nightmare",
@@ -4468,7 +4553,8 @@
         "tt4954660"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Case Closed: The Crimson Love Letter",
@@ -4486,7 +4572,8 @@
         "tt5692622"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Case Closed: Zero the Enforcer",
@@ -4504,7 +4591,8 @@
         "tt7880466"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Case Closed: The Fist of Blue Sapphire",
@@ -4522,7 +4610,8 @@
         "tt9501310"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: The Scarlet Bullet",
@@ -4540,7 +4629,8 @@
         "tt12093860"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "jpn,vie"
+      "sub_langs": "jpn,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Detective Conan: The Bride of Halloween",
@@ -4558,7 +4648,8 @@
         "tt19770970"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "jpn"
+      "sub_langs": "jpn",
+      "sources": "jellyfin+plex"
     }
   ],
   "The Makoto Shinkai Collection": [
@@ -4578,7 +4669,8 @@
         "tt0370754"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Place Promised in Our Early Days",
@@ -4596,7 +4688,8 @@
         "tt0381348"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Children Who Chase Lost Voices",
@@ -4614,7 +4707,8 @@
         "tt1839494"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Garden of Words",
@@ -4632,7 +4726,8 @@
         "tt2591814"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Weathering with You",
@@ -4650,7 +4745,8 @@
         "tt9426210"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Suzume",
@@ -4668,7 +4764,8 @@
         "tt16428256"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,eng,ind,may,tha,vie"
+      "sub_langs": "chi,eng,ind,may,tha,vie",
+      "sources": "jellyfin+plex"
     }
   ],
   "Clockwork Orange County": [
@@ -4689,7 +4786,8 @@
         "tt1334570"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     }
   ],
   "Dan Da Dan": [
@@ -4709,7 +4807,8 @@
         "tt30217403"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin"
     }
   ],
   "Planet of the Apes": [
@@ -4729,7 +4828,8 @@
         "tt0133152"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "dan,dut,eng,fin,fre,ger,nor,swe"
+      "sub_langs": "dan,dut,eng,fin,fre,ger,nor,swe",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Rise of the Planet of the Apes",
@@ -4747,7 +4847,8 @@
         "tt1318514"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dawn of the Planet of the Apes",
@@ -4765,7 +4866,8 @@
         "tt2103281"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "War for the Planet of the Apes",
@@ -4783,7 +4885,8 @@
         "tt3450958"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,eng,fre,por,spa"
+      "sub_langs": "chi,eng,fre,por,spa",
+      "sources": "jellyfin+plex"
     }
   ],
   "Death Note": [
@@ -4803,7 +4906,8 @@
         "tt0877057"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,eng,ind,may,tha,vie"
+      "sub_langs": "chi,eng,ind,may,tha,vie",
+      "sources": "jellyfin+plex"
     }
   ],
   "Demon Slayer": [
@@ -4823,7 +4927,8 @@
         "tt9335498"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "chi,eng,ind,may,tha,vie"
+      "sub_langs": "chi,eng,ind,may,tha,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Demon Slayer: Kimetsu no Yaiba Infinity Castle",
@@ -4842,7 +4947,8 @@
         "tt32820897"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "DM i stand-up 2008": [
@@ -4860,7 +4966,8 @@
         "tt0106421"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Doraemon": [
@@ -4880,7 +4987,8 @@
         "tt1147517"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: The Record of Nobita, Spaceblazer",
@@ -4898,7 +5006,8 @@
         "tt1147515"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Haunts of Evil",
@@ -4916,7 +5025,8 @@
         "tt4184350"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Castle of the Undersea Devil",
@@ -4934,7 +5044,8 @@
         "tt1147509"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita's Great Adventure in the World of Magic",
@@ -4952,7 +5063,8 @@
         "tt1147518"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita's Little Star Wars",
@@ -4970,7 +5082,8 @@
         "tt0313990"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Steel Troops",
@@ -4988,7 +5101,8 @@
         "tt1147528"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Knights on Dinosaurs",
@@ -5006,7 +5120,8 @@
         "tt1147527"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: The Record of Nobita's Parallel Journey to the West",
@@ -5024,7 +5139,8 @@
         "tt1147525"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Birth of Japan",
@@ -5042,7 +5158,8 @@
         "tt1147511"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Animal Planet",
@@ -5060,7 +5177,8 @@
         "tt1147520"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita's Dorabian Nights",
@@ -5078,7 +5196,8 @@
         "tt1147508"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Kingdom of Clouds",
@@ -5096,7 +5215,8 @@
         "tt1147523"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Tin Labyrinth",
@@ -5114,7 +5234,8 @@
         "tt1147521"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita's Three Visionary Swordsmen",
@@ -5132,7 +5253,8 @@
         "tt1147524"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita's Diary on the Creation of the World",
@@ -5150,7 +5272,8 @@
         "tt1147512"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Galaxy Super-express",
@@ -5168,7 +5291,8 @@
         "tt1147522"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Spiral City",
@@ -5186,7 +5310,8 @@
         "tt1147510"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita's Great Adventure in the South Seas",
@@ -5204,7 +5329,8 @@
         "tt1147519"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita Drifts in the Universe",
@@ -5222,7 +5348,8 @@
         "tt1147514"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Legend of the Sun King",
@@ -5240,7 +5367,8 @@
         "tt1147513"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Winged Braves",
@@ -5258,7 +5386,8 @@
         "tt0306741"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Robot Kingdom",
@@ -5276,7 +5405,8 @@
         "tt1147526"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Windmasters",
@@ -5294,7 +5424,8 @@
         "tt0473474"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita in the Wan-Nyan Spacetime Odyssey",
@@ -5312,7 +5443,8 @@
         "tt1147516"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita's Dinosaur",
@@ -5330,7 +5462,8 @@
         "tt0802983"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita's New Great Adventure Into the Underworld - The Seven Magic Users",
@@ -5348,7 +5481,8 @@
         "tt1260351"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Green Giant Legend",
@@ -5366,7 +5500,8 @@
         "tt180304"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: The New Record of Nobita's Spaceblazer",
@@ -5384,7 +5519,8 @@
         "tt1264885"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita's Great Battle of the Mermaid King",
@@ -5402,7 +5538,8 @@
         "tt1613031"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the New Steel Troops: Winged Angels",
@@ -5420,7 +5557,8 @@
         "tt1851909"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Island of Miracles – Animal Adventure",
@@ -5438,7 +5576,27 @@
         "tt2271315"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
+    },
+    {
+      "title": "Doraemon: Nobita's Secret Gadget Museum",
+      "year": "2013",
+      "type": "movie",
+      "viet_title": "Doraemon: Nobita và Viện Bảo Tàng Bảo Bối",
+      "root_key": "tvdb-29954",
+      "tmdb_ids": [
+        "218726"
+      ],
+      "tvdb_ids": [
+        "29954"
+      ],
+      "imdb_ids": [
+        "tt2768084"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: New Nobita's Great Demon - Peko and the Exploration Party of Five",
@@ -5456,7 +5614,8 @@
         "tt3949650"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Stand by Me Doraemon",
@@ -5474,7 +5633,8 @@
         "tt3331846"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Space Heroes",
@@ -5492,7 +5652,8 @@
         "tt4788602"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita and the Birth of Japan",
@@ -5510,7 +5671,8 @@
         "tt5544700"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita's Great Adventure in the Antarctic Kachi Kochi",
@@ -5528,7 +5690,8 @@
         "tt5912470"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita's Treasure Island",
@@ -5546,7 +5709,8 @@
         "tt8098546"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita's Chronicle of the Moon Exploration",
@@ -5564,7 +5728,8 @@
         "tt9735672"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon: Nobita's New Dinosaur",
@@ -5582,7 +5747,8 @@
         "tt10588750"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Stand by Me Doraemon 2",
@@ -5600,7 +5766,8 @@
         "tt13428402"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon the Movie: Nobita's Little Star Wars 2021",
@@ -5618,7 +5785,8 @@
         "tt13740078"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "jpn"
+      "sub_langs": "jpn",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon the Movie: Nobita's Sky Utopia",
@@ -5636,7 +5804,8 @@
         "tt21223380"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Doraemon the Movie: Nobita's Earth Symphony",
@@ -5652,7 +5821,8 @@
         "tt29402528"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Dragon Ball": [
@@ -5672,7 +5842,8 @@
         "tt0142251"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball: Sleeping Princess in Devil's Castle",
@@ -5690,7 +5861,8 @@
         "tt0142249"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball: Mystical Adventure",
@@ -5708,7 +5880,8 @@
         "tt0142248"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball Z: Dead Zone",
@@ -5726,7 +5899,8 @@
         "tt0142235"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball Z: Bardock - The Father of Goku",
@@ -5744,7 +5918,8 @@
         "tt0142245"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball Z: The World's Strongest",
@@ -5762,7 +5937,8 @@
         "tt0142240"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball Z: Cooler's Revenge",
@@ -5780,7 +5956,8 @@
         "tt1125254"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball Z: The History of Trunks",
@@ -5798,7 +5975,8 @@
         "tt0142247"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball GT",
@@ -5816,7 +5994,8 @@
         "tt0139774"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball: The Path to Power",
@@ -5834,7 +6013,8 @@
         "tt0142250"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball GT: A Hero's Legacy",
@@ -5852,7 +6032,8 @@
         "tt0142232"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball Z Kai",
@@ -5870,7 +6051,8 @@
         "tt1409055"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball Z: Battle of Gods",
@@ -5888,7 +6070,8 @@
         "tt2263944"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball Super: Broly",
@@ -5906,7 +6089,8 @@
         "tt7961060"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball Super: Super Hero",
@@ -5924,7 +6108,8 @@
         "tt14614892"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "chi,eng,jpn,vie"
+      "sub_langs": "chi,eng,jpn,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball DAIMA",
@@ -5942,7 +6127,8 @@
         "tt29485149"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,fin,jpn,vie"
+      "sub_langs": "eng,fin,jpn,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Dragon Ball",
@@ -5960,7 +6146,8 @@
         "tt0088509"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "Dragon Ball Z: Bio-Broly",
@@ -5978,7 +6165,8 @@
         "tt0142234"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "Dragon Ball Z: Bojack Unbound",
@@ -5996,7 +6184,8 @@
         "tt0142238"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "Dragon Ball Z: Broly - Second Coming",
@@ -6014,7 +6203,8 @@
         "tt0142239"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "Dragon Ball Z: Broly - The Legendary Super Saiyan",
@@ -6032,7 +6222,8 @@
         "tt0142242"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "Dragon Ball Z: Fusion Reborn",
@@ -6050,7 +6241,8 @@
         "tt0142236"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "Dragon Ball Z: Lord Slug",
@@ -6068,7 +6260,8 @@
         "tt0142244"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "Dragon Ball Z: Resurrection 'F'",
@@ -6086,7 +6279,8 @@
         "tt3819668"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "Dragon Ball Z: Super Android 13!",
@@ -6104,7 +6298,8 @@
         "tt0142241"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "Dragon Ball Z: The Return of Cooler",
@@ -6122,7 +6317,8 @@
         "tt0142237"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "Dragon Ball Z: The Tree of Might",
@@ -6140,7 +6336,8 @@
         "tt0142233"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     },
     {
       "title": "Dragon Ball Z: Wrath of the Dragon",
@@ -6158,7 +6355,8 @@
         "tt0142243"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "Freak Encounters": [
@@ -6176,7 +6374,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "gdrive"
     }
   ],
   "Studio Ghibli": [
@@ -6196,7 +6395,8 @@
         "tt0087544"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Laputa",
@@ -6214,7 +6414,8 @@
         "tt0091379"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "My Neighbor Totoro",
@@ -6232,7 +6433,8 @@
         "tt0096283"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kiki's Delivery Service",
@@ -6250,7 +6452,8 @@
         "tt0097814"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Only Yesterday",
@@ -6268,7 +6471,8 @@
         "tt0102587"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Porco Rosso",
@@ -6286,7 +6490,8 @@
         "tt0104652"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ocean Waves",
@@ -6304,7 +6509,8 @@
         "tt0108432"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Whisper of the Heart",
@@ -6322,7 +6528,8 @@
         "tt0113824"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Princess Mononoke",
@@ -6340,7 +6547,8 @@
         "tt0119698"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "My Neighbors the Yamadas",
@@ -6358,7 +6566,8 @@
         "tt0206013"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Spirited Away",
@@ -6376,7 +6585,8 @@
         "tt0245429"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Cat Returns",
@@ -6394,7 +6604,8 @@
         "tt0347618"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Howl's Moving Castle",
@@ -6412,7 +6623,8 @@
         "tt0347149"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Tales from Earthsea",
@@ -6430,7 +6642,8 @@
         "tt0495596"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ponyo",
@@ -6448,7 +6661,8 @@
         "tt0876563"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Secret World of Arrietty",
@@ -6466,7 +6680,8 @@
         "tt1568921"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "From Up on Poppy Hill",
@@ -6484,7 +6699,8 @@
         "tt1798188"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Tale of The Princess Kaguya",
@@ -6502,7 +6718,8 @@
         "tt2576852"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Wind Rises",
@@ -6520,7 +6737,8 @@
         "tt2013293"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "When Marnie Was There",
@@ -6538,7 +6756,8 @@
         "tt3398268"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Grave of the Fireflies",
@@ -6556,7 +6775,8 @@
         "tt0095327"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "Furuhata Ninzaburo": [
@@ -6574,27 +6794,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
-    }
-  ],
-  "g@me.": [
-    {
-      "title": "g@me.",
-      "year": "",
-      "type": "movie",
-      "viet_title": "Game",
-      "root_key": "tvdb-46304",
-      "tmdb_ids": [
-        "61492"
-      ],
-      "tvdb_ids": [
-        "46304"
-      ],
-      "imdb_ids": [
-        "tt0431077"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "gdrive"
     }
   ],
   "Gintama Series": [
@@ -6614,7 +6815,8 @@
         "tt0988818"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Gintama: The Movie",
@@ -6630,7 +6832,8 @@
         "tt1636780"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin"
     },
     {
       "title": "Gintama: The Final Chapter - Be Forever Yorozuya",
@@ -6648,7 +6851,8 @@
         "tt2374144"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Gintama: The Semi-Final",
@@ -6666,7 +6870,8 @@
         "tt13610306"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin"
     },
     {
       "title": "Gintama: The Very Final",
@@ -6684,10 +6889,30 @@
         "tt10766468"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Space Squad Collection": [
+    {
+      "title": "Kaizoku Sentai Gokaiger vs. Space Sheriff Gavan: The Movie",
+      "year": "2012",
+      "type": "movie",
+      "viet_title": "Kaizoku Sentai Gokaiger vs. Space Sheriff Gavan: The Movie",
+      "root_key": "tvdb-57913",
+      "tmdb_ids": [
+        "200424"
+      ],
+      "tvdb_ids": [
+        "57913"
+      ],
+      "imdb_ids": [
+        "tt2099643"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
+    },
     {
       "title": "Girls in Trouble: Space Squad Episode Zero",
       "year": "2017",
@@ -6704,7 +6929,46 @@
         "tt6195602"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
+    },
+    {
+      "title": "Space Squad: Space Sheriff Gavan VS Tokusou Sentai Dekaranger",
+      "year": "2017",
+      "type": "movie",
+      "viet_title": "Space Squad: Gavan vs. Dekaranger",
+      "root_key": "tvdb-46726",
+      "tmdb_ids": [
+        "434025"
+      ],
+      "tvdb_ids": [
+        "46726"
+      ],
+      "imdb_ids": [
+        "tt6195584"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
+    },
+    {
+      "title": "Uchu Sentai Kyuranger vs. Space Squad",
+      "year": "2018",
+      "type": "movie",
+      "viet_title": "Uchu Sentai Kyuranger vs. Space Squad",
+      "root_key": "tvdb-4252",
+      "tmdb_ids": [
+        "504897"
+      ],
+      "tvdb_ids": [
+        "4252"
+      ],
+      "imdb_ids": [
+        "tt8041572"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "GOAT": [
@@ -6724,7 +6988,8 @@
         "tt27613895"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Gone Girl": [
@@ -6744,7 +7009,8 @@
         "tt2267998"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "HAKYU HOSHIN ENGI": [
@@ -6762,7 +7028,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "local+gdrive"
     }
   ],
   "Harry Potter": [
@@ -6782,7 +7049,8 @@
         "tt0241527"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Harry Potter and the Chamber of Secrets",
@@ -6800,7 +7068,8 @@
         "tt0295297"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Harry Potter and the Prisoner of Azkaban",
@@ -6818,7 +7087,8 @@
         "tt0304141"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Harry Potter and the Goblet of Fire",
@@ -6836,7 +7106,8 @@
         "tt0330373"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Harry Potter and the Order of the Phoenix",
@@ -6854,7 +7125,8 @@
         "tt0373889"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Harry Potter and the Half-Blood Prince",
@@ -6872,7 +7144,8 @@
         "tt0417741"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Harry Potter and the Deathly Hallows: Part 1",
@@ -6890,7 +7163,8 @@
         "tt0926084"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Harry Potter and the Deathly Hallows: Part 2",
@@ -6908,7 +7182,8 @@
         "tt1201607"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Hokum": [
@@ -6928,7 +7203,8 @@
         "tt35672862"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "How to Train Your Dragon": [
@@ -6948,7 +7224,8 @@
         "tt0892769"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "ara,bul,chi,cze,dan,dut,eng,fre,gre,heb,hrv,ind,kor,per,pol,por,rum,slv,spa,srp,swe,vie"
+      "sub_langs": "ara,bul,chi,cze,dan,dut,eng,fre,gre,heb,hrv,ind,kor,per,pol,por,rum,slv,spa,srp,swe,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "How to Train Your Dragon 2",
@@ -6962,7 +7239,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,gre,vie,ara,bul,chi,cze,dan,dut,fre,heb,hrv,ind,kor,per,pol,por,rum,slv,spa,srp,swe"
+      "sub_langs": "eng,gre,vie,ara,bul,chi,cze,dan,dut,fre,heb,hrv,ind,kor,per,pol,por,rum,slv,spa,srp,swe",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "How to Train Your Dragon: The Hidden World",
@@ -6980,7 +7258,8 @@
         "tt2386490"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     }
   ],
   "I Am Nezha 2": [
@@ -6996,7 +7275,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "Ice Age": [
@@ -7016,7 +7296,8 @@
         "tt0268380"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ice Age: The Meltdown",
@@ -7034,7 +7315,8 @@
         "tt0438097"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ice Age: Dawn of the Dinosaurs",
@@ -7052,7 +7334,8 @@
         "tt1080016"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ice Age: Continental Drift",
@@ -7070,7 +7353,8 @@
         "tt1667889"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ice Age: Collision Course",
@@ -7088,7 +7372,8 @@
         "tt3416828"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Ice Age Adventures of Buck Wild",
@@ -7106,7 +7391,8 @@
         "tt13634480"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Inception": [
@@ -7126,7 +7412,8 @@
         "tt1375666"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "InuYasha": [
@@ -7146,7 +7433,8 @@
         "tt0290223"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,rus"
+      "sub_langs": "eng,rus",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Inuyasha the Movie: Affections Touching Across Time",
@@ -7164,7 +7452,8 @@
         "tt0322645"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Inuyasha the Movie 2: The Castle Beyond the Looking Glass",
@@ -7182,7 +7471,8 @@
         "tt0366621"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Inuyasha the Movie 3: Swords of an Honorable Ruler",
@@ -7200,7 +7490,8 @@
         "tt0396659"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Inuyasha the Movie 4: Fire on the Mystic Island",
@@ -7218,7 +7509,8 @@
         "tt0473658"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     }
   ],
   "INVINCIBLE": [
@@ -7238,7 +7530,8 @@
         "tt6741278"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "ara,baq,cat,chi,cze,dan,dut,eng,fil,fin,fre,ger,glg,gre,heb,hin,hun,ind,ita,jpn,kan,kor,mal,may,nob,pol,por,rum,rus,spa,swe,tam,tel,tha,tur,ukr,vie"
+      "sub_langs": "ara,baq,cat,chi,cze,dan,dut,eng,fil,fin,fre,ger,glg,gre,heb,hin,hun,ind,ita,jpn,kan,kor,mal,may,nob,pol,por,rum,rus,spa,swe,tam,tel,tha,tur,ukr,vie",
+      "sources": "jellyfin+plex"
     }
   ],
   "Iron Armored Machine Mikazuki": [
@@ -7258,7 +7551,8 @@
         "tt0184736"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Journey to the West": [
@@ -7278,7 +7572,29 @@
         "tt1459024"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
+    }
+  ],
+  "Super Hero Taisen Series": [
+    {
+      "title": "Kamen Rider × Super Sentai: Super Hero Wars",
+      "year": "2012",
+      "type": "movie",
+      "viet_title": "Kamen Rider × Super Sentai: Super Hero Taisen",
+      "root_key": "tvdb-25062",
+      "tmdb_ids": [
+        "241697"
+      ],
+      "tvdb_ids": [
+        "25062"
+      ],
+      "imdb_ids": [
+        "tt2210717"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Kidnapping Game": [
@@ -7298,7 +7614,8 @@
         "tt12434326"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Kindaichi": [
@@ -7318,7 +7635,8 @@
         "tt21035364"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex+local"
     },
     {
       "title": "The Files of Young Kindaichi: Legend of the Shanghai Mermaid",
@@ -7334,7 +7652,8 @@
         "tt0298384"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Files of the Young Kindaichi (Live Action)",
@@ -7353,7 +7672,8 @@
         "tt0348952"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,ind,jpn,vie"
+      "sub_langs": "eng,ind,jpn,vie",
+      "sources": "jellyfin+plex+gdrive"
     },
     {
       "title": "Kindaichi Case Files Movie 2: Deep Blue Massacre",
@@ -7370,7 +7690,8 @@
         "tt14170110"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kindaichi Case Files: Legendary Vampire Murders",
@@ -7387,7 +7708,8 @@
         "tt18548394"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The File of Young Kindaichi Returns",
@@ -7403,7 +7725,8 @@
         "tt3620020"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Kindaichi Case Files: The Opera House Murders 3",
@@ -7417,7 +7740,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin"
     },
     {
       "title": "Kindaichi Case Files: The Third Opera House Murders",
@@ -7433,10 +7757,30 @@
         "tt18548444"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "Kingdom": [
+    {
+      "title": "Kingdom",
+      "year": "",
+      "type": "movie",
+      "viet_title": "",
+      "root_key": "tmdb-46437",
+      "tmdb_ids": [
+        "46437"
+      ],
+      "tvdb_ids": [
+        "259635"
+      ],
+      "imdb_ids": [],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "local+gdrive"
+    }
+  ],
+  "Kingdom: Ashin of the North": [
     {
       "title": "Kingdom: Ashin of the North",
       "year": "2021",
@@ -7453,23 +7797,8 @@
         "tt13412252"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
-    },
-    {
-      "title": "Kingdom",
-      "year": "",
-      "type": "movie",
-      "viet_title": "",
-      "root_key": "tmdb-46437",
-      "tmdb_ids": [
-        "46437"
-      ],
-      "tvdb_ids": [
-        "259635"
-      ],
-      "imdb_ids": [],
-      "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     }
   ],
   "Live Nude Comedy": [
@@ -7490,7 +7819,8 @@
         "tt0462651"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie,zho"
+      "sub_langs": "eng,vie,zho",
+      "sources": "jellyfin+plex+gdrive"
     }
   ],
   "One Piece": [
@@ -7510,7 +7840,8 @@
         "tt0388629"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Luffy's Fall! The Unexplored Region - Grand Adventure in the Ocean's Navel",
@@ -7528,7 +7859,8 @@
         "tt0975705"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece: The Movie",
@@ -7546,7 +7878,8 @@
         "tt0814243"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece: Clockwork Island Adventure",
@@ -7564,7 +7897,8 @@
         "tt0832449"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece: Chopper's Kingdom on the Island of Strange Animals",
@@ -7582,7 +7916,8 @@
         "tt0997084"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece Special: Open Upon the Great Sea! A Father's Huge, HUGE Dream!",
@@ -7600,7 +7935,8 @@
         "tt1003286"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece Special: Protect! The Last Great Stage",
@@ -7618,7 +7954,8 @@
         "tt1010037"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece: Dead End Adventure",
@@ -7636,7 +7973,8 @@
         "tt1006926"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece: Curse of the Sacred Sword",
@@ -7654,7 +7992,8 @@
         "tt1010435"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece Special: The Detective Memoirs of Chief Straw Hat Luffy",
@@ -7672,7 +8011,27 @@
         "tt1012787"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
+    },
+    {
+      "title": "One Piece: Baron Omatsuri and the Secret Island",
+      "year": "2005",
+      "type": "movie",
+      "viet_title": "One Piece: Nam Tước Omatsuri Và Hòn Đảo Bí Mật",
+      "root_key": "tvdb-6656",
+      "tmdb_ids": [
+        "44729"
+      ],
+      "tvdb_ids": [
+        "6656"
+      ],
+      "imdb_ids": [
+        "tt1018764"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece: Giant Mecha Soldier of Karakuri Castle",
@@ -7690,7 +8049,8 @@
         "tt1059950"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece: The Desert Princess and the Pirates: Adventure in Alabasta",
@@ -7708,7 +8068,8 @@
         "tt1037116"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece: Episode of Chopper Plus: Bloom in the Winter, Miracle Cherry Blossom",
@@ -7726,7 +8087,8 @@
         "tt1206326"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece Film: Strong World",
@@ -7744,7 +8106,8 @@
         "tt1485763"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece Mugiwara Chase",
@@ -7762,7 +8125,8 @@
         "tt1865467"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece Episode of Nami: Tears of a Navigator and the Bonds of Friends",
@@ -7780,7 +8144,8 @@
         "tt2598466"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece Film: Z",
@@ -7798,7 +8163,8 @@
         "tt2375379"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece: Episode of Luffy - Hand Island Adventure",
@@ -7816,7 +8182,8 @@
         "tt3354344"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece Episode of Merry: The Tale of One More Friend",
@@ -7834,7 +8201,8 @@
         "tt3354352"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece \"3D2Y\": Overcome Ace's Death! Luffy's Vow to his Friends",
@@ -7852,7 +8220,8 @@
         "tt5098548"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece Episode of Sabo: The Three Brothers' Bond - The Miraculous Reunion and the Inherited Will",
@@ -7870,7 +8239,8 @@
         "tt6597356"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece: Adventure of Nebulandia",
@@ -7888,7 +8258,8 @@
         "tt6609162"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece Film: GOLD",
@@ -7906,7 +8277,8 @@
         "tt5251328"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece: Heart of Gold",
@@ -7924,7 +8296,8 @@
         "tt6425816"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece Episode of East Blue",
@@ -7942,7 +8315,8 @@
         "tt11757066"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece: Episode of Skypiea",
@@ -7960,7 +8334,8 @@
         "tt11744496"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece: Stampede",
@@ -7978,7 +8353,8 @@
         "tt9430698"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "One Piece Film Red",
@@ -7996,7 +8372,8 @@
         "tt16183464"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "jpn,vie"
+      "sub_langs": "jpn,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "ONE PIECE",
@@ -8014,7 +8391,8 @@
         "tt11737520"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,ger,pol,rus,ukr,vie"
+      "sub_langs": "eng,ger,pol,rus,ukr,vie",
+      "sources": "jellyfin+plex"
     }
   ],
   "Madou King Granzort": [
@@ -8030,7 +8408,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "local"
     }
   ],
   "Mashin Hero Wataru": [
@@ -8046,7 +8425,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex+gdrive"
     }
   ],
   "Higashino Keigo: Masquerade": [
@@ -8066,7 +8446,8 @@
         "tt7502322"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Masquerade Night",
@@ -8084,7 +8465,8 @@
         "tt13582738"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "Higashino Keigo: Galileo": [
@@ -8104,7 +8486,8 @@
         "tt2412556"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Devotion of Suspect X",
@@ -8122,7 +8505,8 @@
         "tt3401392"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Silent Parade",
@@ -8140,7 +8524,8 @@
         "tt21608894"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Suspect X",
@@ -8158,7 +8543,8 @@
         "tt1160629"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "Mission: Impossible": [
@@ -8178,7 +8564,8 @@
         "tt0117060"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Mission: Impossible II",
@@ -8196,7 +8583,8 @@
         "tt0120755"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Mission: Impossible III",
@@ -8214,7 +8602,8 @@
         "tt0317919"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Mission: Impossible - Ghost Protocol",
@@ -8232,7 +8621,8 @@
         "tt1229238"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Mission: Impossible - Rogue Nation",
@@ -8250,7 +8640,8 @@
         "tt2381249"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Mission: Impossible - Fallout",
@@ -8268,7 +8659,8 @@
         "tt4912910"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,fre,por,spa,vie"
+      "sub_langs": "eng,fre,por,spa,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Mission: Impossible - Dead Reckoning Part One",
@@ -8286,7 +8678,8 @@
         "tt9603212"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "ara,bul,chi,cze,dan,eng,est,fin,fre,gre,heb,hin,hun,ind,jpn,kor,lav,lit,may,nor,pol,por,slo,slv,spa,swe,tha,tur,ukr,vie"
+      "sub_langs": "ara,bul,chi,cze,dan,eng,est,fin,fre,gre,heb,hin,hun,ind,jpn,kor,lav,lit,may,nor,pol,por,slo,slv,spa,swe,tha,tur,ukr,vie",
+      "sources": "jellyfin+plex"
     }
   ],
   "Monster": [
@@ -8302,7 +8695,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex+local+gdrive"
     }
   ],
   "Mortal Kombat II": [
@@ -8322,7 +8716,8 @@
         "tt17490712"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Ne Zha": [
@@ -8342,7 +8737,8 @@
         "tt10627720"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Ne Zha 2",
@@ -8358,7 +8754,8 @@
         "tt34956443"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin"
     }
   ],
   "Oldboy": [
@@ -8366,35 +8763,22 @@
       "title": "Oldboy",
       "year": "2003",
       "type": "movie",
-      "viet_title": "",
+      "viet_title": "Đồng Môn",
       "root_key": "tmdb-670",
       "tmdb_ids": [
-        "670"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [
-        "tt0364569"
-      ],
-      "thuyet_minh_vn": false,
-      "sub_langs": ""
-    },
-    {
-      "title": "Oldboy",
-      "year": "",
-      "type": "movie",
-      "viet_title": "Đồng Môn",
-      "root_key": "tvdb-4568",
-      "tmdb_ids": [
+        "670",
         "87516"
       ],
       "tvdb_ids": [
         "4568"
       ],
       "imdb_ids": [
+        "tt0364569",
         "tt1321511"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "One Million Yen Girl": [
@@ -8414,7 +8798,8 @@
         "tt1077094"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "One-Punch Man": [
@@ -8434,7 +8819,8 @@
         "tt4508902"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,zxx"
+      "sub_langs": "eng,zxx",
+      "sources": "jellyfin+plex"
     }
   ],
   "Pirates of the Caribbean": [
@@ -8454,7 +8840,8 @@
         "tt0383574"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,fre,spa,vie"
+      "sub_langs": "eng,fre,spa,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pirates of the Caribbean: At World's End",
@@ -8472,7 +8859,8 @@
         "tt0449088"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,fre,spa,vie"
+      "sub_langs": "eng,fre,spa,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pirates of the Caribbean: On Stranger Tides",
@@ -8490,7 +8878,8 @@
         "tt1298650"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "ara,bul,dut,eng,est,gre,heb,hun,ind,por,rum,spa,tur,vie"
+      "sub_langs": "ara,bul,dut,eng,est,gre,heb,hun,ind,por,rum,spa,tur,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pirates of the Caribbean: Dead Men Tell No Tales",
@@ -8508,7 +8897,8 @@
         "tt1790809"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,fre,spa,vie"
+      "sub_langs": "eng,fre,spa,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pirates of the Caribbean: The Curse of the Black Pearl",
@@ -8526,7 +8916,8 @@
         "tt0325980"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "Pokémon": [
@@ -8546,7 +8937,8 @@
         "tt0190641"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon the Movie 2000",
@@ -8564,7 +8956,8 @@
         "tt0210234"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon 3: The Movie",
@@ -8582,7 +8975,8 @@
         "tt0235679"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon 4Ever",
@@ -8600,7 +8994,8 @@
         "tt0287635"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon Heroes",
@@ -8618,7 +9013,8 @@
         "tt0347791"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon: Jirachi Wish Maker",
@@ -8636,7 +9032,8 @@
         "tt0420076"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon: Destiny Deoxys",
@@ -8654,7 +9051,8 @@
         "tt0435286"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon: Lucario and the Mystery of Mew",
@@ -8672,7 +9070,8 @@
         "tt0875609"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon Ranger and the Temple of the Sea",
@@ -8690,7 +9089,8 @@
         "tt1000095"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon: The Rise of Darkrai",
@@ -8708,7 +9108,8 @@
         "tt1226251"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon: Giratina and the Sky Warrior",
@@ -8726,7 +9127,8 @@
         "tt1160525"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon: Arceus and the Jewel of Life",
@@ -8744,7 +9146,8 @@
         "tt1468843"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon: Zoroark - Master of Illusions",
@@ -8762,7 +9165,8 @@
         "tt1690470"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon the Movie: Black - Victini and Reshiram",
@@ -8780,7 +9184,8 @@
         "tt1961324"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon the Movie: White - Victini and Zekrom",
@@ -8798,7 +9203,8 @@
         "tt1739212"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon the Movie: Kyurem vs. the Sword of Justice",
@@ -8816,7 +9222,8 @@
         "tt2549540"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon the Movie: Genesect and the Legend Awakened",
@@ -8834,7 +9241,8 @@
         "tt3257582"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon the Movie: Diancie and the Cocoon of Destruction",
@@ -8852,7 +9260,8 @@
         "tt3918368"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon the Movie: Hoopa and the Clash of Ages",
@@ -8870,7 +9279,8 @@
         "tt4503906"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon the Movie: Volcanion and the Mechanical Marvel",
@@ -8888,7 +9298,8 @@
         "tt5889204"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon the Movie: I Choose You!",
@@ -8906,7 +9317,8 @@
         "tt6595896"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon the Movie: The Power of Us",
@@ -8924,7 +9336,8 @@
         "tt8108230"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Pokémon the Movie: Mewtwo Strikes Back - Evolution",
@@ -8940,7 +9353,8 @@
         "tt8856470"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin"
     },
     {
       "title": "Pokémon the Movie: Secrets of the Jungle",
@@ -8958,7 +9372,8 @@
         "tt11819890"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Pom Poko": [
@@ -8978,7 +9393,8 @@
         "tt0110008"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "The Three Eyed One": [
@@ -8999,7 +9415,8 @@
         "tt3704852"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex+local+gdrive"
     },
     {
       "title": "The Three-Eyed One: The Prince of Devil Island",
@@ -9013,7 +9430,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "gdrive"
     }
   ],
   "Ricos y Famosos": [
@@ -9031,7 +9449,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "gdrive"
     }
   ],
   "Royal Tramp": [
@@ -9051,7 +9470,8 @@
         "tt0104770"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Royal Tramp 2",
@@ -9069,7 +9489,8 @@
         "tt0104771"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Sherlock": [
@@ -9089,7 +9510,8 @@
         "tt1475582"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     }
   ],
   "Sherlock Holmes": [
@@ -9109,7 +9531,8 @@
         "tt0988045"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "eng,vie"
+      "sub_langs": "eng,vie",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Sherlock Holmes: A Game of Shadows",
@@ -9127,7 +9550,8 @@
         "tt1515091"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Shippû! 'Konoha gakuen' den": [
@@ -9145,7 +9569,8 @@
         "tt6163058"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "plex"
     }
   ],
   "Sing": [
@@ -9165,7 +9590,8 @@
         "tt3470600"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Sonic the Hedgehog 3": [
@@ -9185,7 +9611,8 @@
         "tt18259086"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Spellbinder": [
@@ -9205,7 +9632,8 @@
         "tt0112174"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "eng"
+      "sub_langs": "eng",
+      "sources": "jellyfin+plex"
     }
   ],
   "Sphinx – Secrets of the History": [
@@ -9223,7 +9651,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "gdrive"
     }
   ],
   "Super Fishing Grander Musashi": [
@@ -9231,33 +9660,21 @@
       "title": "Super Fishing Grander Musashi",
       "year": "1997",
       "type": "series",
-      "viet_title": "",
+      "viet_title": "Super Fishing Grander Musashi",
       "root_key": "tmdb-212212",
       "tmdb_ids": [
-        "212212"
-      ],
-      "tvdb_ids": [],
-      "imdb_ids": [
-        "tt15233596"
-      ],
-      "thuyet_minh_vn": true,
-      "sub_langs": ""
-    },
-    {
-      "title": "Super Fishing Grander Musashi",
-      "year": "",
-      "type": "movie",
-      "viet_title": "Super Fishing Grander Musashi",
-      "root_key": "tvdb-309529",
-      "tmdb_ids": [
+        "212212",
         "116066"
       ],
       "tvdb_ids": [
         "309529"
       ],
-      "imdb_ids": [],
-      "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "imdb_ids": [
+        "tt15233596"
+      ],
+      "thuyet_minh_vn": true,
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "DC Universe": [
@@ -9277,7 +9694,8 @@
         "tt0468569"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Zack Snyder's Justice League",
@@ -9295,7 +9713,8 @@
         "tt12361974"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "Superman",
@@ -9313,7 +9732,8 @@
         "tt5950044"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Swapped": [
@@ -9333,7 +9753,8 @@
         "tt29552248"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Higashino Keigo: Kaga Kyoichiro (Shinzanmono)": [
@@ -9353,7 +9774,8 @@
         "tt1946285"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     },
     {
       "title": "The Crimes That Bind",
@@ -9371,7 +9793,8 @@
         "tt7080138"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "The Legend of Lu Xiaofeng": [
@@ -9391,7 +9814,8 @@
         "tt1227160"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "The Matrix": [
@@ -9411,7 +9835,8 @@
         "tt0133093"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "The New Adventures of Chor Lau Heung": [
@@ -9429,7 +9854,27 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
+    }
+  ],
+  "The Secret Garden": [
+    {
+      "title": "The Secret Garden",
+      "year": "1993",
+      "type": "movie",
+      "viet_title": "",
+      "root_key": "tmdb-11236",
+      "tmdb_ids": [
+        "11236"
+      ],
+      "tvdb_ids": [],
+      "imdb_ids": [
+        "tt0108071"
+      ],
+      "thuyet_minh_vn": false,
+      "sub_langs": "",
+      "sources": "jellyfin"
     }
   ],
   "The Shawshank Redemption": [
@@ -9449,7 +9894,8 @@
         "tt0111161"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "The Super Mario Galaxy Movie": [
@@ -9469,7 +9915,8 @@
         "tt28650488"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "The Voice South Africa": [
@@ -9485,7 +9932,8 @@
       "tvdb_ids": [],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie,zho"
+      "sub_langs": "vie,zho",
+      "sources": "jellyfin+plex"
     }
   ],
   "The Westward": [
@@ -9503,7 +9951,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "local+gdrive"
     }
   ],
   "The Young Detective": [
@@ -9523,7 +9972,8 @@
         "tt6788684"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Toho Unused Special Effects Complete Collection": [
@@ -9541,7 +9991,8 @@
         "tt12450416"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin"
     }
   ],
   "Trials": [
@@ -9562,7 +10013,8 @@
         "tt3481622"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "Trinny & Susannah": [
@@ -9580,7 +10032,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "gdrive"
     }
   ],
   "Troy": [
@@ -9600,7 +10053,8 @@
         "tt0332452"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "jellyfin+plex"
     }
   ],
   "What If...?": [
@@ -9620,7 +10074,8 @@
         "tt10168312"
       ],
       "thuyet_minh_vn": true,
-      "sub_langs": "chi,cze,dan,dut,eng,fin,fre,ger,gre,hun,ita,jpn,kor,nor,pol,por,rum,slo,spa,swe,vie"
+      "sub_langs": "chi,cze,dan,dut,eng,fin,fre,ger,gre,hun,ita,jpn,kor,nor,pol,por,rum,slo,spa,swe,vie",
+      "sources": "jellyfin+plex"
     }
   ],
   "WUKONG": [
@@ -9638,7 +10093,8 @@
       ],
       "imdb_ids": [],
       "thuyet_minh_vn": false,
-      "sub_langs": ""
+      "sub_langs": "",
+      "sources": "gdrive"
     }
   ],
   "Your Name.": [
@@ -9658,7 +10114,8 @@
         "tt5311514"
       ],
       "thuyet_minh_vn": false,
-      "sub_langs": "vie"
+      "sub_langs": "vie",
+      "sources": "jellyfin+plex"
     }
   ]
 }
