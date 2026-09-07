@@ -1,0 +1,24 @@
+{
+  "name": "subtitle-frame-aligner",
+  "displayName": "Subtitle Frame Aligner",
+  "description": "Tự động căn chỉnh mốc thời gian (Frame-Perfect Voice Alignment) từng dòng thoại phụ đề theo khẩu hình nhân vật bằng FFmpeg VAD mà không tốn token AI, bảo vệ tuyệt đối KFX/bài hát và xuất SRT siêu sạch.",
+  "version": "1.0.0",
+  "author": {
+    "name": "nchungdev",
+    "url": "https://github.com/nchungdev"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/nchungdev/agent-skills",
+  "repository": "https://github.com/nchungdev/agent-skills",
+  "keywords": [
+    "subtitle",
+    "vad",
+    "voice-alignment",
+    "ffmpeg",
+    "sync",
+    "srt",
+    "ass",
+    "zero-token",
+    "frame-perfect"
+  ]
+}

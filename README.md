@@ -1,12 +1,12 @@
 # 🪐 Antigravity Agent Skills & Media Ecosystem
 
-Kho lưu trữ chuẩn hóa bộ **10 Agent Skills & Plugins** chuyên biệt cho hệ sinh thái **AI Agent & Media Automation**.
+Kho lưu trữ chuẩn hóa bộ **11 Agent Skills & Plugins** chuyên biệt cho hệ sinh thái **AI Agent & Media Automation**.
 
 > 🚀 **Media Hub Standalone App**: Ứng dụng Desktop & Web Dashboard điều phối trung tâm đã được tách thành repository riêng biệt tại [**nchungdev/media-hub**](https://github.com/nchungdev/media-hub). Bộ kỹ năng trong repository này cung cấp toàn bộ năng lực AI Agent xử lý ngầm cho Media Hub.
 
 ---
 
-## 🏛️ Danh Sách 10 Agent Skills
+## 🏛️ Danh Sách 11 Agent Skills
 
 ### 🚀 1. TẦNG QUY TRÌNH CHÍNH (CORE PIPELINE)
 * **`media-downloader`**: Bộ tải dữ liệu đa nguồn (Direct HTTP/DDL, Torrent qua Aria2c Client P2P, hoặc Torrent qua TorBox Debrid Cloud API).
@@ -22,6 +22,7 @@ Kho lưu trữ chuẩn hóa bộ **10 Agent Skills & Plugins** chuyên biệt ch
 * **`media-hub-franchise`**: Tra cứu và quản lý franchise phim từ kho Media Hub, liệt kê franchise, xem danh sách phim kèm mã tmdb/tvdb để map với CSV, và tự động sắp xếp danh sách phim vào từng franchise.
 * **`translate-subtitle`**: Động cơ dịch thuật phụ đề 2 tầng chuyên sâu cho phim và anime (kèm `subtitle-glossary-hub`).
 * **`subtitle-extractor`**: Bóc tách phụ đề nhúng (Muxed Subtitles) từ video container (MKV, MP4, M4V) ra file `.srt`, `.ass`.
+* **`subtitle-frame-aligner`**: Tự động căn chỉnh mốc thời gian (Frame-Perfect Voice Alignment) từng dòng thoại phụ đề theo khẩu hình nhân vật bằng FFmpeg VAD mà không tốn token AI, bảo vệ tuyệt đối KFX/bài hát và xuất SRT siêu sạch.
 * **`sub-to-webvtt`**: Chuyển đổi và làm sạch phụ đề sang chuẩn WebVTT (`.vtt`) tối ưu phát trực tuyến trên trình duyệt.
 
 ---

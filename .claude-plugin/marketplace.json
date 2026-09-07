@@ -4,7 +4,7 @@
     "name": "nchungdev",
     "url": "https://github.com/nchungdev"
   },
-  "description": "Bộ 10 Agent Skills chuyên sâu cho hệ sinh thái Media AI: tải đa nguồn (DDL/Torrent/TorBox), chuẩn hóa thư viện Plex & Jellyfin, đồng bộ NAS/Google Drive, tra cứu TMDb, gom nhóm franchise và pipeline dịch thuật & xử lý phụ đề. Đồng hành cùng ứng dụng Media Hub (https://github.com/nchungdev/media-hub).",
+  "description": "Bộ 11 Agent Skills chuyên sâu cho hệ sinh thái Media AI: tải đa nguồn (DDL/Torrent/TorBox), chuẩn hóa thư viện Plex & Jellyfin, đồng bộ NAS/Google Drive, tra cứu TMDb, gom nhóm franchise và pipeline dịch thuật & xử lý phụ đề. Đồng hành cùng ứng dụng Media Hub (https://github.com/nchungdev/media-hub).",
   "plugins": [
     {
       "name": "media-downloader",
@@ -163,6 +163,25 @@
         "tvdb",
         "catalog",
         "movies"
+      ]
+    },
+    {
+      "name": "subtitle-frame-aligner",
+      "displayName": "Subtitle Frame Aligner",
+      "source": "./plugins/subtitle-frame-aligner",
+      "description": "Tự động căn chỉnh mốc thời gian (Frame-Perfect Voice Alignment) từng dòng thoại phụ đề theo khẩu hình nhân vật bằng FFmpeg VAD mà không tốn token AI, bảo vệ tuyệt đối KFX/bài hát và xuất SRT siêu sạch.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "subtitle",
+        "vad",
+        "voice-alignment",
+        "ffmpeg",
+        "sync",
+        "srt",
+        "ass",
+        "zero-token",
+        "frame-perfect"
       ]
     }
   ]
