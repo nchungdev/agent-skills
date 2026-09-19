@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  tdarr-node:
+    container_name: tdarr-node
+    image: ghcr.io/haveagitgat/tdarr_node:latest
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+      - PUID=1000
+      - PGID=100
+      - nodeID=Linux-Worker-01
+      - nodeIP=0.0.0.0
+      - nodePort=8267
+      - serverIP=192.168.1.37
+      - serverPort=8266
+    volumes:
+      - /appdata/tdarr/node_configs:/app/configs
+      - /srv/mergerfs/MainPool/Phim:/media
+      - /srv/mergerfs/MainPool/tdarr_cache:/temp
+    devices:
+      # For Intel QuickSync Video (QSV)
+      - /dev/dri:/dev/dri
+    # For NVIDIA GPU (uncomment if using Nvidia):
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]

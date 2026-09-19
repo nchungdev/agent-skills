@@ -1,0 +1,22 @@
+{
+  "nodeID": "MacMini-M4",
+  "nodeIP": "192.168.1.4",
+  "nodePort": "8267",
+  "serverIP": "192.168.1.37",
+  "serverPort": "8266",
+  "handbrakePath": "",
+  "ffmpegPath": "",
+  "mkvpropeditPath": "",
+  "pathTranslators": [
+    {
+      "server": "/media",
+      "node": "/Volumes/Phim"
+    },
+    {
+      "server": "/temp",
+      "node": "/Users/chungnh/tdarr_cache"
+    }
+  ],
+  "nodeType": "native",
+  "cronPluginUpdate": ""
+}

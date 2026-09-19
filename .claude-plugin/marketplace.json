@@ -4,7 +4,7 @@
     "name": "nchungdev",
     "url": "https://github.com/nchungdev"
   },
-  "description": "Bộ 11 Agent Skills chuyên sâu cho hệ sinh thái Media AI: tải đa nguồn (DDL/Torrent/TorBox), chuẩn hóa thư viện Plex & Jellyfin, đồng bộ NAS/Google Drive, tra cứu TMDb, gom nhóm franchise và pipeline dịch thuật & xử lý phụ đề. Đồng hành cùng ứng dụng Media Hub (https://github.com/nchungdev/media-hub).",
+  "description": "Bộ 13 Agent Skills chuyên sâu cho hệ sinh thái Media AI: tải đa nguồn (DDL/Torrent/TorBox), chuẩn hóa thư viện Plex & Jellyfin, đồng bộ NAS/Google Drive, tra cứu TMDb, gom nhóm franchise, pipeline dịch thuật & xử lý phụ đề, cùng hạ tầng OMV & cụm Tdarr phân tán. Đồng hành cùng ứng dụng Media Hub (https://github.com/nchungdev/media-hub).",
   "plugins": [
     {
       "name": "media-downloader",
@@ -182,6 +182,43 @@
         "ass",
         "zero-token",
         "frame-perfect"
+      ]
+    },
+    {
+      "name": "omv-media-stack",
+      "displayName": "OMV Media Stack",
+      "source": "./plugins/omv-media-stack",
+      "description": "Kiến trúc toàn diện, ma trận cổng mạng, pipeline tự động hóa media (Jellyseerr, Radarr, Sonarr, Prowlarr, Aria2c, Plex, Jellyfin), MergerFS và sổ tay vận hành OpenMediaVault 7 NAS.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "omv",
+        "nas",
+        "docker",
+        "plex",
+        "jellyfin",
+        "radarr",
+        "sonarr",
+        "prowlarr",
+        "aria2"
+      ]
+    },
+    {
+      "name": "tdarr-node",
+      "displayName": "Tdarr Node",
+      "source": "./plugins/tdarr-node",
+      "description": "Triển khai, cấu hình và vận hành Tdarr Distributed Node trên macOS (Apple Silicon M-series VideoToolbox), Linux (Intel QSV, NVIDIA NVENC) và Docker. Cấu hình Path Translators chống lỗi ENOENT và daemon launchd/systemd chạy 24/7.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "tdarr",
+        "transcoding",
+        "videotoolbox",
+        "qsv",
+        "nvenc",
+        "apple-silicon",
+        "hevc",
+        "distributed"
       ]
     }
   ]

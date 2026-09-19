@@ -1,0 +1,17 @@
+[Unit]
+Description=Tdarr Distributed Transcoding Node
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=chungnh
+Group=users
+WorkingDirectory=/home/chungnh/Tdarr_Node
+ExecStart=/home/chungnh/Tdarr_Node/Tdarr_Node
+Restart=always
+RestartSec=10
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
