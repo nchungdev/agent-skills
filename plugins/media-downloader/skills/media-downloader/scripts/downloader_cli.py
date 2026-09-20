@@ -13,6 +13,7 @@ from providers.direct import download_direct
 from providers.aria2_provider import download_aria2_torrent
 from providers.torbox_provider import list_torrents, add_torrent, get_torbox_token
 from providers.prowlarr_provider import search_prowlarr, resolve_magnet
+from providers.metube_provider import add_metube_download
 
 from hub_paths import staging_dir
 
@@ -22,8 +23,8 @@ def main():
 
     # Command: download
     p_dl = subparsers.add_parser("download", help="Tải nội dung từ URL hoặc Magnet link")
-    p_dl.add_argument("source", help="URL trực tiếp, Magnet link hoặc đường dẫn file .torrent")
-    p_dl.add_argument("--provider", choices=["direct", "aria2", "torbox"], default="aria2", help="Nguồn tải (direct, aria2, torbox). Mặc định: aria2")
+    p_dl.add_argument("source", help="URL trực tiếp, Magnet link, YouTube stream hoặc đường dẫn file .torrent")
+    p_dl.add_argument("--provider", choices=["direct", "aria2", "torbox", "metube"], default="aria2", help="Nguồn tải (direct, aria2, torbox, metube). Mặc định: aria2")
     p_dl.add_argument("--out-dir", default=None,
                       help="Thư mục đệm (mặc định: staging_dir trong cấu hình Media Hub)")
     p_dl.add_argument("--connections", type=int, default=16, help="Số kết nối song song")
@@ -57,6 +58,9 @@ def main():
             sys.exit(0 if success else 1)
         elif prov == "aria2":
             success = download_aria2_torrent(src, out_dir, connections=args.connections)
+            sys.exit(0 if success else 1)
+        elif prov == "metube":
+            success = add_metube_download(src, subfolder=args.out_dir)
             sys.exit(0 if success else 1)
         elif prov == "torbox":
             res = add_torrent(src)

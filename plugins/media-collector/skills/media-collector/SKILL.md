@@ -313,14 +313,14 @@ The agent **MUST** clearly label the delivery format of subtitles for every rele
 
 ---
 
-## ⚡ Non-Direct Download Fallback Protocol
+## ⚡ Non-Direct Download & Web GUI Synchronization Protocol
 
-If the source is NOT a direct HTTP link:
-
-1. **P2P Torrent / Magnet**: Download `.torrent` file + provide Magnet link + search DDL mirrors (Anime Tosho, Archive.org).
-2. **Official Streaming** (YouTube, Muse Asia): Use `yt-dlp` for non-DRM content.
-3. **Cloud Lockers** (GDrive, Mega): Label as `[⚡ CLOUD LOCKER]` with direct links.
-4. **DRM Platforms** (Netflix, Disney+): Inform user, provide official link, search WEBRip releases.
+> [!IMPORTANT]
+> **Mọi tác vụ tải video/phim khởi chạy từ CLI hoặc kịch bản tự động BẮT BUỘC phải liên kết vào Web GUI để người dùng giám sát hàng đợi:**
+> 1. **P2P Torrent / Magnet**: Đẩy vào **Aria2 RPC** (`aria2-add "<magnet>" "<dest_dir>"`). Task **PHẢI** hiển thị trực tiếp và quản lý được trên **AriaNg Web GUI** (`http://192.168.1.37:6880`). Tuyệt đối không chạy binary `aria2c` one-shot tách rời Web GUI.
+> 2. **Official Streaming / Web Video** (YouTube, Muse Asia, v.v.): Đẩy qua **MeTube API** (`metube-dl "<url>" "<subfolder>"`). Task **PHẢI** hiển thị trực tiếp và quản lý được trên **MeTube Web GUI** (`http://192.168.1.37:8081`). Tuyệt đối không chạy binary `yt-dlp` detached trên terminal.
+> 3. **Cloud Lockers** (GDrive, Mega): Gắn nhãn `[⚡ CLOUD LOCKER]` kèm link trực tiếp.
+> 4. **DRM Platforms** (Netflix, Disney+): Thông báo người dùng, cung cấp link chính thức, tìm kiếm bản WEBRip qua Prowlarr/TorBox.
 
 ---
 

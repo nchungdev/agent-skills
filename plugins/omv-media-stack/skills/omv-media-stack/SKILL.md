@@ -71,10 +71,25 @@ flowchart TD
 | **JDownloader 2** | `5800` | Bridge | `http://192.168.1.37:5800` | Direct HTTP/DDL downloader |
 | **Plex Media Server** | `32400` | Host | `http://192.168.1.37:32400/web` | Primary streaming & transcoding server |
 | **Jellyfin** | `8096` | Host | `http://192.168.1.37:8096` | Open-source streaming media server |
+| **MeTube** | `8081` | Bridge | `http://192.168.1.37:8081` | yt-dlp Web GUI video & playlist downloader |
 | **FileBrowser** | `8080` | Bridge | `http://192.168.1.37:8080` | Web-based file manager |
 | **Tdarr** | `8265` | Host | `http://192.168.1.37:8265` | Distributed media transcoding & compression |
 | **AGY Manager** | `8585` | Host | `http://192.168.1.37:8585` | Antigravity CLI monitor & web UI |
 | **OMV WebGUI** | `80` / `443` | Native | `http://192.168.1.37` | NAS & storage management UI |
+
+### 3.1. CLI ↔ Web GUI Synchronization Architecture
+
+All CLI commands and automation scripts MUST dispatch download tasks into the corresponding Web GUI daemons so users maintain 100% visibility and control over active queues:
+
+1. **Web Video & Streams (YouTube / Playlists)**:
+   - CLI Tool: `metube-dl "<URL>" [folder] [quality]` (or REST API `POST http://127.0.0.1:8081/add`)
+   - Monitored & Managed on: **MeTube Web GUI** (`http://192.168.1.37:8081`)
+   - *Rule: Never execute detached `yt-dlp` binary directly on the host shell.*
+
+2. **Torrents, Magnets & Direct Links**:
+   - CLI Tool: `aria2-add "<MAGNET|URL>" [dest_dir]` (or JSON-RPC `http://127.0.0.1:6800/jsonrpc`)
+   - Monitored & Managed on: **AriaNg Web GUI** (`http://192.168.1.37:6880`)
+   - *Rule: Never execute detached `aria2c` binary directly on the host shell.*
 
 ---
 
