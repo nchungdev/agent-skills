@@ -210,40 +210,119 @@ class PlexReader:
         finally:
             conn.close()
 
-    def search_local(self, query: str) -> List[Dict[str, Any]]:
-        """Searches if a movie exists locally on NAS / Plex."""
+    def search_local(self, query: str, year: Optional[Any] = None, tmdb_id: Optional[int] = None) -> List[Dict[str, Any]]:
+        """Searches if a movie exists locally on NAS / Plex using strict matching."""
         conn = self._get_connection()
         if not conn:
             return []
 
-        clean_q = re.sub(r"[:\-\(\)\*]", " ", query).strip()
-        words = [w for w in clean_q.split() if len(w) > 2]
-        search_pattern = f"%{words[0]}%" if words else f"%{query}%"
-
         try:
             cur = conn.cursor()
+
+            # 1. Exact match via TMDb ID if available
+            if tmdb_id:
+                # 1a. Check Plex tags
+                cur.execute("""
+                    SELECT m.id, m.title, m.year, m.metadata_type, p.file, s.view_count
+                    FROM metadata_items m
+                    JOIN taggings tg ON tg.metadata_item_id = m.id
+                    JOIN tags t ON t.id = tg.tag_id AND t.tag_type = 314
+                    LEFT JOIN media_items mi ON mi.metadata_item_id = m.id
+                    LEFT JOIN media_parts p ON p.media_item_id = mi.id
+                    LEFT JOIN metadata_item_settings s ON s.guid = m.guid
+                    WHERE m.metadata_type IN (1, 2) AND t.tag = ?
+                    GROUP BY m.id
+                    LIMIT 1;
+                """, (f"tmdb://{tmdb_id}",))
+                row = cur.fetchone()
+                if not row:
+                    # 1b. Check media_parts file path
+                    cur.execute("""
+                        SELECT m.id, m.title, m.year, m.metadata_type, p.file, s.view_count
+                        FROM metadata_items m
+                        JOIN media_items mi ON mi.metadata_item_id = m.id
+                        JOIN media_parts p ON p.media_item_id = mi.id
+                        LEFT JOIN metadata_item_settings s ON s.guid = m.guid
+                        WHERE m.metadata_type IN (1, 2) AND p.file LIKE ?
+                        GROUP BY m.id
+                        LIMIT 1;
+                    """, (f"%{{tmdb-{tmdb_id}}}%",))
+                    row = cur.fetchone()
+                if row:
+                    return [{
+                        "id": row[0],
+                        "title": row[1],
+                        "year": row[2],
+                        "type": "Movie" if row[3] == 1 else "Show",
+                        "file": row[4] or "",
+                        "view_count": row[5] or 0,
+                        "watched": (row[5] or 0) > 0
+                    }]
+
+            # 2. Strict normalized title matching
+            from difflib import SequenceMatcher
+
+            def normalize(s):
+                if not s:
+                    return ""
+                s = s.lower()
+                s = re.sub(r"[\(\)\[\]\{\}\:\-\*\.\,\?\_]", " ", s)
+                return " ".join(s.split())
+
+            nq = normalize(query)
+            if not nq:
+                return []
+
+            stop = {"the", "a", "an", "phim", "movie", "tap", "season"}
+            q_tokens = set([w for w in nq.split() if w not in stop])
+
             cur.execute("""
                 SELECT m.id, m.title, m.year, m.metadata_type, p.file, s.view_count
                 FROM metadata_items m
                 LEFT JOIN metadata_item_settings s ON s.guid = m.guid
                 LEFT JOIN media_items mi ON mi.metadata_item_id = m.id
                 LEFT JOIN media_parts p ON p.media_item_id = mi.id
-                WHERE m.metadata_type IN (1, 2) AND m.title LIKE ?
-                GROUP BY m.id
-                LIMIT 5;
-            """, (search_pattern,))
-            
+                WHERE m.metadata_type IN (1, 2)
+                GROUP BY m.id;
+            """)
+
             results = []
+            target_year = int(year) if year and str(year).isdigit() else None
+
             for r in cur.fetchall():
-                results.append({
-                    "id": r[0],
-                    "title": r[1],
-                    "year": r[2],
-                    "type": "Movie" if r[3] == 1 else "Show",
-                    "file": r[4] or "",
-                    "view_count": r[5] or 0,
-                    "watched": (r[5] or 0) > 0
-                })
+                cand_title = r[1]
+                cand_year = r[2]
+                nt = normalize(cand_title)
+                if not nt:
+                    continue
+
+                matched = False
+                if nq == nt:
+                    matched = True
+                else:
+                    t_tokens = set([w for w in nt.split() if w not in stop])
+                    if q_tokens and t_tokens and q_tokens == t_tokens:
+                        matched = True
+                    else:
+                        ratio = SequenceMatcher(None, nq, nt).ratio()
+                        if ratio >= 0.85:
+                            matched = True
+
+                if matched:
+                    if target_year and cand_year and abs(target_year - int(cand_year)) > 1:
+                        continue
+                    results.append({
+                        "id": r[0],
+                        "title": r[1],
+                        "year": r[2],
+                        "type": "Movie" if r[3] == 1 else "Show",
+                        "file": r[4] or "",
+                        "view_count": r[5] or 0,
+                        "watched": (r[5] or 0) > 0
+                    })
+                    if len(results) >= 2:
+                        break
+
             return results
         except Exception:
             return []

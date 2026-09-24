@@ -200,7 +200,10 @@ def cmd_theatrical(args):
     theatrical = tmdb.get_theatrical_releases(limit=args.limit)
     for item in theatrical:
         if btype == "local_sqlite":
-            local_matches = backend.search_local(item["title"])
+            rel_year = item.get("release_date", "")[:4] if item.get("release_date") else None
+            local_matches = backend.search_local(item["title"], year=rel_year, tmdb_id=item.get("tmdb_id"))
+            if not local_matches and item.get("original_title") and item["original_title"] != item["title"]:
+                local_matches = backend.search_local(item["original_title"], year=rel_year)
             if local_matches:
                 item["nas_status"] = f"🟢 ĐÃ CÓ TRÊN SERVER: `{local_matches[0]['title']}`"
             else:
@@ -228,7 +231,10 @@ def cmd_trending(args):
     trending = tmdb.get_trending("all", "week", limit=args.limit)
     for item in trending:
         if btype == "local_sqlite":
-            local_matches = backend.search_local(item["title"])
+            rel_year = item.get("release_date", "")[:4] if item.get("release_date") else None
+            local_matches = backend.search_local(item["title"], year=rel_year, tmdb_id=item.get("tmdb_id"))
+            if not local_matches and item.get("original_title") and item["original_title"] != item["title"]:
+                local_matches = backend.search_local(item["original_title"], year=rel_year)
             if local_matches:
                 item["nas_status"] = f"🟢 ĐÃ CÓ TRÊN SERVER: `{local_matches[0]['title']}`"
             else:
@@ -283,7 +289,10 @@ def cmd_buzz(args):
         item["buzz_reasons"] = buzz_reasons
 
         if btype == "local_sqlite":
-            local_matches = backend.search_local(title)
+            rel_year = item.get("release_date", "")[:4] if item.get("release_date") else None
+            local_matches = backend.search_local(title, year=rel_year, tmdb_id=item.get("tmdb_id"))
+            if not local_matches and item.get("original_title") and item["original_title"] != title:
+                local_matches = backend.search_local(item["original_title"], year=rel_year)
             if local_matches:
                 item["nas_status"] = f"🟢 ĐÃ CÓ TRÊN SERVER: `{local_matches[0]['title']}`"
             else:
@@ -337,7 +346,10 @@ def cmd_query(args):
 
     for item in items:
         if btype == "local_sqlite":
-            local_matches = backend.search_local(item["title"])
+            rel_year = item.get("release_date", "")[:4] if item.get("release_date") else None
+            local_matches = backend.search_local(item["title"], year=rel_year, tmdb_id=item.get("tmdb_id"))
+            if not local_matches and item.get("original_title") and item["original_title"] != item["title"]:
+                local_matches = backend.search_local(item["original_title"], year=rel_year)
             if local_matches:
                 item["nas_status"] = f"🟢 ĐÃ CÓ TRÊN SERVER: `{local_matches[0]['title']}`"
             else:
