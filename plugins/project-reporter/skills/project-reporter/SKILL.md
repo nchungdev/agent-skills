@@ -122,7 +122,6 @@ File được lưu tại thư mục gốc của Workspace:
 
 ---
 
-## 🛡️ 5. Quy Tắc Vàng Dành Cho Agent (Golden Rules)
-
 * **Rule 1 (Zero Context Drift):** Khi khởi đầu một task phức tạp hoặc sang một phiên chat mới, agent luôn kiểm tra `.agent/project_status.json` trước để nắm toàn bộ bức tranh kiến trúc và tài nguyên của hệ thống.
 * **Rule 2 (Keep Ledger Updated):** Sau khi hoàn tất một thay đổi quan trọng về cấu hình (đổi port, đổi đường dẫn, hoàn tất download series phim lớn), luôn gọi `--sync` hoặc cập nhật `.agent/project_status.json`.
+* **Rule 3 (Absolute Secret & Privacy Protection):** Tuyệt đối không lưu trữ, xuất bản hoặc hiển thị API key, Token, Secret, Password, Credentials trong báo cáo Markdown hay trong sổ cái `.agent/project_status.json`. Bộ lọc `mask_sensitive_data` trong `reporter.py` tự động phát hiện và che giấu (redact) toàn bộ token, bearer authorization, key-value secrets và thông tin nhạy cảm trước khi xuất báo cáo. Chỉ lưu cấu hình tham chiếu (ví dụ: `PROWLARR_API_KEY: "<configured in ~/.env>"`) thay vì lưu giá trị thật.

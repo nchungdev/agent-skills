@@ -12,9 +12,33 @@ import argparse
 from pathlib import Path
 from datetime import datetime
 
+import re
+
 APP_DATA_DIR = Path.home() / ".gemini" / "antigravity-cli"
 DB_PATH = APP_DATA_DIR / "conversation_summaries.db"
 BRAIN_DIR = APP_DATA_DIR / "brain"
+
+SENSITIVE_PATTERNS = [
+    # Authorization header / Bearer token
+    (re.compile(r'(?i)(bearer\s+)([a-zA-Z0-9_\-\.]{8,})'), r'\1[REDACTED_TOKEN]'),
+    # Known key / token prefixes
+    (re.compile(r'\b(gh[pousr]_[A-Za-z0-9_]{16,}|sk-[a-zA-Z0-9]{20,}|AIza[0-9A-Za-z\-_]{35}|ey[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,})\b'), r'[REDACTED_KEY]'),
+    # Key-value assignments like api_key=..., token=..., password=..., secret=...
+    (re.compile(r'(?i)(["\']?(?:api[_-]?key|token|auth_token|access_token|refresh_token|secret|password|passwd|credentials)["\']?\s*[:=]\s*["\']?)([^"\'\s,;]{6,})(["\']?)'), r'\1[REDACTED]\3'),
+    # Header format: X-Api-Key: ..., Authorization: ...
+    (re.compile(r'(?i)(x-api-key|authorization)\s*:\s*([^\s]{6,})'), r'\1: [REDACTED]'),
+    # URL basic authentication format: http://user:pass@host
+    (re.compile(r'(https?://[^:@\s]+):([^@\s]+)@'), r'\1:[REDACTED]@'),
+]
+
+def mask_sensitive_data(text):
+    """Sanitize and mask API keys, tokens, passwords, and secrets from any text."""
+    if not text or not isinstance(text, str):
+        return text
+    masked = text
+    for pattern, repl in SENSITIVE_PATTERNS:
+        masked = pattern.sub(repl, masked)
+    return masked
 
 def get_current_workspace():
     """Detect current workspace directory."""
@@ -44,7 +68,7 @@ def find_workspace_conversations(workspace_path):
     return rows
 
 def parse_transcript_summary(conv_id, max_events=10):
-    """Parse transcript.jsonl of a conversation for key events, user intents, and completed work."""
+    """Parse transcript.jsonl of a conversation for key events, user intents, and completed work with secret masking."""
     t_file = BRAIN_DIR / conv_id / ".system_generated" / "logs" / "transcript.jsonl"
     if not t_file.is_file():
         return {"user_requests": [], "tools_used": set(), "completed_tasks": [], "modified_files": set()}
@@ -67,19 +91,19 @@ def parse_transcript_summary(conv_id, max_events=10):
                     if step_type == "USER_INPUT" and content:
                         clean_content = content.strip().split("\n")[0][:100]
                         if not clean_content.startswith("<"):
-                            user_requests.append(clean_content)
+                            user_requests.append(mask_sensitive_data(clean_content))
 
                     tool_calls = obj.get("tool_calls", [])
                     for tc in tool_calls:
                         t_name = tc.get("toolAction") or tc.get("toolSummary") or tc.get("name")
                         if t_name:
-                            tools_used.add(t_name)
+                            tools_used.add(mask_sensitive_data(t_name))
                         
                         args = tc.get("args") or tc.get("arguments") or {}
                         if isinstance(args, dict):
                             cmd = args.get("CommandLine")
                             if cmd:
-                                commands_run.append(cmd.strip()[:80])
+                                commands_run.append(mask_sensitive_data(cmd.strip()[:80]))
                             tgt = args.get("TargetFile") or args.get("AbsolutePath")
                             if tgt:
                                 clean_name = Path(tgt).name.strip(' "\'')
@@ -148,7 +172,7 @@ def sync_current_conversation(workspace_path, conv_id=None, note=None):
             "last_synced": datetime.now().isoformat(),
             "latest_requests": t_summary.get("user_requests", [])[-3:],
             "modified_files": t_summary.get("modified_files", []),
-            "note": note or "Auto-synced via project-reporter"
+            "note": mask_sensitive_data(note) if note else "Auto-synced via project-reporter"
         }
         ledger["conversations"][conv_id] = conv_entry
 
