@@ -517,13 +517,22 @@ def main():
     if is_book:
         booking = oracle.vn_scraper.get_booking_links(query)
         print(f"# 🎟️ ĐẶT VÉ XEM PHIM: {query.upper()}\n")
-        print("> 💡 **Ưu tiên mở App trên điện thoại**: Nhấp vào Universal Link bên dưới để điện thoại tự động mở ứng dụng MoMo Cinema hoặc CGV.\n")
-        print("## 📱 1. Đặt Vé Qua Ứng Dụng (App Universal Link / Deeplink)")
+        print("> 💡 **Ưu tiên mở App trên điện thoại**: Nhấp Universal Link để điện thoại tự động mở đúng ứng dụng.\n")
+        print("## 📱 1. Đặt Vé Qua Ứng Dụng")
         for app in booking.get("app_links", []):
             print(f"### {app['badge']} ({app['platform']})")
-            print(f"- 🔗 **Universal Link (Ưu tiên)**: [{app['action_text']}]({app['universal_link']})")
-            print(f"- 📲 **Deeplink App Scheme**: `{app['deeplink']}`")
-            print(f"- ℹ️ **Mô tả**: {app['description']}\n")
+            print(f"- 🔗 **Universal Link**: [{app['action_text']}]({app['universal_link']})")
+            dl = app.get("deeplink", "")
+            if dl and not dl.startswith("intent://"):
+                print(f"- 📲 **Deeplink**: `{dl}`")
+            note = app.get("deeplink_note", "")
+            if note:
+                print(f"- 📲 **Mở App**: {note}")
+            if app.get("store_android"):
+                print(f"- 🤖 **Android**: [Tải / Mở từ Play Store]({app['store_android']})")
+            if app.get("store_ios"):
+                print(f"- 🍎 **iOS**: [Tải / Mở từ App Store]({app['store_ios']})")
+            print(f"- ℹ️ {app['description']}\n")
         print("## 🌐 2. Đặt Vé Trực Tuyến Qua Trình Duyệt Web")
         for w in booking.get("web_links", []):
             print(f"- **{w['badge']}**: [{w['action_text']}]({w['url']})")

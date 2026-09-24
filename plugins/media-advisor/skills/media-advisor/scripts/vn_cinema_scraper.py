@@ -426,9 +426,16 @@ class VnCinemaScraper:
         momo_web = "https://momo.vn/cinema"
 
         # 2. CGV Cinemas Vietnam
-        # CGV registered Universal Link domain (triggers CGV App on iOS/Android or falls back to Web search)
-        cgv_universal = f"https://www.cgv.vn/default/catalogsearch/result/?q={clean_encoded}"
-        cgv_deeplink = f"cgvvn://search?keyword={clean_encoded}"
+        # CGV không publish scheme riêng (cgvvn:// chưa được verify).
+        # Thay thế: intent:// format (Android Chrome) sẽ fallback về Play Store nếu chưa cài.
+        # Trên iOS: dùng App Store link hoặc cgv.vn (domain được CGV app đăng ký App Links nhưng WAF block verify).
+        cgv_search_web = f"https://www.cgv.vn/default/catalogsearch/result/?q={clean_encoded}"
+        # intent:// → Android Chrome tự mở CGV app nếu đã cài, fallback Play Store nếu chưa
+        cgv_intent = (
+            f"intent://default/catalogsearch/result/?q={clean_encoded}"
+            f"#Intent;scheme=https;host=www.cgv.vn;package=com.cgv.vn;"
+            f"S.browser_fallback_url={urllib.parse.quote_plus(cgv_search_web)};end"
+        )
 
         # 3. Moveek (Universal Cinema Aggregator - CGV, Lotte, BHD, Galaxy, Beta, Cinestar)
         moveek_web = f"https://moveek.com/tim-kiem/?q={encoded_query}"
@@ -454,9 +461,13 @@ class VnCinemaScraper:
                     "platform": "CGV Cinemas Vietnam",
                     "badge": "🍿 App CGV",
                     "priority": 2,
-                    "universal_link": cgv_universal,
-                    "deeplink": cgv_deeplink,
-                    "web_fallback": cgv_universal,
+                    "universal_link": cgv_search_web,
+                    # intent:// chỉ work trên Android Chrome; iOS dùng universal_link (cgv.vn là App Link của CGV app)
+                    "deeplink": cgv_intent,
+                    "deeplink_note": "Android: intent:// tự mở app CGV nếu đã cài | iOS: mở cgv.vn → app tự intercept",
+                    "web_fallback": cgv_search_web,
+                    "store_android": "https://play.google.com/store/apps/details?id=com.cgv.vn",
+                    "store_ios": "https://apps.apple.com/vn/app/cgv-cinemas-vietnam/id849664126",
                     "action_text": "Mở App CGV Cinemas",
                     "description": "Tìm suất chiếu và đặt vé trực tiếp trên ứng dụng CGV Việt Nam"
                 }
@@ -472,7 +483,7 @@ class VnCinemaScraper:
                 {
                     "platform": "CGV Online",
                     "badge": "🌐 CGV Web",
-                    "url": cgv_universal,
+                    "url": cgv_search_web,
                     "action_text": "Đặt Vé Tại Website CGV",
                     "description": "Trang tìm kiếm và đặt vé chính thức tại cgv.vn"
                 },
@@ -485,6 +496,7 @@ class VnCinemaScraper:
                 }
             ]
         }
+
 
 if __name__ == "__main__":
     scraper = VnCinemaScraper()
