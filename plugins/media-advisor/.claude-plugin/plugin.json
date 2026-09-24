@@ -1,0 +1,22 @@
+{
+  "name": "media-advisor",
+  "displayName": "Media Advisor & Cinema Recommendation Engine",
+  "version": "1.0.0",
+  "description": "Zero-API homelab cinema concierge: Reads local Plex/Jellyfin SQLite databases directly in read-only mode to analyze watch history, in-progress items, user ratings, and unwatched library gems. Cross-references real-time theatrical releases, streaming platform drops, and community buzz with anti-seeding sentiment verification. Renders recommendations as 2-column visual cards with local poster thumbnails.",
+  "author": {
+    "name": "nchungdev"
+  },
+  "keywords": [
+    "recommendation",
+    "advisor",
+    "plex",
+    "jellyfin",
+    "nas",
+    "sqlite",
+    "theatrical",
+    "streaming",
+    "anti-seeding",
+    "movies",
+    "tv"
+  ]
+}

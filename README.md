@@ -3,9 +3,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Agent Skills Standard](https://img.shields.io/badge/Standard-Agent%20Skills-brightgreen.svg)](https://agentskills.org)
 [![Compatible With](https://img.shields.io/badge/Compatible%20With-Claude%20Code%20|%20Antigravity%20|%20Gemini%20|%20Codex%20|%20Cursor-orange.svg)](#-platform-compatibility)
-[![Total Skills](https://img.shields.io/badge/Skills%20Catalog-8%20Production%20Skills-purple.svg)](#-skills-catalog)
+[![Total Skills](https://img.shields.io/badge/Skills%20Catalog-9%20Production%20Skills-purple.svg)](#-skills-catalog)
 
-> **A curated, production-grade monorepo of 8 modular AI Agent Skills & Plugins crafted by [@nchungdev](https://github.com/nchungdev).**  
+> **A curated, production-grade monorepo of 9 modular AI Agent Skills & Plugins crafted by [@nchungdev](https://github.com/nchungdev).**  
 > Built strictly on the open **Agent Skills Standard (`SKILL.md`)**, ready to install, distribute, and execute across any AI coding assistant or autonomous runtime: **Claude Code, Google Antigravity / Gemini CLI, OpenAI Codex, Cursor, Windsurf**, and custom agent frameworks.
 
 ---
@@ -17,14 +17,14 @@
 * 🛡️ **Zero Secret Leakage (Built-in Redaction):** Hardened with automated pattern-based secret sanitization (`mask_sensitive_data`). Automatically redacts API keys, Bearer tokens, passwords, and private credentials in CLI transcripts, project reports, and shared state files.
 * 📦 **1-Command Multi-Agent Installer:** Instant deployment via `./install.sh`. Generates dynamic symlinks into target skill directories across all major AI agent CLIs (`~/.gemini/skills`, `~/.agents/skills`, `~/.codex/skills`) or through the Claude Code Plugin Marketplace.
 * 📊 **Uniform `report` Command Across All Skills:** Every single skill features a standard `report` sub-command, rendering clean, real-time Markdown dashboards.
-* 🔑 **Interactive `setup` with Masked Input:** Dedicated setup wizards for skills requiring credentials (`tmdb-catalog`, `media-downloader`, `media-sync`), masking secrets while typing and testing live API connectivity.
+* 🔑 **Interactive `setup` with Masked Input:** Dedicated setup wizards for skills requiring credentials or preferences (`tmdb-catalog`, `media-downloader`, `media-sync`, `media-advisor`), masking secrets while typing and testing live API connectivity.
 * 🩺 **0.1s Zero-Config Device Auto-Detection:** Automatically diagnoses host environment (macOS workstation, Linux NAS/Server, or dev machine) without tedious CLI flags.
 
 ---
 
-## 🏛️ Skills Catalog (8 Consolidated Skills)
+## 🏛️ Skills Catalog (9 Consolidated Skills)
 
-The catalog features **8 production-ready Agent Skills**, consolidated into a clean, non-overlapping suite:
+The catalog features **9 production-ready Agent Skills**, consolidated into a clean, non-overlapping suite:
 
 | # | Skill | Superpower & Description | Core Stack / Tooling |
 |:---:|---|---|---|
@@ -36,6 +36,7 @@ The catalog features **8 production-ready Agent Skills**, consolidated into a cl
 | 6 | **`distributed-infra`** | Comprehensive self-hosted infrastructure & distributed compute manager: OpenMediaVault 7 NAS architecture, MergerFS storage pools, Docker Compose media automation, distributed Tdarr transcoding nodes, and ephemeral Cloudflare Tunnel (`cloudflared`) integration. | OMV 7, Docker Compose, MergerFS, Tdarr, Cloudflared |
 | 7 | **`project-reporter`** | Multi-conversation orchestrator, context synchronizer, and progress reporter. Eliminates context drift across concurrent chat sessions via a centralized ledger (`.agent/project_status.json`), scrubs secret tokens, and provides project visibility (`report`, `report all`). | SQLite Metadata, Transcript Parser, JSON Ledger |
 | 8 | **`system-doctor`** | Autonomous system optimizer & SRE diagnostic engine (CleanMyMac X meets Site Reliability Engineering). Auto-detects device signatures in 0.1s (macOS, Linux Server/NAS, Workstation) to clean OS/developer caches, purge RAM, kill runaway CPU hogs, hunt port conflicts, inspect Docker crashloops, and execute 1-click auto-healing. | SRE Diagnostics, OS Cleaner, Docker Forensics, Inode/RAM |
+| 9 | **`media-advisor`** | Zero-API cinema & series recommendation concierge: Reads local Plex/Jellyfin SQLite DB directly in read-only mode to extract authentic watch history, in-progress items, personal ratings, and unwatched library gems. Integrates real-time theatrical releases, OTT streaming platform drops, and community buzz with anti-seeding sentiment verification. Renders recommendations as 2-column visual cards with local poster thumbnails. | SQLite Read-Only (`mode=ro`), Plex/Jellyfin DB, TMDb Trends, Anti-Seeding Filter |
 
 ---
 
