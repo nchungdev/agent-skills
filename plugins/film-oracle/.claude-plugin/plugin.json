@@ -1,0 +1,22 @@
+{
+  "name": "film-oracle",
+  "displayName": "Film Oracle & Authentic Cinema Auditor",
+  "version": "1.0.0",
+  "description": "Truth-seeking cinema auditor & honest film evaluation engine. Synthesizes critic consensus, audience sentiment, controversies, polarizing viewpoints, and demographic matchmaking to answer whether any film is worth watching, who it's for, and what flaws to expect.",
+  "author": {
+    "name": "nchungdev"
+  },
+  "keywords": [
+    "film-oracle",
+    "cinema-audit",
+    "movie-review",
+    "critic-consensus",
+    "audience-reception",
+    "controversies",
+    "ratings",
+    "matchmaking",
+    "rotten-tomatoes",
+    "metacritic",
+    "imdb"
+  ]
+}
