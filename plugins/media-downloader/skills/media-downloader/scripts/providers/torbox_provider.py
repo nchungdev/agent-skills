@@ -10,7 +10,7 @@ TORBOX_API_BASE = "https://api.torbox.app/v1/api"
 
 def get_torbox_token():
     """Retrieve TorBox token from env, ~/.env, or settings.json."""
-    token = os.environ.get("TORBOX_API_TOKEN") or os.environ.get("TORBOX_TOKEN")
+    token = os.environ.get("TORBOX_API_KEY") or os.environ.get("TORBOX_API_TOKEN") or os.environ.get("TORBOX_TOKEN")
     if token:
         return token.strip()
     
@@ -18,7 +18,7 @@ def get_torbox_token():
     if env_file.is_file():
         with open(env_file, "r") as f:
             for line in f:
-                if line.startswith("TORBOX_API_TOKEN=") or line.startswith("TORBOX_TOKEN="):
+                if line.startswith("TORBOX_API_KEY=") or line.startswith("TORBOX_API_TOKEN=") or line.startswith("TORBOX_TOKEN="):
                     return line.split("=", 1)[1].strip().strip('"').strip("'")
     
     settings_file = Path.home() / ".gemini" / "config" / "media_hub_settings.json"
@@ -38,7 +38,10 @@ def torbox_request(endpoint, method="GET", data=None, token=None):
         return {"error": "Missing TorBox API Token"}
 
     url = f"{TORBOX_API_BASE}/{endpoint.lstrip('/')}"
-    headers = {"Authorization": f"Bearer {token}"}
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
     req_data = None
     if data:
         if isinstance(data, dict):

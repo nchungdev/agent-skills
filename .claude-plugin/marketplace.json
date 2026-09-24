@@ -4,7 +4,7 @@
     "name": "nchungdev",
     "url": "https://github.com/nchungdev"
   },
-  "description": "Bộ 13 Agent Skills chuyên sâu cho hệ sinh thái Media AI: tải đa nguồn (DDL/Torrent/TorBox), chuẩn hóa thư viện Plex & Jellyfin, đồng bộ NAS/Google Drive, tra cứu TMDb, gom nhóm franchise, pipeline dịch thuật & xử lý phụ đề, cùng hạ tầng OMV & cụm Tdarr phân tán. Đồng hành cùng ứng dụng Media Hub (https://github.com/nchungdev/media-hub).",
+  "description": "Bộ 14 Agent Skills chuyên sâu cho hệ sinh thái Media AI: tải đa nguồn (DDL/Torrent/TorBox), chuẩn hóa thư viện Plex & Jellyfin, đồng bộ NAS/Google Drive, tra cứu TMDb, gom nhóm franchise, pipeline dịch thuật & xử lý phụ đề, hạ tầng OMV, cụm Tdarr phân tán, và quản trị điều phối đa phiên (Multi-Conversation Orchestrator). Đồng hành cùng ứng dụng Media Hub (https://github.com/nchungdev/media-hub).",
   "plugins": [
     {
       "name": "media-downloader",
@@ -219,6 +219,23 @@
         "apple-silicon",
         "hevc",
         "distributed"
+      ]
+    },
+    {
+      "name": "project-reporter",
+      "displayName": "Project Reporter & Multi-Conversation Orchestrator",
+      "source": "./plugins/project-reporter",
+      "description": "Điều phối tiến độ đa phiên (Multi-Conversation Orchestrator), đồng bộ ngữ cảnh (Context Synchronization), chống phân mảnh thông tin giữa các conversation, và tổng hợp báo cáo tiến độ toàn diện cho dự án (report, report all).",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "reporter",
+        "multi-conversation",
+        "orchestrator",
+        "context-sync",
+        "project-management",
+        "progress",
+        "antigravity"
       ]
     }
   ]

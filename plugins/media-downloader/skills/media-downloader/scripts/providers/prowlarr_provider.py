@@ -7,6 +7,12 @@ import re
 
 PROWLARR_URL = os.environ.get("PROWLARR_URL", "http://localhost:9696")
 PROWLARR_API_KEY = os.environ.get("PROWLARR_API_KEY", "")
+if not PROWLARR_API_KEY and os.path.exists(os.path.expanduser("~/.env")):
+    with open(os.path.expanduser("~/.env")) as f:
+        for line in f:
+            if line.startswith("PROWLARR_API_KEY="):
+                PROWLARR_API_KEY = line.strip().split("=", 1)[1].strip("\"'")
+
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
@@ -36,7 +42,7 @@ def search_prowlarr(query, quality=None, limit=20):
     url = f"{PROWLARR_URL}/api/v1/search?query={encoded_q}"
     req = urllib.request.Request(url, headers={"X-Api-Key": PROWLARR_API_KEY})
     try:
-        with urllib.request.urlopen(req, timeout=15) as resp:
+        with urllib.request.urlopen(req, timeout=45) as resp:
             data = json.loads(resp.read().decode("utf-8"))
     except Exception as e:
         print(f"❌ Prowlarr API error: {e}")

@@ -1,12 +1,12 @@
 # 🪐 Antigravity Agent Skills & Media Ecosystem
 
-Kho lưu trữ chuẩn hóa bộ **13 Agent Skills & Plugins** chuyên biệt cho hệ sinh thái **AI Agent & Media Automation**.
+Kho lưu trữ chuẩn hóa bộ **14 Agent Skills & Plugins** chuyên biệt cho hệ sinh thái **AI Agent & Media Automation**.
 
 > 🚀 **Media Hub Standalone App**: Ứng dụng Desktop & Web Dashboard điều phối trung tâm đã được tách thành repository riêng biệt tại [**nchungdev/media-hub**](https://github.com/nchungdev/media-hub). Bộ kỹ năng trong repository này cung cấp toàn bộ năng lực AI Agent xử lý ngầm cho Media Hub.
 
 ---
 
-## 🏛️ Danh Sách 13 Agent Skills
+## 🏛️ Danh Sách 14 Agent Skills
 
 ### 🚀 1. TẦNG QUY TRÌNH CHÍNH (CORE PIPELINE)
 * **`media-downloader`**: Bộ tải dữ liệu đa nguồn (Direct HTTP/DDL, Torrent qua Aria2c Client P2P, hoặc Torrent qua TorBox Debrid Cloud API).
@@ -33,7 +33,12 @@ Kho lưu trữ chuẩn hóa bộ **13 Agent Skills & Plugins** chuyên biệt ch
 
 ---
 
-### 📦 3. HỆ SINH THÁI LIÊN KẾT (RELATED REPOSITORIES)
+### 📊 4. TẦNG QUẢN TRỊ DỰ ÁN & ĐIỀU PHỐI ĐA PHIÊN (PROJECT MANAGEMENT & MULTI-CONVERSATION)
+* **`project-reporter`**: Điều phối tiến độ đa phiên (Multi-Conversation Orchestrator), đồng bộ ngữ cảnh (Context Synchronization), loại bỏ hiện tượng trôi dạt ngữ cảnh qua sổ cái dự án (`.agent/project_status.json`), và tự động tổng hợp báo cáo tiến độ toàn diện cho dự án (`report`, `report all`).
+
+---
+
+### 📦 5. HỆ SINH THÁI LIÊN KẾT (RELATED REPOSITORIES)
 * 🪐 [**nchungdev/media-hub**](https://github.com/nchungdev/media-hub): Ứng dụng Desktop Native Electron & Web Dashboard điều phối tập trung, quản lý hàng đợi, Subtitle Studio và giám sát CLI Console realtime.
 * 📚 [**nchungdev/subtitle-glossary-hub**](https://github.com/nchungdev/subtitle-glossary-hub): Kho tri thức tập trung của `translate-subtitle` — glossary, workflow và quy chuẩn thuật ngữ phim/anime tái sử dụng vĩnh viễn.
 
