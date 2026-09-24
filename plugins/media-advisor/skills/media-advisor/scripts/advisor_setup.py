@@ -1,25 +1,32 @@
 #!/usr/bin/env python3
 """
 Media Advisor interactive user survey and environment configuration.
-Discovers local Plex/Jellyfin SQLite databases and surveys user preferences.
+Discovers local Plex/Jellyfin SQLite databases, supports Remote Server API,
+or runs in Pure Internet Cinephile mode (no media server required).
 """
 
 import os
 import sys
 import json
+import getpass
 from pathlib import Path
 
 DEFAULT_CONFIG = {
+    "mode": "auto",                  # "auto", "internet_only", "remote"
     "plex_db_path": "/home/chungnh/appdata/plex/Library/Application Support/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db",
     "jellyfin_db_path": "/home/chungnh/appdata/jellyfin/data/data/jellyfin.db",
+    "remote_plex_url": "",
+    "remote_plex_token": "",
+    "remote_jellyfin_url": "",
+    "remote_jellyfin_token": "",
     "preferred_genres": [],          # Empty = all genres welcome
     "excluded_genres": [],
     "preferred_regions": ["ALL"],     # ALL, US, KR, JP, CN, VN
     "max_duration_minutes": 0,       # 0 = unlimited
-    "min_rating": 6.5,               # TMDb / IMDb minimum rating
+    "min_rating": 6.8,               # TMDb / IMDb minimum rating
     "anti_seeding_min_votes": 300,   # Minimum vote count to defeat PR/seeding bots
     "streaming_providers": ["Netflix", "Apple TV+", "HBO Max", "Disney+", "Amazon Prime"],
-    "auto_taste_profiling": True     # Auto-learn from Plex watch history
+    "auto_taste_profiling": True     # Auto-learn from Plex watch history if available
 }
 
 def get_config_paths():
@@ -53,14 +60,12 @@ def save_config(cfg):
     workspace_cfg, user_cfg = get_config_paths()
     saved = []
     
-    # Save to workspace if in a git/agent workspace
     if Path.cwd() != Path.home():
         (Path.cwd() / ".agent").mkdir(parents=True, exist_ok=True)
         with open(workspace_cfg, "w", encoding="utf-8") as f:
             json.dump(cfg, f, indent=2, ensure_ascii=False)
         saved.append(str(workspace_cfg))
 
-    # Always save to user config directory
     user_cfg.parent.mkdir(parents=True, exist_ok=True)
     with open(user_cfg, "w", encoding="utf-8") as f:
         json.dump(cfg, f, indent=2, ensure_ascii=False)
@@ -74,37 +79,50 @@ def run_survey(non_interactive=False):
     cfg = load_config()
 
     if non_interactive or "--defaults" in sys.argv:
-        print("⚡ Đang lưu cấu hình mặc định (khách quan, bao quát toàn bộ, không giới hạn)...")
+        print("⚡ Đang lưu cấu hình mặc định (tự động nhận diện, khách quan, bao quát toàn bộ)...")
         saved = save_config(cfg)
         print(f"✅ Đã lưu cấu hình tại: {', '.join(saved)}")
         return cfg
 
-    # 1. Plex DB detection
-    default_plex = cfg.get("plex_db_path", "")
-    if os.path.exists(default_plex):
-        print(f"🟢 Tìm thấy Plex Database: {default_plex}")
+    # 1. Choose Operating Mode
+    print("\n--- 🖥️ CHỌN PHƯƠNG THỨC HOẠT ĐỘNG ---")
+    print("1. Tự động (Ưu tiên Plex/Jellyfin trên máy nếu có, nếu không tự chuyển sang Internet) [Mặc định]")
+    print("2. Chỉ dùng dữ liệu Internet (Không dùng Plex/Jellyfin, khám phá phim rạp & OTT theo gu khảo sát)")
+    print("3. Kết nối Remote Plex / Jellyfin qua mạng (nhập URL + Token)")
+    mode_opt = input("Chọn chế độ (1-3, Enter = 1): ").strip()
+
+    if mode_opt == "2":
+        cfg["mode"] = "internet_only"
+        print("🌐 Đã chọn: Chế độ Internet Toàn Cầu (Pure Cinephile). Bỏ qua Plex/Jellyfin.")
+    elif mode_opt == "3":
+        cfg["mode"] = "remote"
+        print("\n--- 📡 CẤU HÌNH REMOTE SERVER ---")
+        p_url = input("Plex Server URL (ví dụ http://nas.local:32400, Enter bỏ qua): ").strip()
+        if p_url:
+            cfg["remote_plex_url"] = p_url
+            cfg["remote_plex_token"] = getpass.getpass("Plex Token (ký tự sẽ ẩn): ").strip()
+        
+        jf_url = input("Jellyfin Server URL (ví dụ http://nas.local:8096, Enter bỏ qua): ").strip()
+        if jf_url:
+            cfg["remote_jellyfin_url"] = jf_url
+            cfg["remote_jellyfin_token"] = getpass.getpass("Jellyfin API Key (ký tự sẽ ẩn): ").strip()
     else:
-        print(f"🟡 Không tìm thấy Plex DB tại: {default_plex}")
-    ans = input(f"Đường dẫn Plex DB [{default_plex}]: ").strip()
-    if ans:
-        cfg["plex_db_path"] = ans
+        cfg["mode"] = "auto"
+        # Auto-detect local DBs
+        default_plex = cfg.get("plex_db_path", "")
+        if os.path.exists(default_plex):
+            print(f"🟢 Tìm thấy Local Plex Database: {default_plex}")
+        else:
+            print(f"ℹ️ Không có Plex Database cục bộ. Sẽ dùng Internet Mode nếu cần.")
 
-    # 2. Jellyfin DB detection
-    default_jf = cfg.get("jellyfin_db_path", "")
-    if os.path.exists(default_jf):
-        print(f"🟢 Tìm thấy Jellyfin Database: {default_jf}")
-    ans = input(f"Đường dẫn Jellyfin DB [{default_jf}]: ").strip()
-    if ans:
-        cfg["jellyfin_db_path"] = ans
-
-    # 3. Taste Survey - Preferred Genres
+    # 2. Taste Survey - Preferred Genres
     print("\n--- 🎬 KHẢO SÁT GU XEM PHIM ---")
-    print("1. Tất cả thể loại (Mặc định - Khách quan)")
+    print("1. Tất cả thể loại (Mặc định - Khách quan, tự do)")
     print("2. Ưu tiên: Hành động / Phiêu lưu / Sci-Fi")
     print("3. Ưu tiên: Anime / Hoạt hình Nhật Bản")
     print("4. Ưu tiên: Trinh thám / Giật gân / Tâm lý tội phạm")
     print("5. Ưu tiên: Hài hước / Gia đình / Chữa lành")
-    genre_opt = input("Chọn mục (1-5 hoặc gõ tự do, Enter để bỏ qua): ").strip()
+    genre_opt = input("Chọn mục (1-5 hoặc nhập tên tự do, Enter bỏ qua): ").strip()
     if genre_opt == "2":
         cfg["preferred_genres"] = ["Action", "Adventure", "Science Fiction"]
     elif genre_opt == "3":
@@ -118,7 +136,7 @@ def run_survey(non_interactive=False):
     else:
         cfg["preferred_genres"] = []
 
-    # 4. Excluded Genres
+    # 3. Excluded Genres
     print("\nBạn có muốn loại trừ thể loại nào không? (ví dụ: Kinh dị, Tình cảm...)")
     exc = input("Thể loại bỏ qua (Enter để không bỏ qua gì): ").strip()
     if exc:
@@ -126,8 +144,8 @@ def run_survey(non_interactive=False):
     else:
         cfg["excluded_genres"] = []
 
-    # 5. Preferred Region / Language
-    print("\n--- 🌍 KHU VỰC & QUỐC GIA ---")
+    # 4. Preferred Region / Language
+    print("\n--- 🌍 KHU VỰC & ĐIỆN ẢNH ---")
     print("1. Toàn cầu (Âu Mỹ, Châu Á, v.v. - Mặc định)")
     print("2. Hollywood / Âu Mỹ")
     print("3. Nhật Bản / Anime")
@@ -137,7 +155,7 @@ def run_survey(non_interactive=False):
     region_map = {"1": ["ALL"], "2": ["US", "GB"], "3": ["JP"], "4": ["KR"], "5": ["CN", "HK", "TW"]}
     cfg["preferred_regions"] = region_map.get(reg_opt, ["ALL"])
 
-    # 6. Duration Budget
+    # 5. Duration Budget
     print("\n--- ⏱️ THỜI LƯỢNG MONG MUỐN ---")
     print("1. Không giới hạn thời lượng (Mặc định)")
     print("2. Phim ngắn / Vừa phải (< 90 phút)")
@@ -150,14 +168,14 @@ def run_survey(non_interactive=False):
     else:
         cfg["max_duration_minutes"] = 0
 
-    # 7. Anti-Seeding Filter
+    # 6. Anti-Seeding Filter
     print("\n--- 🛡️ BỘ LỌC CHỐNG SEEDING & ĐÁNH GIÁ ẢO ---")
-    print("Mặc định: Phải có tối thiểu 300 lượt đánh giá thực tế và điểm số >= 6.5.")
+    print("Mặc định: Phải có tối thiểu 300 lượt đánh giá thực tế và điểm số >= 6.8.")
     min_vote = input("Số lượt đánh giá tối thiểu [300]: ").strip()
     if min_vote.isdigit():
         cfg["anti_seeding_min_votes"] = int(min_vote)
     
-    min_rat = input("Điểm đánh giá tối thiểu [6.5]: ").strip()
+    min_rat = input("Điểm đánh giá tối thiểu [6.8]: ").strip()
     try:
         if min_rat:
             cfg["min_rating"] = float(min_rat)
@@ -169,7 +187,7 @@ def run_survey(non_interactive=False):
     print("🎉 Khảo sát hoàn tất! Cấu hình đã được lưu an toàn tại:")
     for p in saved:
         print(f"  📁 {p}")
-    print("💡 Giờ bạn có thể chạy: `media-advisor unwatched` hoặc `media-advisor theatrical` để nhận đề xuất!")
+    print("💡 Giờ bạn có thể chạy: `media-advisor report` hoặc `media-advisor discover` để nhận đề xuất!")
     return cfg
 
 if __name__ == "__main__":

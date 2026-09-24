@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-TMDb Trends & Theatrical / Streaming Ingestion Engine.
-Fetches real-time cinema and OTT releases, downloading local w185 thumbnails for visual cards.
+TMDb Trends, Streaming Providers & Discover Engine.
+Fetches real-time cinema and OTT releases, downloads local w185 thumbnails,
+resolves where to watch (Netflix, Apple TV+, etc.), and discovers movies by surveyed taste.
 """
 
 import os
@@ -11,6 +12,25 @@ import urllib.request
 import urllib.parse
 from pathlib import Path
 from typing import List, Dict, Any, Optional
+
+GENRE_MAP = {
+    "action": 28, "hành động": 28,
+    "adventure": 12, "phiêu lưu": 12,
+    "animation": 16, "anime": 16, "hoạt hình": 16,
+    "comedy": 35, "hài": 35, "hài hước": 35,
+    "crime": 80, "tội phạm": 80,
+    "documentary": 99, "tài liệu": 99,
+    "drama": 18, "chính kịch": 18, "tâm lý": 18,
+    "family": 10751, "gia đình": 10751,
+    "fantasy": 14, "giả tưởng": 14,
+    "history": 36, "lịch sử": 36,
+    "horror": 27, "kinh dị": 27,
+    "mystery": 9648, "bí ẩn": 9648, "trinh thám": 9648,
+    "romance": 10749, "lãng mạn": 10749, "tình cảm": 10749,
+    "science fiction": 878, "sci-fi": 878, "khoa học viễn tưởng": 878,
+    "thriller": 53, "giật gân": 53,
+    "war": 10752, "chiến tranh": 10752
+}
 
 def get_tmdb_api_key() -> Optional[str]:
     key = os.environ.get("TMDB_API_KEY")
@@ -70,7 +90,7 @@ class TMDbTrends:
                 return {}
 
     def ensure_local_poster(self, poster_path: Optional[str], slug: str) -> Optional[str]:
-        """Downloads poster to local cache to bypass web UI CSP / sandbox restrictions."""
+        """Downloads poster to local cache to bypass web UI CSP restrictions."""
         if not poster_path:
             return None
         clean_slug = "".join(c if c.isalnum() else "_" for c in slug).strip("_")
@@ -91,8 +111,24 @@ class TMDbTrends:
             pass
         return None
 
+    def get_watch_providers(self, tmdb_id: int, media_type: str = "movie") -> List[str]:
+        """Resolves where to stream (Netflix, Apple TV, Disney+, HBO Max, etc.)."""
+        endpoint = f"/{media_type}/{tmdb_id}/watch/providers"
+        data = self._get(endpoint)
+        results = data.get("results", {})
+        
+        # Check VN first, then US as fallback
+        providers = set()
+        for region in ["VN", "US"]:
+            reg_data = results.get(region, {})
+            for p in reg_data.get("flatrate", []):
+                name = p.get("provider_name")
+                if name:
+                    clean_name = name.replace("Standard with Ads", "").strip()
+                    providers.add(clean_name)
+        return list(providers)[:4]
+
     def get_details_by_id(self, tmdb_id: int, media_type: str = "movie") -> Optional[Dict[str, Any]]:
-        """Fetch item details directly by TMDb ID."""
         endpoint = f"/{media_type}/{tmdb_id}"
         data = self._get(endpoint)
         if not data or "id" not in data:
@@ -105,6 +141,9 @@ class TMDbTrends:
 
         title = data.get("title") or data.get("name")
         poster = self.ensure_local_poster(data.get("poster_path"), title or f"item_{tmdb_id}")
+        actual_type = "Movie" if "release_date" in data else "TV Show"
+        providers = self.get_watch_providers(data.get("id"), "movie" if actual_type == "Movie" else "tv")
+
         return {
             "tmdb_id": data.get("id"),
             "title": title,
@@ -114,7 +153,8 @@ class TMDbTrends:
             "vote_count": data.get("vote_count", 0),
             "overview": data.get("overview") or "",
             "poster_local": poster,
-            "type": "Movie" if "release_date" in data else "TV Show"
+            "type": actual_type,
+            "watch_providers": providers
         }
 
     def get_theatrical_releases(self, limit: int = 10) -> List[Dict[str, Any]]:
@@ -132,7 +172,8 @@ class TMDbTrends:
                 "vote_count": m.get("vote_count", 0),
                 "overview": m.get("overview") or "",
                 "poster_local": poster,
-                "type": "Movie"
+                "type": "Movie",
+                "watch_providers": ["Rạp Chiếu Phim (Theatrical)"]
             })
         return items
 
@@ -143,6 +184,8 @@ class TMDbTrends:
         for m in results[:limit]:
             title = m.get("title") or m.get("name") or m.get("original_title") or m.get("original_name")
             poster = self.ensure_local_poster(m.get("poster_path"), title or "item")
+            m_type = "Movie" if m.get("media_type") == "movie" else "TV Show"
+            providers = self.get_watch_providers(m.get("id"), "movie" if m_type == "Movie" else "tv")
             items.append({
                 "tmdb_id": m.get("id"),
                 "title": title,
@@ -152,7 +195,48 @@ class TMDbTrends:
                 "vote_count": m.get("vote_count", 0),
                 "overview": m.get("overview") or "",
                 "poster_local": poster,
-                "type": "Movie" if m.get("media_type") == "movie" else "TV Show"
+                "type": m_type,
+                "watch_providers": providers
+            })
+        return items
+
+    def discover_by_survey(self, genres: List[str] = None, min_rating: float = 7.0, min_votes: int = 300, limit: int = 10) -> List[Dict[str, Any]]:
+        """Discovers top acclaimed cinema from the internet based on surveyed tastes."""
+        params = {
+            "sort_by": "vote_average.desc",
+            "vote_count.gte": min_votes,
+            "vote_average.gte": min_rating,
+            "page": 1
+        }
+        
+        # Resolve genre IDs
+        genre_ids = []
+        if genres:
+            for g in genres:
+                gid = GENRE_MAP.get(g.lower().strip())
+                if gid:
+                    genre_ids.append(str(gid))
+        if genre_ids:
+            params["with_genres"] = ",".join(genre_ids)
+
+        data = self._get("/discover/movie", params)
+        results = data.get("results", [])
+        items = []
+        for m in results[:limit]:
+            title = m.get("title") or m.get("original_title")
+            poster = self.ensure_local_poster(m.get("poster_path"), title or "item")
+            providers = self.get_watch_providers(m.get("id"), "movie")
+            items.append({
+                "tmdb_id": m.get("id"),
+                "title": title,
+                "original_title": m.get("original_title"),
+                "release_date": m.get("release_date"),
+                "vote_average": m.get("vote_average", 0.0),
+                "vote_count": m.get("vote_count", 0),
+                "overview": m.get("overview") or "",
+                "poster_local": poster,
+                "type": "Movie",
+                "watch_providers": providers
             })
         return items
 
@@ -166,6 +250,8 @@ class TMDbTrends:
                 continue
             title = m.get("title") or m.get("name")
             poster = self.ensure_local_poster(m.get("poster_path"), title or "item")
+            m_type = "Movie" if m.get("media_type") == "movie" else "TV Show"
+            providers = self.get_watch_providers(m.get("id"), "movie" if m_type == "Movie" else "tv")
             items.append({
                 "tmdb_id": m.get("id"),
                 "title": title,
@@ -174,6 +260,7 @@ class TMDbTrends:
                 "vote_count": m.get("vote_count", 0),
                 "overview": m.get("overview") or "",
                 "poster_local": poster,
-                "type": "Movie" if m.get("media_type") == "movie" else "TV Show"
+                "type": m_type,
+                "watch_providers": providers
             })
         return items
