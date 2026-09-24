@@ -464,16 +464,44 @@ def format_audit_report(res: Dict[str, Any]) -> str:
 
 def main():
     if len(sys.argv) < 2:
-        print("Sử dụng: python3 oracle_auditor.py <tên_phim> [năm]")
-        print("Ví dụ: python3 oracle_auditor.py \"The Substance\" 2024")
-        print("       python3 oracle_auditor.py \"Mai\" 2024")
+        print("Sử dụng:")
+        print("  python3 oracle_auditor.py <tên_phim> [năm]             # Thẩm định phim độc lập")
+        print("  python3 oracle_auditor.py share <tên_phim> [năm]       # Thẩm định & xuất Infographic PNG bo góc chia sẻ")
+        print("  python3 oracle_auditor.py share --compare <p1> <p2>    # Xuất ảnh so sánh nhiều phim")
+        print("Ví dụ: python3 oracle_auditor.py share \"Yêu Nhân Thần Thám: Kỳ Án Trường An\" 2026")
         return
 
-    query = sys.argv[1]
-    year = sys.argv[2] if len(sys.argv) > 2 and sys.argv[2].isdigit() else None
+    is_share = sys.argv[1].lower() == "share"
+    args = sys.argv[2:] if is_share else sys.argv[1:]
+
+    if is_share and args and args[0] == "--compare":
+        titles = args[1:]
+        oracle = FilmOracle()
+        results = [oracle.audit_film(t) for t in titles]
+        from infographic_exporter import InfographicExporter
+        exp = InfographicExporter()
+        img_path = exp.export_comparison_card(results)
+        print(f"\n📸 ĐÃ XUẤT ẢNH SO SÁNH INFOGRAPHIC (PNG): {img_path}")
+        return
+
+    if not args:
+        print("Vui lòng cung cấp tên phim cần thẩm định hoặc chia sẻ.")
+        return
+
+    query = args[0]
+    year = args[1] if len(args) > 1 and args[1].isdigit() else None
     oracle = FilmOracle()
     res = oracle.audit_film(query, year)
     print(format_audit_report(res))
+
+    if is_share:
+        from infographic_exporter import InfographicExporter
+        exp = InfographicExporter()
+        img_path = exp.export_single_audit_card(res)
+        print("\n" + "="*60)
+        print(f"📸 ĐÃ XUẤT INFOGRAPHIC CARD (PNG): {img_path}")
+        print("💡 Ảnh có bố cục thẻ bo góc hiện đại, font tiếng Việt chuẩn, sẵn sàng chia sẻ lên MXH / Story / Zalo!")
+        print("="*60)
 
 if __name__ == "__main__":
     main()

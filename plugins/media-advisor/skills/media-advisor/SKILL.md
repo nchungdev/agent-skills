@@ -124,6 +124,16 @@ Quét đa kênh: Megathread thảo luận trên Reddit (r/movies, r/boxoffice), 
 python3 advisor_cli.py trending --limit 5
 ```
 
+### 10. Xuất Ảnh Photographic Infographic Card Bo Góc (Share)
+```bash
+# Xuất ảnh thẻ thẩm định 1 phim để chia sẻ MXH
+python3 advisor_cli.py share "Yêu Nhân Thần Thám: Kỳ Án Trường An"
+
+# Xuất ảnh so sánh 2-3 phim chiếu rạp
+python3 advisor_cli.py share "Yêu Nhân Thần Thám: Kỳ Án Trường An" --compare "Bát Tiên" "Bạch Xà 3"
+```
+Tạo ngay file ảnh PNG (1080x1680) với các panel bo góc mượt mà, font Google Noto Sans tiếng Việt chuẩn, tổng hợp điểm Meta Truth Score, vé rạp MoMo Cinema đã xác thực, Moveek, ưu/nhược điểm và trích dẫn review để chia sẻ nhanh lên Story, Facebook, Zalo.
+
 ---
 
 ## 📋 Định Dạng Thẻ Visual Movie Card (2 Cột Markdown)

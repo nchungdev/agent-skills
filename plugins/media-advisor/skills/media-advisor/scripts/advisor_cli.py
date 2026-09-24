@@ -451,6 +451,44 @@ def cmd_report(args):
         cmd_theatrical(args)
         cmd_trending(args)
 
+def cmd_share(args):
+    """Exports a rounded-corner photographic infographic PNG card for a movie or comparison."""
+    title = args.title
+    compare_titles = args.compare
+
+    oracle_script = Path(__file__).parents[4] / "film-oracle" / "skills" / "film-oracle" / "scripts"
+    if oracle_script.exists():
+        sys.path.insert(0, str(oracle_script))
+    
+    from oracle_auditor import FilmOracle
+    from infographic_exporter import InfographicExporter
+
+    oracle = FilmOracle()
+    exporter = InfographicExporter()
+
+    if compare_titles:
+        all_titles = [title] + compare_titles
+        print(f"🎨 Đang tổng hợp và tạo ảnh so sánh Infographic cho {len(all_titles)} phim...")
+        audits = [oracle.audit_film(t) for t in all_titles]
+        out_file = exporter.export_comparison_card(audits)
+        if out_file:
+            print(f"\n📸 ĐÃ XUẤT ẢNH SO SÁNH (PNG): {out_file}")
+            print("💡 Ảnh được thiết kế bo góc tinh tế, font tiếng Việt chuẩn, sẵn sàng chia sẻ!")
+        else:
+            print("❌ Lỗi khi xuất ảnh so sánh.")
+        return
+
+    print(f"🔍 Đang thẩm định và tạo thẻ Infographic Card cho '{title}'...")
+    audit = oracle.audit_film(title)
+    out_file = exporter.export_single_audit_card(audit)
+    if out_file:
+        print(f"\n📸 ĐÃ XUẤT INFOGRAPHIC CARD (PNG): {out_file}")
+        print(f"★ Điểm Meta Truth Score: {audit.get('meta_truth_score', 0)}/10")
+        print(f"🎯 Phán quyết: {audit.get('worth_verdict')}")
+        print("💡 Ảnh được thiết kế bo góc tinh tế, font tiếng Việt chuẩn, sẵn sàng chia sẻ lên Zalo/MXH/Story!")
+    else:
+        print("❌ Không thể tạo infographic card cho phim này.")
+
 def main():
     parser = argparse.ArgumentParser(description="Media Advisor - Cinema & Series Recommendation Concierge")
     subparsers = parser.add_subparsers(dest="command", help="Lệnh thực hiện")
@@ -488,6 +526,11 @@ def main():
     p_query.add_argument("keyword", type=str, help="Từ khóa hoặc mô tả phim muốn xem")
     p_query.add_argument("--limit", type=int, default=5, help="Số lượng đề xuất")
 
+    # share
+    p_share = subparsers.add_parser("share", help="Xuất ảnh Photographic Infographic Card (PNG) bo góc để chia sẻ")
+    p_share.add_argument("title", type=str, help="Tên phim cần tạo ảnh chia sẻ")
+    p_share.add_argument("--compare", nargs="+", help="Các phim khác để so sánh song song trong cùng 1 ảnh")
+
     # report
     p_rep = subparsers.add_parser("report", help="Báo cáo toàn diện")
     p_rep.add_argument("--limit", type=int, default=3, help="Số lượng mỗi mục")
@@ -516,6 +559,8 @@ def main():
         cmd_discover(args)
     elif args.command == "query":
         cmd_query(args)
+    elif args.command == "share":
+        cmd_share(args)
     elif args.command == "report":
         cmd_report(args)
 

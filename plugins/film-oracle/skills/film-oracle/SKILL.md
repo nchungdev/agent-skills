@@ -69,15 +69,23 @@ flowchart TD
 Các script nằm tại: `plugins/film-oracle/skills/film-oracle/scripts/`
 
 ```bash
-# Thẩm định bất kỳ bộ phim nào
+# 1. Thẩm định độc lập 7 câu hỏi
 python3 oracle_auditor.py "<tên_phim>" [năm]
 
+# 2. Thẩm định và xuất Photographic Infographic Card (PNG) bo góc để chia sẻ MXH
+python3 oracle_auditor.py share "<tên_phim>" [năm]
+
+# 3. Xuất thẻ Infographic so sánh 2-3 phim chiếu rạp
+python3 oracle_auditor.py share --compare "<phim_1>" "<phim_2>" "<phim_3>"
+
 # Ví dụ thực tế:
-python3 oracle_auditor.py "The Substance" 2024
-python3 oracle_auditor.py "Mai" 2024
-python3 oracle_auditor.py "Captain America: Brave New World" 2025
-python3 oracle_auditor.py "Oppenheimer" 2023
+python3 oracle_auditor.py share "Yêu Nhân Thần Thám: Kỳ Án Trường An" 2026
+python3 oracle_auditor.py share "The Substance" 2024
+python3 oracle_auditor.py share "Mai" 2024
 ```
+
+> **Tính Năng Thẻ Chia Sẻ (Infographic Card)**:
+> Tự động tạo ảnh PNG dọc (1080x1680) với các panel bo góc hiện đại (radius 14-20px), typography Google Noto Sans tiếng Việt chuẩn 100%, tích hợp điểm Meta Truth Score, dữ liệu vé rạp MoMo Cinema đã xác thực, Moveek, Pros/Cons và trích dẫn khán giả. Sẵn sàng chia sẻ ngay lên Story, Facebook, Zalo, Telegram.
 
 ---
 
