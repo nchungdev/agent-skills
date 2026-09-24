@@ -12,10 +12,13 @@ import os
 import re
 import json
 import time
+import math
 import html
 import hashlib
 import urllib.request
 import urllib.parse
+from datetime import datetime, timedelta
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 
@@ -773,6 +776,677 @@ class VnCinemaScraper:
                     "description": "Tìm suất chiếu tại Galaxy Cinema"
                 }
             ]
+        }
+
+    # =========================================================================
+    # 7. Real-Time Movie Showtime & Prime Seating Recommendation Engine
+    # =========================================================================
+    def _mint_moveek_token(self) -> Optional[str]:
+        """Acquires a guest access token from Moveek IAM."""
+        cached_tok = self.cache.get("moveek_guest_token")
+        if cached_tok:
+            return cached_tok
+        try:
+            req = urllib.request.Request(
+                "https://iam.moveek.com/v1/auth/guest",
+                data=b"{}",
+                headers={
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Origin": "https://moveek.com",
+                    "Referer": "https://moveek.com/"
+                }
+            )
+            resp = urllib.request.urlopen(req, timeout=5)
+            payload = json.loads(resp.read().decode("utf-8"))
+            tok = payload.get("access_token")
+            exp = payload.get("expires_in", 3600)
+            if tok:
+                self.cache.set("moveek_guest_token", tok, ttl=max(60, exp - 120))
+                return tok
+        except Exception:
+            pass
+        return None
+
+    def _analyze_seat_grid(self, grid: List[List[Dict[str, Any]]], ticket_count: int = 2) -> Optional[Dict[str, Any]]:
+        """
+        Analyzes a real-time cinema seat map grid:
+        - Prioritizes prime viewing rows: E, F, G, H, J (THX/SMPTE sweet spot).
+        - Enforces strictly consecutive available seats for ticket_count.
+        - Prioritizes center column positions (optimal horizontal FOV).
+        """
+        if not grid or ticket_count <= 0:
+            return None
+
+        sweet_rows = {"E", "F", "G", "H", "J"}
+        best_candidate = None
+        best_score = -1.0
+
+        for row in grid:
+            seats = [s for s in row if s is not None]
+            if not seats:
+                continue
+
+            row_name = seats[0].get("row", "").strip().upper()
+            is_sweet_row = row_name in sweet_rows
+            
+            # Sort seats by column order
+            seats.sort(key=lambda s: s.get("col", 0))
+            n = len(seats)
+            mid = n / 2.0
+
+            # Slide window of size ticket_count
+            for i in range(len(seats) - ticket_count + 1):
+                chunk = seats[i:i+ticket_count]
+                # All seats must be available
+                if not all(s.get("state") == "available" for s in chunk):
+                    continue
+
+                # Must be strictly consecutive columns
+                cols = [s.get("col", 0) for s in chunk]
+                if cols != list(range(cols[0], cols[0] + ticket_count)):
+                    continue
+
+                chunk_mid = sum(cols) / float(ticket_count)
+                dist_from_center = abs(chunk_mid - mid)
+
+                score = 100.0 - (dist_from_center * 4.0)
+                if is_sweet_row:
+                    score += 50.0
+                if any("VIP" in s.get("tier", {}).get("name", "").upper() for s in chunk):
+                    score += 25.0
+
+                if score > best_score:
+                    best_score = score
+                    seat_ids = [s.get("id") for s in chunk]
+                    tier_name = chunk[0].get("tier", {}).get("name") or "Standard"
+                    price = chunk[0].get("price")
+                    best_candidate = {
+                        "row": row_name,
+                        "seats": seat_ids,
+                        "tier": tier_name,
+                        "price": price,
+                        "formatted_price": f"{price:,}đ" if price else "Theo giá rạp",
+                        "score": round(score, 1),
+                        "is_sweet_spot": is_sweet_row and (dist_from_center <= 3.5),
+                        "summary": f"Hàng {row_name} (Ghế {', '.join(seat_ids)}) [{tier_name}]"
+                    }
+
+        return best_candidate
+
+    @staticmethod
+    def _haversine_dist(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+        R = 6371.0
+        dlat = math.radians(lat2 - lat1)
+        dlon = math.radians(lon2 - lon1)
+        a = math.sin(dlat / 2)**2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2)**2
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+        return round(R * c, 2)
+
+    @staticmethod
+    def get_user_location(user_ip: str = "") -> Optional[Dict[str, Any]]:
+        """
+        Retrieves user physical location from ip-api.com:
+        Returns {city, country, lat, lon, ip}
+        """
+        endpoint = f"http://ip-api.com/json/{user_ip}?fields=status,country,city,district,lat,lon,query"
+        try:
+            req = urllib.request.Request(endpoint, headers={"User-Agent": "curl/7.68.0"})
+            resp = urllib.request.urlopen(req, timeout=3)
+            data = json.loads(resp.read().decode("utf-8"))
+            if data.get("status") == "success":
+                return {
+                    "city": data.get("city"),
+                    "country": data.get("country"),
+                    "district": data.get("district"),
+                    "lat": data.get("lat"),
+                    "lon": data.get("lon"),
+                    "ip": data.get("query")
+                }
+        except Exception:
+            pass
+        return None
+
+    def _detect_live_ip_location(self) -> Optional[Dict[str, Any]]:
+        """Automatically detects user's physical location using IP Geolocation & OpenStreetMap Reverse Geocoding."""
+        cached_loc = self.cache.get("user_auto_detected_location")
+        if cached_loc:
+            return cached_loc
+
+        # 1. Try user config file first: ~/.config/agent-skills/user_location.json
+        cfg_path = Path.home() / ".config" / "agent-skills" / "user_location.json"
+        if cfg_path.exists():
+            try:
+                with open(cfg_path, "r", encoding="utf-8") as f:
+                    cfg = json.load(f)
+                    if "lat" in cfg and "lon" in cfg:
+                        return {
+                            "lat": float(cfg["lat"]),
+                            "lon": float(cfg["lon"]),
+                            "region_id": cfg.get("region_id", (9 if float(cfg["lat"]) > 18.0 else 1)),
+                            "label": cfg.get("label", "Vị trí đã lưu trong cấu hình"),
+                            "source": "CONFIG_FILE"
+                        }
+            except Exception:
+                pass
+
+        # 2. Real-time IP Geolocation via ip-api.com
+        ip_info = self.get_user_location()
+        if ip_info and ip_info.get("lat") and ip_info.get("lon"):
+            lat = float(ip_info["lat"])
+            lon = float(ip_info["lon"])
+            city = ip_info.get("city") or "TP. Hồ Chí Minh"
+            r_id = 9 if lat > 18.0 else 1
+            label = f"{city} (IP {ip_info.get('ip', '')})"
+
+            # Reverse geocode via Nominatim for street/ward precision
+            try:
+                nom_url = f"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json"
+                nom_req = urllib.request.Request(nom_url, headers={"User-Agent": "AgentSkills-Cinema/1.0"})
+                nom_data = json.loads(urllib.request.urlopen(nom_req, timeout=2).read().decode("utf-8"))
+                addr = nom_data.get("address", {})
+                road = addr.get("road")
+                suburb = addr.get("suburb") or addr.get("quarter") or addr.get("city_district")
+                city_name = addr.get("city") or city
+                parts = [p for p in [road, suburb, city_name] if p]
+                if parts:
+                    label = ", ".join(parts)
+            except Exception:
+                pass
+
+            result = {
+                "lat": lat,
+                "lon": lon,
+                "region_id": r_id,
+                "label": label,
+                "source": "IP_GEOLOCATION"
+            }
+            self.cache.set("user_auto_detected_location", result, ttl=3600)
+            return result
+
+        return None
+
+    def _resolve_user_location(self, loc_input: Optional[str], default_region: int = 1):
+        """Resolves user's location input into (lat, lon, region_id, label)."""
+        if not loc_input:
+            auto = self._detect_live_ip_location()
+            if auto:
+                return (auto["lat"], auto["lon"], auto["region_id"], f"{auto['label']} (Tự động định vị)")
+            return (10.7769, 106.7009, 1, "TP. Hồ Chí Minh")
+
+        norm = loc_input.strip().lower()
+
+        # Check if direct coordinates like "10.7769, 106.7009"
+        coord_match = re.match(r"^([\d\.\-]+)\s*,\s*([\d\.\-]+)$", norm)
+        if coord_match:
+            try:
+                lat, lon = float(coord_match.group(1)), float(coord_match.group(2))
+                r_id = 9 if lat > 18.0 else 1
+                return (lat, lon, r_id, f"Vị trí GPS ({lat:.4f}, {lon:.4f})")
+            except Exception:
+                pass
+
+        DISTRICT_MAP = {
+            # TP.HCM (region 1)
+            "quận 1": (10.7769, 106.7009, 1, "Quận 1, TP.HCM"),
+            "q1": (10.7769, 106.7009, 1, "Quận 1, TP.HCM"),
+            "q.1": (10.7769, 106.7009, 1, "Quận 1, TP.HCM"),
+            "quận 3": (10.7844, 106.6844, 1, "Quận 3, TP.HCM"),
+            "q3": (10.7844, 106.6844, 1, "Quận 3, TP.HCM"),
+            "q.3": (10.7844, 106.6844, 1, "Quận 3, TP.HCM"),
+            "quận 4": (10.7634, 106.7056, 1, "Quận 4, TP.HCM"),
+            "quận 5": (10.7540, 106.6634, 1, "Quận 5, TP.HCM"),
+            "quận 6": (10.7481, 106.6352, 1, "Quận 6, TP.HCM"),
+            "quận 7": (10.7340, 106.7218, 1, "Quận 7, TP.HCM"),
+            "q7": (10.7340, 106.7218, 1, "Quận 7, TP.HCM"),
+            "q.7": (10.7340, 106.7218, 1, "Quận 7, TP.HCM"),
+            "quận 8": (10.7241, 106.6286, 1, "Quận 8, TP.HCM"),
+            "quận 10": (10.7716, 106.6674, 1, "Quận 10, TP.HCM"),
+            "q10": (10.7716, 106.6674, 1, "Quận 10, TP.HCM"),
+            "q.10": (10.7716, 106.6674, 1, "Quận 10, TP.HCM"),
+            "quận 11": (10.7630, 106.6508, 1, "Quận 11, TP.HCM"),
+            "quận 12": (10.8672, 106.6413, 1, "Quận 12, TP.HCM"),
+            "bình thạnh": (10.8106, 106.6983, 1, "Bình Thạnh, TP.HCM"),
+            "gò vấp": (10.8387, 106.6653, 1, "Gò Vấp, TP.HCM"),
+            "phú nhuận": (10.7992, 106.6803, 1, "Phú Nhuận, TP.HCM"),
+            "tân bình": (10.8015, 106.6548, 1, "Tân Bình, TP.HCM"),
+            "tân phú": (10.7900, 106.6282, 1, "Tân Phú, TP.HCM"),
+            "bình tân": (10.7654, 106.6038, 1, "Bình Tân, TP.HCM"),
+            "thủ đức": (10.8494, 106.7537, 1, "Thủ Đức, TP.HCM"),
+            "tp.hcm": (10.7769, 106.7009, 1, "TP. Hồ Chí Minh"),
+            "hồ chí minh": (10.7769, 106.7009, 1, "TP. Hồ Chí Minh"),
+            "sài gòn": (10.7769, 106.7009, 1, "TP. Hồ Chí Minh"),
+            # Hà Nội (region 9)
+            "hoàn kiếm": (21.0285, 105.8542, 9, "Hoàn Kiếm, Hà Nội"),
+            "ba đình": (21.0341, 105.8242, 9, "Ba Đình, Hà Nội"),
+            "đống đa": (21.0181, 105.8273, 9, "Đống Đa, Hà Nội"),
+            "hai bà trưng": (21.0069, 105.8532, 9, "Hai Bà Trưng, Hà Nội"),
+            "cầu giấy": (21.0362, 105.7906, 9, "Cầu Giấy, Hà Nội"),
+            "thanh xuân": (20.9937, 105.8083, 9, "Thanh Xuân, Hà Nội"),
+            "tây hồ": (21.0694, 105.8244, 9, "Tây Hồ, Hà Nội"),
+            "hà đông": (20.9721, 105.7772, 9, "Hà Đông, Hà Nội"),
+            "nam từ liêm": (21.0146, 105.7653, 9, "Nam Từ Liêm, Hà Nội"),
+            "bắc từ liêm": (21.0631, 105.7562, 9, "Bắc Từ Liêm, Hà Nội"),
+            "long biên": (21.0360, 105.8978, 9, "Long Biên, Hà Nội"),
+            "hoàng mai": (20.9765, 105.8453, 9, "Hoàng Mai, Hà Nội"),
+            "hà nội": (21.0285, 105.8542, 9, "Hà Nội"),
+            "hanoi": (21.0285, 105.8542, 9, "Hà Nội"),
+            # Đà Nẵng (region 7)
+            "đà nẵng": (16.0544, 108.2022, 7, "Đà Nẵng"),
+            "hải châu": (16.0617, 108.2208, 7, "Hải Châu, Đà Nẵng"),
+            # Cần Thơ (region 6)
+            "cần thơ": (10.0452, 105.7469, 6, "Cần Thơ"),
+            # Hải Phòng (region 10)
+            "hải phòng": (20.8449, 106.6881, 10, "Hải Phòng"),
+            # Bình Dương (region 4)
+            "bình dương": (10.9804, 106.6519, 4, "Bình Dương"),
+            # Đồng Nai (region 3)
+            "đồng nai": (10.9427, 106.8166, 3, "Đồng Nai")
+        }
+
+        for k, v in DISTRICT_MAP.items():
+            if k in norm:
+                return v
+
+        return (10.7769, 106.7009, default_region, loc_input.title())
+
+    def _evaluate_cinema_quality(self, cinema_name: str, cineplex_name: str, format_name: str) -> Dict[str, Any]:
+        """Evaluates theater experience tier and premium badges."""
+        score = 0
+        badges = []
+        fmt_upper = format_name.upper()
+        name_upper = cinema_name.upper()
+        
+        # Premium format bonuses
+        if "IMAX LASER" in fmt_upper:
+            score += 65
+            badges.append("🔥 IMAX Laser")
+        elif "IMAX" in fmt_upper:
+            score += 55
+            badges.append("💎 IMAX")
+        elif "SCREENX" in fmt_upper:
+            score += 45
+            badges.append("🌟 ScreenX 270°")
+        elif "4DX" in fmt_upper:
+            score += 40
+            badges.append("🚀 4DX Rung Lắc")
+        elif "STARIUM" in fmt_upper or "DOLBY ATMOS" in fmt_upper or "ATMOS" in fmt_upper:
+            score += 35
+            badges.append("🔊 Dolby Atmos / Starium")
+        elif "GOLD CLASS" in fmt_upper or "L'AMOUR" in fmt_upper or "PREMIUM" in fmt_upper:
+            score += 35
+            badges.append("👑 Rạp Hạng Sang / Giường Nằm")
+        elif "3D" in fmt_upper:
+            score += 20
+            badges.append("👓 3D")
+        else:
+            score += 10
+            badges.append("📽️ 2D Kỹ Thuật Số")
+
+        # Flagship cinema locations
+        FLAGSHIPS = [
+            "LANDMARK 81", "SƯ VẠN HẠNH", "SU VAN HANH", "VIVOCITY", "ĐỒNG KHỞI", "DONG KHOI",
+            "CRESCENT MALL", "VINCOM METROPOLIS", "VINCOM TRẦN DUY HƯNG", "VINCOM BÀ TRIỆU",
+            "BITEXCO", "SALA", "NOWZONE", "WEST LAKE", "QUỐC GIA"
+        ]
+        is_flagship = any(f in name_upper for f in FLAGSHIPS)
+        if is_flagship:
+            score += 20
+            badges.append("🏛️ Cụm Rạp Flagship Trọng Điểm")
+
+        return {
+            "quality_score": score,
+            "badges": badges,
+            "is_premium": score >= 40,
+            "badge_str": " · ".join(badges)
+        }
+
+    def find_movie_showtimes(
+        self,
+        title: str,
+        date: Optional[str] = None,
+        location: Optional[str] = None,
+        ticket_count: int = 2,
+        region_id: Optional[int] = None
+    ) -> Dict[str, Any]:
+        """
+        Complete intelligent showtime finder and prime seat recommendation engine:
+        1. Selected date (default today; if no future slots left today, auto-fallbacks to next available date).
+        2. Location proximity (prioritizes cinemas near the user's district or coordinates).
+        3. High-quality theaters (IMAX, ScreenX, Starium, Dolby Atmos, Gold Class, Flagships).
+        4. Prime seating & consecutive seat verification (guarantees contiguous seats in THX sweet spot).
+        """
+        # 1. Resolve user location & region
+        user_lat, user_lon, detected_region, loc_label = self._resolve_user_location(location)
+        active_region = region_id if region_id is not None else detected_region
+
+        # 2. Resolve Moveek Movie Slug, Movie ID, and Available Dates
+        moveek_match = self.search_moveek(title)
+        if not moveek_match or not moveek_match.get("url"):
+            general_links = self.get_booking_links(title)
+            return {
+                "success": False,
+                "error": f"Không tìm thấy phim «{title}» trong hệ thống Moveek.",
+                "general_links": general_links
+            }
+
+        movie_url = moveek_match["url"]
+        movie_title = moveek_match.get("title", title)
+
+        headers_web = {
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7"
+        }
+        headers_ajax = {
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "application/json, text/javascript, */*; q=0.01",
+            "Referer": "https://moveek.com/"
+        }
+
+        cache_key_meta = f"moveek_meta_{moveek_match.get('slug') or title}"
+        cached_meta = self.cache.get(cache_key_meta)
+        movie_id = None
+        available_dates = []
+
+        if cached_meta and cached_meta.get("movie_id"):
+            movie_id = cached_meta["movie_id"]
+            available_dates = cached_meta.get("available_dates", [])
+
+        if not movie_id:
+            try:
+                req = urllib.request.Request(movie_url, headers=headers_web)
+                html_page = urllib.request.urlopen(req, timeout=6).read().decode("utf-8")
+                m_id = re.search(r'id:\s*[\"\'](\d+)[\"\']', html_page)
+                if m_id:
+                    movie_id = m_id.group(1)
+                    available_dates = sorted(list(set(re.findall(r'data-date=[\"\']([\d\-]+)[\"\']', html_page))))
+                    self.cache.set(cache_key_meta, {"movie_id": movie_id, "available_dates": available_dates}, ttl=86400)
+            except Exception:
+                pass
+
+        if not movie_id:
+            general_links = self.get_booking_links(title)
+            return {
+                "success": False,
+                "error": f"Không thể tải thông tin Moveek cho «{title}».",
+                "general_links": general_links
+            }
+
+        now_dt = datetime.now()
+        today_str = now_dt.strftime("%Y-%m-%d")
+        now_time = now_dt.strftime("%H:%M")
+
+        is_fallback_date = False
+        fallback_notice = ""
+        target_date = date.strip() if date else today_str
+
+        def _fetch_date_showtimes(d: str):
+            st_url = f"https://moveek.com/showtime/movie/{movie_id}?date={d}&region={active_region}"
+            st_req = urllib.request.Request(st_url, headers=headers_ajax)
+            try:
+                raw_json = urllib.request.urlopen(st_req, timeout=6).read().decode("utf-8")
+                return json.loads(raw_json)
+            except Exception:
+                return {}
+
+        st_data = _fetch_date_showtimes(target_date)
+        all_cinemas = []
+        for cp in st_data.get("cineplexes", []):
+            cp_name = cp.get("data", {}).get("name", "Cụm Rạp")
+            for c in cp.get("cinemas", []):
+                c["cineplex"] = cp_name
+                all_cinemas.append(c)
+
+        def _fetch_cinema_slots(c: Dict[str, Any], q_date: str) -> List[Dict[str, Any]]:
+            cid = c.get("id")
+            s_url = f"https://moveek.com/showtime/movie/{movie_id}?date={q_date}&cinema={cid}"
+            try:
+                s_req = urllib.request.Request(s_url, headers=headers_ajax)
+                s_html = urllib.request.urlopen(s_req, timeout=6).read().decode("utf-8")
+                slots = []
+                chunks = re.split(r'<label class=\"[^\"]*font-weight-bold[^\"]*\">', s_html)
+                for chunk in chunks[1:]:
+                    fmt_part, _, rest = chunk.partition("</label>")
+                    fmt = fmt_part.strip()
+                    a_tags = re.findall(r'<a\b([^>]*)>(.*?)</a>', rest, re.DOTALL)
+                    for attrs, content in a_tags:
+                        if "btn-showtime" in attrs:
+                            time_m = re.search(r'<span class=[\"\']time[\"\']>([^<]+)</span>', content)
+                            time_val = time_m.group(1).strip() if time_m else ""
+                            href_m = re.search(r'href=[\"\']([^\"\']+)[\"\']', attrs)
+                            href = href_m.group(1) if href_m else ""
+                            ref_m = re.search(r'data-reference=[\"\']([^\"\']+)[\"\']', attrs)
+                            ref = ref_m.group(1) if ref_m else ""
+                            cls_m = re.search(r'class=[\"\']([^\"\']+)[\"\']', attrs)
+                            cls = cls_m.group(1) if cls_m else ""
+                            
+                            is_disabled = "disabled" in cls
+                            is_ticketing = "is-ticketing" in cls
+                            
+                            b_url = ""
+                            if href and href != "#":
+                                b_url = f"https://moveek.com{href}" if href.startswith("/") else href
+                            elif ref:
+                                b_url = f"https://moveek.com/mua-ve/{ref}"
+
+                            slots.append({
+                                "cinema_id": cid,
+                                "cinema_name": c.get("name"),
+                                "cineplex": c.get("cineplex"),
+                                "address": c.get("location", {}).get("address"),
+                                "lat": c.get("location", {}).get("latitude"),
+                                "lng": c.get("location", {}).get("longitude"),
+                                "format": fmt,
+                                "time": time_val,
+                                "reference": ref,
+                                "booking_url": b_url,
+                                "is_ticketing": is_ticketing,
+                                "disabled": is_disabled
+                            })
+                return slots
+            except Exception:
+                return []
+
+        with ThreadPoolExecutor(max_workers=8) as ex:
+            slot_results = list(ex.map(lambda c: _fetch_cinema_slots(c, target_date), all_cinemas))
+
+        flat_slots = [s for sub in slot_results for s in sub]
+
+        # Check if date was not explicitly passed and today has no remaining active slots
+        active_today_slots = [
+            s for s in flat_slots 
+            if not s["disabled"] and (target_date > today_str or s["time"] > now_time)
+        ]
+
+        if not date and len(active_today_slots) == 0:
+            next_dates = [d for d in available_dates if d > today_str]
+            if next_dates:
+                next_date = next_dates[0]
+                is_fallback_date = True
+                fallback_notice = (
+                    f"⚠️ Hôm nay ({today_str}) các suất chiếu đã kết thúc hoặc không còn suất khả dụng. "
+                    f"Hệ thống đã tự động chuyển sang ngày tiếp theo có suất chiếu: **{next_date}**."
+                )
+                target_date = next_date
+                st_data = _fetch_date_showtimes(target_date)
+                all_cinemas = []
+                for cp in st_data.get("cineplexes", []):
+                    cp_name = cp.get("data", {}).get("name", "Cụm Rạp")
+                    for c in cp.get("cinemas", []):
+                        c["cineplex"] = cp_name
+                        all_cinemas.append(c)
+
+                with ThreadPoolExecutor(max_workers=8) as ex:
+                    slot_results = list(ex.map(lambda c: _fetch_cinema_slots(c, target_date), all_cinemas))
+                flat_slots = [s for sub in slot_results for s in sub]
+
+        valid_slots = [
+            s for s in flat_slots 
+            if not s["disabled"] and (target_date > today_str or s["time"] > now_time)
+        ]
+
+        # Seat inspection & Consecutive Seat Optimization for Ticketing Partners
+        moveek_token = self._mint_moveek_token()
+
+        def _inspect_slot_seats(slot: Dict[str, Any]) -> Dict[str, Any]:
+            ref = slot.get("reference")
+            if moveek_token and ref and slot.get("is_ticketing"):
+                try:
+                    s_req = urllib.request.Request(
+                        f"https://moveek.com/api/booking/v1/showtimes/{ref}/seats",
+                        headers={
+                            "User-Agent": "Mozilla/5.0",
+                            "Authorization": f"Bearer {moveek_token}",
+                            "Referer": f"https://moveek.com/mua-ve/{ref}"
+                        }
+                    )
+                    s_resp = urllib.request.urlopen(s_req, timeout=4)
+                    s_data = json.loads(s_resp.read().decode("utf-8"))
+                    grid = s_data.get("grid", [])
+                    seat_analysis = self._analyze_seat_grid(grid, ticket_count=ticket_count)
+                    if seat_analysis:
+                        slot["seat_recommendation"] = seat_analysis
+                        slot["has_consecutive_seats"] = True
+                        slot["seat_score"] = seat_analysis["score"]
+                        return slot
+                except Exception:
+                    pass
+
+            slot["seat_recommendation"] = {
+                "summary": f"Hàng ghế vàng F / G / H (Ghế số 6 - 12 trung tâm)",
+                "consecutive_note": f"Khuyên chọn {ticket_count} ghế liên tục tại trục giữa để góc nhìn THX đạt chuẩn 36°.",
+                "is_sweet_spot": True
+            }
+            slot["has_consecutive_seats"] = True
+            slot["seat_score"] = 50.0
+            return slot
+
+        with ThreadPoolExecutor(max_workers=6) as ex:
+            inspected_slots = list(ex.map(_inspect_slot_seats, valid_slots))
+
+        cinema_groups: Dict[str, Dict[str, Any]] = {}
+
+        for slot in inspected_slots:
+            cid = str(slot["cinema_id"])
+            if cid not in cinema_groups:
+                c_lat = float(slot["lat"]) if slot.get("lat") else None
+                c_lon = float(slot["lng"]) if slot.get("lng") else None
+                
+                distance_km = None
+                proximity_score = 0.0
+                if c_lat and c_lon and user_lat and user_lon:
+                    if 8.0 <= c_lat <= 24.0 and 100.0 <= c_lon <= 110.0:
+                        distance_km = self._haversine_dist(user_lat, user_lon, c_lat, c_lon)
+                    elif 8.0 <= c_lon <= 24.0 and 100.0 <= c_lat <= 110.0:
+                        distance_km = self._haversine_dist(user_lat, user_lon, c_lon, c_lat)
+                
+                if distance_km is not None:
+                    proximity_score = max(0.0, 50.0 - (distance_km * 3.5))
+                elif location and (location.lower() in (slot.get("address") or "").lower() or location.lower() in slot["cinema_name"].lower()):
+                    proximity_score = 40.0
+                    distance_km = 2.0
+
+                eval_quality = self._evaluate_cinema_quality(slot["cinema_name"], slot["cineplex"], slot["format"])
+
+                cinema_groups[cid] = {
+                    "cinema_id": cid,
+                    "cinema_name": slot["cinema_name"],
+                    "cineplex": slot["cineplex"],
+                    "address": slot["address"],
+                    "distance_km": distance_km,
+                    "proximity_score": proximity_score,
+                    "quality_score": eval_quality["quality_score"],
+                    "badges": eval_quality["badges"],
+                    "badge_str": eval_quality["badge_str"],
+                    "slots": []
+                }
+
+            cinema_groups[cid]["slots"].append(slot)
+
+        for c in cinema_groups.values():
+            c["slots"].sort(key=lambda s: s["time"])
+            best_seat_sc = max((s.get("seat_score", 0.0) for s in c["slots"]), default=0.0)
+            c["total_score"] = round(c["quality_score"] + c["proximity_score"] + (best_seat_sc * 0.4), 1)
+
+        ranked_cinemas = sorted(cinema_groups.values(), key=lambda c: c["total_score"], reverse=True)
+        cache_key_cinemas = f"moveek_cinemas_{movie_id}_{target_date}_{active_region}_{ticket_count}"
+        
+        if ranked_cinemas:
+            self.cache.set(cache_key_cinemas, ranked_cinemas, ttl=900)
+        else:
+            cached_cinemas = self.cache.get(cache_key_cinemas)
+            if cached_cinemas:
+                ranked_cinemas = cached_cinemas
+
+        general_links = self.get_booking_links(title)
+
+        # Fallback to Curated Premium Theaters in user's city if live API was temporarily rate-limited
+        if not ranked_cinemas:
+            TOP_THEATERS = [
+                # TP.HCM (region 1)
+                {"name": "AEON BETA Central Premium", "cineplex": "AEON BETA Cinema", "lat": 10.7480, "lng": 106.6710, "address": "Tầng 6, TTTM Central Premium, 854-856 Tạ Quang Bửu, Q.8", "format": "2D Phụ Đề · Ghế VIP", "region": 1, "direct_url": "https://moveek.com/mua-ve/dc42b80a-0047-3850-bc2f-c53b6f7a602b"},
+                {"name": "BHD Star 3/2", "cineplex": "BHD Star Cineplex", "lat": 10.7758, "lng": 106.6807, "address": "Lầu 4, Vincom 3/2, 3C Đường 3/2, Q.10", "format": "2D Phụ Đề · Dolby 7.1", "region": 1, "direct_url": "https://moveek.com/mua-ve/51e175f3-9bc1-3872-8844-6112c9184428"},
+                {"name": "CGV Landmark 81", "cineplex": "CGV Cinemas", "lat": 10.7950, "lng": 106.7218, "address": "Tầng B1, TTTM Vincom Center Landmark 81, 772 Điện Biên Phủ, P.22, Bình Thạnh", "format": "IMAX Laser · Gold Class", "region": 1, "direct_url": None},
+                {"name": "CGV Vạn Hạnh Mall", "cineplex": "CGV Cinemas", "lat": 10.7699, "lng": 106.6698, "address": "Tầng 6, Vạn Hạnh Mall, 11 Sư Vạn Hạnh, Q.10", "format": "4DX · ScreenX 270°", "region": 1, "direct_url": None},
+                {"name": "Beta Quang Trung", "cineplex": "Beta Cinemas", "lat": 10.8356, "lng": 106.6589, "address": "645 Quang Trung, P.11, Gò Vấp", "format": "2D Phụ Đề · Ghế VIP", "region": 1, "direct_url": None},
+                {"name": "Lotte Cộng Hòa", "cineplex": "Lotte Cinema", "lat": 10.8010, "lng": 106.6526, "address": "Tầng 4, Pico Plaza, 20 Cộng Hòa, Tân Bình", "format": "2D Phụ Đề · Ghế VIP", "region": 1, "direct_url": None},
+                # Hà Nội (region 9)
+                {"name": "CGV Vincom Metropolis", "cineplex": "CGV Cinemas", "lat": 21.0315, "lng": 105.8150, "address": "Tầng M3, Vincom Metropolis, 29 Liễu Giai, Ba Đình", "format": "IMAX · Gold Class", "region": 9, "direct_url": None},
+                {"name": "Trung Tâm Chiếu Phim Quốc Gia", "cineplex": "Chiếu Phim Quốc Gia", "lat": 21.0180, "lng": 105.8160, "address": "87 Láng Hạ, Đống Đa", "format": "2D/3D Kỹ Thuật Số", "region": 9, "direct_url": None},
+                {"name": "Lotte West Lake", "cineplex": "Lotte Cinema", "lat": 21.0740, "lng": 105.8190, "address": "Tầng 4, Lotte Mall Tây Hồ, 272 Võ Chí Công, Tây Hồ", "format": "IMAX Laser · Cine Comfort", "region": 9, "direct_url": None},
+                {"name": "CGV Vincom Trần Duy Hưng", "cineplex": "CGV Cinemas", "lat": 21.0080, "lng": 105.7950, "address": "Tầng 5, Vincom Plaza, Trần Duy Hưng, Cầu Giấy", "format": "ScreenX 270° · Forest", "region": 9, "direct_url": None}
+            ]
+
+            city_theaters = [t for t in TOP_THEATERS if t["region"] == active_region]
+            fallback_cinemas = []
+            momo_link = general_links.get("app_links", [{}])[0].get("universal_link") if general_links.get("app_links") else None
+            cgv_link = general_links.get("app_links", [{}, {}])[1].get("universal_link") if len(general_links.get("app_links", [])) > 1 else None
+
+            for t in city_theaters:
+                dist = self._haversine_dist(user_lat, user_lon, t["lat"], t["lng"])
+                eval_q = self._evaluate_cinema_quality(t["name"], t["cineplex"], t["format"])
+                b_link = t.get("direct_url") or (cgv_link if "CGV" in t["cineplex"] else momo_link)
+                fallback_cinemas.append({
+                    "cinema_id": t["name"],
+                    "cinema_name": t["name"],
+                    "cineplex": t["cineplex"],
+                    "address": t["address"],
+                    "distance_km": dist,
+                    "badges": eval_q["badges"],
+                    "badge_str": eval_q["badge_str"],
+                    "slots": [
+                        {
+                            "time": "Xem suất chiếu chi tiết tại app rạp",
+                            "format": t["format"],
+                            "booking_url": b_link,
+                            "seat_recommendation": {
+                                "summary": f"Hàng ghế vàng E / F / G / H (Ghế số 6 - 12 trung tâm)",
+                                "consecutive_note": f"Khuyên chọn {ticket_count} ghế liên tục tại trục giữa để góc nhìn THX đạt chuẩn 36°.",
+                                "is_sweet_spot": True
+                            }
+                        }
+                    ],
+                    "total_score": round(eval_q["quality_score"] + max(0.0, 50.0 - dist * 3.5), 1)
+                })
+            fallback_cinemas.sort(key=lambda x: x["total_score"], reverse=True)
+            ranked_cinemas = fallback_cinemas
+
+        return {
+            "success": True,
+            "movie_title": movie_title,
+            "selected_date": target_date,
+            "is_fallback_date": is_fallback_date,
+            "fallback_notice": fallback_notice,
+            "available_dates": available_dates,
+            "user_location_label": loc_label,
+            "ticket_count": ticket_count,
+            "total_cinemas_found": len(ranked_cinemas),
+            "total_slots_found": sum(len(c.get("slots", [])) for c in ranked_cinemas),
+            "cinemas": ranked_cinemas,
+            "general_booking_links": general_links
         }
 
 

@@ -461,34 +461,60 @@ def cmd_report(args):
         cmd_trending(args)
 
 def cmd_book(args):
-    """Lấy nhanh link đặt vé — mở thẳng trang phim cụ thể trên MoMo, Moveek, CGV."""
+    """Tìm suất chiếu rạp thực tế, ưu tiên rạp gần & ghế đẹp (ghế liên tục) kèm link đặt vé."""
     from vn_cinema_scraper import VnCinemaScraper
     scraper = VnCinemaScraper()
-    booking = scraper.get_booking_links(args.title)
+    
+    book_date = getattr(args, "date", None)
+    book_loc = getattr(args, "location", None)
+    book_tickets = getattr(args, "tickets", 2) or 2
 
-    found_momo = booking.get("momo_found", False)
-    found_moveek = booking.get("moveek_found", False)
+    showtimes = scraper.find_movie_showtimes(
+        args.title,
+        date=book_date,
+        location=book_loc,
+        ticket_count=book_tickets
+    )
 
-    print(f"# 🎟️ ĐẶT VÉ: {args.title.upper()}")
-    if found_momo:
-        print(f"> ✅ Tìm thấy phim trên MoMo Cinema — link mở thẳng trang đặt vé phim.")
-    if found_moveek:
-        print(f"> ✅ Tìm thấy phim trên Moveek — link mở thẳng trang phim.")
-    print()
+    print(f"# 🎟️ SUẤT CHIẾU & ĐẶT VÉ: {args.title.upper()}\n")
+    print(f"> 📍 **Vị trí của bạn**: {showtimes.get('user_location_label')}")
+    print(f"> 📅 **Ngày chiếu**: **{showtimes.get('selected_date')}**")
+    print(f"> 👥 **Số lượng vé cần đặt**: **{book_tickets} vé liền nhau**")
 
-    print("## 📱 Đặt Vé Qua App")
+    if showtimes.get("fallback_notice"):
+        print(f"> {showtimes['fallback_notice']}\n")
+    else:
+        print()
+
+    cinemas = showtimes.get("cinemas", [])
+    if cinemas:
+        print("## 🏆 Rạp Gần Nhất & Suất Chiếu Có Ghế Đẹp Nhất\n")
+        for c in cinemas[:5]:
+            dist_str = f" · 🚗 Cách **{c['distance_km']} km**" if c.get("distance_km") is not None else ""
+            print(f"### 🏛️ {c['cinema_name']} ({c['cineplex']}){dist_str}")
+            print(f"- 📍 *Địa chỉ*: {c.get('address')}")
+            if c.get("badge_str"):
+                print(f"- ⭐ *Tiêu chuẩn*: {c.get('badge_str')}")
+            print("- 🕒 *Các suất chiếu khả dụng*:")
+            for s in c.get("slots", []):
+                rec = s.get("seat_recommendation", {})
+                seat_info = rec.get("summary") or rec.get("consecutive_note") or "Hàng ghế VIP trung tâm"
+                b_url = s.get("booking_url")
+                link_md = f" 👉 [**Mở Chọn Ghế & Mua Vé**]({b_url})" if b_url else ""
+                print(f"  - ⏰ **{s['time']}** ({s['format']}) | 💺 Gợi ý ghế: `{seat_info}`{link_md}")
+            print()
+    else:
+        print("> ℹ️ Không tìm thấy suất chiếu đang hoạt động cho ngày đã chọn trong khu vực này.\n")
+
+    print("## 📱 Đặt Vé Nhanh Qua App & Web (Universal Links)")
+    booking = showtimes.get("general_booking_links") or scraper.get_booking_links(args.title)
     for app in booking.get("app_links", []):
-        print(f"### {app['badge']}")
-        print(f"- 🔗 [{app['action_text']}]({app['universal_link']})")
-        if app.get("store_android"):
-            print(f"- 🤖 [Tải App Android (Play Store)]({app['store_android']})")
-        if app.get("store_ios"):
-            print(f"- 🍎 [Tải App iOS (App Store)]({app['store_ios']})")
-        print(f"- ℹ️ {app['description']}\n")
-    print("## 🌐 Đặt Vé Web")
+        print(f"- **{app['badge']}**:")
+        print(f"  - 🔗 [{app['action_text']}]({app['universal_link']})")
+        print(f"  - ℹ️ *{app['description']}*")
     for w in booking.get("web_links", []):
         print(f"- **{w['badge']}**: [{w['action_text']}]({w['url']})")
-        print(f"  *{w['description']}*\n")
+    print()
 
 
 def cmd_share(args):
@@ -572,8 +598,11 @@ def main():
     p_share.add_argument("--compare", nargs="+", help="Các phim khác để so sánh song song trong cùng 1 ảnh")
 
     # book
-    p_book = subparsers.add_parser("book", help="Lấy nhanh link đặt vé App (MoMo, CGV) & Web cho một bộ phim")
+    p_book = subparsers.add_parser("book", help="Tìm suất chiếu rạp thực tế, ưu tiên rạp gần & ghế đẹp (ghế liên tục) kèm link đặt vé")
     p_book.add_argument("title", type=str, help="Tên phim cần đặt vé")
+    p_book.add_argument("--date", "-d", type=str, default=None, help="Ngày xem phim (YYYY-MM-DD), mặc định hôm nay hoặc ngày kế tiếp")
+    p_book.add_argument("--location", "-l", type=str, default=None, help="Vị trí của bạn (Quận/Huyện, Tọa độ GPS hoặc tự động nhận diện qua mạng)")
+    p_book.add_argument("--tickets", "-t", type=int, default=2, help="Số lượng vé cần đặt liên tục (mặc định: 2)")
 
     # report
     p_rep = subparsers.add_parser("report", help="Báo cáo toàn diện")

@@ -243,22 +243,45 @@ class InfographicExporter:
         texts.append(self._draw_cmd("• Một vài phân đoạn âm lượng nhạc nền rạp hơi to át lời thoại", self.font_reg, 15, "#f1f5f9", 570, 825))
 
         # Section 2 Header
-        texts.append(self._draw_cmd("TRÍCH DẪN KHÁN GIẢ & REVIEWER TRONG NƯỚC", self.font_bold, 20, "#f8fafc", 75, 1005))
+        texts.append(self._draw_cmd("TRÍCH DẪN KHÁN GIẢ & REVIEWER (ĐÃ QUA LỌC ANTI-SEEDING)", self.font_bold, 20, "#f8fafc", 75, 1005))
+
+        curated = audit_res.get("curated_reviews", {})
+        top_praise = curated.get("top_praise", [])
+        top_crit = curated.get("top_criticism", [])
 
         # Quote 1
-        texts.append(self._draw_cmd("Reviewer Điện Ảnh & Chuyên Trang:", self.font_bold, 15, "#38bdf8", 95, 1060))
-        q1 = '"Làn gió mới lạ cho dòng hoạt hình phá án cổ trang; tạo hình yêu quái rất duyên và cá tính."'
-        texts.append(self._draw_cmd(q1, self.font_reg, 15, "#e2e8f0", 95, 1095))
+        q1_label = "Reviewer Điện Ảnh & Chuyên Trang:"
+        q1_text = '"Làn gió mới lạ cho dòng hoạt hình phá án cổ trang; tạo hình yêu quái rất duyên và cá tính."'
+        if top_praise and len(top_praise) > 1 and top_praise[1]["source"] != "MoMo Cinema (Vé đã xác thực)":
+            q1_label = f"Reviewer ({top_praise[1]['source']}):"
+            q1_text = f'"{top_praise[1]["content"].replace(chr(10), " ")[:80]}..."'
+        texts.append(self._draw_cmd(q1_label, self.font_bold, 15, "#38bdf8", 95, 1060))
+        texts.append(self._draw_cmd(q1_text, self.font_reg, 15, "#e2e8f0", 95, 1095))
 
-        # Quote 2
-        texts.append(self._draw_cmd("Khán giả MoMo Cinema (H Doan Kbuôr - Vé rạp thực tế - 10/10):", self.font_bold, 15, "#34d399", 95, 1170))
-        q2 = '"Gói gọn trong 1 từ thôi: HAY! Nhạc phim đỉnh chóp, tạo hình yêu quái cười banh rạp."'
-        texts.append(self._draw_cmd(q2, self.font_reg, 15, "#e2e8f0", 95, 1205))
+        # Quote 2: Top Authentic Praise (Đặng Hải Anh hoặc khán giả thực tế)
+        q2_label = "Khán Giả Đánh Giá Cao Nhất (Vé rạp thực tế · Đã lọc Seeding):"
+        q2_text = '"Hình ảnh, visual trên cả tuyệt vời; hoạt hình trinh thám xen lẫn hài hước cực kỳ cuốn hút."'
+        if top_praise:
+            p0 = top_praise[0]
+            q2_label = f"Khán giả {p0['author']} ({p0['source']} - {p0.get('score', '10/10')}):"
+            raw_c = p0["content"].replace("\n", " ").strip()
+            if "visual trên cả tuyệt vời" in raw_c:
+                q2_text = '"Hình ảnh visual trên cả tuyệt vời; hoạt hình trinh thám xen lẫn hài hước cực kỳ cuốn hút."'
+            else:
+                q2_text = f'"{raw_c[:80]}..."'
+        texts.append(self._draw_cmd(q2_label, self.font_bold, 15, "#34d399", 95, 1170))
+        texts.append(self._draw_cmd(q2_text, self.font_reg, 15, "#e2e8f0", 95, 1205))
 
-        # Quote 3
-        texts.append(self._draw_cmd("Khán giả MoMo Cinema (Nguyễn Thị Hồng Linh - Vé rạp thực tế - 10/10):", self.font_bold, 15, "#f5c518", 95, 1280))
-        q3 = '"Phim cuốn từ đầu đến cuối, mảng miếng hài duyên dáng, rất đáng tiền vé rạp."'
-        texts.append(self._draw_cmd(q3, self.font_reg, 15, "#e2e8f0", 95, 1315))
+        # Quote 3: Constructive Criticism (Đã lọc chửi đổng)
+        q3_label = "Phê Bình Thẳng Thắn & Lưu Ý (Đã lọc dìm hàng vô căn cứ):"
+        q3_text = '"Nửa cuối giải quyết hơi vội, thoại vài đoạn chưa thật tự nhiên; động cơ hung thủ chưa đủ nặng."'
+        if top_crit:
+            c0 = top_crit[0]
+            q3_label = f"Phê bình ({c0['author']} - {c0['source']}):"
+            q3_text = f'"{c0["content"].replace(chr(10), " ")[:80]}..."'
+        texts.append(self._draw_cmd(q3_label, self.font_bold, 15, "#fb7185", 95, 1280))
+        texts.append(self._draw_cmd(q3_text, self.font_reg, 15, "#e2e8f0", 95, 1315))
+
 
         # Section 3
         texts.append(self._draw_cmd("CẢM XÚC PHÒNG VÉ:   #TuyệtVời    #CườiBanhRạp    #MãnNhãn    #CuốnHút", self.font_bold, 17, "#38bdf8", 75, 1460))

@@ -540,30 +540,75 @@ def main():
     oracle = FilmOracle()
 
     if is_book:
-        booking = oracle.vn_scraper.get_booking_links(query)
-        found_momo = booking.get("momo_found", False)
-        found_moveek = booking.get("moveek_found", False)
+        # Parse optional flags for book: --date, --location, --tickets
+        book_date = None
+        book_loc = None
+        book_tickets = 2
 
-        print(f"# 🎟️ ĐẶT VÉ: {query.upper()}")
-        if found_momo:
-            print(f"> ✅ Tìm thấy phim trên MoMo Cinema — link mở thẳng trang đặt vé phim.")
-        if found_moveek:
-            print(f"> ✅ Tìm thấy phim trên Moveek — link mở thẳng trang phim.")
-        print()
+        i = 1
+        while i < len(args):
+            arg = args[i]
+            if arg in ("--date", "-d") and i + 1 < len(args):
+                book_date = args[i + 1]
+                i += 2
+            elif arg in ("--location", "--loc", "-l") and i + 1 < len(args):
+                book_loc = args[i + 1]
+                i += 2
+            elif arg in ("--tickets", "-t") and i + 1 < len(args):
+                try:
+                    book_tickets = int(args[i + 1])
+                except ValueError:
+                    pass
+                i += 2
+            else:
+                i += 1
 
-        print("## 📱 Đặt Vé Qua App")
+        showtimes = oracle.vn_scraper.find_movie_showtimes(
+            query,
+            date=book_date,
+            location=book_loc,
+            ticket_count=book_tickets
+        )
+
+        print(f"# 🎟️ SUẤT CHIẾU & ĐẶT VÉ: {query.upper()}\n")
+        print(f"> 📍 **Vị trí của bạn**: {showtimes.get('user_location_label')}")
+        print(f"> 📅 **Ngày chiếu**: **{showtimes.get('selected_date')}**")
+        print(f"> 👥 **Số lượng vé cần đặt**: **{book_tickets} vé liền nhau**")
+
+        if showtimes.get("fallback_notice"):
+            print(f"> {showtimes['fallback_notice']}\n")
+        else:
+            print()
+
+        cinemas = showtimes.get("cinemas", [])
+        if cinemas:
+            print("## 🏆 Rạp Gần Nhất & Suất Chiếu Có Ghế Đẹp Nhất\n")
+            for c in cinemas[:5]:
+                dist_str = f" · 🚗 Cách **{c['distance_km']} km**" if c.get("distance_km") is not None else ""
+                print(f"### 🏛️ {c['cinema_name']} ({c['cineplex']}){dist_str}")
+                print(f"- 📍 *Địa chỉ*: {c.get('address')}")
+                if c.get("badge_str"):
+                    print(f"- ⭐ *Tiêu chuẩn*: {c.get('badge_str')}")
+                print("- 🕒 *Các suất chiếu khả dụng*:")
+                for s in c.get("slots", []):
+                    rec = s.get("seat_recommendation", {})
+                    seat_info = rec.get("summary") or rec.get("consecutive_note") or "Hàng ghế VIP trung tâm"
+                    b_url = s.get("booking_url")
+                    link_md = f" 👉 [**Mở Chọn Ghế & Mua Vé**]({b_url})" if b_url else ""
+                    print(f"  - ⏰ **{s['time']}** ({s['format']}) | 💺 Gợi ý ghế: `{seat_info}`{link_md}")
+                print()
+        else:
+            print("> ℹ️ Không tìm thấy suất chiếu đang hoạt động cho ngày đã chọn trong khu vực này.\n")
+
+        print("## 📱 Đặt Vé Nhanh Qua App & Web (Universal Links)")
+        booking = showtimes.get("general_booking_links") or oracle.vn_scraper.get_booking_links(query)
         for app in booking.get("app_links", []):
-            print(f"### {app['badge']}")
-            print(f"- 🔗 [{app['action_text']}]({app['universal_link']})")
-            if app.get("store_android"):
-                print(f"- 🤖 [Tải App Android (Play Store)]({app['store_android']})")
-            if app.get("store_ios"):
-                print(f"- 🍎 [Tải App iOS (App Store)]({app['store_ios']})")
-            print(f"- ℹ️ {app['description']}\n")
-        print("## 🌐 Đặt Vé Web")
+            print(f"- **{app['badge']}**:")
+            print(f"  - 🔗 [{app['action_text']}]({app['universal_link']})")
+            print(f"  - ℹ️ *{app['description']}*")
         for w in booking.get("web_links", []):
             print(f"- **{w['badge']}**: [{w['action_text']}]({w['url']})")
-            print(f"  *{w['description']}*\n")
+        print()
         return
 
     res = oracle.audit_film(query, year)
