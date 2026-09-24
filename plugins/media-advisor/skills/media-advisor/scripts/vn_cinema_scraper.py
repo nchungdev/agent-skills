@@ -420,10 +420,16 @@ class VnCinemaScraper:
         clean_encoded = urllib.parse.quote_plus(clean_title)
 
         # 1. MoMo Cinema
-        # Official MoMo Universal Link that opens the 'Mua vé xem phim' miniapp inside MoMo App directly
-        momo_universal = "https://momoapp.page.link/bi9jFZjZ21sej9gr5"
-        momo_deeplink = "momo://app?action=open_miniapp&appId=cinema"
-        momo_web = "https://momo.vn/cinema"
+        # ⚠️  Firebase Dynamic Links (momoapp.page.link/...) bị Google shutdown ngày 25/8/2025 → không dùng nữa.
+        # ⚠️  momo:// scheme không được MoMo public document → không đảm bảo hoạt động.
+        # ✅  Dùng intent:// (Android Chrome) → mở app MoMo nếu đã cài, fallback Play Store nếu chưa.
+        # ✅  iOS: momo.vn/cinema → MoMo app intercept qua Universal Link (App Store ID: 918751511).
+        momo_cinema_web = "https://www.momo.vn/cinema"
+        momo_intent = (
+            "intent://cinema"
+            "#Intent;scheme=https;host=www.momo.vn;package=com.mservice.momotransfer;"
+            f"S.browser_fallback_url={urllib.parse.quote_plus(momo_cinema_web)};end"
+        )
 
         # 2. CGV Cinemas Vietnam
         # CGV không publish scheme riêng (cgvvn:// chưa được verify).
@@ -451,11 +457,14 @@ class VnCinemaScraper:
                     "platform": "MoMo Cinema",
                     "badge": "📱 App MoMo",
                     "priority": 1,
-                    "universal_link": momo_universal,
-                    "deeplink": momo_deeplink,
-                    "web_fallback": momo_web,
-                    "action_text": "Mở App MoMo Đặt Vé",
-                    "description": "Đặt vé rạp CGV, Lotte, BHD, Galaxy thanh toán tức thì trên Ví MoMo"
+                    "universal_link": momo_cinema_web,
+                    "deeplink": momo_intent,
+                    "deeplink_note": "Android: intent:// tự mở app MoMo nếu đã cài | iOS: momo.vn/cinema → app tự intercept",
+                    "web_fallback": momo_cinema_web,
+                    "store_android": "https://play.google.com/store/apps/details?id=com.mservice.momotransfer",
+                    "store_ios": "https://apps.apple.com/vn/app/momo-e-wallet/id918751511",
+                    "action_text": "Mở App MoMo Đặt Vé Phim",
+                    "description": "Đặt vé rạp CGV, Lotte, BHD, Galaxy — thanh toán tức thì trên Ví MoMo"
                 },
                 {
                     "platform": "CGV Cinemas Vietnam",
