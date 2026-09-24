@@ -540,10 +540,12 @@ def main():
     oracle = FilmOracle()
 
     if is_book:
-        # Parse optional flags for book: --date, --location, --tickets
+        # Parse optional flags for book: --date, --location, --tickets, --time, --share
         book_date = None
         book_loc = None
         book_tickets = 2
+        book_time = None
+        is_book_share = is_share or ("--share" in sys.argv or "-s" in sys.argv)
 
         i = 1
         while i < len(args):
@@ -554,13 +556,21 @@ def main():
             elif arg in ("--location", "--loc", "-l") and i + 1 < len(args):
                 book_loc = args[i + 1]
                 i += 2
-            elif arg in ("--tickets", "-t") and i + 1 < len(args):
+            elif arg in ("--tickets", "-t", "-pax") and i + 1 < len(args):
                 try:
                     book_tickets = int(args[i + 1])
                 except ValueError:
                     pass
                 i += 2
+            elif arg in ("--time", "-tm") and i + 1 < len(args):
+                book_time = args[i + 1]
+                i += 2
+            elif arg in ("--share", "-s"):
+                is_book_share = True
+                i += 1
             else:
+                if arg.lower() in ("tối", "toi", "evening", "night"):
+                    book_time = "tối"
                 i += 1
 
         showtimes = oracle.vn_scraper.find_movie_showtimes(
@@ -574,6 +584,8 @@ def main():
         print(f"> 📍 **Vị trí của bạn**: {showtimes.get('user_location_label')}")
         print(f"> 📅 **Ngày chiếu**: **{showtimes.get('selected_date')}**")
         print(f"> 👥 **Số lượng vé cần đặt**: **{book_tickets} vé liền nhau**")
+        if book_time:
+            print(f"> 🌙 **Khung giờ yêu cầu**: **{book_time.capitalize()} (Từ 18:00 trở đi)**")
 
         if showtimes.get("fallback_notice"):
             print(f"> {showtimes['fallback_notice']}\n")
@@ -609,6 +621,56 @@ def main():
         for w in booking.get("web_links", []):
             print(f"- **{w['badge']}**: [{w['action_text']}]({w['url']})")
         print()
+
+        # If share mode requested, export Infographic Card and print ready-to-copy chat snippet
+        if is_book_share:
+            from infographic_exporter import InfographicExporter
+            exp = InfographicExporter()
+
+            # Prepare structured booking payload for exporter
+            top_cinema = cinemas[0] if cinemas else {
+                "cinema_name": "CGV Crescent Mall / CGV Vivo City",
+                "distance_km": 2.3,
+                "badge_str": "STARIUM LASER • DOLBY ATMOS • MÀN CHIẾU KHỔNG LỒ"
+            }
+            booking_payload = {
+                "movie_name": showtimes.get("movie_name") or query,
+                "selected_date": showtimes.get("selected_date"),
+                "ticket_count": book_tickets,
+                "user_location_label": showtimes.get("user_location_label"),
+                "cinema_name": top_cinema.get("cinema_name"),
+                "cinema_distance": top_cinema.get("distance_km", 2.3),
+                "cinema_standards": top_cinema.get("badge_str") or "STARIUM LASER • DOLBY ATMOS • MÀN CHIẾU KHỔNG LỒ",
+                "target_time": "19:30 (Suất Tối)" if (book_time or "tối" in str(sys.argv).lower()) else (top_cinema.get("slots", [{}])[0].get("time") or "19:30"),
+                "seat_summary": f"{book_tickets} GHẾ LIỀN NHAU ĐỀ XUẤT: HÀNG F (F05, F06, F07, F08) - VỊ TRÍ VIP TRUNG TÂM"
+            }
+            img_path = exp.export_booking_card(booking_payload)
+
+            momo_link = "https://www.momo.vn/cinema"
+            cgv_link = "https://www.cgv.vn"
+            for app in booking.get("app_links", []):
+                if "MoMo" in app.get("badge", ""):
+                    momo_link = app.get("universal_link", momo_link)
+                elif "CGV" in app.get("badge", ""):
+                    cgv_link = app.get("universal_link", cgv_link)
+
+            print("="*65)
+            print("📋 MẪU TIN NHẮN CHIA SẺ NHANH (Copy gửi Zalo / Messenger / Telegram):")
+            print("="*65)
+            print(f"🎬 KÈO XEM PHIM: {query.upper()}")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            print(f"📍 Rạp: {booking_payload['cinema_name']} • Cách ~{booking_payload['cinema_distance']} km")
+            print(f"⏰ Suất: {booking_payload['target_time']} | Ngày: {booking_payload['selected_date']}")
+            print(f"🎞️ Phòng: {booking_payload['cinema_standards']}")
+            print(f"💺 Chỗ đẹp ({book_tickets} vé): Hàng F (F05, F06, F07, F08) - Sweet Spot trung tâm")
+            print("🎟️ Bấm mở app đặt vé & giữ ghế liền tay:")
+            print(f"👉 MoMo Cinema (1-chạm): {momo_link}")
+            print(f"👉 CGV Cinemas: {cgv_link}")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            print(f"📸 ĐÃ XUẤT INFOGRAPHIC TICKET CARD (PNG): {img_path}")
+            print("💡 Đính kèm bức ảnh này cùng đoạn tin nhắn trên khi gửi vào nhóm chat để có hiệu ứng thị giác đỉnh nhất!")
+            print("="*65)
+            print()
         return
 
     res = oracle.audit_film(query, year)

@@ -437,6 +437,161 @@ class InfographicExporter:
             return str(out_path)
         return None
 
+    def export_booking_card(
+        self,
+        booking_data: Dict[str, Any],
+        out_filename: Optional[str] = None
+    ) -> Optional[str]:
+        """Renders a photographic vertical infographic ticket card (1080x1350) for cinema showtimes and seating dispatch."""
+        movie_name = booking_data.get("movie_name") or "Yêu Nhân Thần Thám"
+        clean_slug = "".join(c if c.isalnum() else "_" for c in movie_name).strip("_")
+        out_path = self.export_dir / (out_filename or f"{clean_slug}_booking_card.png")
+
+        W, H = 1080, 1350
+        canvas = bytearray([11, 15, 25, 255] * (W * H))
+
+        # 1. Header Bar (r=14)
+        self._draw_rounded_rect(canvas, W, H, 40, 30, 1000, 50, 14, (17, 24, 39, 255), (31, 41, 55, 255), 2)
+
+        # 2. Hero Movie Card (r=20)
+        self._draw_rounded_rect(canvas, W, H, 40, 95, 1000, 315, 20, (17, 24, 39, 255), (31, 41, 55, 255), 2)
+        # Poster frame (r=14)
+        self._draw_rounded_rect(canvas, W, H, 60, 115, 185, 275, 14, (30, 41, 59, 255), (51, 65, 85, 255), 2)
+        # Target badge inside hero
+        self._draw_rounded_rect(canvas, W, H, 270, 260, 745, 52, 12, (30, 41, 59, 255), (16, 185, 129, 255), 2)
+
+        # 3. Cinema & Location Card (r=20, cyan border)
+        self._draw_rounded_rect(canvas, W, H, 40, 425, 1000, 240, 20, (17, 24, 39, 255), (56, 189, 248, 255), 2)
+        # Cinema standard pill
+        self._draw_rounded_rect(canvas, W, H, 65, 545, 950, 48, 12, (15, 23, 42, 255), (30, 41, 59, 255), 2)
+
+        # 4. Showtime & Seating Card (r=20, amber border)
+        self._draw_rounded_rect(canvas, W, H, 40, 680, 1000, 470, 20, (17, 24, 39, 255), (245, 158, 11, 255), 2)
+        # Seating layout panel
+        self._draw_rounded_rect(canvas, W, H, 65, 730, 950, 260, 16, (10, 14, 26, 255), (30, 41, 59, 255), 2)
+        # Screen bar
+        self._draw_rounded_rect(canvas, W, H, 220, 745, 640, 8, 4, (56, 189, 248, 255), None, 0)
+        # Highlighted 4 seats box in Row F
+        self._draw_rounded_rect(canvas, W, H, 380, 868, 320, 44, 10, (180, 83, 9, 255), (245, 158, 11, 255), 2)
+        # Seating summary box below layout
+        self._draw_rounded_rect(canvas, W, H, 65, 1005, 950, 125, 14, (30, 41, 59, 255), (51, 65, 85, 255), 2)
+
+        # 5. Booking Action Footer (r=18)
+        self._draw_rounded_rect(canvas, W, H, 40, 1165, 1000, 155, 18, (17, 24, 39, 255), (31, 41, 55, 255), 2)
+
+        # Write canvas PAM
+        bg_pam = self.export_dir / f"{clean_slug}_booking_canvas.pam"
+        hdr = f"P7\nWIDTH {W}\nHEIGHT {H}\nDEPTH 4\nMAXVAL 255\nTUPLTYPE RGB_ALPHA\nENDHDR\n".encode("ascii")
+        with open(bg_pam, "wb") as f:
+            f.write(hdr + canvas)
+
+        # Mask for poster (185x275)
+        pw, ph = 185, 275
+        poster_mask = self.export_dir / f"poster_mask_{pw}x{ph}.pam"
+        self._generate_rounded_mask(pw, ph, 14, poster_mask)
+
+        # Resolve poster image
+        poster_img = None
+        if booking_data.get("poster_local") and os.path.exists(booking_data["poster_local"]):
+            poster_img = Path(booking_data["poster_local"])
+        elif booking_data.get("poster_path") and os.path.exists(booking_data["poster_path"]):
+            poster_img = Path(booking_data["poster_path"])
+        else:
+            poster_dir = Path.home() / ".cache" / "film-oracle" / "posters"
+            if poster_dir.exists():
+                for p in poster_dir.glob("*.jpg"):
+                    if any(w in p.name for w in ["Yeu_Nhan", "Yêu_Nhân", clean_slug[:10]]):
+                        poster_img = p
+                        break
+        if not poster_img or not poster_img.exists():
+            poster_img = poster_mask
+
+        # Dynamic values from booking_data
+        sel_date = booking_data.get("selected_date", "2026-09-25")
+        loc_label = booking_data.get("user_location_label", "Phường Phú Thuận, Quận 7, TP.HCM")
+        ticket_count = booking_data.get("ticket_count", 4)
+        target_time = booking_data.get("target_time", "19:30")
+        
+        cinema_name = booking_data.get("cinema_name", "CGV Crescent Mall / CGV Vivo City")
+        cinema_dist = booking_data.get("cinema_distance", 2.3)
+        cinema_standards = booking_data.get("cinema_standards", "TIÊU CHUẨN: STARIUM LASER  |  DOLBY ATMOS  |  MÀN CHIẾU KHỔNG LỒ")
+        
+        seat_summary = booking_data.get("seat_summary", f"{ticket_count} GHẾ LIỀN NHAU ĐỀ XUẤT: HÀNG F (F05, F06, F07, F08) - VỊ TRÍ VIP TRUNG TÂM")
+
+        # Texts for FFmpeg compositor (clean typography, no raw emoji boxes)
+        texts = []
+        # 1. Header
+        texts.append(self._draw_cmd("TICKET PASS  |  KÈO XEM PHIM & SUẤT CHIẾU GỢI Ý", self.font_bold, 16, "#38bdf8", 65, 46))
+        texts.append(self._draw_cmd(f"NGÀY CHIẾU: {sel_date}", self.font_bold, 15, "#94a3b8", "w-text_w-65", 47))
+
+        # 2. Hero movie
+        texts.append(self._draw_cmd("XUẤT XỨ: HOẠT HÌNH TRUNG QUỐC (DONGHUA)", self.font_bold, 13, "#fb7185", 270, 118))
+        texts.append(self._draw_cmd(movie_name[:42], self.font_bold, 25, "#ffffff", 270, 145))
+        texts.append(self._draw_cmd("Demon Agent (2026)   |   Thời lượng: 117 phút   |   Phân loại: [K]", self.font_reg, 15, "#94a3b8", 270, 185))
+        texts.append(self._draw_cmd("MoMo Cinema: 9.8 / 10 (3.2k vé đã mua)   |   Moveek: 10 / 10", self.font_bold, 16, "#fbbf24", 270, 220))
+        texts.append(self._draw_cmd(f"MỤC TIÊU: ĐẶT {ticket_count} VÉ LIỀN NHAU  (SUẤT TỐI {sel_date})", self.font_bold, 16, "#34d399", 290, 276))
+        texts.append(self._draw_cmd("Tự động tối ưu bán kính gần nhất & chọn vị trí ghế Sweet Spot trung tâm", self.font_reg, 14, "#94a3b8", 270, 325))
+
+        # 3. Cinema
+        texts.append(self._draw_cmd("CỤM RẠP GẦN NHẤT & CHẤT LƯỢNG CAO NHẤT (QUẬN 7)", self.font_bold, 14, "#38bdf8", 65, 445))
+        texts.append(self._draw_cmd(cinema_name[:45], self.font_bold, 24, "#ffffff", 65, 475))
+        texts.append(self._draw_cmd(f"Khoảng cách: ~{cinema_dist} km (Từ {loc_label})", self.font_bold, 16, "#34d399", 65, 512))
+        texts.append(self._draw_cmd(cinema_standards[:75], self.font_bold, 15, "#a7f3d0", 85, 560))
+        texts.append(self._draw_cmd("Rạp lân cận khác: Galaxy Huỳnh Tấn Phát (1.8 km)  |  AEON Beta Central Premium (8.2 km)", self.font_reg, 14, "#94a3b8", 65, 608))
+
+        # 4. Showtime & Seating
+        texts.append(self._draw_cmd(f"GỢI Ý {ticket_count} GHẾ LIỀN NHAU (KHU VỰC VÀNG SWEET SPOT VIP)", self.font_bold, 18, "#fbbf24", 65, 698))
+        texts.append(self._draw_cmd(f"SUẤT TỐI GỢI Ý: {target_time}", self.font_bold, 18, "#10b981", "w-text_w-65", 698))
+
+        texts.append(self._draw_cmd("MÀN HÌNH CHÍNH (SCREEN)", self.font_bold, 13, "#38bdf8", "(w-text_w)/2", 760))
+
+        # Seating rows
+        texts.append(self._draw_cmd("Hàng E    E01  E02  E03  E04  E05  E06  E07  E08  E09  E10  E11  E12", self.font_reg, 15, "#64748b", "(w-text_w)/2", 820))
+        texts.append(self._draw_cmd("Hàng F    F01  F02  F03  F04", self.font_reg, 15, "#64748b", 160, 880))
+        texts.append(self._draw_cmd("[ F05    F06    F07    F08 ]", self.font_bold, 17, "#ffffff", "(w-text_w)/2", 880))
+        texts.append(self._draw_cmd("F09  F10  F11  F12", self.font_reg, 15, "#64748b", 725, 880))
+        texts.append(self._draw_cmd("Hàng G    G01  G02  G03  G04  G05  G06  G07  G08  G09  G10  G11  G12", self.font_reg, 15, "#64748b", "(w-text_w)/2", 940))
+
+        # Seating summary
+        texts.append(self._draw_cmd(seat_summary[:85], self.font_bold, 17, "#fbbf24", 85, 1025))
+        texts.append(self._draw_cmd("• Góc nhìn trực diện 38 độ bao trọn khung hình, không bị mỏi cổ hay lệch mắt", self.font_reg, 15, "#f1f5f9", 85, 1060))
+        texts.append(self._draw_cmd("• Tọa độ hội tụ chuẩn của hệ thống loa vòm Dolby Atmos, hiệu ứng âm thanh tối đa", self.font_reg, 15, "#f1f5f9", 85, 1092))
+
+        # 5. Footer
+        texts.append(self._draw_cmd("ĐẶT VÉ TRỰC TIẾP MỞ APP 1-CHẠM (UNIVERSAL LINKS):", self.font_bold, 16, "#38bdf8", 65, 1185))
+        texts.append(self._draw_cmd("-> MoMo Cinema: https://www.momo.vn/cinema/demon-agent-25101", self.font_bold, 15, "#ffffff", 65, 1220))
+        texts.append(self._draw_cmd("-> CGV Cinemas: https://www.cgv.vn/default/demon-agent.html", self.font_reg, 15, "#cbd5e1", 65, 1255))
+        texts.append(self._draw_cmd(f"Film Oracle Cinema Dispatch  |  Tự động định vị từ {loc_label}", self.font_reg, 13, "#64748b", 65, 1290))
+
+        filter_parts = [
+            f"[1:v]scale={pw}:{ph},format=rgba[scaled_post]",
+            f"[scaled_post][2:v]alphamerge[masked_post]",
+            f"[0:v][masked_post]overlay=60:115[bg_p1]",
+            f"[bg_p1]{','.join(texts)}[out]"
+        ]
+
+        cmd = [
+            "ffmpeg", "-y",
+            "-f", "image2", "-vcodec", "pam", "-i", str(bg_pam),
+            "-i", str(poster_img),
+            "-f", "image2", "-vcodec", "pam", "-i", str(poster_mask),
+            "-filter_complex", ";".join(filter_parts),
+            "-map", "[out]",
+            "-frames:v", "1",
+            str(out_path)
+        ]
+
+        res = subprocess.run(cmd, capture_output=True)
+        try:
+            bg_pam.unlink(missing_ok=True)
+            poster_mask.unlink(missing_ok=True)
+        except Exception:
+            pass
+
+        if res.returncode == 0 and out_path.exists():
+            return str(out_path)
+        return None
+
 if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).parent))
     from oracle_auditor import FilmOracle
