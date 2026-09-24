@@ -908,11 +908,112 @@ class VnCinemaScraper:
             pass
         return None
 
+    @staticmethod
+    def _query_hardware_gps(timeout: float = 1.0) -> Optional[Dict[str, Any]]:
+        """
+        Polls local hardware GPS receivers:
+        1. gpsd daemon (port 2947) - standard Linux GPS architecture
+        2. ModemManager (mmcli) - LTE/5G cellular modules with GNSS
+        3. Direct serial NMEA devices (/dev/ttyUSB*, /dev/ttyACM*)
+        """
+        import socket
+        # 1. Check gpsd socket
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(timeout)
+            s.connect(("127.0.0.1", 2947))
+            s.recv(1024)
+            s.sendall(b'?WATCH={"enable":true,"json":true};?POLL;\n')
+            buf = ""
+            for _ in range(5):
+                chunk = s.recv(2048).decode("utf-8")
+                if not chunk:
+                    break
+                buf += chunk
+                for line in buf.splitlines():
+                    if line.startswith("{"):
+                        try:
+                            pkt = json.loads(line)
+                            if pkt.get("class") == "TPV" and pkt.get("lat") is not None and pkt.get("lon") is not None:
+                                s.close()
+                                lat = float(pkt["lat"])
+                                lon = float(pkt["lon"])
+                                return {
+                                    "lat": lat,
+                                    "lon": lon,
+                                    "region_id": 9 if lat > 18.0 else 1,
+                                    "label": f"GPS Vệ Tinh (gpsd: {lat:.4f}, {lon:.4f})",
+                                    "source": "HARDWARE_GPSD"
+                                }
+                        except Exception:
+                            pass
+            s.close()
+        except Exception:
+            pass
+
+        # 2. Check ModemManager via mmcli (4G/5G WWAN modem GNSS fix)
+        import shutil, subprocess
+        if shutil.which("mmcli"):
+            try:
+                out = subprocess.check_output(["mmcli", "-m", "0", "--location-get"], timeout=2, stderr=subprocess.DEVNULL).decode("utf-8")
+                m_lat = re.search(r"latitude:\s*([\d\.\-]+)", out, re.I)
+                m_lon = re.search(r"longitude:\s*([\d\.\-]+)", out, re.I)
+                if m_lat and m_lon:
+                    lat = float(m_lat.group(1))
+                    lon = float(m_lon.group(1))
+                    return {
+                        "lat": lat,
+                        "lon": lon,
+                        "region_id": 9 if lat > 18.0 else 1,
+                        "label": f"GPS Modem 4G/5G (GNSS: {lat:.4f}, {lon:.4f})",
+                        "source": "MODEM_MANAGER_GPS"
+                    }
+            except Exception:
+                pass
+
+        # 3. Check direct NMEA USB GPS Dongles (/dev/ttyUSB*, /dev/ttyACM*)
+        import glob
+        serial_ports = glob.glob("/dev/ttyUSB*") + glob.glob("/dev/ttyACM*")
+        for port in serial_ports:
+            try:
+                with open(port, "r", encoding="ascii", errors="ignore") as f:
+                    for _ in range(30):
+                        line = f.readline()
+                        if line.startswith("$GPRMC") or line.startswith("$GNRMC"):
+                            parts = line.split(",")
+                            if len(parts) > 6 and parts[2] == "A":
+                                raw_lat, lat_dir = parts[3], parts[4]
+                                raw_lon, lon_dir = parts[5], parts[6]
+                                if raw_lat and raw_lon:
+                                    lat_deg = float(raw_lat[:2]) + float(raw_lat[2:]) / 60.0
+                                    if lat_dir == "S":
+                                        lat_deg = -lat_deg
+                                    lon_deg = float(raw_lon[:3]) + float(raw_lon[3:]) / 60.0
+                                    if lon_dir == "W":
+                                        lon_deg = -lon_deg
+                                    return {
+                                        "lat": lat_deg,
+                                        "lon": lon_deg,
+                                        "region_id": 9 if lat_deg > 18.0 else 1,
+                                        "label": f"USB GPS Receiver ({port})",
+                                        "source": "SERIAL_NMEA_GPS"
+                                    }
+            except Exception:
+                pass
+
+        return None
+
     def _detect_live_ip_location(self) -> Optional[Dict[str, Any]]:
-        """Automatically detects user's physical location using IP Geolocation & OpenStreetMap Reverse Geocoding."""
+        """Automatically detects user's physical location (Priority: Hardware GPS -> Config File -> IP Geolocation)."""
         cached_loc = self.cache.get("user_auto_detected_location")
         if cached_loc:
             return cached_loc
+
+        # 0. Check Hardware GPS receiver (gpsd, 4G/5G modem, USB GPS dongle)
+        hw_gps = self._query_hardware_gps()
+        if hw_gps:
+            self.cache.set("user_auto_detected_location", hw_gps, ttl=300)
+            return hw_gps
 
         # 1. Try user config file first: ~/.config/agent-skills/user_location.json
         cfg_path = Path.home() / ".config" / "agent-skills" / "user_location.json"
