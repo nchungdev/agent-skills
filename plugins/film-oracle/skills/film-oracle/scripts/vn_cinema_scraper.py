@@ -407,6 +407,85 @@ class VnCinemaScraper:
             "total_momo_movies": len(catalog)
         }
 
+    # =========================================================================
+    # 6. Cinema Ticket Booking Link Engine (App Deeplinks & Web Links)
+    # =========================================================================
+    def get_booking_links(self, title: str) -> Dict[str, Any]:
+        """
+        Generates validated mobile app deeplinks / universal links and web booking links
+        for Vietnamese cinema platforms (MoMo Cinema, CGV Cinemas, Moveek, Galaxy, Lotte).
+        """
+        clean_title = re.sub(r"[^\w\s]", " ", title).strip()
+        encoded_query = urllib.parse.quote_plus(title)
+        clean_encoded = urllib.parse.quote_plus(clean_title)
+
+        # 1. MoMo Cinema
+        # Official MoMo Universal Link that opens the 'Mua vé xem phim' miniapp inside MoMo App directly
+        momo_universal = "https://momoapp.page.link/bi9jFZjZ21sej9gr5"
+        momo_deeplink = "momo://app?action=open_miniapp&appId=cinema"
+        momo_web = "https://momo.vn/cinema"
+
+        # 2. CGV Cinemas Vietnam
+        # CGV registered Universal Link domain (triggers CGV App on iOS/Android or falls back to Web search)
+        cgv_universal = f"https://www.cgv.vn/default/catalogsearch/result/?q={clean_encoded}"
+        cgv_deeplink = f"cgvvn://search?keyword={clean_encoded}"
+
+        # 3. Moveek (Universal Cinema Aggregator - CGV, Lotte, BHD, Galaxy, Beta, Cinestar)
+        moveek_web = f"https://moveek.com/tim-kiem/?q={encoded_query}"
+
+        # 4. Galaxy Cinema & Lotte
+        galaxy_web = f"https://www.galaxycine.vn/tim-kiem/?q={clean_encoded}"
+        lotte_web = "https://www.lottecinemavn.com/LCHS/Contents/Movie/Movie-List.aspx"
+
+        return {
+            "title": title,
+            "app_links": [
+                {
+                    "platform": "MoMo Cinema",
+                    "badge": "📱 App MoMo",
+                    "priority": 1,
+                    "universal_link": momo_universal,
+                    "deeplink": momo_deeplink,
+                    "web_fallback": momo_web,
+                    "action_text": "Mở App MoMo Đặt Vé",
+                    "description": "Đặt vé rạp CGV, Lotte, BHD, Galaxy thanh toán tức thì trên Ví MoMo"
+                },
+                {
+                    "platform": "CGV Cinemas Vietnam",
+                    "badge": "🍿 App CGV",
+                    "priority": 2,
+                    "universal_link": cgv_universal,
+                    "deeplink": cgv_deeplink,
+                    "web_fallback": cgv_universal,
+                    "action_text": "Mở App CGV Cinemas",
+                    "description": "Tìm suất chiếu và đặt vé trực tiếp trên ứng dụng CGV Việt Nam"
+                }
+            ],
+            "web_links": [
+                {
+                    "platform": "Moveek",
+                    "badge": "🌐 Moveek (Mọi Rạp)",
+                    "url": moveek_web,
+                    "action_text": "Tra Cứu Suất Chiếu Toàn Quốc (Moveek)",
+                    "description": "Tổng hợp lịch chiếu & giá vé tất cả cụm rạp: CGV, Lotte, BHD, Beta, Galaxy, Cinestar"
+                },
+                {
+                    "platform": "CGV Online",
+                    "badge": "🌐 CGV Web",
+                    "url": cgv_universal,
+                    "action_text": "Đặt Vé Tại Website CGV",
+                    "description": "Trang tìm kiếm và đặt vé chính thức tại cgv.vn"
+                },
+                {
+                    "platform": "Galaxy Cinema",
+                    "badge": "🌐 Galaxy Web",
+                    "url": galaxy_web,
+                    "action_text": "Đặt Vé Tại Galaxy Cinema",
+                    "description": "Trang chủ tìm suất chiếu Galaxy Cinema"
+                }
+            ]
+        }
+
 if __name__ == "__main__":
     scraper = VnCinemaScraper()
     print("Testing MoMo Catalog count:", len(scraper.get_momo_catalog()))

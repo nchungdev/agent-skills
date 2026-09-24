@@ -125,6 +125,15 @@ def render_movie_card_table(items: List[Dict[str, Any]], title_section: str = ""
                 clean_sum = clean_sum[:217] + "..."
             info_lines.append(f"📝 {clean_sum}")
 
+        # Quick Booking Links for theatrical/cinema items
+        if item.get("is_theatrical") or "rạp" in str(item.get("vn_cinema", "")).lower() or item.get("booking_links"):
+            scraper = VnCinemaScraper()
+            booking = item.get("booking_links") or scraper.get_booking_links(title)
+            momo_app = booking["app_links"][0]["universal_link"]
+            cgv_app = booking["app_links"][1]["universal_link"]
+            moveek_web = booking["web_links"][0]["url"]
+            info_lines.append(f"🎟️ **Đặt vé**: [📱 Mở App MoMo]({momo_app}) · [🍿 Mở App CGV]({cgv_app}) · [🌐 Moveek]({moveek_web})")
+
         detail_cell = "<br>".join(info_lines)
         lines.append(f"| {poster_html} | {detail_cell} |")
 
@@ -451,6 +460,28 @@ def cmd_report(args):
         cmd_theatrical(args)
         cmd_trending(args)
 
+def cmd_book(args):
+    """Lấy nhanh link đặt vé xem phim qua App (MoMo, CGV) và Web."""
+    from vn_cinema_scraper import VnCinemaScraper
+    scraper = VnCinemaScraper()
+    booking = scraper.get_booking_links(args.title)
+
+    print(f"# 🎟️ ĐẶT VÉ XEM PHIM: {args.title.upper()}\n")
+    print("> 💡 Ưu tiên mở App: Universal Link bên dưới tự động mở App MoMo hoặc CGV trên điện thoại.\n")
+
+    print("## 📱 1. Đặt Vé Qua Ứng Dụng")
+    for app in booking.get("app_links", []):
+        print(f"### {app['badge']} ({app['platform']})")
+        print(f"- 🔗 **Universal Link**: [{app['action_text']}]({app['universal_link']})")
+        print(f"- 📲 **Deeplink**: `{app['deeplink']}`")
+        print(f"- ℹ️ {app['description']}\n")
+
+    print("## 🌐 2. Đặt Vé Qua Trình Duyệt Web")
+    for w in booking.get("web_links", []):
+        print(f"- **{w['badge']}**: [{w['action_text']}]({w['url']})")
+        print(f"  *{w['description']}*\n")
+
+
 def cmd_share(args):
     """Exports a rounded-corner photographic infographic PNG card for a movie or comparison."""
     title = args.title
@@ -531,6 +562,10 @@ def main():
     p_share.add_argument("title", type=str, help="Tên phim cần tạo ảnh chia sẻ")
     p_share.add_argument("--compare", nargs="+", help="Các phim khác để so sánh song song trong cùng 1 ảnh")
 
+    # book
+    p_book = subparsers.add_parser("book", help="Lấy nhanh link đặt vé App (MoMo, CGV) & Web cho một bộ phim")
+    p_book.add_argument("title", type=str, help="Tên phim cần đặt vé")
+
     # report
     p_rep = subparsers.add_parser("report", help="Báo cáo toàn diện")
     p_rep.add_argument("--limit", type=int, default=3, help="Số lượng mỗi mục")
@@ -561,6 +596,8 @@ def main():
         cmd_query(args)
     elif args.command == "share":
         cmd_share(args)
+    elif args.command == "book":
+        cmd_book(args)
     elif args.command == "report":
         cmd_report(args)
 

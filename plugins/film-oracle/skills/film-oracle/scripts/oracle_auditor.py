@@ -389,7 +389,8 @@ class FilmOracle:
             "audience_summary": audience_summary,
             "flaws_summary": flaws_summary,
             "lifecycle_info": lifecycle_info,
-            "match_profiles": match_profiles
+            "match_profiles": match_profiles,
+            "booking_links": self.vn_scraper.get_booking_links(title) if title else None
         }
 
 def format_audit_report(res: Dict[str, Any]) -> str:
@@ -458,6 +459,24 @@ def format_audit_report(res: Dict[str, Any]) -> str:
         lines.append(f"- {m}")
     lines.append("")
 
+    # 8. Đặt vé xem phim (App Deeplink & Web)
+    booking = res.get("booking_links")
+    if booking:
+        lines.append("## 8. 🎟️ Đặt Vé Xem Phim (Ưu Tiên App & Web)")
+        lines.append("> 💡 **Ưu tiên mở App trên điện thoại**: Nhấp vào Universal Link bên dưới để tự động chuyển tiếp vào App MoMo hoặc CGV.\n")
+        
+        lines.append("### 📱 Đặt Vé Qua Ứng Dụng (App Universal Link / Deeplink):")
+        for app in booking.get("app_links", []):
+            lines.append(f"- **{app['badge']} ({app['platform']})**:")
+            lines.append(f"  - 🔗 **Universal Link (Khuyên dùng)**: [{app['action_text']}]({app['universal_link']})")
+            lines.append(f"  - 📲 *Deeplink App*: `{app['deeplink']}`")
+            lines.append(f"  - ℹ️ *Ghi chú*: {app['description']}")
+
+        lines.append("\n### 🌐 Đặt Vé Qua Trình Duyệt Web:")
+        for w in booking.get("web_links", []):
+            lines.append(f"- **{w['badge']}**: [{w['action_text']}]({w['url']}) — *{w['description']}*")
+        lines.append("")
+
     lines.append("---")
     lines.append("*Báo cáo thẩm định bởi `film-oracle` — Độc lập, không nhận booking PR, bảo vệ thời gian của người xem.*")
     return "\n".join(lines)
@@ -465,14 +484,17 @@ def format_audit_report(res: Dict[str, Any]) -> str:
 def main():
     if len(sys.argv) < 2:
         print("Sử dụng:")
-        print("  python3 oracle_auditor.py <tên_phim> [năm]             # Thẩm định phim độc lập")
+        print("  python3 oracle_auditor.py <tên_phim> [năm]             # Thẩm định phim độc lập (kèm link đặt vé)")
+        print("  python3 oracle_auditor.py book <tên_phim>              # Lấy nhanh link đặt vé App (MoMo, CGV) & Web")
         print("  python3 oracle_auditor.py share <tên_phim> [năm]       # Thẩm định & xuất Infographic PNG bo góc chia sẻ")
         print("  python3 oracle_auditor.py share --compare <p1> <p2>    # Xuất ảnh so sánh nhiều phim")
-        print("Ví dụ: python3 oracle_auditor.py share \"Yêu Nhân Thần Thám: Kỳ Án Trường An\" 2026")
+        print("Ví dụ: python3 oracle_auditor.py book \"Yêu Nhân Thần Thám: Kỳ Án Trường An\"")
         return
 
-    is_share = sys.argv[1].lower() == "share"
-    args = sys.argv[2:] if is_share else sys.argv[1:]
+    first_arg = sys.argv[1].lower()
+    is_share = first_arg == "share"
+    is_book = first_arg == "book"
+    args = sys.argv[2:] if (is_share or is_book) else sys.argv[1:]
 
     if is_share and args and args[0] == "--compare":
         titles = args[1:]
@@ -485,12 +507,29 @@ def main():
         return
 
     if not args:
-        print("Vui lòng cung cấp tên phim cần thẩm định hoặc chia sẻ.")
+        print("Vui lòng cung cấp tên phim cần thẩm định, đặt vé hoặc chia sẻ.")
         return
 
     query = args[0]
     year = args[1] if len(args) > 1 and args[1].isdigit() else None
     oracle = FilmOracle()
+
+    if is_book:
+        booking = oracle.vn_scraper.get_booking_links(query)
+        print(f"# 🎟️ ĐẶT VÉ XEM PHIM: {query.upper()}\n")
+        print("> 💡 **Ưu tiên mở App trên điện thoại**: Nhấp vào Universal Link bên dưới để điện thoại tự động mở ứng dụng MoMo Cinema hoặc CGV.\n")
+        print("## 📱 1. Đặt Vé Qua Ứng Dụng (App Universal Link / Deeplink)")
+        for app in booking.get("app_links", []):
+            print(f"### {app['badge']} ({app['platform']})")
+            print(f"- 🔗 **Universal Link (Ưu tiên)**: [{app['action_text']}]({app['universal_link']})")
+            print(f"- 📲 **Deeplink App Scheme**: `{app['deeplink']}`")
+            print(f"- ℹ️ **Mô tả**: {app['description']}\n")
+        print("## 🌐 2. Đặt Vé Trực Tuyến Qua Trình Duyệt Web")
+        for w in booking.get("web_links", []):
+            print(f"- **{w['badge']}**: [{w['action_text']}]({w['url']})")
+            print(f"  *{w['description']}*\n")
+        return
+
     res = oracle.audit_film(query, year)
     print(format_audit_report(res))
 
