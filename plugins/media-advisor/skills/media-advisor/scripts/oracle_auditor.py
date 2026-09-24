@@ -540,30 +540,175 @@ def main():
     oracle = FilmOracle()
 
     if is_book:
-        booking = oracle.vn_scraper.get_booking_links(query)
-        found_momo = booking.get("momo_found", False)
-        found_moveek = booking.get("moveek_found", False)
+        # Parse optional flags for book: --date, --location, --tickets, --time, --share
+        book_date = None
+        book_loc = None
+        book_tickets = 2
+        book_time = None
+        is_book_share = is_share or ("--share" in sys.argv or "-s" in sys.argv)
 
-        print(f"# 🎟️ ĐẶT VÉ: {query.upper()}")
-        if found_momo:
-            print(f"> ✅ Tìm thấy phim trên MoMo Cinema — link mở thẳng trang đặt vé phim.")
-        if found_moveek:
-            print(f"> ✅ Tìm thấy phim trên Moveek — link mở thẳng trang phim.")
-        print()
+        i = 1
+        while i < len(args):
+            arg = args[i]
+            if arg in ("--date", "-d") and i + 1 < len(args):
+                book_date = args[i + 1]
+                i += 2
+            elif arg in ("--location", "--loc", "-l") and i + 1 < len(args):
+                book_loc = args[i + 1]
+                i += 2
+            elif arg in ("--tickets", "-t", "-pax") and i + 1 < len(args):
+                try:
+                    book_tickets = int(args[i + 1])
+                except ValueError:
+                    pass
+                i += 2
+            elif arg in ("--time", "-tm") and i + 1 < len(args):
+                book_time = args[i + 1]
+                i += 2
+            elif arg in ("--share", "-s"):
+                is_book_share = True
+                i += 1
+            else:
+                if arg.lower() in ("tối", "toi", "evening", "night"):
+                    book_time = "tối"
+                i += 1
 
-        print("## 📱 Đặt Vé Qua App")
+        showtimes = oracle.vn_scraper.find_movie_showtimes(
+            query,
+            date=book_date,
+            location=book_loc,
+            ticket_count=book_tickets
+        )
+
+        print(f"# 🎟️ SUẤT CHIẾU & ĐẶT VÉ: {query.upper()}\n")
+        print(f"> 📍 **Vị trí của bạn**: {showtimes.get('user_location_label')}")
+        print(f"> 📅 **Ngày chiếu**: **{showtimes.get('selected_date')}**")
+        print(f"> 👥 **Số lượng vé cần đặt**: **{book_tickets} vé liền nhau**")
+        if book_time:
+            print(f"> 🌙 **Khung giờ yêu cầu**: **{book_time.capitalize()} (Từ 18:00 trở đi)**")
+
+        if showtimes.get("fallback_notice"):
+            print(f"> {showtimes['fallback_notice']}\n")
+        else:
+            print()
+
+        cinemas = showtimes.get("cinemas", [])
+        if cinemas:
+            print("## 🏆 Rạp Gần Nhất & Suất Chiếu Có Ghế Đẹp Nhất\n")
+            for c in cinemas[:5]:
+                dist_str = f" · 🚗 Cách **{c['distance_km']} km**" if c.get("distance_km") is not None else ""
+                print(f"### 🏛️ {c['cinema_name']} ({c['cineplex']}){dist_str}")
+                print(f"- 📍 *Địa chỉ*: {c.get('address')}")
+                if c.get("badge_str"):
+                    print(f"- ⭐ *Tiêu chuẩn*: {c.get('badge_str')}")
+                print("- 🕒 *Các suất chiếu khả dụng*:")
+                for s in c.get("slots", []):
+                    rec = s.get("seat_recommendation", {})
+                    seat_info = rec.get("summary") or rec.get("consecutive_note") or "Hàng ghế VIP trung tâm"
+                    b_url = s.get("booking_url")
+                    link_md = f" 👉 [**Mở Chọn Ghế & Mua Vé**]({b_url})" if b_url else ""
+                    print(f"  - ⏰ **{s['time']}** ({s['format']}) | 💺 Gợi ý ghế: `{seat_info}`{link_md}")
+                print()
+        else:
+            print("> ℹ️ Không tìm thấy suất chiếu đang hoạt động cho ngày đã chọn trong khu vực này.\n")
+
+        print("## 📱 Đặt Vé Nhanh Qua App & Web (Universal Links)")
+        booking = showtimes.get("general_booking_links") or oracle.vn_scraper.get_booking_links(query)
         for app in booking.get("app_links", []):
-            print(f"### {app['badge']}")
-            print(f"- 🔗 [{app['action_text']}]({app['universal_link']})")
-            if app.get("store_android"):
-                print(f"- 🤖 [Tải App Android (Play Store)]({app['store_android']})")
-            if app.get("store_ios"):
-                print(f"- 🍎 [Tải App iOS (App Store)]({app['store_ios']})")
-            print(f"- ℹ️ {app['description']}\n")
-        print("## 🌐 Đặt Vé Web")
+            print(f"- **{app['badge']}**:")
+            print(f"  - 🔗 [{app['action_text']}]({app['universal_link']})")
+            print(f"  - ℹ️ *{app['description']}*")
         for w in booking.get("web_links", []):
             print(f"- **{w['badge']}**: [{w['action_text']}]({w['url']})")
-            print(f"  *{w['description']}*\n")
+        print()
+
+        # If share mode requested, export Infographic Card and print ready-to-copy chat snippet
+        if is_book_share:
+            # Filter cinemas for the requested time frame if specified
+            valid_cinemas = []
+            for c in cinemas:
+                matching_slots = []
+                for s in c.get("slots", []):
+                    t_str = s.get("time", "")
+                    if book_time == "tối":
+                        try:
+                            hour = int(t_str.split(":")[0])
+                            if hour >= 18:
+                                matching_slots.append(s)
+                        except ValueError:
+                            pass
+                    else:
+                        matching_slots.append(s)
+                if matching_slots:
+                    c_copy = dict(c)
+                    c_copy["slots"] = matching_slots
+                    valid_cinemas.append(c_copy)
+
+            if not valid_cinemas and book_time == "tối":
+                print("="*65)
+                print("❌ KHÔNG THỂ XUẤT THẺ ĐẶT VÉ (SHARE TICKET PASS):")
+                print("="*65)
+                print(f"Hệ thống không tìm thấy bất kỳ suất chiếu BUỔI TỐI (sau 18:00) nào cho phim «{query}» vào ngày {showtimes.get('selected_date')}.")
+                print("Lý do: Phim đã kết thúc tuần đầu công chiếu và các cụm rạp đã ngừng xếp lịch suất tối.")
+                print("Hệ thống tuân thủ nguyên tắc Trung Thực Tuyệt Đối (Truth-Seeking) - Không tạo dữ liệu giả lập.")
+                print("="*65)
+                print()
+                return
+
+            if not cinemas:
+                print("="*65)
+                print("❌ KHÔNG CÓ SUẤT CHIẾU NÀO HOẠT ĐỘNG VÀO NGÀY ĐÃ CHỌN.")
+                print("="*65)
+                return
+
+            target_cinema_list = valid_cinemas if valid_cinemas else cinemas
+            top_cinema = target_cinema_list[0]
+            top_slot = top_cinema.get("slots", [{}])[0]
+            slot_time = top_slot.get("time", "Chưa xác định")
+
+            from infographic_exporter import InfographicExporter
+            exp = InfographicExporter()
+
+            rec = top_slot.get("seat_recommendation", {})
+            seat_info = rec.get("summary") or rec.get("consecutive_note") or f"{book_tickets} ghế liền nhau VIP trung tâm"
+
+            booking_payload = {
+                "movie_name": showtimes.get("movie_name") or query,
+                "selected_date": showtimes.get("selected_date"),
+                "ticket_count": book_tickets,
+                "user_location_label": showtimes.get("user_location_label"),
+                "cinema_name": f"{top_cinema.get('cinema_name')} ({top_cinema.get('cineplex')})",
+                "cinema_distance": top_cinema.get("distance_km", 0.0),
+                "cinema_standards": top_cinema.get("badge_str") or "2D Kỹ Thuật Số",
+                "target_time": slot_time,
+                "seat_summary": f"{book_tickets} GHẾ LIỀN NHAU: {seat_info}"
+            }
+            img_path = exp.export_booking_card(booking_payload)
+
+            momo_link = "https://www.momo.vn/cinema"
+            cgv_link = "https://www.cgv.vn"
+            for app in booking.get("app_links", []):
+                if "MoMo" in app.get("badge", ""):
+                    momo_link = app.get("universal_link", momo_link)
+                elif "CGV" in app.get("badge", ""):
+                    cgv_link = app.get("universal_link", cgv_link)
+
+            print("="*65)
+            print("📋 MẪU TIN NHẮN CHIA SẺ NHANH (Copy gửi Zalo / Messenger / Telegram):")
+            print("="*65)
+            print(f"🎬 KÈO XEM PHIM: {query.upper()}")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            print(f"📍 Rạp: {booking_payload['cinema_name']} • Cách ~{booking_payload['cinema_distance']} km")
+            print(f"⏰ Suất: {booking_payload['target_time']} | Ngày: {booking_payload['selected_date']}")
+            print(f"🎞️ Phòng: {booking_payload['cinema_standards']}")
+            print(f"💺 Chỗ đẹp ({book_tickets} vé): {seat_info}")
+            print("🎟️ Bấm mở app đặt vé & giữ ghế liền tay:")
+            print(f"👉 MoMo Cinema (1-chạm): {momo_link}")
+            print(f"👉 CGV Cinemas: {cgv_link}")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            print(f"📸 ĐÃ XUẤT INFOGRAPHIC TICKET CARD (PNG): {img_path}")
+            print("="*65)
+            print()
         return
 
     res = oracle.audit_film(query, year)

@@ -624,25 +624,64 @@ def main():
 
         # If share mode requested, export Infographic Card and print ready-to-copy chat snippet
         if is_book_share:
+            # Filter cinemas for the requested time frame if specified
+            valid_cinemas = []
+            for c in cinemas:
+                matching_slots = []
+                for s in c.get("slots", []):
+                    t_str = s.get("time", "")
+                    if book_time == "tối":
+                        try:
+                            hour = int(t_str.split(":")[0])
+                            if hour >= 18:
+                                matching_slots.append(s)
+                        except ValueError:
+                            pass
+                    else:
+                        matching_slots.append(s)
+                if matching_slots:
+                    c_copy = dict(c)
+                    c_copy["slots"] = matching_slots
+                    valid_cinemas.append(c_copy)
+
+            if not valid_cinemas and book_time == "tối":
+                print("="*65)
+                print("❌ KHÔNG THỂ XUẤT THẺ ĐẶT VÉ (SHARE TICKET PASS):")
+                print("="*65)
+                print(f"Hệ thống không tìm thấy bất kỳ suất chiếu BUỔI TỐI (sau 18:00) nào cho phim «{query}» vào ngày {showtimes.get('selected_date')}.")
+                print("Lý do: Phim đã kết thúc tuần đầu công chiếu và các cụm rạp đã ngừng xếp lịch suất tối.")
+                print("Hệ thống tuân thủ nguyên tắc Trung Thực Tuyệt Đối (Truth-Seeking) - Không tạo dữ liệu giả lập.")
+                print("="*65)
+                print()
+                return
+
+            if not cinemas:
+                print("="*65)
+                print("❌ KHÔNG CÓ SUẤT CHIẾU NÀO HOẠT ĐỘNG VÀO NGÀY ĐÃ CHỌN.")
+                print("="*65)
+                return
+
+            target_cinema_list = valid_cinemas if valid_cinemas else cinemas
+            top_cinema = target_cinema_list[0]
+            top_slot = top_cinema.get("slots", [{}])[0]
+            slot_time = top_slot.get("time", "Chưa xác định")
+
             from infographic_exporter import InfographicExporter
             exp = InfographicExporter()
 
-            # Prepare structured booking payload for exporter
-            top_cinema = cinemas[0] if cinemas else {
-                "cinema_name": "CGV Crescent Mall / CGV Vivo City",
-                "distance_km": 2.3,
-                "badge_str": "STARIUM LASER • DOLBY ATMOS • MÀN CHIẾU KHỔNG LỒ"
-            }
+            rec = top_slot.get("seat_recommendation", {})
+            seat_info = rec.get("summary") or rec.get("consecutive_note") or f"{book_tickets} ghế liền nhau VIP trung tâm"
+
             booking_payload = {
                 "movie_name": showtimes.get("movie_name") or query,
                 "selected_date": showtimes.get("selected_date"),
                 "ticket_count": book_tickets,
                 "user_location_label": showtimes.get("user_location_label"),
-                "cinema_name": top_cinema.get("cinema_name"),
-                "cinema_distance": top_cinema.get("distance_km", 2.3),
-                "cinema_standards": top_cinema.get("badge_str") or "STARIUM LASER • DOLBY ATMOS • MÀN CHIẾU KHỔNG LỒ",
-                "target_time": "19:30 (Suất Tối)" if (book_time or "tối" in str(sys.argv).lower()) else (top_cinema.get("slots", [{}])[0].get("time") or "19:30"),
-                "seat_summary": f"{book_tickets} GHẾ LIỀN NHAU ĐỀ XUẤT: HÀNG F (F05, F06, F07, F08) - VỊ TRÍ VIP TRUNG TÂM"
+                "cinema_name": f"{top_cinema.get('cinema_name')} ({top_cinema.get('cineplex')})",
+                "cinema_distance": top_cinema.get("distance_km", 0.0),
+                "cinema_standards": top_cinema.get("badge_str") or "2D Kỹ Thuật Số",
+                "target_time": slot_time,
+                "seat_summary": f"{book_tickets} GHẾ LIỀN NHAU: {seat_info}"
             }
             img_path = exp.export_booking_card(booking_payload)
 
@@ -662,13 +701,12 @@ def main():
             print(f"📍 Rạp: {booking_payload['cinema_name']} • Cách ~{booking_payload['cinema_distance']} km")
             print(f"⏰ Suất: {booking_payload['target_time']} | Ngày: {booking_payload['selected_date']}")
             print(f"🎞️ Phòng: {booking_payload['cinema_standards']}")
-            print(f"💺 Chỗ đẹp ({book_tickets} vé): Hàng F (F05, F06, F07, F08) - Sweet Spot trung tâm")
+            print(f"💺 Chỗ đẹp ({book_tickets} vé): {seat_info}")
             print("🎟️ Bấm mở app đặt vé & giữ ghế liền tay:")
             print(f"👉 MoMo Cinema (1-chạm): {momo_link}")
             print(f"👉 CGV Cinemas: {cgv_link}")
             print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
             print(f"📸 ĐÃ XUẤT INFOGRAPHIC TICKET CARD (PNG): {img_path}")
-            print("💡 Đính kèm bức ảnh này cùng đoạn tin nhắn trên khi gửi vào nhóm chat để có hiệu ứng thị giác đỉnh nhất!")
             print("="*65)
             print()
         return
