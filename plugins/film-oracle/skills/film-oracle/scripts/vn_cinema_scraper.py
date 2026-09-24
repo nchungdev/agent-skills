@@ -410,101 +410,117 @@ class VnCinemaScraper:
     # =========================================================================
     # 6. Cinema Ticket Booking Link Engine (App Deeplinks & Web Links)
     # =========================================================================
-    def get_booking_links(self, title: str) -> Dict[str, Any]:
+    def get_booking_links(self, title: str, original_title: Optional[str] = None) -> Dict[str, Any]:
         """
-        Generates validated mobile app deeplinks / universal links and web booking links
-        for Vietnamese cinema platforms (MoMo Cinema, CGV Cinemas, Moveek, Galaxy, Lotte).
+        Generates direct-to-movie booking links for Vietnamese cinema platforms.
+        Searches MoMo & Moveek catalogs first to get exact movie page URLs,
+        falls back to search URLs only when movie isn't found in catalog.
         """
         clean_title = re.sub(r"[^\w\s]", " ", title).strip()
         encoded_query = urllib.parse.quote_plus(title)
         clean_encoded = urllib.parse.quote_plus(clean_title)
 
-        # 1. MoMo Cinema
-        # ⚠️  Firebase Dynamic Links (momoapp.page.link/...) bị Google shutdown ngày 25/8/2025 → không dùng nữa.
-        # ⚠️  momo:// scheme không được MoMo public document → không đảm bảo hoạt động.
-        # ✅  Dùng intent:// (Android Chrome) → mở app MoMo nếu đã cài, fallback Play Store nếu chưa.
-        # ✅  iOS: momo.vn/cinema → MoMo app intercept qua Universal Link (App Store ID: 918751511).
-        momo_cinema_web = "https://www.momo.vn/cinema"
+        # ── 1. Search MoMo catalog for direct movie page ──
+        momo_match = self.search_momo(title, original_title)
+        if momo_match and momo_match.get("url"):
+            # Direct URL like https://momo.vn/cinema/demon-agent-25101
+            momo_direct = momo_match["url"]
+            if not momo_direct.startswith("https://www.momo.vn"):
+                momo_direct = momo_direct.replace("https://momo.vn", "https://www.momo.vn")
+            momo_action = f"Mở Trang Đặt Vé «{momo_match.get('title', title)}» trên MoMo"
+            momo_found = True
+        else:
+            # Fallback: generic cinema homepage
+            momo_direct = "https://www.momo.vn/cinema"
+            momo_action = "Mở MoMo Cinema (tìm phim thủ công)"
+            momo_found = False
+
+        # intent:// → Android Chrome tự mở app MoMo, fallback Play Store
+        momo_path = momo_direct.replace("https://www.momo.vn/", "")
         momo_intent = (
-            "intent://cinema"
-            "#Intent;scheme=https;host=www.momo.vn;package=com.mservice.momotransfer;"
-            f"S.browser_fallback_url={urllib.parse.quote_plus(momo_cinema_web)};end"
+            f"intent://{momo_path}"
+            f"#Intent;scheme=https;host=www.momo.vn;package=com.mservice.momotransfer;"
+            f"S.browser_fallback_url={urllib.parse.quote_plus(momo_direct)};end"
         )
 
-        # 2. CGV Cinemas Vietnam
-        # CGV không publish scheme riêng (cgvvn:// chưa được verify).
-        # Thay thế: intent:// format (Android Chrome) sẽ fallback về Play Store nếu chưa cài.
-        # Trên iOS: dùng App Store link hoặc cgv.vn (domain được CGV app đăng ký App Links nhưng WAF block verify).
+        # ── 2. Search Moveek for direct movie page ──
+        moveek_match = self.search_moveek(title, original_title)
+        if moveek_match and moveek_match.get("url"):
+            # Direct URL like https://moveek.com/phim/yeu-nhan-than-tham-ky-an-truong-an/
+            moveek_direct = moveek_match["url"]
+            moveek_action = f"Xem Suất Chiếu «{moveek_match.get('title', title)}» trên Moveek"
+            moveek_found = True
+        else:
+            moveek_direct = f"https://moveek.com/tim-kiem/?q={encoded_query}"
+            moveek_action = "Tìm Phim Trên Moveek"
+            moveek_found = False
+
+        # ── 3. CGV — search URL (CGV không có API public, search là best effort) ──
         cgv_search_web = f"https://www.cgv.vn/default/catalogsearch/result/?q={clean_encoded}"
-        # intent:// → Android Chrome tự mở CGV app nếu đã cài, fallback Play Store nếu chưa
         cgv_intent = (
             f"intent://default/catalogsearch/result/?q={clean_encoded}"
             f"#Intent;scheme=https;host=www.cgv.vn;package=com.cgv.vn;"
             f"S.browser_fallback_url={urllib.parse.quote_plus(cgv_search_web)};end"
         )
 
-        # 3. Moveek (Universal Cinema Aggregator - CGV, Lotte, BHD, Galaxy, Beta, Cinestar)
-        moveek_web = f"https://moveek.com/tim-kiem/?q={encoded_query}"
-
-        # 4. Galaxy Cinema & Lotte
+        # ── 4. Galaxy Cinema ──
         galaxy_web = f"https://www.galaxycine.vn/tim-kiem/?q={clean_encoded}"
-        lotte_web = "https://www.lottecinemavn.com/LCHS/Contents/Movie/Movie-List.aspx"
 
         return {
             "title": title,
+            "momo_found": momo_found,
+            "moveek_found": moveek_found,
             "app_links": [
                 {
                     "platform": "MoMo Cinema",
-                    "badge": "📱 App MoMo",
+                    "badge": "📱 MoMo Cinema",
                     "priority": 1,
-                    "universal_link": momo_cinema_web,
+                    "universal_link": momo_direct,
                     "deeplink": momo_intent,
-                    "deeplink_note": "Android: intent:// tự mở app MoMo nếu đã cài | iOS: momo.vn/cinema → app tự intercept",
-                    "web_fallback": momo_cinema_web,
+                    "web_fallback": momo_direct,
                     "store_android": "https://play.google.com/store/apps/details?id=com.mservice.momotransfer",
                     "store_ios": "https://apps.apple.com/vn/app/momo-e-wallet/id918751511",
-                    "action_text": "Mở App MoMo Đặt Vé Phim",
-                    "description": "Đặt vé rạp CGV, Lotte, BHD, Galaxy — thanh toán tức thì trên Ví MoMo"
+                    "action_text": momo_action,
+                    "description": "Mở trực tiếp trang phim — chọn rạp, suất chiếu, ghế ngồi & thanh toán MoMo"
                 },
                 {
                     "platform": "CGV Cinemas Vietnam",
-                    "badge": "🍿 App CGV",
+                    "badge": "🍿 CGV Cinemas",
                     "priority": 2,
                     "universal_link": cgv_search_web,
-                    # intent:// chỉ work trên Android Chrome; iOS dùng universal_link (cgv.vn là App Link của CGV app)
                     "deeplink": cgv_intent,
-                    "deeplink_note": "Android: intent:// tự mở app CGV nếu đã cài | iOS: mở cgv.vn → app tự intercept",
                     "web_fallback": cgv_search_web,
                     "store_android": "https://play.google.com/store/apps/details?id=com.cgv.vn",
                     "store_ios": "https://apps.apple.com/vn/app/cgv-cinemas-vietnam/id849664126",
-                    "action_text": "Mở App CGV Cinemas",
-                    "description": "Tìm suất chiếu và đặt vé trực tiếp trên ứng dụng CGV Việt Nam"
+                    "action_text": f"Tìm «{title}» trên CGV",
+                    "description": "Tìm suất chiếu và đặt vé trực tiếp tại CGV Việt Nam"
                 }
             ],
             "web_links": [
                 {
                     "platform": "Moveek",
-                    "badge": "🌐 Moveek (Mọi Rạp)",
-                    "url": moveek_web,
-                    "action_text": "Tra Cứu Suất Chiếu Toàn Quốc (Moveek)",
+                    "badge": "🎬 Moveek" + (" ✅" if moveek_found else ""),
+                    "url": moveek_direct,
+                    "action_text": moveek_action,
                     "description": "Tổng hợp lịch chiếu & giá vé tất cả cụm rạp: CGV, Lotte, BHD, Beta, Galaxy, Cinestar"
                 },
                 {
                     "platform": "CGV Online",
                     "badge": "🌐 CGV Web",
                     "url": cgv_search_web,
-                    "action_text": "Đặt Vé Tại Website CGV",
+                    "action_text": f"Tìm «{title}» tại cgv.vn",
                     "description": "Trang tìm kiếm và đặt vé chính thức tại cgv.vn"
                 },
                 {
                     "platform": "Galaxy Cinema",
-                    "badge": "🌐 Galaxy Web",
+                    "badge": "🌐 Galaxy Cinema",
                     "url": galaxy_web,
-                    "action_text": "Đặt Vé Tại Galaxy Cinema",
-                    "description": "Trang chủ tìm suất chiếu Galaxy Cinema"
+                    "action_text": f"Tìm «{title}» tại Galaxy Cinema",
+                    "description": "Tìm suất chiếu tại Galaxy Cinema"
                 }
             ]
         }
+
 
 
 if __name__ == "__main__":

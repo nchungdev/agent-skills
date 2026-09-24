@@ -461,22 +461,31 @@ def cmd_report(args):
         cmd_trending(args)
 
 def cmd_book(args):
-    """Lấy nhanh link đặt vé xem phim qua App (MoMo, CGV) và Web."""
+    """Lấy nhanh link đặt vé — mở thẳng trang phim cụ thể trên MoMo, Moveek, CGV."""
     from vn_cinema_scraper import VnCinemaScraper
     scraper = VnCinemaScraper()
     booking = scraper.get_booking_links(args.title)
 
-    print(f"# 🎟️ ĐẶT VÉ XEM PHIM: {args.title.upper()}\n")
-    print("> 💡 Ưu tiên mở App: Universal Link bên dưới tự động mở App MoMo hoặc CGV trên điện thoại.\n")
+    found_momo = booking.get("momo_found", False)
+    found_moveek = booking.get("moveek_found", False)
 
-    print("## 📱 1. Đặt Vé Qua Ứng Dụng")
+    print(f"# 🎟️ ĐẶT VÉ: {args.title.upper()}")
+    if found_momo:
+        print(f"> ✅ Tìm thấy phim trên MoMo Cinema — link mở thẳng trang đặt vé phim.")
+    if found_moveek:
+        print(f"> ✅ Tìm thấy phim trên Moveek — link mở thẳng trang phim.")
+    print()
+
+    print("## 📱 Đặt Vé Qua App")
     for app in booking.get("app_links", []):
-        print(f"### {app['badge']} ({app['platform']})")
-        print(f"- 🔗 **Universal Link**: [{app['action_text']}]({app['universal_link']})")
-        print(f"- 📲 **Deeplink**: `{app['deeplink']}`")
+        print(f"### {app['badge']}")
+        print(f"- 🔗 [{app['action_text']}]({app['universal_link']})")
+        if app.get("store_android"):
+            print(f"- 🤖 [Tải App Android (Play Store)]({app['store_android']})")
+        if app.get("store_ios"):
+            print(f"- 🍎 [Tải App iOS (App Store)]({app['store_ios']})")
         print(f"- ℹ️ {app['description']}\n")
-
-    print("## 🌐 2. Đặt Vé Qua Trình Duyệt Web")
+    print("## 🌐 Đặt Vé Web")
     for w in booking.get("web_links", []):
         print(f"- **{w['badge']}**: [{w['action_text']}]({w['url']})")
         print(f"  *{w['description']}*\n")

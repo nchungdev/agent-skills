@@ -516,24 +516,26 @@ def main():
 
     if is_book:
         booking = oracle.vn_scraper.get_booking_links(query)
-        print(f"# 🎟️ ĐẶT VÉ XEM PHIM: {query.upper()}\n")
-        print("> 💡 **Ưu tiên mở App trên điện thoại**: Nhấp Universal Link để điện thoại tự động mở đúng ứng dụng.\n")
-        print("## 📱 1. Đặt Vé Qua Ứng Dụng")
+        found_momo = booking.get("momo_found", False)
+        found_moveek = booking.get("moveek_found", False)
+
+        print(f"# 🎟️ ĐẶT VÉ: {query.upper()}")
+        if found_momo:
+            print(f"> ✅ Tìm thấy phim trên MoMo Cinema — link mở thẳng trang đặt vé phim.")
+        if found_moveek:
+            print(f"> ✅ Tìm thấy phim trên Moveek — link mở thẳng trang phim.")
+        print()
+
+        print("## 📱 Đặt Vé Qua App")
         for app in booking.get("app_links", []):
-            print(f"### {app['badge']} ({app['platform']})")
-            print(f"- 🔗 **Universal Link**: [{app['action_text']}]({app['universal_link']})")
-            dl = app.get("deeplink", "")
-            if dl and not dl.startswith("intent://"):
-                print(f"- 📲 **Deeplink**: `{dl}`")
-            note = app.get("deeplink_note", "")
-            if note:
-                print(f"- 📲 **Mở App**: {note}")
+            print(f"### {app['badge']}")
+            print(f"- 🔗 [{app['action_text']}]({app['universal_link']})")
             if app.get("store_android"):
-                print(f"- 🤖 **Android**: [Tải / Mở từ Play Store]({app['store_android']})")
+                print(f"- 🤖 [Tải App Android (Play Store)]({app['store_android']})")
             if app.get("store_ios"):
-                print(f"- 🍎 **iOS**: [Tải / Mở từ App Store]({app['store_ios']})")
+                print(f"- 🍎 [Tải App iOS (App Store)]({app['store_ios']})")
             print(f"- ℹ️ {app['description']}\n")
-        print("## 🌐 2. Đặt Vé Trực Tuyến Qua Trình Duyệt Web")
+        print("## 🌐 Đặt Vé Web")
         for w in booking.get("web_links", []):
             print(f"- **{w['badge']}**: [{w['action_text']}]({w['url']})")
             print(f"  *{w['description']}*\n")
