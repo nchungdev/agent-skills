@@ -59,6 +59,99 @@ class DiskCache:
             pass
 
 
+class ReviewFilterEngine:
+    """
+    Intelligent Anti-Seeding and Anti-Hate Review Filter Engine.
+    Filters out:
+    1. Seeding / PR fluff: Short, hollow compliments with zero substance ('quá hay', 'đỉnh', fan idol, etc.)
+    2. Toxic hate / Review bombing: Unsubstantiated bashing ('phim rác', 'phí tiền', '1 sao', etc.)
+    Categorizes the rest into:
+    - Top Authentic Praise (Khen ngợi có chiều sâu, chỉ ra điểm sáng cụ thể)
+    - Top Constructive Criticism (Phê bình thẳng thắn, chỉ ra hạt sạn/lỗ hổng cụ thể)
+    """
+    SEEDING_PATTERNS = [
+        r"^(quá\s+)?hay(\s+quá|\s+lắm)?(!|\.)*$",
+        r"^(phim\s+)?đỉnh(\s+quá|\s+chóp)?(!|\.)*$",
+        r"^1\s*từ\s*(thôi)?\s*[:\s]*hay",
+        r"^tuyệt\s*vời(!|\.)*$",
+        r"^siêu\s*phẩm(!|\.)*$",
+        r"^đi\s*xem\s*(đi|ngay)\s*(mọi\s*người|nha)",
+        r"^xem\s*đi\s*kẻo\s*tiếc",
+        r"u\s*mê\s*(ck|chồng|anh|em|idol)",
+        r"đẹp\s*trai\s*(quá|xỉu)",
+        r"ủng\s*hộ\s*(đoàn\s*phim|anh|chị|idol)",
+        r"^10/10",
+        r"^xuất\s*sắc(!|\.)*$",
+    ]
+
+    HATE_PATTERNS = [
+        r"^phim\s*rác",
+        r"^phí\s*(tiền|thời\s*gian)",
+        r"^dở\s*(ẹc|tệ|kinh\s*khủng)",
+        r"^1\s*(sao|\*)\s*(khỏi|cho\s*nhanh)",
+        r"tẩy\s*chay",
+        r"^như\s*hạch",
+        r"buồn\s*ngủ\s*vãi",
+        r"nhảm\s*nhí",
+    ]
+
+    SUBSTANTIVE_KEYWORDS = [
+        "kịch bản", "cốt truyện", "tình tiết", "diễn xuất", "nhân vật", "kỹ xảo",
+        "hình ảnh", "visual", "cú máy", "âm thanh", "nhạc phim", "soundtrack",
+        "nhịp phim", "tiết tấu", "nút thắt", "twist", "kết thúc", "cái kết",
+        "thông điệp", "ý nghĩa", "lắng đọng", "hài hước", "hụt hẫng", "sượng",
+        "gượng gạo", "lê thê", "đầu voi đuôi chuột", "logic", "đạo diễn", "bối cảnh",
+        "trinh thám", "hành động", "phiêu lưu", "hóa thân", "chiều sâu"
+    ]
+
+    @classmethod
+    def audit_review(cls, text: str, score: Optional[float] = None) -> Dict[str, Any]:
+        """Evaluates a single review and returns its quality assessment."""
+        text = text.strip()
+        if not text:
+            return {"verdict": "EMPTY", "is_valid": False}
+
+        # Check Seeding
+        for p in cls.SEEDING_PATTERNS:
+            if re.search(p, text, re.I):
+                return {"verdict": "SEEDING_REJECTED", "reason": "Khen sáo rỗng / PR / Fan seeding không có luận cứ", "is_valid": False}
+        if len(text) < 30 and score is not None and score >= 9.0:
+            return {"verdict": "SEEDING_REJECTED", "reason": "Đánh giá 10/10 nhưng quá ngắn không có nội dung phân tích", "is_valid": False}
+
+        # Check Toxic Hate
+        for p in cls.HATE_PATTERNS:
+            if re.search(p, text, re.I) and len(text) < 50:
+                return {"verdict": "HATE_REJECTED", "reason": "Chửi đổng / Hạ bệ quá mức không phân tích chuyên môn", "is_valid": False}
+
+        # Check Substantive Content
+        has_substance = any(k in text.lower() for k in cls.SUBSTANTIVE_KEYWORDS)
+        
+        # Categorize Praise vs Criticism
+        is_criticism = False
+        text_lower = text.lower()
+        # Handle praise idioms containing 'chê' (e.g., 'miễn chê', 'không chê vào đâu được')
+        clean_text_for_crit = re.sub(r"(miễn\s+chê|không\s+(thể\s+)?chê|hết\s+chỗ\s+chê|chê\s+vào\s+đâu)", "", text_lower)
+
+        if score is not None:
+            if score <= 6.5:
+                is_criticism = True
+            elif score >= 8.0:
+                is_criticism = False
+            else: # 7.0 - 7.5
+                is_criticism = any(w in clean_text_for_crit for w in ["chê", "sạn", "hụt hẫng", "lê thê", "điểm trừ", "điểm yếu", "sượng", "chưa tới", "thất vọng", "đuối", "gượng"])
+        else:
+            is_criticism = any(w in clean_text_for_crit for w in ["chê", "sạn", "hụt hẫng", "lê thê", "điểm trừ", "điểm yếu", "sượng", "chưa tới", "thất vọng", "đuối", "gượng", "lỗ hổng", "thiếu sót"])
+
+
+        return {
+            "verdict": "ACCEPTED",
+            "is_valid": True,
+            "has_substance": has_substance,
+            "is_criticism": is_criticism,
+            "length": len(text)
+        }
+
+
 class VnCinemaScraper:
     def __init__(self):
         self.cache = DiskCache()
@@ -98,8 +191,10 @@ class VnCinemaScraper:
         except Exception:
             pass
 
-        self.cache.set(cache_key, snippets, ttl=43200) # 12 hours
+        if snippets:
+            self.cache.set(cache_key, snippets, ttl=43200) # 12 hours
         return snippets
+
 
     # =========================================================================
     # 1. MoMo Cinema Scraper
@@ -190,9 +285,9 @@ class VnCinemaScraper:
 
             # Exact or substring match
             if nq and (nq == nt or nq == ne or (len(nq) > 4 and (nq in nt or nt in nq))):
-                return m
+                return self._enrich_momo_detail(m)
             if no and (no == nt or no == ne or (len(no) > 4 and (no in ne or ne in no))):
-                return m
+                return self._enrich_momo_detail(m)
 
             # Fuzzy match
             r1 = SequenceMatcher(None, nq, nt).ratio() if nq else 0
@@ -203,9 +298,42 @@ class VnCinemaScraper:
                 best_ratio = top_r
                 best_match = m
 
-        if best_ratio >= 0.75:
-            return best_match
+        if best_ratio >= 0.75 and best_match:
+            return self._enrich_momo_detail(best_match)
         return None
+
+    def _enrich_momo_detail(self, m: Dict[str, Any]) -> Dict[str, Any]:
+        """Fetches movie detail page to extract high-interaction top comments."""
+        url = m.get("url")
+        if not url or "momo.vn/cinema/" not in url:
+            return m
+        raw = self._fetch_url(url)
+        if not raw:
+            return m
+        try:
+            m_data = re.search(r'<script id=[\"\']__NEXT_DATA__[\"\'][^>]*>(.*?)</script>', raw, re.DOTALL)
+            if m_data:
+                payload = json.loads(m_data.group(1))
+                film = payload.get("props", {}).get("pageProps", {}).get("FilmData", {}).get("Data", {})
+                detail_comments = film.get("TopComments", [])
+                existing_users = {c.get("user") for c in m.get("top_comments", [])}
+                for c in detail_comments:
+                    u = c.get("creatorName", "Khán giả MoMo")
+                    if u not in existing_users:
+                        tags = [t.get("keyword") for t in c.get("tagsV2", []) if t.get("keyword")]
+                        m.setdefault("top_comments", []).append({
+                            "user": u,
+                            "point": c.get("point", 10),
+                            "paid": c.get("paid", True),
+                            "tags": tags,
+                            "desc": c.get("desc", "").strip(),
+                            "interaction_count": c.get("interactionCount", 0),
+                            "is_outstanding": c.get("IsOutStanding", False)
+                        })
+        except Exception:
+            pass
+        return m
+
 
     # =========================================================================
     # 2. Moveek Scraper
@@ -365,23 +493,129 @@ class VnCinemaScraper:
             "has_data": bool(quotes or praise or criticisms)
         }
 
-        self.cache.set(cache_key, res, ttl=43200) # 12h
+        if res.get("has_data"):
+            self.cache.set(cache_key, res, ttl=43200) # 12h
         return res
 
+
     # =========================================================================
-    # 4. Master Unified Domestic Audit
+    # 4. Master Unified Domestic Audit & Curated Review Engine
     # =========================================================================
+    def audit_curated_reviews(self, momo_data: Optional[Dict[str, Any]], creators_data: Optional[Dict[str, Any]], moveek_data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Processes and filters all reviews across MoMo, Moveek, and Reviewers:
+        - Rejects seeding (hollow praise, idol fan PR, 1-word compliments)
+        - Rejects toxic hate / review bombing (unsubstantiated bashing)
+        - Extracts Top Authentic Praise (Điểm sáng có chiều sâu)
+        - Extracts Top Constructive Criticism (Phê bình thẳng thắn, bóc tách hạt sạn)
+        """
+        top_praise = []
+        top_criticism = []
+        seeding_count = 0
+        hate_count = 0
+
+        # 1. Process MoMo comments
+        if momo_data and momo_data.get("top_comments"):
+            for c in momo_data["top_comments"]:
+                desc = c.get("desc", "").strip()
+                pt = c.get("point")
+                audit = ReviewFilterEngine.audit_review(desc, pt)
+                
+                if audit["verdict"] == "SEEDING_REJECTED":
+                    seeding_count += 1
+                    continue
+                elif audit["verdict"] == "HATE_REJECTED":
+                    hate_count += 1
+                    continue
+
+                if audit["is_valid"]:
+                    item = {
+                        "author": c.get("user", "Khán giả rạp"),
+                        "source": "MoMo Cinema (Vé đã xác thực)" if c.get("paid") else "MoMo Cinema",
+                        "score": f"{pt}/10" if pt else "",
+                        "content": desc,
+                        "has_substance": audit["has_substance"],
+                        "interaction": c.get("interaction_count", 0)
+                    }
+                    if audit["is_criticism"]:
+                        top_criticism.append(item)
+                    else:
+                        top_praise.append(item)
+
+        # 2. Process Moveek review article quote
+        if moveek_data and moveek_data.get("review_article_quote"):
+            m_quote = moveek_data["review_article_quote"].strip()
+            audit_m = ReviewFilterEngine.audit_review(m_quote, moveek_data.get("score"))
+            if audit_m["is_valid"]:
+                item_m = {
+                    "author": moveek_data.get("review_article_title") or "Nhà phê bình Moveek",
+                    "source": "Moveek Phê Bình",
+                    "score": f"{moveek_data.get('score')}/10" if moveek_data.get("score") else "",
+                    "content": m_quote,
+                    "has_substance": True,
+                    "interaction": 100
+                }
+                if audit_m["is_criticism"]:
+                    top_criticism.append(item_m)
+                else:
+                    top_praise.append(item_m)
+
+        # 3. Process Reviewers / Cinephile communities pulse
+        if creators_data:
+            for p in creators_data.get("praise", []):
+                audit_p = ReviewFilterEngine.audit_review(p)
+                if audit_p["verdict"] == "SEEDING_REJECTED":
+                    seeding_count += 1
+                elif audit_p["is_valid"]:
+                    top_praise.append({
+                        "author": "Cộng đồng Điện Ảnh",
+                        "source": "YouTube / Cinephile Hub",
+                        "score": "",
+                        "content": p,
+                        "has_substance": audit_p["has_substance"],
+                        "interaction": 50
+                    })
+
+            for cr in creators_data.get("criticisms", []):
+                audit_cr = ReviewFilterEngine.audit_review(cr)
+                if audit_cr["verdict"] == "HATE_REJECTED":
+                    hate_count += 1
+                elif audit_cr["is_valid"]:
+                    top_criticism.append({
+                        "author": "Cộng đồng Phê Bình",
+                        "source": "YouTube / Diễn Đàn Điện Ảnh",
+                        "score": "",
+                        "content": cr,
+                        "has_substance": audit_cr["has_substance"],
+                        "interaction": 50
+                    })
+
+        # Sort by substantive content, interaction, and length
+        top_praise.sort(key=lambda x: (x["has_substance"], x["interaction"], len(x["content"])), reverse=True)
+        top_criticism.sort(key=lambda x: (x["has_substance"], x["interaction"], len(x["content"])), reverse=True)
+
+        return {
+            "top_praise": top_praise[:3],
+            "top_criticism": top_criticism[:3],
+            "seeding_filtered_count": seeding_count,
+            "hate_filtered_count": hate_count,
+            "has_data": bool(top_praise or top_criticism)
+        }
+
     def audit_domestic(self, title: str, original_title: Optional[str] = None, release_year: Optional[str] = None) -> Dict[str, Any]:
         """Runs the complete Vietnamese cinema audit suite across MoMo, Moveek, and Reviewers."""
         momo_data = self.search_momo(title, original_title)
         moveek_data = self.search_moveek(title, original_title)
         creators_data = self.search_vn_creators_pulse(title, release_year)
+        curated_reviews = self.audit_curated_reviews(momo_data, creators_data, moveek_data)
 
         return {
             "momo": momo_data,
             "moveek": moveek_data,
-            "creators": creators_data
+            "creators": creators_data,
+            "curated_reviews": curated_reviews
         }
+
 
     # =========================================================================
     # 5. Trending Domestic Signals (for Social Buzz Radar)
