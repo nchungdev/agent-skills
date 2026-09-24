@@ -1,0 +1,18 @@
+{
+  "name": "ffmpeg-toolkit",
+  "displayName": "FFmpeg Toolkit",
+  "version": "2.0.0",
+  "description": "Comprehensive media processing engine powered by FFmpeg & FFprobe: Muxed subtitle stream extraction, zero-token voice activity alignment (VAD), and W3C WebVTT conversion with CSS tag sanitization.",
+  "author": {
+    "name": "nchungdev"
+  },
+  "keywords": [
+    "ffmpeg",
+    "subtitles",
+    "extraction",
+    "voice-alignment",
+    "vad",
+    "webvtt",
+    "media"
+  ]
+}

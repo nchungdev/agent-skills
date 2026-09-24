@@ -1,21 +1,19 @@
 {
   "name": "media-downloader",
-  "displayName": "Media Downloader",
-  "description": "Bộ tải dữ liệu đa nguồn: Hỗ trợ Direct DDL link, Torrent qua Aria2c P2P, hoặc Torrent qua TorBox Debrid Cloud API.",
-  "version": "1.0.0",
+  "displayName": "Media Downloader & Ingestion Pipeline",
+  "version": "2.0.0",
+  "description": "Universal media curation and high-performance ingestion engine: Torrent census & disk estimation, Prowlarr multi-indexer search, accelerated BitTorrent downloads via Aria2c RPC, and TorBox Debrid Cloud API.",
   "author": {
-    "name": "nchungdev",
-    "url": "https://github.com/nchungdev"
+    "name": "nchungdev"
   },
-  "license": "MIT",
-  "homepage": "https://github.com/nchungdev/agent-skills",
-  "repository": "https://github.com/nchungdev/agent-skills",
   "keywords": [
     "download",
     "torrent",
     "aria2",
     "torbox",
     "debrid",
+    "prowlarr",
+    "curation",
     "media"
   ]
 }

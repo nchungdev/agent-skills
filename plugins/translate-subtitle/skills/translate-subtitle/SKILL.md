@@ -84,4 +84,22 @@ Nhằm đảm bảo tính ổn định, kiểm soát hạn mức quota API (trá
 * 🚨 **`ERRORS_AND_PITFALLS.md`:** Nhật ký các cạm bẫy lỗi đã trả giá và phương án sửa để tránh lặp lại.
 * 🏷️ **`metadata.json`:** Thông tin định danh TheTVDB `{tvdb-ID}` và TMDb `{tmdb-ID}`.
 
+---
+
+## 📊 Báo Cáo Tiến Độ: `translate-subtitle report`
+
+Khi được yêu cầu báo cáo tiến độ dịch, Agent đọc `PROGRESS.md` và `AUDIT_REPORT.md` để xuất bảng tổng hợp:
+
+```markdown
+### 📊 Báo Cáo Tiến Độ Dịch Phụ Đề (Translation Status)
+> **Tác phẩm**: Tây Hành Kỷ (The Westward) - Season 05 | **Ngôn ngữ**: vi (Tiếng Việt)
+
+| Tập | Tiến Độ Dịch | Kiểm Định Kỹ Thuật (Audit) | File Hoàn Tất (.ass, .srt, .vtt) | Trạng Thái |
+|:---:|:---:|:---:|:---:|:---:|
+| S05E01 | 100% | ✅ Passed (0 lỗi lệch dòng) | ✅ Đã xuất đủ | Hoàn tất |
+| S05E02 | 100% | ✅ Passed (0 lỗi lệch dòng) | ✅ Đã xuất đủ | Hoàn tất |
+| S05E03 | 45%  | ⏳ Đang dịch batch 1        | ⏳ Đang xử lý | Đang chạy ngầm |
+```
+
+
 

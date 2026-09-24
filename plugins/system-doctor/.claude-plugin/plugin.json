@@ -1,0 +1,21 @@
+{
+  "name": "system-doctor",
+  "displayName": "System Doctor & Autonomous SRE Diagnostic",
+  "version": "1.0.0",
+  "description": "All-in-one system optimizer and autonomous SRE diagnostic engine (CleanMyMac X meets Site Reliability Engineering). Auto-detects device signatures in 0.1s (macOS, Linux Server/NAS, Workstation) to clean OS/developer caches, purge RAM, kill runaway CPU hogs, hunt port conflicts, inspect Docker crashloops, and execute 1-click auto-healing.",
+  "author": {
+    "name": "nchungdev"
+  },
+  "keywords": [
+    "doctor",
+    "cleaner",
+    "cleanmymac",
+    "diagnostic",
+    "sre",
+    "docker",
+    "ports",
+    "ram",
+    "cache",
+    "maintenance"
+  ]
+}

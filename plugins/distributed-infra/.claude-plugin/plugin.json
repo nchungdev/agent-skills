@@ -1,0 +1,20 @@
+{
+  "name": "distributed-infra",
+  "displayName": "Distributed Infrastructure & Homelab Operations",
+  "version": "2.0.0",
+  "description": "Comprehensive self-hosted infrastructure and distributed compute manager: OpenMediaVault 7 NAS architecture, MergerFS storage pools, Docker Compose media automation, distributed Tdarr transcoding nodes, and ephemeral Cloudflare Tunnel (cloudflared) integration.",
+  "author": {
+    "name": "nchungdev"
+  },
+  "keywords": [
+    "omv",
+    "nas",
+    "docker",
+    "mergerfs",
+    "tdarr",
+    "videotoolbox",
+    "cloudflared",
+    "tunnel",
+    "homelab"
+  ]
+}

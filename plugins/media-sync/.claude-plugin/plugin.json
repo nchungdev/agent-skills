@@ -1,21 +1,20 @@
 {
   "name": "media-sync",
-  "displayName": "Media Sync",
-  "description": "Đồng bộ đa đích thông minh: Đẩy dữ liệu đồng thời lên NAS qua SSH/SFTP và Google Drive qua Rclone, kèm cơ chế giải phóng đệm tự động (Auto-Purge).",
-  "version": "1.0.0",
+  "displayName": "Media Sync & Library Dispatcher",
+  "version": "2.0.0",
+  "description": "Media destination dispatcher and library standardizer: Normalizes Plex/TheTVDB directory hierarchies, auto-discovers NAS library targets via SSH, performs parallel high-throughput transfers to NAS (SSH/SFTP) and Google Drive (Rclone), and enforces post-sync auto-purging.",
   "author": {
-    "name": "nchungdev",
-    "url": "https://github.com/nchungdev"
+    "name": "nchungdev"
   },
-  "license": "MIT",
-  "homepage": "https://github.com/nchungdev/agent-skills",
-  "repository": "https://github.com/nchungdev/agent-skills",
   "keywords": [
     "sync",
     "rclone",
     "ssh",
     "sftp",
     "nas",
-    "google-drive"
+    "google-drive",
+    "plex",
+    "librarian",
+    "auto-purge"
   ]
 }

@@ -1,17 +1,52 @@
 {
-  "name": "antigravity-media",
+  "name": "nchungdev-skills",
   "owner": {
     "name": "nchungdev",
     "url": "https://github.com/nchungdev"
   },
-  "description": "Bộ 14 Agent Skills chuyên sâu cho hệ sinh thái Media AI: tải đa nguồn (DDL/Torrent/TorBox), chuẩn hóa thư viện Plex & Jellyfin, đồng bộ NAS/Google Drive, tra cứu TMDb, gom nhóm franchise, pipeline dịch thuật & xử lý phụ đề, hạ tầng OMV, cụm Tdarr phân tán, và quản trị điều phối đa phiên (Multi-Conversation Orchestrator). Đồng hành cùng ứng dụng Media Hub (https://github.com/nchungdev/media-hub).",
+  "description": "Universal suite of 8 production-grade AI Agent Skills: FFmpeg media processing, TMDb catalog & franchise taxonomy, high-performance media ingestion, multi-target cloud/NAS synchronization, AI subtitle translation, distributed infrastructure & homelab operations, multi-conversation progress orchestration, and autonomous system optimization & SRE diagnostics (CleanMyMac meets SRE).",
   "plugins": [
     {
+      "name": "ffmpeg-toolkit",
+      "displayName": "FFmpeg Toolkit",
+      "source": "./plugins/ffmpeg-toolkit",
+      "description": "Comprehensive media processing engine powered by FFmpeg & FFprobe: Muxed subtitle stream extraction, zero-token voice activity alignment (VAD), and W3C WebVTT conversion with CSS tag sanitization.",
+      "version": "2.0.0",
+      "license": "MIT",
+      "keywords": [
+        "ffmpeg",
+        "subtitles",
+        "extraction",
+        "voice-alignment",
+        "vad",
+        "webvtt",
+        "media"
+      ]
+    },
+    {
+      "name": "tmdb-catalog",
+      "displayName": "TMDb Catalog & Franchise Intelligence",
+      "source": "./plugins/tmdb-catalog",
+      "description": "Cinema knowledge graph powered by TMDb API v3 & TheTVDB: Rich metadata, NFO generation, visual movie card rendering with small local poster thumbnails, season status tracking, and franchise classification (IP Universes, Auteur Collections, Studio Collections).",
+      "version": "2.0.0",
+      "license": "MIT",
+      "keywords": [
+        "tmdb",
+        "thetvdb",
+        "metadata",
+        "nfo",
+        "artwork",
+        "franchise",
+        "catalog",
+        "movies"
+      ]
+    },
+    {
       "name": "media-downloader",
-      "displayName": "Media Downloader",
+      "displayName": "Media Downloader & Ingestion Pipeline",
       "source": "./plugins/media-downloader",
-      "description": "Bộ tải dữ liệu đa nguồn: Hỗ trợ Direct DDL link, Torrent qua Aria2c P2P, hoặc Torrent qua TorBox Debrid Cloud API.",
-      "version": "1.0.0",
+      "description": "Universal media curation and high-performance ingestion engine: Torrent census & disk estimation, Prowlarr multi-indexer search, accelerated BitTorrent downloads via Aria2c RPC, and TorBox Debrid Cloud API.",
+      "version": "2.0.0",
       "license": "MIT",
       "keywords": [
         "download",
@@ -19,31 +54,17 @@
         "aria2",
         "torbox",
         "debrid",
+        "prowlarr",
+        "curation",
         "media"
       ]
     },
     {
-      "name": "cloud-librarian",
-      "displayName": "Cloud Librarian",
-      "source": "./plugins/cloud-librarian",
-      "description": "Nhìn các kho lưu trữ từ xa như một thư viện media kiểu Plex: dò tìm thư mục thư viện Plex/Jellyfin trên NAS qua SSH để lấy đường dẫn đích cho media-sync, và sinh đường dẫn đặt tên chuẩn Plex/TheTVDB sau khi làm sạch tag rác của torrent.",
-      "version": "1.0.0",
-      "license": "MIT",
-      "keywords": [
-        "nas",
-        "ssh",
-        "plex",
-        "jellyfin",
-        "library",
-        "tvdb"
-      ]
-    },
-    {
       "name": "media-sync",
-      "displayName": "Media Sync",
+      "displayName": "Media Sync & Library Dispatcher",
       "source": "./plugins/media-sync",
-      "description": "Đồng bộ đa đích thông minh: Đẩy dữ liệu đồng thời lên NAS qua SSH/SFTP và Google Drive qua Rclone, kèm cơ chế giải phóng đệm tự động (Auto-Purge).",
-      "version": "1.0.0",
+      "description": "Media destination dispatcher and library standardizer: Normalizes Plex/TheTVDB directory hierarchies, auto-discovers NAS library targets via SSH, performs parallel high-throughput transfers to NAS (SSH/SFTP) and Google Drive (Rclone), and enforces post-sync auto-purging.",
+      "version": "2.0.0",
       "license": "MIT",
       "keywords": [
         "sync",
@@ -51,62 +72,18 @@
         "ssh",
         "sftp",
         "nas",
-        "google-drive"
-      ]
-    },
-    {
-      "name": "media-collector",
-      "displayName": "Media Collector",
-      "source": "./plugins/media-collector",
-      "description": "Universal Film, TV Show & Anime Curator Plugin with disk estimation, duplicate detection, cloud sync, NFO metadata, aria2c integration, resume/checkpoint, and translate-subtitle handoff.",
-      "version": "2.0.0",
-      "license": "MIT",
-      "keywords": [
-        "media",
-        "curation",
-        "torrent",
-        "anime",
+        "google-drive",
         "plex",
-        "metadata"
-      ]
-    },
-    {
-      "name": "tmdb-lookup",
-      "displayName": "TMDb Lookup",
-      "source": "./plugins/tmdb-lookup",
-      "description": "The Movie Database (TMDb) API Integration Skill for metadata resolution, character casting, artwork downloads, and NFO generation for Movies, TV Shows & Anime.",
-      "version": "1.2.0",
-      "license": "MIT",
-      "keywords": [
-        "tmdb",
-        "metadata",
-        "nfo",
-        "artwork",
-        "movies",
-        "tv"
-      ]
-    },
-    {
-      "name": "franchise-classifier",
-      "displayName": "Franchise Classifier",
-      "source": "./plugins/franchise-classifier",
-      "description": "Gom nhóm phim lẻ, series, anime, live-action thành franchise từ TMDb ID / TheTVDB ID. Hỗ trợ 3 loại franchise: (1) thương hiệu/IP tổng thể -- TMDb Collection chỉ là một tín hiệu hẹp hơn nhiều; (2) Auteur Collection -- cùng đạo diễn/tác giả; (3) Studio Collection -- cùng hãng phim có bản sắc tuyển tập (vd Studio Ghibli, nhiều đạo diễn khác nhau). Luôn đối chiếu với danh sách franchise đã tồn tại của caller trước khi kết luận độc lập, để không tạo nhóm trùng nghĩa khác ngôn ngữ.",
-      "version": "2.2.0",
-      "license": "MIT",
-      "keywords": [
-        "franchise",
-        "tmdb",
-        "tvdb",
-        "collection",
-        "classification"
+        "librarian",
+        "auto-purge"
       ]
     },
     {
       "name": "translate-subtitle",
       "displayName": "Translate Subtitle",
       "source": "./plugins/translate-subtitle",
-      "description": "Dịch phụ đề phim tự động kết hợp xây dựng từ điển (glossary) bối cảnh, xưng hô, thuật ngữ.",
-      "version": "1.0.0",
+      "description": "Two-stage deep neural subtitle translation engine tailored for cinema and anime: Preserves typography tags and timecode integrity while syncing with centralized glossaries (Subtitle Glossary Hub).",
+      "version": "2.0.0",
       "license": "MIT",
       "keywords": [
         "subtitle",
@@ -114,118 +91,34 @@
         "glossary",
         "anime",
         "srt",
-        "ass"
-      ]
-    },
-    {
-      "name": "subtitle-extractor",
-      "displayName": "Subtitle Extractor",
-      "source": "./plugins/subtitle-extractor",
-      "description": "Tự động phát hiện và bóc tách các track phụ đề nhúng (Muxed Subtitles) từ file MKV/MP4 ra file SRT/ASS rời chuẩn hóa Plex.",
-      "version": "1.0.0",
-      "license": "MIT",
-      "keywords": [
-        "subtitle",
-        "mkv",
-        "ffmpeg",
-        "extraction",
-        "srt",
-        "ass"
-      ]
-    },
-    {
-      "name": "sub-to-webvtt",
-      "displayName": "Sub to WebVTT",
-      "source": "./plugins/sub-to-webvtt",
-      "description": "Chuyển đổi và tối ưu hóa phụ đề (SRT, ASS, SSA) sang chuẩn WebVTT (.vtt) tương thích 100% với HTML5 Web Video Stream, Plex, Safari và Chrome.",
-      "version": "1.0.0",
-      "license": "MIT",
-      "keywords": [
-        "subtitle",
-        "webvtt",
-        "vtt",
-        "streaming",
-        "html5",
-        "plex"
-      ]
-    },
-    {
-      "name": "media-hub-franchise",
-      "displayName": "Media Hub Franchise",
-      "source": "./plugins/media-hub-franchise",
-      "description": "Tra cứu franchise phim từ kho Media Hub, liệt kê các franchise trong list phim, xem danh sách phim trong từng franchise (kèm ID tmdb/tvdb để map với file input CSV), và tự động sắp xếp/phân loại một danh sách phim bất kỳ vào đúng franchise.",
-      "version": "1.0.0",
-      "license": "MIT",
-      "keywords": [
-        "franchise",
-        "media-hub",
-        "tmdb",
-        "tvdb",
-        "catalog",
-        "movies"
-      ]
-    },
-    {
-      "name": "subtitle-frame-aligner",
-      "displayName": "Subtitle Frame Aligner",
-      "source": "./plugins/subtitle-frame-aligner",
-      "description": "Tự động căn chỉnh mốc thời gian (Frame-Perfect Voice Alignment) từng dòng thoại phụ đề theo khẩu hình nhân vật bằng FFmpeg VAD mà không tốn token AI, bảo vệ tuyệt đối KFX/bài hát và xuất SRT siêu sạch.",
-      "version": "1.0.0",
-      "license": "MIT",
-      "keywords": [
-        "subtitle",
-        "vad",
-        "voice-alignment",
-        "ffmpeg",
-        "sync",
-        "srt",
         "ass",
-        "zero-token",
-        "frame-perfect"
+        "llm"
       ]
     },
     {
-      "name": "omv-media-stack",
-      "displayName": "OMV Media Stack",
-      "source": "./plugins/omv-media-stack",
-      "description": "Kiến trúc toàn diện, ma trận cổng mạng, pipeline tự động hóa media (Jellyseerr, Radarr, Sonarr, Prowlarr, Aria2c, Plex, Jellyfin), MergerFS và sổ tay vận hành OpenMediaVault 7 NAS.",
-      "version": "1.0.0",
+      "name": "distributed-infra",
+      "displayName": "Distributed Infrastructure & Homelab Operations",
+      "source": "./plugins/distributed-infra",
+      "description": "Comprehensive self-hosted infrastructure and distributed compute manager: OpenMediaVault 7 NAS architecture, MergerFS storage pools, Docker Compose media automation, distributed Tdarr transcoding nodes, and ephemeral Cloudflare Tunnel (cloudflared) integration.",
+      "version": "2.0.0",
       "license": "MIT",
       "keywords": [
         "omv",
         "nas",
         "docker",
-        "plex",
-        "jellyfin",
-        "radarr",
-        "sonarr",
-        "prowlarr",
-        "aria2"
-      ]
-    },
-    {
-      "name": "tdarr-node",
-      "displayName": "Tdarr Node",
-      "source": "./plugins/tdarr-node",
-      "description": "Triển khai, cấu hình và vận hành Tdarr Distributed Node trên macOS (Apple Silicon M-series VideoToolbox), Linux (Intel QSV, NVIDIA NVENC) và Docker. Cấu hình Path Translators chống lỗi ENOENT và daemon launchd/systemd chạy 24/7.",
-      "version": "1.0.0",
-      "license": "MIT",
-      "keywords": [
+        "mergerfs",
         "tdarr",
-        "transcoding",
         "videotoolbox",
-        "qsv",
-        "nvenc",
-        "apple-silicon",
-        "hevc",
-        "distributed"
+        "cloudflared",
+        "tunnel",
+        "homelab"
       ]
     },
     {
       "name": "project-reporter",
       "displayName": "Project Reporter & Multi-Conversation Orchestrator",
       "source": "./plugins/project-reporter",
-      "description": "Điều phối tiến độ đa phiên (Multi-Conversation Orchestrator), đồng bộ ngữ cảnh (Context Synchronization), chống phân mảnh thông tin giữa các conversation, và tổng hợp báo cáo tiến độ toàn diện cho dự án (report, report all).",
+      "description": "Multi-conversation orchestrator, context synchronizer, and progress reporter. Eliminates context drift across concurrent chat sessions via a centralized ledger (.agent/project_status.json), scrubs secret tokens, and provides project visibility (report, report all).",
       "version": "1.0.0",
       "license": "MIT",
       "keywords": [
@@ -236,6 +129,26 @@
         "project-management",
         "progress",
         "antigravity"
+      ]
+    },
+    {
+      "name": "system-doctor",
+      "displayName": "System Doctor & Autonomous SRE Diagnostic",
+      "source": "./plugins/system-doctor",
+      "description": "All-in-one system optimizer and autonomous SRE diagnostic engine (CleanMyMac X meets Site Reliability Engineering). Auto-detects device signatures in 0.1s (macOS, Linux Server/NAS, Workstation) to clean OS/developer caches, purge RAM, kill runaway CPU hogs, hunt port conflicts, inspect Docker crashloops, and execute 1-click auto-healing.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "doctor",
+        "cleaner",
+        "cleanmymac",
+        "diagnostic",
+        "sre",
+        "docker",
+        "ports",
+        "ram",
+        "cache",
+        "maintenance"
       ]
     }
   ]
