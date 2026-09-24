@@ -23,6 +23,7 @@ from media_server_client import PlexApiClient, JellyfinApiClient
 from sentiment_filter import SentimentFilter
 from tmdb_trends import TMDbTrends
 from social_buzz_radar import SocialBuzzRadar
+from vn_cinema_scraper import VnCinemaScraper
 
 def get_media_backend(cfg: Dict[str, Any]) -> Tuple[str, Any]:
     """
@@ -86,6 +87,11 @@ def render_movie_card_table(items: List[Dict[str, Any]], title_section: str = ""
         if badge:
             rating_part += f" · {badge}"
         info_lines.append(rating_part)
+
+        # Domestic Vietnamese Cinema & Reviewer signal if present
+        vn_cinema = item.get("vn_cinema")
+        if vn_cinema:
+            info_lines.append(f"🇻🇳 **Đánh giá trong nước**: {vn_cinema}")
 
         # Buzz Score if present
         buzz_score = item.get("buzz_score")
@@ -197,8 +203,25 @@ def cmd_theatrical(args):
         print("❌ Chưa cấu hình TMDB_API_KEY. Hãy chạy `tmdb-catalog setup` để lưu key.")
         return
 
+    vn_scraper = VnCinemaScraper()
     theatrical = tmdb.get_theatrical_releases(limit=args.limit)
     for item in theatrical:
+        # Check MoMo & Moveek domestic data
+        momo_match = vn_scraper.search_momo(item["title"], item.get("original_title"))
+        if momo_match:
+            pts = momo_match.get("rating_point")
+            paid = momo_match.get("paid_tickets", 0)
+            if paid > 0 or pts is not None:
+                pt_str = f"⭐ **{pts}/10**" if pts is not None else ""
+                paid_str = f"({paid:,} vé đã mua)" if paid > 0 else "(Sắp chiếu / Đang mở bán)"
+                item["vn_cinema"] = f"🎟️ MoMo Cinema: {pt_str} {paid_str}".strip()
+
+        moveek_match = vn_scraper.search_moveek(item["title"], item.get("original_title"))
+        if moveek_match and moveek_match.get("score") is not None:
+            vn_prev = item.get("vn_cinema", "")
+            mv_str = f"Moveek: {moveek_match['score']}/10"
+            item["vn_cinema"] = f"{vn_prev} · {mv_str}" if vn_prev else f"🎬 {mv_str}"
+
         if btype == "local_sqlite":
             rel_year = item.get("release_date", "")[:4] if item.get("release_date") else None
             local_matches = backend.search_local(item["title"], year=rel_year, tmdb_id=item.get("tmdb_id"))
@@ -259,30 +282,55 @@ def cmd_buzz(args):
         print("❌ Chưa cấu hình TMDB_API_KEY.")
         return
 
-    print("📡 Đang kích hoạt Radar quét thảo luận Diễn đàn (Reddit), YouTube Review & TikTok Trends...")
+    print("📡 Đang kích hoạt Radar quét thảo luận MoMo Cinema, Moveek, YouTube Review & TikTok Trends...")
     radar = SocialBuzzRadar()
     signals = radar.get_social_signals()
     entities = signals.get("extracted_entities", {})
+    momo_hot = signals.get("momo_hot", {})
 
     trending = tmdb.get_trending("all", "day", limit=15)
     buzz_items = []
     for item in trending:
         title = item.get("title", "")
+        orig_title = item.get("original_title", "")
         buzz_score = 50
         buzz_reasons = ["Xu hướng 24h"]
 
-        for entity in entities:
-            if entity.lower() in title.lower() or title.lower() in entity.lower():
-                buzz_score += 25
-                buzz_reasons.append(f"Hot Reddit/YouTube: {entity}")
-                break
+        # 1. Domestic MoMo / Moveek detection
+        momo_match = radar.vn_scraper.search_momo(title, orig_title)
+        if momo_match:
+            pts = momo_match.get("rating_point")
+            paid = momo_match.get("paid_tickets", 0)
+            if paid > 0 or pts is not None:
+                buzz_score += 35
+                paid_label = f"{paid:,} vé" if paid > 0 else "Mới mở bán"
+                buzz_reasons.append(f"Hot MoMo ({paid_label})")
+                pt_str = f"⭐ **{pts}/10**" if pts is not None else ""
+                paid_str = f"({paid:,} vé đã thanh toán)" if paid > 0 else "(Sắp chiếu / Đang mở bán)"
+                item["vn_cinema"] = f"🎟️ MoMo Cinema: {pt_str} {paid_str}".strip()
+
+        moveek_match = radar.vn_scraper.search_moveek(title, orig_title)
+        if moveek_match and moveek_match.get("score") is not None:
+            buzz_score += 20
+            buzz_reasons.append("Hot Moveek")
+            vn_prev = item.get("vn_cinema", "")
+            mv_str = f"Moveek: {moveek_match['score']}/10"
+            item["vn_cinema"] = f"{vn_prev} · {mv_str}" if vn_prev else f"🎬 {mv_str}"
+
+        # 2. General entity match
+        if not momo_match:
+            for entity in entities:
+                if entity.lower() in title.lower() or title.lower() in entity.lower():
+                    buzz_score += 25
+                    buzz_reasons.append(f"Hot Thảo Luận: {entity}")
+                    break
 
         s_res = sentiment.analyze_sentiment(item["vote_average"], item["vote_count"], title)
         item["sentiment_badge"] = s_res.get("badge")
         item["adjusted_rating"] = s_res.get("adjusted_rating")
 
         if s_res.get("is_genuine"):
-            buzz_score += 25
+            buzz_score += 15
             buzz_reasons.append("Đánh giá thực chất")
 
         item["buzz_score"] = min(100, buzz_score)

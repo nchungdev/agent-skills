@@ -20,6 +20,7 @@ import urllib.parse
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any, List, Optional
+from vn_cinema_scraper import VnCinemaScraper
 
 def get_tmdb_api_key() -> Optional[str]:
     key = os.environ.get("TMDB_API_KEY")
@@ -51,6 +52,7 @@ class FilmOracle:
 
     def __init__(self, api_key: Optional[str] = None):
         self.api_key = api_key or get_tmdb_api_key()
+        self.vn_scraper = VnCinemaScraper()
         self.cache_dir = Path.home() / ".cache" / "film-oracle" / "posters"
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.headers = {
@@ -149,7 +151,13 @@ class FilmOracle:
         vote_count = details.get("vote_count", 0)
         poster_local = self.ensure_local_poster(details.get("poster_path") or match.get("poster_path"), title)
 
-        # 1. Age Certification
+        # Domestic VN audit (MoMo, Moveek, Reviewers)
+        domestic = self.vn_scraper.audit_domestic(title, match.get("original_title"), release_year)
+        momo_data = domestic.get("momo")
+        moveek_data = domestic.get("moveek")
+        creators_data = domestic.get("creators", {})
+
+        # 1. Age Certification: prioritize domestic Vietnamese censorship
         cert_data = self._tmdb_get(f"/movie/{mid}/release_dates")
         us_cert = "PG-13"
         vn_cert = ""
@@ -164,6 +172,10 @@ class FilmOracle:
                     if c.get("certification"):
                         vn_cert = c.get("certification")
                         break
+        if moveek_data and moveek_data.get("age_rating"):
+            vn_cert = moveek_data["age_rating"]
+        elif momo_data and momo_data.get("age_rating"):
+            vn_cert = momo_data["age_rating"]
 
         # 2. Scrape Critic Scores & Consensus
         search_q1 = f"{title} {release_year} rotten tomatoes critic consensus score metacritic"
@@ -198,10 +210,21 @@ class FilmOracle:
             critic_quote = m_quote.group(1).strip()
 
         # Deduce Scores
-        base_score = vote_avg
+        scores = []
+        if vote_count > 0 and vote_avg > 0:
+            scores.append(vote_avg)
         if rt_critic:
-            base_score = (base_score + (rt_critic / 10.0)) / 2.0
-        meta_truth_score = round(base_score, 1)
+            scores.append(rt_critic / 10.0)
+        if metascore:
+            scores.append(metascore / 10.0)
+        if momo_data and momo_data.get("rating_point") is not None:
+            scores.append(float(momo_data["rating_point"]))
+        if moveek_data and moveek_data.get("score") is not None:
+            scores.append(float(moveek_data["score"]))
+        
+        if not scores:
+            scores = [vote_avg] if vote_avg > 0 else [7.0]
+        meta_truth_score = round(sum(scores) / len(scores), 1)
 
         # 1. Đáng xem hay không?
         if meta_truth_score >= 8.0:
@@ -223,44 +246,82 @@ class FilmOracle:
             critic_summary.append(f"🍅 **Rotten Tomatoes Tomatometer**: **{rt_critic}%** (Cà chua tươi)")
         if metascore:
             critic_summary.append(f"Ⓜ️ **Metacritic Score**: **{metascore}/100**")
+        if moveek_data and moveek_data.get("score") is not None:
+            m_sc = moveek_data["score"]
+            m_vc = moveek_data.get("vote_count", 0)
+            critic_summary.append(f"🇻🇳 **Moveek Score (Chuyên trang điện ảnh VN)**: **{m_sc}/10** ({m_vc} lượt đánh giá)")
+            if moveek_data.get("review_article_title"):
+                critic_summary.append(f"📰 *Bài phê bình Moveek*: [{moveek_data['review_article_title']}]({moveek_data.get('url')})")
+            if moveek_data.get("review_article_quote"):
+                critic_summary.append(f"💬 *Nhận định từ Moveek*: \"{moveek_data['review_article_quote']}\"")
         if critic_quote:
-            critic_summary.append(f"💬 *Đồng thuận chuyên môn*: \"{critic_quote}\"")
+            critic_summary.append(f"💬 *Đồng thuận chuyên môn quốc tế*: \"{critic_quote}\"")
         else:
             for s in snippets_critic[:2]:
                 if any(w in s.lower() for w in ["impressive", "brilliant", "delivers", "tốt", "khen", "acting", "diễn xuất"]):
                     critic_summary.append(f"💬 *Nhận định báo chí*: {s[:160]}...")
                     break
         if not critic_summary:
-            critic_summary.append("Chưa có nhiều bài đánh giá chi tiết từ các nhà phê bình quốc tế lớn.")
+            critic_summary.append("Chưa có nhiều bài đánh giá chi tiết từ các nhà phê bình lớn.")
 
-        # 3. Reviewer & Creator pulse
+        # 3. Reviewer & Creator pulse (YouTube, TikTok, Fanpage)
         reviewer_summary = []
+        if creators_data and creators_data.get("quotes"):
+            for q in creators_data["quotes"]:
+                reviewer_summary.append(f"- 🎙️ {q}")
+        if creators_data and creators_data.get("praise"):
+            for p in creators_data["praise"]:
+                if not any(p[:40] in r for r in reviewer_summary):
+                    reviewer_summary.append(f"- 👍 **Điểm khen từ cộng đồng**: {p}")
         for s in snippets_reviewer:
             clean = s.strip()
             if any(w in clean.lower() for w in ["diễn xuất", "kịch bản", "hình ảnh", "cốt truyện", "ấn tượng", "đạo diễn", "xuất sắc", "đẫm máu", "kinh dị", "cảm xúc", "hài lòng", "performance", "direction", "visuals"]):
-                reviewer_summary.append(f"- {clean[:190]}...")
-                if len(reviewer_summary) >= 3:
-                    break
+                if not any(clean[:40] in r for r in reviewer_summary):
+                    reviewer_summary.append(f"- {clean[:190]}...")
+                    if len(reviewer_summary) >= 5:
+                        break
         if not reviewer_summary:
             reviewer_summary.append("- Các reviewer đánh giá cao phong cách thể hiện và tính sáng tạo; nội dung tạo ra nhiều cuộc thảo luận phân tích sau khi xem.")
 
         # 4. Khán giả đón nhận ra sao?
         audience_summary = []
-        audience_summary.append(f"⭐ **Điểm số đại chúng**: **{vote_avg:.1f}/10** từ **{vote_count:,}** lượt bình chọn thực tế.")
+        if momo_data and momo_data.get("rating_point") is not None:
+            m_pt = momo_data["rating_point"]
+            m_tot = momo_data.get("rating_total", 0)
+            m_paid = momo_data.get("paid_tickets", 0)
+            audience_summary.append(f"🎟️ **MoMo Cinema (Khán giả mua vé thực tế tại rạp Việt Nam)**: ⭐ **{m_pt}/10** ({m_tot:,} lượt đánh giá, **{m_paid:,} vé đã thanh toán verified**)")
+            
+            all_momo_tags = []
+            for c in momo_data.get("top_comments", []):
+                all_momo_tags.extend(c.get("tags", []))
+            if all_momo_tags:
+                from collections import Counter
+                common_tags = [t for t, _ in Counter(all_momo_tags).most_common(5)]
+                audience_summary.append(f"🔥 *Cảm xúc người mua vé rạp*: {', '.join(f'`{t}`' for t in common_tags)}")
+
+            for c in momo_data.get("top_comments", [])[:2]:
+                if c.get("desc") and len(c["desc"]) > 5:
+                    audience_summary.append(f"💬 *Khán giả {c['user']} ({c['point']}/10)*: \"{c['desc'][:160]}\"")
+
+        audience_summary.append(f"⭐ **Điểm số đại chúng Quốc tế (TMDb)**: **{vote_avg:.1f}/10** từ **{vote_count:,}** lượt bình chọn.")
         if vote_count >= 1000:
-            audience_summary.append("Khán giả đại chúng đón nhận nồng nhiệt; hiệu ứng truyền miệng tích cực.")
+            audience_summary.append("Khán giả quốc tế đón nhận nồng nhiệt; hiệu ứng truyền miệng tích cực.")
         elif vote_count >= 300:
             audience_summary.append("Mức độ đón nhận ổn định; tạo được thảo luận tốt trong cộng đồng yêu phim.")
         else:
-            audience_summary.append("Số lượng đánh giá còn khiêm tốn; chủ yếu là người hâm mộ đầu tiên trải nghiệm.")
+            audience_summary.append("Số lượng đánh giá quốc tế còn khiêm tốn; chủ yếu là người hâm mộ đầu tiên trải nghiệm.")
 
         # 5. Có ý kiến trái chiều / điểm yếu gì không?
         flaws_summary = []
+        if creators_data and creators_data.get("criticisms"):
+            for cr in creators_data["criticisms"]:
+                flaws_summary.append(f"- ⚠️ {cr}")
         for s in snippets_controversy:
             if any(w in s.lower() for w in ["tranh cãi", "chê", "sượng", "điểm yếu", "hạn chế", "lê thê", "flaw", "polariz", "detractor"]):
-                flaws_summary.append(f"- {s[:180]}...")
-                if len(flaws_summary) >= 3:
-                    break
+                if not any(s[:40] in f for f in flaws_summary):
+                    flaws_summary.append(f"- {s[:180]}...")
+                    if len(flaws_summary) >= 4:
+                        break
         if not flaws_summary:
             if meta_truth_score < 7.0:
                 flaws_summary.append("- Nhịp phim hoặc kịch bản có đoạn thiếu liền mạch, kết thúc chưa thực sự thỏa mãn mọi tệp khán giả.")
