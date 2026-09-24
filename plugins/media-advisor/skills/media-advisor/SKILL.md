@@ -113,7 +113,13 @@ python3 advisor_cli.py continue --limit 5
 python3 advisor_cli.py theatrical --limit 5
 ```
 
-### 8. Xu Hướng Thịnh Hành Trực Tuyến (Trending OTT)
+### 8. Radar Bùng Nổ Thảo Luận Mạng Xã Hội (Social Buzz Radar)
+```bash
+python3 advisor_cli.py buzz --limit 5
+```
+Quét đa kênh: Megathread thảo luận trên Reddit (r/movies, r/boxoffice), review bom tấn trên YouTube, trích đoạn viral trên TikTok, và Google Trends Việt Nam. Tự động chấm điểm thảo luận (`0 - 100`) và kích hoạt bộ lọc chống seeding.
+
+### 9. Xu Hướng Thịnh Hành Trực Tuyến (Trending OTT)
 ```bash
 python3 advisor_cli.py trending --limit 5
 ```

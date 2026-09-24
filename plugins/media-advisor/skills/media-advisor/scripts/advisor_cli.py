@@ -22,6 +22,7 @@ from plex_reader import PlexReader
 from media_server_client import PlexApiClient, JellyfinApiClient
 from sentiment_filter import SentimentFilter
 from tmdb_trends import TMDbTrends
+from social_buzz_radar import SocialBuzzRadar
 
 def get_media_backend(cfg: Dict[str, Any]) -> Tuple[str, Any]:
     """
@@ -85,6 +86,13 @@ def render_movie_card_table(items: List[Dict[str, Any]], title_section: str = ""
         if badge:
             rating_part += f" · {badge}"
         info_lines.append(rating_part)
+
+        # Buzz Score if present
+        buzz_score = item.get("buzz_score")
+        if buzz_score is not None:
+            reasons = item.get("buzz_reasons", [])
+            reasons_str = f" ({', '.join(reasons)})" if reasons else ""
+            info_lines.append(f"🔥 **Độ thảo luận MXH**: **{buzz_score}/100**{reasons_str}")
 
         # Platform / NAS Location
         if is_internet_mode:
@@ -234,6 +242,60 @@ def cmd_trending(args):
 
     print(render_movie_card_table(trending, f"🔥 XU HƯỚNG NỔI BẬT TRÊN CÁC NỀN TẢNG (Trending Movies & Series)", is_internet_mode=not has_server))
 
+def cmd_buzz(args):
+    cfg = load_config()
+    sentiment = SentimentFilter(cfg.get("anti_seeding_min_votes", 300), cfg.get("min_rating", 6.5))
+    tmdb = TMDbTrends()
+    btype, backend = get_media_backend(cfg)
+    has_server = (btype != "internet")
+
+    if not tmdb.api_key:
+        print("❌ Chưa cấu hình TMDB_API_KEY.")
+        return
+
+    print("📡 Đang kích hoạt Radar quét thảo luận Diễn đàn (Reddit), YouTube Review & TikTok Trends...")
+    radar = SocialBuzzRadar()
+    signals = radar.get_social_signals()
+    entities = signals.get("extracted_entities", {})
+
+    trending = tmdb.get_trending("all", "day", limit=15)
+    buzz_items = []
+    for item in trending:
+        title = item.get("title", "")
+        buzz_score = 50
+        buzz_reasons = ["Xu hướng 24h"]
+
+        for entity in entities:
+            if entity.lower() in title.lower() or title.lower() in entity.lower():
+                buzz_score += 25
+                buzz_reasons.append(f"Hot Reddit/YouTube: {entity}")
+                break
+
+        s_res = sentiment.analyze_sentiment(item["vote_average"], item["vote_count"], title)
+        item["sentiment_badge"] = s_res.get("badge")
+        item["adjusted_rating"] = s_res.get("adjusted_rating")
+
+        if s_res.get("is_genuine"):
+            buzz_score += 25
+            buzz_reasons.append("Đánh giá thực chất")
+
+        item["buzz_score"] = min(100, buzz_score)
+        item["buzz_reasons"] = buzz_reasons
+
+        if btype == "local_sqlite":
+            local_matches = backend.search_local(title)
+            if local_matches:
+                item["nas_status"] = f"🟢 ĐÃ CÓ TRÊN SERVER: `{local_matches[0]['title']}`"
+            else:
+                item["nas_status"] = "⚪ Chưa có trên Server"
+        elif has_server:
+            item["nas_status"] = "⚪ Có thể tìm và tải về Server"
+
+        buzz_items.append(item)
+
+    buzz_items.sort(key=lambda x: x.get("buzz_score", 0), reverse=True)
+    print(render_movie_card_table(buzz_items[:args.limit], f"🔥 BÙNG NỔ THẢO LUẬN & CHỐNG SEEDING (Social Buzz Radar: Reddit + YouTube + TikTok)", is_internet_mode=not has_server))
+
 def cmd_discover(args):
     cfg = load_config()
     sentiment = SentimentFilter(cfg.get("anti_seeding_min_votes", 300), cfg.get("min_rating", 6.8))
@@ -353,6 +415,10 @@ def main():
     p_trend = subparsers.add_parser("trending", help="Đề xuất xu hướng thịnh hành")
     p_trend.add_argument("--limit", type=int, default=5, help="Số lượng đề xuất")
 
+    # buzz
+    p_buzz = subparsers.add_parser("buzz", help="Radar quét bùng nổ thảo luận MXH (Reddit + YouTube + TikTok) và chống seeding")
+    p_buzz.add_argument("--limit", type=int, default=5, help="Số lượng đề xuất")
+
     # discover
     p_disc = subparsers.add_parser("discover", help="Khám phá phim hay từ Internet theo gu khảo sát")
     p_disc.add_argument("--limit", type=int, default=5, help="Số lượng đề xuất")
@@ -384,6 +450,8 @@ def main():
         cmd_theatrical(args)
     elif args.command == "trending":
         cmd_trending(args)
+    elif args.command == "buzz":
+        cmd_buzz(args)
     elif args.command == "discover":
         cmd_discover(args)
     elif args.command == "query":
