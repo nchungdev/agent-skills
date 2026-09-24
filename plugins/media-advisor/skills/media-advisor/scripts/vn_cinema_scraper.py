@@ -1004,18 +1004,8 @@ class VnCinemaScraper:
         return None
 
     def _detect_live_ip_location(self) -> Optional[Dict[str, Any]]:
-        """Automatically detects user's physical location (Priority: Hardware GPS -> Config File -> IP Geolocation)."""
-        cached_loc = self.cache.get("user_auto_detected_location")
-        if cached_loc:
-            return cached_loc
-
-        # 0. Check Hardware GPS receiver (gpsd, 4G/5G modem, USB GPS dongle)
-        hw_gps = self._query_hardware_gps()
-        if hw_gps:
-            self.cache.set("user_auto_detected_location", hw_gps, ttl=300)
-            return hw_gps
-
-        # 1. Try user config file first: ~/.config/agent-skills/user_location.json
+        """Automatically detects user's physical location (Priority: Config File -> Hardware GPS -> IP Geolocation)."""
+        # 1. User config file has highest preference: ~/.config/agent-skills/user_location.json
         cfg_path = Path.home() / ".config" / "agent-skills" / "user_location.json"
         if cfg_path.exists():
             try:
@@ -1031,6 +1021,16 @@ class VnCinemaScraper:
                         }
             except Exception:
                 pass
+
+        # 2. Check Hardware GPS receiver (gpsd, 4G/5G modem, USB GPS dongle)
+        hw_gps = self._query_hardware_gps()
+        if hw_gps:
+            return hw_gps
+
+        # 3. Check cached auto-detected IP location
+        cached_loc = self.cache.get("user_auto_detected_location")
+        if cached_loc:
+            return cached_loc
 
         # 2. Real-time IP Geolocation via ip-api.com
         ip_info = self.get_user_location()
@@ -1087,6 +1087,31 @@ class VnCinemaScraper:
                 return (lat, lon, r_id, f"Vị trí GPS ({lat:.4f}, {lon:.4f})")
             except Exception:
                 pass
+
+        # Try OpenStreetMap forward geocoding for specific wards / streets
+        try:
+            cached_geo = self.cache.get(f"geo_{norm}")
+            if cached_geo:
+                return (cached_geo["lat"], cached_geo["lon"], cached_geo["region_id"], cached_geo["label"])
+
+            for q in [f"{loc_input}, Việt Nam", f"{loc_input}, TP.HCM"]:
+                nom_url = f"https://nominatim.openstreetmap.org/search?q={urllib.parse.quote(q)}&format=json&limit=1"
+                nom_req = urllib.request.Request(nom_url, headers={"User-Agent": "AgentSkills-Cinema/1.0"})
+                nom_data = json.loads(urllib.request.urlopen(nom_req, timeout=2).read().decode("utf-8"))
+                if nom_data:
+                    g_lat = float(nom_data[0]["lat"])
+                    g_lon = float(nom_data[0]["lon"])
+                    g_region = 9 if g_lat > 18.0 else 1
+                    res_geo = {
+                        "lat": g_lat,
+                        "lon": g_lon,
+                        "region_id": g_region,
+                        "label": f"{loc_input.title()} (GPS: {g_lat:.4f}, {g_lon:.4f})"
+                    }
+                    self.cache.set(f"geo_{norm}", res_geo, ttl=86400)
+                    return (g_lat, g_lon, g_region, res_geo["label"])
+        except Exception:
+            pass
 
         DISTRICT_MAP = {
             # TP.HCM (region 1)
