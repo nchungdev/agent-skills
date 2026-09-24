@@ -136,16 +136,34 @@ def scan_media_ports():
             pass
     return status
 
+def get_docker_cmd(args):
+    """Return docker command line, falling back to sudo -n if unprivileged."""
+    if not shutil.which("docker"):
+        return None
+    try:
+        test = subprocess.run(["docker", "ps"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=2)
+        if test.returncode == 0:
+            return ["docker"] + args
+    except Exception:
+        pass
+    try:
+        test_sudo = subprocess.run(["sudo", "-n", "docker", "ps"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=2)
+        if test_sudo.returncode == 0:
+            return ["sudo", "-n", "docker"] + args
+    except Exception:
+        pass
+    return ["docker"] + args
+
 def check_docker_containers():
     """Check Docker container health and detect crash loops."""
-    if not shutil.which("docker"):
+    cmd = get_docker_cmd(["ps", "-a", "--format", "{{.Names}}\t{{.Status}}\t{{.Image}}"])
+    if not cmd:
         return {"status": "Docker not installed"}
 
     try:
-        res = subprocess.run(["docker", "ps", "-a", "--format", "{{.Names}}\t{{.Status}}\t{{.Image}}"],
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
         if res.returncode != 0:
-            return {"status": "Docker daemon unreachable"}
+            return {"status": "Docker daemon unreachable (check permissions)"}
 
         containers = []
         issues = []
@@ -163,7 +181,7 @@ def check_docker_containers():
             "total": len(containers),
             "healthy": len(containers) - len(issues),
             "issues": issues,
-            "containers": containers[:10]
+            "containers": containers
         }
     except Exception as e:
         return {"status": f"Error: {e}"}
@@ -184,6 +202,11 @@ def run_smart_scan():
     md.append("## 🏢 1. Tầng Hệ Điều Hành & Bộ Nhớ (OS & Storage)")
     d_icon = "🟢" if disk["percent_used"] < 85 else ("🟡" if disk["percent_used"] < 92 else "🔴")
     md.append(f"* {d_icon} **Ổ đĩa gốc (`/`)**: Đã dùng `{disk['used_gb']} GB / {disk['total_gb']} GB` (`{disk['percent_used']}%`) — Còn trống `{disk['free_gb']} GB`")
+    
+    if os.path.exists("/srv/mergerfs/MainPool"):
+        m_disk = check_disk_usage("/srv/mergerfs/MainPool")
+        m_icon = "🟢" if m_disk["percent_used"] < 85 else ("🟡" if m_disk["percent_used"] < 92 else "🔴")
+        md.append(f"* {m_icon} **Kho lưu trữ MergerFS (`/srv/mergerfs/MainPool`)**: Đã dùng `{m_disk['used_gb']} GB / {m_disk['total_gb']} GB` (`{m_disk['percent_used']}%`) — Còn trống `{m_disk['free_gb']} GB`")
     
     rec_gb = caches.get("total_reclaimable_gb", 0)
     md.append(f"* 🧹 **Rác Developer & Cache có thể dọn**: `~{rec_gb} GB`")
