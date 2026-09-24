@@ -455,13 +455,32 @@ class VnCinemaScraper:
             moveek_action = "Tìm Phim Trên Moveek"
             moveek_found = False
 
-        # ── 3. CGV — search URL (CGV không có API public, search là best effort) ──
+        # ── 3. CGV Cinemas — Direct Movie URL & App Universal Link ──
+        cgv_slug = None
+        if momo_match and momo_match.get("url"):
+            m = re.search(r'/cinema/([a-zA-Z0-9\-]+)-\d+$', momo_match["url"])
+            if m:
+                cgv_slug = m.group(1)
+
         cgv_search_web = f"https://www.cgv.vn/default/catalogsearch/result/?q={clean_encoded}"
-        cgv_intent = (
-            f"intent://default/catalogsearch/result/?q={clean_encoded}"
-            f"#Intent;scheme=https;host=www.cgv.vn;package=com.cgv.vn;"
-            f"S.browser_fallback_url={urllib.parse.quote_plus(cgv_search_web)};end"
-        )
+        if cgv_slug:
+            cgv_direct_web = f"https://www.cgv.vn/default/{cgv_slug}.html"
+            cgv_action = f"Mở Trang Phim «{title}» trên CGV"
+            cgv_found = True
+            cgv_intent = (
+                f"intent://default/{cgv_slug}.html"
+                f"#Intent;scheme=https;host=www.cgv.vn;package=com.cgv.vn;"
+                f"S.browser_fallback_url={urllib.parse.quote_plus(cgv_direct_web)};end"
+            )
+        else:
+            cgv_direct_web = cgv_search_web
+            cgv_action = f"Tìm «{title}» trên CGV"
+            cgv_found = False
+            cgv_intent = (
+                f"intent://default/catalogsearch/result/?q={clean_encoded}"
+                f"#Intent;scheme=https;host=www.cgv.vn;package=com.cgv.vn;"
+                f"S.browser_fallback_url={urllib.parse.quote_plus(cgv_search_web)};end"
+            )
 
         # ── 4. Galaxy Cinema ──
         galaxy_web = f"https://www.galaxycine.vn/tim-kiem/?q={clean_encoded}"
@@ -470,6 +489,7 @@ class VnCinemaScraper:
             "title": title,
             "momo_found": momo_found,
             "moveek_found": moveek_found,
+            "cgv_found": cgv_found,
             "app_links": [
                 {
                     "platform": "MoMo Cinema",
@@ -485,15 +505,15 @@ class VnCinemaScraper:
                 },
                 {
                     "platform": "CGV Cinemas Vietnam",
-                    "badge": "🍿 CGV Cinemas",
+                    "badge": "🍿 CGV Cinemas" + (" ✅" if cgv_found else ""),
                     "priority": 2,
-                    "universal_link": cgv_search_web,
+                    "universal_link": cgv_direct_web,
                     "deeplink": cgv_intent,
-                    "web_fallback": cgv_search_web,
+                    "web_fallback": cgv_direct_web,
                     "store_android": "https://play.google.com/store/apps/details?id=com.cgv.vn",
                     "store_ios": "https://apps.apple.com/vn/app/cgv-cinemas-vietnam/id849664126",
-                    "action_text": f"Tìm «{title}» trên CGV",
-                    "description": "Tìm suất chiếu và đặt vé trực tiếp tại CGV Việt Nam"
+                    "action_text": cgv_action,
+                    "description": "Mở trực tiếp trang phim tại CGV — chọn cụm rạp CGV & suất chiếu để đặt vé"
                 }
             ],
             "web_links": [
@@ -506,10 +526,10 @@ class VnCinemaScraper:
                 },
                 {
                     "platform": "CGV Online",
-                    "badge": "🌐 CGV Web",
-                    "url": cgv_search_web,
-                    "action_text": f"Tìm «{title}» tại cgv.vn",
-                    "description": "Trang tìm kiếm và đặt vé chính thức tại cgv.vn"
+                    "badge": "🌐 CGV Web" + (" ✅" if cgv_found else ""),
+                    "url": cgv_direct_web,
+                    "action_text": cgv_action if cgv_found else f"Tìm «{title}» tại cgv.vn",
+                    "description": "Trang thông tin phim và lịch chiếu chính thức tại CGV Việt Nam"
                 },
                 {
                     "platform": "Galaxy Cinema",
