@@ -3,7 +3,7 @@
 Media Advisor Master CLI: Homelab Cinema & Series Recommendation Concierge.
 Gracefully adapts across 3 modes:
 1. Local SQLite Homelab (Zero-API Plex/Jellyfin read-only)
-2. Remote Server API (Plex / Jellyfin HTTP)
+2. Remote Server API (Plex Token / Jellyfin API Key)
 3. Pure Internet Cinephile (Zero server required, survey-driven & global trends)
 Outputs beautiful 2-column visual Markdown tables with local poster thumbnails.
 """
@@ -12,15 +12,39 @@ import sys
 import os
 import argparse
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 
 # Add scripts directory to path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from advisor_setup import load_config, run_survey
 from plex_reader import PlexReader
+from media_server_client import PlexApiClient, JellyfinApiClient
 from sentiment_filter import SentimentFilter
 from tmdb_trends import TMDbTrends
+
+def get_media_backend(cfg: Dict[str, Any]) -> Tuple[str, Any]:
+    """
+    Returns ('remote_plex' | 'remote_jellyfin' | 'local_sqlite' | 'internet', backend_instance)
+    """
+    mode = cfg.get("mode", "auto")
+    if mode == "internet_only":
+        return "internet", None
+
+    # Check remote server API configuration
+    if mode == "remote" or (cfg.get("remote_url") and cfg.get("remote_token")):
+        stype = cfg.get("server_type", "plex")
+        if stype == "jellyfin":
+            return "remote_jellyfin", JellyfinApiClient(cfg["remote_url"], cfg["remote_token"])
+        else:
+            return "remote_plex", PlexApiClient(cfg["remote_url"], cfg["remote_token"])
+
+    # Fallback to local SQLite reader if available
+    plex_local = PlexReader(cfg.get("plex_db_path"))
+    if plex_local.available:
+        return "local_sqlite", plex_local
+
+    return "internet", None
 
 def render_movie_card_table(items: List[Dict[str, Any]], title_section: str = "", is_internet_mode: bool = False) -> str:
     """Renders items into a 2-column GitHub-Flavored Markdown table with local thumbnails."""
@@ -70,7 +94,7 @@ def render_movie_card_table(items: List[Dict[str, Any]], title_section: str = ""
         else:
             nas_status = item.get("nas_status")
             if nas_status:
-                info_lines.append(f"📍 **Kho NAS**: {nas_status}")
+                info_lines.append(f"📍 **Kho Media**: {nas_status}")
 
         # Progress if in-progress
         progress = item.get("progress_percent")
@@ -92,27 +116,26 @@ def render_movie_card_table(items: List[Dict[str, Any]], title_section: str = ""
 
     return "\n".join(lines) + "\n"
 
-def is_homelab_active(cfg, plex) -> bool:
-    mode = cfg.get("mode", "auto")
-    if mode == "internet_only":
-        return False
-    return plex.available
-
 def cmd_unwatched(args):
     cfg = load_config()
-    plex = PlexReader(cfg.get("plex_db_path"))
+    btype, backend = get_media_backend(cfg)
     sentiment = SentimentFilter(cfg.get("anti_seeding_min_votes", 300), cfg.get("min_rating", 6.5))
     tmdb = TMDbTrends()
 
-    if not is_homelab_active(cfg, plex):
-        print("ℹ️ Hệ thống đang hoạt động ở chế độ Internet (không có kết nối Plex/Jellyfin cục bộ).")
+    if btype == "internet":
+        print("ℹ️ Hệ thống đang hoạt động ở chế độ Internet (không có kết nối Plex/Jellyfin).")
         print("💡 Tự động chuyển sang đề xuất tác phẩm kinh điển theo gu khảo sát:")
         cmd_discover(args)
         return
 
-    items = plex.get_unwatched_library(limit=args.limit, min_rating=0.0)
+    if btype == "local_sqlite":
+        items = backend.get_unwatched_library(limit=args.limit, min_rating=0.0)
+    elif btype in ("remote_plex", "remote_jellyfin"):
+        items = backend.get_unwatched(limit=args.limit)
+    else:
+        items = []
+
     for item in items:
-        item["nas_status"] = "🟢 Sẵn sàng xem ngay trên NAS"
         t_match = None
         if tmdb.api_key and item.get("tmdb_id"):
             t_match = tmdb.get_details_by_id(item["tmdb_id"], "movie" if item.get("type") == "Movie" else "tv")
@@ -129,20 +152,19 @@ def cmd_unwatched(args):
             item["sentiment_badge"] = s_res.get("badge")
             item["adjusted_rating"] = s_res.get("adjusted_rating")
 
-    print(render_movie_card_table(items, f"💎 KHO BÁU BỎ QUÊN TRÊN NAS (Chưa xem, sẵn sàng phát ngay)", is_internet_mode=False))
+    print(render_movie_card_table(items, f"💎 KHO BÁU BỎ QUÊN TRÊN SERVER (Chưa xem, sẵn sàng phát ngay)", is_internet_mode=False))
 
 def cmd_continue(args):
     cfg = load_config()
-    plex = PlexReader(cfg.get("plex_db_path"))
+    btype, backend = get_media_backend(cfg)
     tmdb = TMDbTrends()
 
-    if not is_homelab_active(cfg, plex):
+    if btype == "internet":
         print("ℹ️ Chế độ Internet không lưu trữ tiến độ xem dở.")
         return
 
-    items = plex.get_in_progress(limit=args.limit)
+    items = backend.get_in_progress(limit=args.limit)
     for item in items:
-        item["nas_status"] = "🟢 Sẵn sàng trên NAS"
         t_match = None
         if tmdb.api_key and item.get("tmdb_id"):
             t_match = tmdb.get_details_by_id(item["tmdb_id"], "tv" if item.get("type") == "Episode" else "movie")
@@ -154,14 +176,14 @@ def cmd_continue(args):
         if t_match:
             item["poster_local"] = t_match.get("poster_local")
 
-    print(render_movie_card_table(items, f"⏯️ TIẾP TỤC THEO DÕI (Đang xem dở trên Plex / Jellyfin)", is_internet_mode=False))
+    print(render_movie_card_table(items, f"⏯️ TIẾP TỤC THEO DÕI (Đang xem dở trên Server)", is_internet_mode=False))
 
 def cmd_theatrical(args):
     cfg = load_config()
     sentiment = SentimentFilter(cfg.get("anti_seeding_min_votes", 300), cfg.get("min_rating", 6.5))
     tmdb = TMDbTrends()
-    plex = PlexReader(cfg.get("plex_db_path"))
-    has_homelab = is_homelab_active(cfg, plex)
+    btype, backend = get_media_backend(cfg)
+    has_server = (btype != "internet")
 
     if not tmdb.api_key:
         print("❌ Chưa cấu hình TMDB_API_KEY. Hãy chạy `tmdb-catalog setup` để lưu key.")
@@ -169,25 +191,27 @@ def cmd_theatrical(args):
 
     theatrical = tmdb.get_theatrical_releases(limit=args.limit)
     for item in theatrical:
-        if has_homelab:
-            local_matches = plex.search_local(item["title"])
+        if btype == "local_sqlite":
+            local_matches = backend.search_local(item["title"])
             if local_matches:
-                item["nas_status"] = f"🟢 ĐÃ CÓ TRÊN NAS: `{local_matches[0]['title']}`"
+                item["nas_status"] = f"🟢 ĐÃ CÓ TRÊN SERVER: `{local_matches[0]['title']}`"
             else:
-                item["nas_status"] = "⚪ Chưa có trên NAS (Có thể dùng `media-downloader` tìm kiếm)"
+                item["nas_status"] = "⚪ Chưa có trên Server (Có thể dùng `media-downloader` tìm kiếm)"
+        elif has_server:
+            item["nas_status"] = "⚪ Có thể tìm và tải về Server"
 
         s_res = sentiment.analyze_sentiment(item["vote_average"], item["vote_count"], item["title"])
         item["sentiment_badge"] = s_res.get("badge")
         item["adjusted_rating"] = s_res.get("adjusted_rating")
 
-    print(render_movie_card_table(theatrical, f"🍿 ĐANG CHIẾU RẠP & VỪA RA MẮT (Theatrical Releases)", is_internet_mode=not has_homelab))
+    print(render_movie_card_table(theatrical, f"🍿 ĐANG CHIẾU RẠP & VỪA RA MẮT (Theatrical Releases)", is_internet_mode=not has_server))
 
 def cmd_trending(args):
     cfg = load_config()
     sentiment = SentimentFilter(cfg.get("anti_seeding_min_votes", 300), cfg.get("min_rating", 6.5))
     tmdb = TMDbTrends()
-    plex = PlexReader(cfg.get("plex_db_path"))
-    has_homelab = is_homelab_active(cfg, plex)
+    btype, backend = get_media_backend(cfg)
+    has_server = (btype != "internet")
 
     if not tmdb.api_key:
         print("❌ Chưa cấu hình TMDB_API_KEY.")
@@ -195,18 +219,20 @@ def cmd_trending(args):
 
     trending = tmdb.get_trending("all", "week", limit=args.limit)
     for item in trending:
-        if has_homelab:
-            local_matches = plex.search_local(item["title"])
+        if btype == "local_sqlite":
+            local_matches = backend.search_local(item["title"])
             if local_matches:
-                item["nas_status"] = f"🟢 ĐÃ CÓ TRÊN NAS: `{local_matches[0]['title']}`"
+                item["nas_status"] = f"🟢 ĐÃ CÓ TRÊN SERVER: `{local_matches[0]['title']}`"
             else:
-                item["nas_status"] = "⚪ Chưa có trên NAS"
+                item["nas_status"] = "⚪ Chưa có trên Server"
+        elif has_server:
+            item["nas_status"] = "⚪ Có thể tìm và tải về Server"
 
         s_res = sentiment.analyze_sentiment(item["vote_average"], item["vote_count"], item["title"])
         item["sentiment_badge"] = s_res.get("badge")
         item["adjusted_rating"] = s_res.get("adjusted_rating")
 
-    print(render_movie_card_table(trending, f"🔥 XU HƯỚNG NỔI BẬT TRÊN CÁC NỀN TẢNG (Trending Movies & Series)", is_internet_mode=not has_homelab))
+    print(render_movie_card_table(trending, f"🔥 XU HƯỚNG NỔI BẬT TRÊN CÁC NỀN TẢNG (Trending Movies & Series)", is_internet_mode=not has_server))
 
 def cmd_discover(args):
     cfg = load_config()
@@ -237,8 +263,8 @@ def cmd_query(args):
     cfg = load_config()
     sentiment = SentimentFilter(cfg.get("anti_seeding_min_votes", 300), cfg.get("min_rating", 6.5))
     tmdb = TMDbTrends()
-    plex = PlexReader(cfg.get("plex_db_path"))
-    has_homelab = is_homelab_active(cfg, plex)
+    btype, backend = get_media_backend(cfg)
+    has_server = (btype != "internet")
 
     if not tmdb.api_key:
         print("❌ Chưa cấu hình TMDB_API_KEY.")
@@ -248,27 +274,28 @@ def cmd_query(args):
     items = tmdb.search_multi(query_str, limit=args.limit)
 
     for item in items:
-        if has_homelab:
-            local_matches = plex.search_local(item["title"])
+        if btype == "local_sqlite":
+            local_matches = backend.search_local(item["title"])
             if local_matches:
-                item["nas_status"] = f"🟢 ĐÃ CÓ TRÊN NAS: `{local_matches[0]['title']}`"
+                item["nas_status"] = f"🟢 ĐÃ CÓ TRÊN SERVER: `{local_matches[0]['title']}`"
             else:
-                item["nas_status"] = "⚪ Chưa có trên NAS"
+                item["nas_status"] = "⚪ Chưa có trên Server"
+        elif has_server:
+            item["nas_status"] = "⚪ Có thể tìm kiếm và lưu vào Server"
 
         s_res = sentiment.analyze_sentiment(item["vote_average"], item["vote_count"], item["title"])
         item["sentiment_badge"] = s_res.get("badge")
         item["adjusted_rating"] = s_res.get("adjusted_rating")
 
-    print(render_movie_card_table(items, f"🔍 KẾT QUẢ TÌM KIẾM CHO: '{query_str}'", is_internet_mode=not has_homelab))
+    print(render_movie_card_table(items, f"🔍 KẾT QUẢ TÌM KIẾM CHO: '{query_str}'", is_internet_mode=not has_server))
 
 def cmd_report(args):
     cfg = load_config()
-    plex = PlexReader(cfg.get("plex_db_path"))
-    has_homelab = is_homelab_active(cfg, plex)
+    btype, backend = get_media_backend(cfg)
     
     print("## 🧭 BÁO CÁO TỔNG QUAN MEDIA CONCIERGE & KHẨU VỊ PHIM\n")
-    if has_homelab:
-        profile = plex.get_taste_profile()
+    if btype == "local_sqlite":
+        profile = backend.get_taste_profile()
         genres = ", ".join([f"**{g['genre']}** ({g['count']})" for g in profile.get("genres", [])[:6]])
         actors = ", ".join([f"{a['actor']} ({a['count']})" for a in profile.get("actors", [])[:5]])
         print(f"🏠 **Chế độ**: Homelab Native (Plex/Jellyfin Local SQLite ro)")
@@ -280,11 +307,20 @@ def cmd_report(args):
         cmd_continue(args)
         cmd_unwatched(args)
         cmd_theatrical(args)
+    elif btype in ("remote_plex", "remote_jellyfin"):
+        stitle = "Plex Media Server" if btype == "remote_plex" else "Jellyfin Server"
+        print(f"📡 **Chế độ**: Remote Server API ({stitle} tại `{cfg.get('remote_url')}`)")
+        print(f"- Kết nối: REST API qua Token/API Key đã xác thực.")
+        print("---")
+        args.limit = 3
+        cmd_continue(args)
+        cmd_unwatched(args)
+        cmd_theatrical(args)
     else:
         genres = ", ".join(cfg.get("preferred_genres", [])) or "Tất cả thể loại (Khách quan)"
         regions = ", ".join(cfg.get("preferred_regions", ["ALL"]))
         print(f"🌐 **Chế độ**: Khám Phá Internet Toàn Cầu (Pure Cinephile - Zero Media Server)")
-        print(f"- Gu thể loại đã khảo sát: **{genre_str or genres}**")
+        print(f"- Gu thể loại đã khảo sát: **{genres}**")
         print(f"- Khu vực ưu tiên: **{regions}**")
         print(f"- Bộ lọc chống seeding: Điểm >= **{cfg.get('min_rating', 6.8)}**, Vote >= **{cfg.get('anti_seeding_min_votes', 300)}**\n")
         print("---")
@@ -302,7 +338,7 @@ def main():
     p_setup.add_argument("--defaults", action="store_true", help="Lưu cấu hình mặc định (khách quan, bao quát toàn bộ)")
 
     # unwatched
-    p_unw = subparsers.add_parser("unwatched", help="Đề xuất phim chưa xem trên NAS (hoặc theo gu nếu không có NAS)")
+    p_unw = subparsers.add_parser("unwatched", help="Đề xuất phim chưa xem trên Server (hoặc theo gu nếu chế độ Internet)")
     p_unw.add_argument("--limit", type=int, default=5, help="Số lượng đề xuất")
 
     # continue
