@@ -33,11 +33,20 @@ def main():
     p_sync.add_argument("--nas-path", default="/volume1/video/TV Shows", help="Đường dẫn thư mục trên NAS")
     p_sync.add_argument("--nas-port", type=int, default=22, help="Cổng SSH NAS")
 
+    # Command: report
+    p_rep = subparsers.add_parser("report", help="Báo cáo trạng thái đồng bộ đa đích (Media Sync Dashboard)")
+    p_rep.add_argument("--remote", default=None, help="Tên remote Rclone (mặc định: tự động phát hiện)")
+
     args = parser.parse_args()
 
     if not args.command:
         parser.print_help()
         sys.exit(1)
+
+    if args.command == "report":
+        from dispatchers.report_generator import generate_sync_report
+        print(generate_sync_report(target_remote=args.remote))
+        return
 
     if args.command == "sync":
         src_path = Path(args.source)
