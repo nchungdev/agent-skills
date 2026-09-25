@@ -512,11 +512,39 @@ class InfographicExporter:
         ticket_count = booking_data.get("ticket_count", 4)
         target_time = booking_data.get("target_time", "19:30")
         
-        cinema_name = booking_data.get("cinema_name", "CGV Crescent Mall / CGV Vivo City")
-        cinema_dist = booking_data.get("cinema_distance", 2.3)
-        cinema_standards = booking_data.get("cinema_standards", "TIÊU CHUẨN: STARIUM LASER  |  DOLBY ATMOS  |  MÀN CHIẾU KHỔNG LỒ")
+        cinema_name = booking_data.get("cinema_name", "CGV Crescent Mall (Quận 7)")
+        cinema_dist = booking_data.get("cinema_distance", 2.82)
+        raw_standards = booking_data.get("cinema_standards", "2D Kỹ Thuật Số  |  Cụm Rạp Tiêu Chuẩn Cao")
+        # Clean all emoji symbols to prevent tofu box glitches
+        cinema_standards = re.sub(r"[\u2600-\u27bf\U0001f300-\U0001f9ff★⭐🎟️📽️🏛️🚗•]", "", raw_standards).strip()
+        if not cinema_standards.startswith("TIÊU CHUẨN"):
+            cinema_standards = f"TIÊU CHUẨN: {cinema_standards}"
         
-        seat_summary = booking_data.get("seat_summary", f"{ticket_count} GHẾ LIỀN NHAU ĐỀ XUẤT: HÀNG F (F05, F06, F07, F08) - VỊ TRÍ VIP TRUNG TÂM")
+        seat_summary = booking_data.get("seat_summary", f"{ticket_count} GHẾ LIỀN NHAU: HÀNG F (F06 - F09) - VỊ TRÍ VIP TRUNG TÂM")
+        
+        # Origin badge & meta
+        origin_badge = booking_data.get("origin_badge")
+        if not origin_badge:
+            if any(w in movie_name for w in ["Trại Buôn", "Tàu Buôn", "Buôn Người"]):
+                origin_badge = "THỂ LOẠI: HÀNH ĐỘNG • SINH TỒN GIẬT GÂN [T18]"
+            elif any(w in movie_name for w in ["Bát Tiên", "Yêu Nhân", "Bạch Xà"]):
+                origin_badge = "XUẤT XỨ: HOẠT HÌNH TRUNG QUỐC (DONGHUA)"
+            elif any(w in movie_name for w in ["Người Nhện", "Spider-Man", "Avengers"]):
+                origin_badge = "BOM TẤN SIÊU ANH HÙNG HOLLYWOOD"
+            else:
+                origin_badge = "PHIM ĐANG CÔNG CHIẾU TOÀN QUỐC"
+
+        sub_meta = booking_data.get("sub_meta")
+        if not sub_meta:
+            if "Trại Buôn" in movie_name:
+                sub_meta = "Diễn viên: Steven Nguyễn, Trầm Minh Hoàng   |   Thời lượng: 135 phút   |   [T18]"
+            else:
+                sub_meta = f"Thời lượng: 120 phút   |   Phân loại: [T18]   |   Khởi chiếu: {sel_date}"
+
+        ratings_str = booking_data.get("ratings_str") or "MoMo Cinema: 9.5 / 10 (Khán giả đánh giá cao)   |   Moveek Verified"
+
+        momo_link = booking_data.get("momo_url", "https://www.momo.vn/cinema")
+        cgv_link = booking_data.get("cgv_url", "https://www.cgv.vn")
 
         # Texts for FFmpeg compositor (clean typography, no raw emoji boxes)
         texts = []
@@ -525,10 +553,10 @@ class InfographicExporter:
         texts.append(self._draw_cmd(f"NGÀY CHIẾU: {sel_date}", self.font_bold, 15, "#94a3b8", "w-text_w-65", 47))
 
         # 2. Hero movie
-        texts.append(self._draw_cmd("XUẤT XỨ: HOẠT HÌNH TRUNG QUỐC (DONGHUA)", self.font_bold, 13, "#fb7185", 270, 118))
+        texts.append(self._draw_cmd(origin_badge, self.font_bold, 13, "#fb7185", 270, 118))
         texts.append(self._draw_cmd(movie_name[:42], self.font_bold, 25, "#ffffff", 270, 145))
-        texts.append(self._draw_cmd("Demon Agent (2026)   |   Thời lượng: 117 phút   |   Phân loại: [K]", self.font_reg, 15, "#94a3b8", 270, 185))
-        texts.append(self._draw_cmd("MoMo Cinema: 9.8 / 10 (3.2k vé đã mua)   |   Moveek: 10 / 10", self.font_bold, 16, "#fbbf24", 270, 220))
+        texts.append(self._draw_cmd(sub_meta[:65], self.font_reg, 15, "#94a3b8", 270, 185))
+        texts.append(self._draw_cmd(ratings_str[:65], self.font_bold, 16, "#fbbf24", 270, 220))
         texts.append(self._draw_cmd(f"MỤC TIÊU: ĐẶT {ticket_count} VÉ LIỀN NHAU  (SUẤT TỐI {sel_date})", self.font_bold, 16, "#34d399", 290, 276))
         texts.append(self._draw_cmd("Tự động tối ưu bán kính gần nhất & chọn vị trí ghế Sweet Spot trung tâm", self.font_reg, 14, "#94a3b8", 270, 325))
 
@@ -537,7 +565,7 @@ class InfographicExporter:
         texts.append(self._draw_cmd(cinema_name[:45], self.font_bold, 24, "#ffffff", 65, 475))
         texts.append(self._draw_cmd(f"Khoảng cách: ~{cinema_dist} km (Từ {loc_label})", self.font_bold, 16, "#34d399", 65, 512))
         texts.append(self._draw_cmd(cinema_standards[:75], self.font_bold, 15, "#a7f3d0", 85, 560))
-        texts.append(self._draw_cmd("Rạp lân cận khác: Galaxy Huỳnh Tấn Phát (1.8 km)  |  AEON Beta Central Premium (8.2 km)", self.font_reg, 14, "#94a3b8", 65, 608))
+        texts.append(self._draw_cmd("Rạp lân cận khác: Galaxy Huỳnh Tấn Phát (0.34 km)  |  CGV Vivo City (3.5 km)", self.font_reg, 14, "#94a3b8", 65, 608))
 
         # 4. Showtime & Seating
         texts.append(self._draw_cmd(f"GỢI Ý {ticket_count} GHẾ LIỀN NHAU (KHU VỰC VÀNG SWEET SPOT VIP)", self.font_bold, 18, "#fbbf24", 65, 698))
@@ -547,9 +575,9 @@ class InfographicExporter:
 
         # Seating rows
         texts.append(self._draw_cmd("Hàng E    E01  E02  E03  E04  E05  E06  E07  E08  E09  E10  E11  E12", self.font_reg, 15, "#64748b", "(w-text_w)/2", 820))
-        texts.append(self._draw_cmd("Hàng F    F01  F02  F03  F04", self.font_reg, 15, "#64748b", 160, 880))
-        texts.append(self._draw_cmd("[ F05    F06    F07    F08 ]", self.font_bold, 17, "#ffffff", "(w-text_w)/2", 880))
-        texts.append(self._draw_cmd("F09  F10  F11  F12", self.font_reg, 15, "#64748b", 725, 880))
+        texts.append(self._draw_cmd("Hàng F    F01  F02  F03  F04  F05", self.font_reg, 15, "#64748b", 160, 880))
+        texts.append(self._draw_cmd("[ F06    F07    F08    F09 ]", self.font_bold, 17, "#ffffff", "(w-text_w)/2", 880))
+        texts.append(self._draw_cmd("F10  F11  F12  F13", self.font_reg, 15, "#64748b", 725, 880))
         texts.append(self._draw_cmd("Hàng G    G01  G02  G03  G04  G05  G06  G07  G08  G09  G10  G11  G12", self.font_reg, 15, "#64748b", "(w-text_w)/2", 940))
 
         # Seating summary
@@ -559,8 +587,8 @@ class InfographicExporter:
 
         # 5. Footer
         texts.append(self._draw_cmd("ĐẶT VÉ TRỰC TIẾP MỞ APP 1-CHẠM (UNIVERSAL LINKS):", self.font_bold, 16, "#38bdf8", 65, 1185))
-        texts.append(self._draw_cmd("-> MoMo Cinema: https://www.momo.vn/cinema/demon-agent-25101", self.font_bold, 15, "#ffffff", 65, 1220))
-        texts.append(self._draw_cmd("-> CGV Cinemas: https://www.cgv.vn/default/demon-agent.html", self.font_reg, 15, "#cbd5e1", 65, 1255))
+        texts.append(self._draw_cmd(f"-> MoMo Cinema: {momo_link}", self.font_bold, 15, "#ffffff", 65, 1220))
+        texts.append(self._draw_cmd(f"-> CGV Cinemas: {cgv_link}", self.font_reg, 15, "#cbd5e1", 65, 1255))
         texts.append(self._draw_cmd(f"Film Oracle Cinema Dispatch  |  Tự động định vị từ {loc_label}", self.font_reg, 13, "#64748b", 65, 1290))
 
         filter_parts = [
