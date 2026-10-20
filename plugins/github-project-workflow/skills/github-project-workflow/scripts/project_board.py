@@ -619,89 +619,231 @@ def resolve_project_item_id(task_id, config, cache, cache_path):
     return None
 
 
-def update_local_spec_status(task_id, board_status, tasks_dir):
+def update_local_spec_status_if_changed(task_id, board_status, tasks_dir):
+    """Update local spec status only if different from current content."""
     pattern = os.path.join(tasks_dir, f"{task_id}*.md")
     matches = glob.glob(pattern)
     if not matches:
         spec_path = os.path.join(tasks_dir, f"{task_id}.md")
         if not os.path.exists(spec_path):
-            return
+            return False
         matches = [spec_path]
 
     mapped = LOCAL_SPEC_STATUS.get(board_status, board_status.upper())
+    updated_any = False
     for spec_path in matches:
-        with open(spec_path, "r", encoding="utf-8") as f:
-            text = f.read()
-        updated = re.sub(r"^Status:\s*.*$", f"Status: {mapped}", text, flags=re.M | re.I)
-        with open(spec_path, "w", encoding="utf-8") as f:
-            f.write(updated)
-        print(f"Updated local spec {spec_path} -> Status: {mapped}")
+        try:
+            with open(spec_path, "r", encoding="utf-8") as f:
+                text = f.read()
+            current_match = re.search(r"^Status:\s*(.+)$", text, re.M | re.I)
+            if current_match and current_match.group(1).strip().upper() == mapped.upper():
+                continue
+            updated = re.sub(r"^Status:\s*.*$", f"Status: {mapped}", text, flags=re.M | re.I)
+            with open(spec_path, "w", encoding="utf-8") as f:
+                f.write(updated)
+            updated_any = True
+        except Exception:
+            pass
+    return updated_any
+
+
+def update_local_spec_status(task_id, board_status, tasks_dir):
+    update_local_spec_status_if_changed(task_id, board_status, tasks_dir)
+
+
+DEFAULT_CACHE_TTL = 120  # 2 minutes default
+
+
+def sync_project_state(config, cache, cache_path, outbox_path, force=False, ttl=DEFAULT_CACHE_TTL):
+    """
+    Ensure local task state is synchronized with latest GitHub Project state,
+    protected by TTL caching and rate-limit guard.
+    """
+    snapshot = cache.get("board_snapshot", {})
+    synced_at = snapshot.get("synced_at", 0)
+    cached_items = snapshot.get("items", [])
+    age = int(time.time() - synced_at)
+
+    if not force and cached_items and age < ttl:
+        rem_ttl = max(0, ttl - age)
+        return (
+            cached_items,
+            False,
+            "cache_hit",
+            f"📦 [CACHE] Trạng thái GitHub Project (đồng bộ {age}s trước, cache hiệu lực thêm {rem_ttl}s. Dùng --refresh để ép fetch)",
+        )
+
+    # Pre-check rate limits to avoid getting throttled
+    rl = get_rate_limit_info()
+    if rl and (rl.get("gql_remaining", 0) <= 5 or rl.get("core_remaining", 0) <= 5):
+        if cached_items:
+            reset_ts = rl.get("gql_reset", 0) or rl.get("core_reset", 0)
+            reset_str = datetime.fromtimestamp(reset_ts).strftime("%H:%M:%S") if reset_ts else "sắp tới"
+            return (
+                cached_items,
+                False,
+                "rate_limited",
+                f"⚠️ [RATE-LIMIT SHIELD] API quota gần cạn. Dùng dữ liệu cache từ {datetime.fromtimestamp(synced_at).strftime('%H:%M:%S')} (reset lúc {reset_str}).",
+            )
+        local_tasks = parse_local_specs(config["tasks_dir"], config["backlog_doc"])
+        return (
+            local_tasks,
+            False,
+            "rate_limited",
+            "⚠️ [RATE-LIMIT SHIELD] API quota gần cạn. Dùng dữ liệu markdown cục bộ.",
+        )
+
+    project_number = config.get("project_number")
+    owner = config.get("owner")
+    if not project_number or not owner:
+        local_tasks = parse_local_specs(config["tasks_dir"], config["backlog_doc"])
+        return local_tasks, False, "no_config", "📁 [LOCAL] Chưa cấu hình project_number/owner. Dùng dữ liệu local specs."
+
+    # Attempt live query from GitHub Project
+    rc, out, err = run_gh(
+        ["gh", "project", "item-list", str(project_number), "--owner", owner, "--limit", "150", "--format", "json"],
+        check=False,
+    )
+    if rc == 0:
+        data = json.loads(out)
+        remote_items = data.get("items", [])
+        parsed_tasks = []
+        items_cache = cache.setdefault("items", {})
+
+        outbox = load_json(outbox_path, [])
+        pending_ids = {entry.get("task_id") for entry in outbox if entry.get("task_id")}
+
+        reconciled_count = 0
+        for i in remote_items:
+            title = i.get("title", "")
+            m = re.match(r"^([A-Za-z0-9]+-\d+)", title)
+            tid = m.group(1).upper() if m else None
+            if not tid:
+                continue
+
+            issue_num = i.get("content", {}).get("number")
+            status = normalize_board_status(i.get("status", "Backlog"))
+            phase = i.get("phase", "P0")
+            item_id = i.get("id")
+
+            items_cache[tid] = {
+                "item_id": item_id,
+                "issue_number": issue_num,
+                "status": status,
+                "phase": phase,
+            }
+
+            parsed_tasks.append({
+                "task_id": tid,
+                "issue_number": issue_num or "?",
+                "status": status,
+                "raw_status": status,
+                "phase": phase,
+                "title": title,
+            })
+
+            # Reconcile with local spec if not pending in outbox
+            if tid not in pending_ids:
+                if update_local_spec_status_if_changed(tid, status, config["tasks_dir"]):
+                    reconciled_count += 1
+
+        def sort_key(t):
+            num = re.search(r"\d+", t["task_id"])
+            return int(num.group(0)) if num else 0
+
+        parsed_tasks.sort(key=sort_key)
+        cache["board_snapshot"] = {
+            "synced_at": time.time(),
+            "items": parsed_tasks,
+        }
+        save_json(cache_path, cache)
+
+        rec_msg = f" (đã tự động cập nhật {reconciled_count} local spec)" if reconciled_count > 0 else ""
+        return (
+            parsed_tasks,
+            True,
+            "success",
+            f"⚡ [REMOTE SYNC] Đã đồng bộ mới nhất từ GitHub Project #{project_number}{rec_msg} (Cache TTL: {ttl}s)",
+        )
+
+    scope_missing = "missing required scopes" in err or "INSUFFICIENT_SCOPES" in err
+    hint = " (Chạy 'gh auth refresh -s project,read:project' để cấp quyền Project Board)" if scope_missing else ""
+
+    if cached_items:
+        return (
+            cached_items,
+            False,
+            "error_fallback",
+            f"⚠️ [FALLBACK] Không thể kết nối live Project{hint}. Dùng dữ liệu cache từ {datetime.fromtimestamp(synced_at).strftime('%H:%M:%S')}.",
+        )
+
+    local_tasks = parse_local_specs(config["tasks_dir"], config["backlog_doc"])
+    cache["board_snapshot"] = {
+        "synced_at": time.time(),
+        "items": local_tasks,
+    }
+    save_json(cache_path, cache)
+    return (
+        local_tasks,
+        False,
+        "local_fallback",
+        f"📁 [LOCAL FALLBACK] Không thể kết nối live Project{hint}. Dùng dữ liệu local specs & lưu cache (TTL: {ttl}s).",
+    )
+
+
+def update_cache_task_status(task_id, target_status, cache, cache_path):
+    """Keep local cache snapshot in sync with immediate mutation."""
+    items_cache = cache.setdefault("items", {})
+    if task_id in items_cache:
+        items_cache[task_id]["status"] = target_status
+    else:
+        items_cache[task_id] = {"status": target_status}
+
+    snapshot = cache.get("board_snapshot", {})
+    if "items" in snapshot:
+        for item in snapshot["items"]:
+            if item.get("task_id") == task_id:
+                item["status"] = target_status
+                item["raw_status"] = target_status
+                break
+    save_json(cache_path, cache)
 
 
 def cmd_list(args):
     config = resolve_config(args)
     opportunistic_auto_sync(config)
     cache_path, outbox_path = get_cache_paths(config)
-
-    if not args.remote:
-        tasks = parse_local_specs(config["tasks_dir"], config["backlog_doc"])
-        if args.status:
-            target = normalize_board_status(args.status).lower()
-            tasks = [
-                t
-                for t in tasks
-                if t["status"].lower() == target
-                or (target == "todo" and t["raw_status"].strip().upper() == "TODO")
-            ]
-        for t in tasks:
-            num = t["issue_number"]
-            phase_short = t["phase"].split("—")[0].strip()
-            print(f"#{str(num):<3} | {t['status']:<12} | {phase_short:<6} | {t['title']}")
-        outbox = load_json(outbox_path, [])
-        suffix = f" (Pending outbox sync: {len(outbox)})" if outbox else " (0 GitHub API calls used)"
-        print(f"\nTotal: {len(tasks)} task(s){suffix}")
-        return
-
-    # Remote listing requested
-    project_number = config.get("project_number")
-    owner = config.get("owner")
-    if not project_number or not owner:
-        print(f"[WARN] Missing project_number or owner. Falling back to local specs:\n")
-        args.remote = False
-        return cmd_list(args)
-
-    rc, out, err = run_gh(
-        ["gh", "project", "item-list", str(project_number), "--owner", owner, "--limit", "150", "--format", "json"],
-        check=False,
-    )
-    if rc != 0:
-        print(f"[WARN] Remote Project query unavailable ({err.splitlines()[-1] if err else 'error'}). Falling back to local specs:\n")
-        args.remote = False
-        return cmd_list(args)
-
-    data = json.loads(out)
-    items = data.get("items", [])
     cache = load_json(cache_path, {})
-    items_cache = cache.setdefault("items", {})
-    for i in items:
-        title = i.get("title", "")
-        m = re.match(r"^([A-Za-z0-9]+-\d+)", title)
-        if m:
-            tid = m.group(1).upper()
-            items_cache[tid] = {
-                "item_id": i.get("id"),
-                "issue_number": i.get("content", {}).get("number"),
-            }
-    save_json(cache_path, cache)
+    force = getattr(args, "refresh", False) or getattr(args, "remote", False)
+    ttl = getattr(args, "ttl", None)
+    if ttl is None:
+        ttl = int(os.environ.get("GH_PROJECT_CACHE_TTL", DEFAULT_CACHE_TTL))
+    local_only = getattr(args, "local_only", False)
+
+    if local_only:
+        tasks = parse_local_specs(config["tasks_dir"], config["backlog_doc"])
+        banner = "📁 [LOCAL ONLY] Đọc từ local markdown specs (0 API calls)."
+    else:
+        tasks, is_fresh, code, banner = sync_project_state(config, cache, cache_path, outbox_path, force=force, ttl=ttl)
 
     if args.status:
-        items = [i for i in items if i.get("status", "").lower() == args.status.lower()]
-    for i in items:
-        num = i.get("content", {}).get("number", "?")
-        status = i.get("status", "None")
-        phase = i.get("phase", "")
-        print(f"#{num:<3} | {status:<12} | {phase:<22} | {i.get('title')}")
-    print(f"\nTotal: {len(items)} task(s) (synced to local cache)")
+        target = normalize_board_status(args.status).lower()
+        tasks = [
+            t
+            for t in tasks
+            if t["status"].lower() == target
+            or (target == "todo" and t.get("raw_status", "").strip().upper() == "TODO")
+        ]
+
+    print(f"{banner}\n")
+    for t in tasks:
+        num = t.get("issue_number", "?")
+        phase_short = t.get("phase", "P0").split("—")[0].strip()
+        print(f"#{str(num):<3} | {t['status']:<12} | {phase_short:<6} | {t['title']}")
+
+    outbox = load_json(outbox_path, [])
+    suffix = f" (Pending outbox sync: {len(outbox)})" if outbox else ""
+    print(f"\nTotal: {len(tasks)} task(s){suffix}")
 
 
 def cmd_move(args):
@@ -712,10 +854,11 @@ def cmd_move(args):
     target_status = normalize_board_status(args.status)
 
     # 1. Local-First: Update spec file immediately
-    update_local_spec_status(task_id, target_status, config["tasks_dir"])
+    update_local_spec_status_if_changed(task_id, target_status, config["tasks_dir"])
+    cache = load_json(cache_path, {})
+    update_cache_task_status(task_id, target_status, cache, cache_path)
 
     # 2. Remote update (GraphQL)
-    cache = load_json(cache_path, {})
     try:
         project_id = config.get("project_id")
         if not project_id:
@@ -766,7 +909,9 @@ def cmd_push(args):
     phase_code = phase_match.group(1).split("—")[0].strip() if phase_match else "P0"
     board_status = normalize_board_status(args.status)
 
-    update_local_spec_status(task_id, board_status, config["tasks_dir"])
+    update_local_spec_status_if_changed(task_id, board_status, config["tasks_dir"])
+    cache = load_json(cache_path, {})
+    update_cache_task_status(task_id, board_status, cache, cache_path)
     owner = config.get("owner")
     repo = config.get("repo")
     repo_slug = f"{owner}/{repo}" if owner and repo else None
@@ -843,16 +988,20 @@ def cmd_push(args):
 
 
 def cmd_sync(args):
+    """Bidirectional sync: Flush outbox (Local -> Remote) and refresh board state (Remote -> Local)."""
     config = resolve_config(args)
-    flushed = flush_outbox_entries(config)
     cache_path, outbox_path = get_cache_paths(config)
+    print("🔄 [SYNC] Bắt đầu đồng bộ 2 chiều (Local <-> GitHub Project)...")
+    flushed = flush_outbox_entries(config)
     outbox = load_json(outbox_path, [])
-    if not outbox and flushed == 0:
-        print("Outbox is empty — all local task statuses are in sync.")
-    elif not outbox:
-        print(f"All {flushed} pending outbox tasks successfully synced to GitHub Project!")
-    else:
-        print(f"Synced {flushed} task(s). {len(outbox)} task(s) remaining in outbox.")
+
+    cache = load_json(cache_path, {})
+    force = getattr(args, "refresh", True)
+    ttl = getattr(args, "ttl", DEFAULT_CACHE_TTL)
+    items, is_fresh, code, msg = sync_project_state(config, cache, cache_path, outbox_path, force=force, ttl=ttl)
+
+    print(f"  • Local -> Remote: Đã đẩy {flushed} tác vụ ({len(outbox)} tác vụ còn tồn trong outbox).")
+    print(f"  • Remote -> Local: {msg} (Tổng {len(items)} tác vụ).")
 
 
 def cmd_daemon(args):
@@ -912,9 +1061,9 @@ def cmd_report(args):
     config = resolve_config(args)
     opportunistic_auto_sync(config)
     cache_path, outbox_path = get_cache_paths(config)
-    tasks = parse_local_specs(config["tasks_dir"], config["backlog_doc"])
-    outbox = load_json(outbox_path, [])
     cache = load_json(cache_path, {})
+    tasks, is_fresh, code, sync_banner = sync_project_state(config, cache, cache_path, outbox_path, force=False, ttl=DEFAULT_CACHE_TTL)
+    outbox = load_json(outbox_path, [])
 
     # Check API rate limits
     rc, out, _ = run_gh(["gh", "api", "rate_limit"], check=False)
@@ -933,7 +1082,7 @@ def cmd_report(args):
     # Group tasks by canonical status
     groups = {s: [] for s in ["Backlog", "Todo", "In Progress", "Done", "Released"]}
     for t in tasks:
-        st = t["status"]
+        st = t.get("status", "Backlog")
         if st not in groups:
             groups[st] = []
         groups[st].append(t)
@@ -949,6 +1098,7 @@ def cmd_report(args):
         f"- **Repository**: `{owner}/{repo}`",
         f"- **Project Board**: `#{p_num}` (Node ID: `{p_id}`)",
         f"- **Spec Directory**: `{config['tasks_dir']}`",
+        f"- **Sync State**: {sync_banner}",
         "",
         "## 🚦 API Rate-Limit Status",
         f"- **REST Core**: `{core_rem}/{core_lim}` remaining",
@@ -1039,9 +1189,11 @@ def main():
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     # list
-    p_list = sub.add_parser("list", help="List tasks (0 API calls by default; pass --remote for live query)")
+    p_list = sub.add_parser("list", help="List tasks (cached state with TTL by default; auto-syncs from Project v2)")
     p_list.add_argument("--status", help="Filter by status (Backlog, Todo, In Progress, Done, Released)")
-    p_list.add_argument("--remote", action="store_true", help="Query GitHub Project v2 directly and refresh cache")
+    p_list.add_argument("-r", "--refresh", "--remote", action="store_true", dest="refresh", help="Force refresh latest state from GitHub Project v2")
+    p_list.add_argument("--ttl", type=int, help=f"Cache validity TTL in seconds (default: {DEFAULT_CACHE_TTL})")
+    p_list.add_argument("--local-only", action="store_true", help="Pure offline mode (read only markdown files without cache sync)")
     p_list.set_defaults(func=cmd_list)
 
     # move
@@ -1057,7 +1209,9 @@ def main():
     p_push.set_defaults(func=cmd_push)
 
     # sync
-    p_sync = sub.add_parser("sync", help="Flush queued outbox mutations to GitHub Project v2")
+    p_sync = sub.add_parser("sync", help="Bidirectional sync: Flush outbox (Local->Remote) and refresh board state (Remote->Local)")
+    p_sync.add_argument("-r", "--refresh", action="store_true", default=True, help="Force refresh state from GitHub Project v2")
+    p_sync.add_argument("--ttl", type=int, default=DEFAULT_CACHE_TTL, help="Cache validity TTL in seconds")
     p_sync.set_defaults(func=cmd_sync)
 
     # rate-limit
