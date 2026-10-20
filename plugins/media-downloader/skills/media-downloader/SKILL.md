@@ -1,6 +1,9 @@
 ---
 name: media-downloader
-description: Universal media curation and high-performance multi-source ingestion pipeline. Evaluates copyright censuses, estimates disk footprints, searches torrent/magnet sources via Prowlarr/Nyaa, and executes accelerated downloads via Aria2c RPC, TorBox Debrid Cloud API (with Cloudflare bypass), and direct HTTP/HTTPS. Supports local download and remote dispatch directly to NAS storage, with built-in real-time queue reporting (`media-downloader report`).
+description: >-
+  Universal media curation and high-performance multi-source ingestion pipeline.
+  Auto-triggers when user asks in natural language to download files or check queues ('tải media', 'kéo link download', 'kéo torrent', 'hàng đợi tải', 'tiến độ tải', 'kiểm tra aria2/torbox', 'download file').
+  Evaluates copyright censuses, estimates disk footprints, searches torrent/magnet sources via Prowlarr/Nyaa, and executes accelerated downloads via Aria2c RPC, TorBox Debrid Cloud API (with Cloudflare bypass), and direct HTTP/HTTPS. Supports local download and remote dispatch directly to NAS storage, with built-in real-time queue reporting (`media-downloader report`).
 ---
 
 # Media Downloader & Ingestion Pipeline Skill

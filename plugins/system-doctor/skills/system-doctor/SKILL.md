@@ -1,6 +1,9 @@
 ---
 name: system-doctor
-description: Autonomous system optimizer and SRE diagnostic engine (CleanMyMac X meets Site Reliability Engineering). Auto-detects device signatures in 0.1s (macOS, Linux Server/NAS, Workstation) without manual flags to clean OS/developer caches, purge inactive RAM, kill runaway CPU hogs, hunt port conflicts (Aria2, Plex, Prowlarr), inspect Docker crashloops, and execute 1-click auto-healing.
+description: >-
+  Autonomous system optimizer and SRE diagnostic engine (CleanMyMac X meets Site Reliability Engineering).
+  Auto-triggers when user asks in natural language about system health, errors, or maintenance ('kiểm tra hệ thống', 'khám máy', 'ổ cứng báo lỗi', 'unmount ổ', 'bad sector', 'monit báo lỗi', 'dọn dẹp ram', 'giải phóng ổ đĩa', 'treo docker', 'port conflict', 'check ram/cpu', 'tối ưu hệ thống').
+  Auto-detects device signatures in 0.1s (macOS, Linux Server/NAS, Workstation) without manual flags to clean OS/developer caches, purge inactive RAM, kill runaway CPU hogs, hunt port conflicts (Aria2, Plex, Prowlarr), inspect Docker crashloops, and execute 1-click auto-healing.
 ---
 
 # System Doctor (Autonomous System Optimizer & SRE Diagnostics)

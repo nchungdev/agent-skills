@@ -54,7 +54,11 @@ def run_batch(hardsub_dir, target_dir, api_key=None, model=DEFAULT_MODEL,
     # Gather target reference SRT files
     target_srts = {}
     target_mkvs = {}
+    hardsub_abs = os.path.abspath(hardsub_dir)
     for root, _, files in os.walk(target_dir):
+        # Automatically skip the source hardsub directory if nested inside target_dir
+        if os.path.abspath(root).startswith(hardsub_abs):
+            continue
         for f in files:
             full_path = os.path.join(root, f)
             tag = find_season_ep_tag(f)

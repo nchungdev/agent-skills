@@ -1,6 +1,9 @@
 ---
 name: distributed-infra
-description: Comprehensive self-hosted infrastructure and distributed compute manager. Operates OpenMediaVault 7 NAS architectures, MergerFS storage pools, Docker Compose media automation pipelines, distributed hardware-accelerated Tdarr transcoding nodes, and ephemeral Cloudflare Tunnel (cloudflared) docker integrations with masked token injection.
+description: >-
+  Comprehensive self-hosted infrastructure and distributed compute manager.
+  Auto-triggers when user asks in natural language about NAS architecture, storage pools, or containers ('hạ tầng nas', 'omv', 'openmediavault', 'mergerfs', 'docker compose', 'cấu hình nas', 'cloudflare tunnel', 'quản lý nas', 'tdarr').
+  Operates OpenMediaVault 7 NAS architectures, MergerFS storage pools, Docker Compose media automation pipelines, distributed hardware-accelerated Tdarr transcoding nodes, and ephemeral Cloudflare Tunnel (cloudflared) docker integrations with masked token injection.
 ---
 
 # Distributed Infrastructure & Homelab Operations Skill

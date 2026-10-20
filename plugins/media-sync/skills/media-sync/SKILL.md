@@ -1,6 +1,9 @@
 ---
 name: media-sync
-description: Media destination dispatcher, library standardizer, and multi-target cloud/NAS synchronization engine. Normalizes directory naming according to strict Plex/TheTVDB conventions, auto-discovers NAS library paths via SSH, executes parallel high-throughput transfers to NAS (SSH/SFTP/rsync) and Google Drive (Rclone), guides Rclone account onboarding/switching, enforces post-transfer local cache auto-purging, and reports sync status (`media-sync report`).
+description: >-
+  Media destination dispatcher, library standardizer, and multi-target cloud/NAS synchronization engine.
+  Auto-triggers when user asks in natural language to move, standardize, or sync media ('chuyển phim vào thư viện', 'move phim sang plex', 'đồng bộ nas', 'sync rclone', 'chuẩn hóa tên thư mục', 'quét lại plex/sonarr', 'dọn cache sau sync').
+  Normalizes directory naming according to strict Plex/TheTVDB conventions, auto-discovers NAS library paths via SSH, executes parallel high-throughput transfers to NAS (SSH/SFTP/rsync) and Google Drive (Rclone), guides Rclone account onboarding/switching, enforces post-transfer local cache auto-purging, and reports sync status (`media-sync report`).
 ---
 
 # Media Sync & Library Dispatcher Skill

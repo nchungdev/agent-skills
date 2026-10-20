@@ -1,6 +1,9 @@
 ---
 name: film-oracle
-description: Truth-seeking cinema auditor and honest film evaluation engine. Synthesizes critic consensus, reviewer analyses, audience sentiment, polarizing flaws, buzz lifecycle timing, and demographic matchmaking to deliver an authentic verdict for any film.
+description: >-
+  Truth-seeking cinema auditor and honest film evaluation engine.
+  Auto-triggers when user asks in natural language for film reviews, ratings, or opinions ('đánh giá phim', 'review phim', 'phim này hay không', 'điểm imdb/rotten tomatoes', 'nhận xét phim', 'có nên xem không', 'khen chê phim').
+  Synthesizes critic consensus, reviewer analyses, audience sentiment, polarizing flaws, buzz lifecycle timing, and demographic matchmaking to deliver an authentic verdict for any film.
 ---
 
 # Film Oracle: Authentic Cinema Auditor & Truth-Seeking Film Critic

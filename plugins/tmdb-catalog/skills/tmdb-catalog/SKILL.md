@@ -1,6 +1,9 @@
 ---
 name: tmdb-catalog
-description: Cinema & television knowledge graph powered by The Movie Database (TMDb) API v3 and TheTVDB. Resolves rich metadata, downloads HD posters/fanart, generates Plex/Kodi-compliant NFO files, renders visual 2-column movie cards with local poster thumbnails, and classifies titles into overarching Franchises (IP Universes, Auteur Collections, Studio Collections).
+description: >-
+  Cinema & television knowledge graph powered by The Movie Database (TMDb) API v3 and TheTVDB.
+  Auto-triggers when user asks in natural language about film metadata, series info, or artwork ('tra cứu tmdb', 'thông tin phim', 'nội dung phim', 'poster phim', 'diễn viên phim', 'năm phát hành', 'phim này có mấy phần', 'franchise', 'tmdb id').
+  Resolves rich metadata, downloads HD posters/fanart, generates Plex/Kodi-compliant NFO files, renders visual 2-column movie cards with local poster thumbnails, and classifies titles into overarching Franchises (IP Universes, Auteur Collections, Studio Collections).
 ---
 
 # TMDb Catalog & Franchise Intelligence Skill

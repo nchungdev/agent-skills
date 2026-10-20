@@ -1,6 +1,9 @@
 ---
 name: ffmpeg-toolkit
-description: Comprehensive media processing engine powered by FFmpeg & FFprobe. Extracts embedded (muxed) subtitles from MKV/MP4/M4V containers, aligns subtitle timecodes to speech via Voice Activity Detection (VAD) without consuming AI tokens, converts and sanitizes subtitles (ASS/SRT) to W3C-standard WebVTT for browser streaming, and outputs media processing reports. Supports local execution and remote execution on NAS via SSH.
+description: >-
+  Comprehensive media processing engine powered by FFmpeg & FFprobe.
+  Auto-triggers when user asks in natural language to process audio/video/subtitles ('xử lý video', 'extract sub', 'trích phụ đề', 'convert webvtt', 'align sub', 'lệch phụ đề', 'chuyển đổi định dạng video', 'ffprobe', 'kiểm tra bitrate/codec').
+  Extracts embedded (muxed) subtitles from MKV/MP4/M4V containers, aligns subtitle timecodes to speech via Voice Activity Detection (VAD) without consuming AI tokens, converts and sanitizes subtitles (ASS/SRT) to W3C-standard WebVTT for browser streaming, and outputs media processing reports. Supports local execution and remote execution on NAS via SSH.
 ---
 
 # FFmpeg Toolkit (Media & Subtitle Processing Engine)

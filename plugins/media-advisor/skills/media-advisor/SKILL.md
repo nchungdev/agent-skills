@@ -1,6 +1,9 @@
 ---
 name: media-advisor
-description: Zero-API cinema and series concierge. Reads local Plex and Jellyfin SQLite databases directly in read-only mode to extract authentic watch history, in-progress items, personal ratings, and unwatched library gems. Integrates real-time theatrical releases, OTT streaming platform drops, and community buzz with anti-seeding sentiment verification. Renders recommendations as 2-column visual cards with local poster thumbnails.
+description: >-
+  Zero-API cinema and series concierge.
+  Auto-triggers when user asks in natural language for recommendations or watch advice ('gợi ý phim', 'hôm nay xem gì', 'tư vấn phim', 'phim tương tự', 'thư viện plex có gì xem', 'tìm phim hay', 'đề xuất phim').
+  Reads local Plex and Jellyfin SQLite databases directly in read-only mode to extract authentic watch history, in-progress items, personal ratings, and unwatched library gems. Integrates real-time theatrical releases, OTT streaming platform drops, and community buzz with anti-seeding sentiment verification. Renders recommendations as 2-column visual cards with local poster thumbnails.
 ---
 
 # Media Advisor: Zero-API Cinema & Series Recommendation Concierge
