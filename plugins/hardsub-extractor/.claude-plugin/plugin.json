@@ -1,0 +1,18 @@
+{
+  "name": "hardsub-extractor",
+  "displayName": "Hardsub OCR & Subtitle Synchronizer",
+  "version": "1.0.0",
+  "description": "Autonomous video hardsub extraction and OCR alignment engine: Uses FFmpeg memory streaming and Gemini Multimodal Vision API to extract high-accuracy Vietnamese subtitles with exact timecodes and exports clean .vi.OCR.srt files.",
+  "author": {
+    "name": "nchungdev"
+  },
+  "keywords": [
+    "hardsub",
+    "ocr",
+    "subtitles",
+    "gemini-vision",
+    "ffmpeg",
+    "synchronization",
+    "srt"
+  ]
+}

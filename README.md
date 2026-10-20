@@ -3,9 +3,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Agent Skills Standard](https://img.shields.io/badge/Standard-Agent%20Skills-brightgreen.svg)](https://agentskills.org)
 [![Compatible With](https://img.shields.io/badge/Compatible%20With-Claude%20Code%20|%20Antigravity%20|%20Gemini%20|%20Codex%20|%20Cursor-orange.svg)](#-platform-compatibility)
-[![Total Skills](https://img.shields.io/badge/Skills%20Catalog-10%20Production%20Skills-purple.svg)](#-skills-catalog)
+[![Total Skills](https://img.shields.io/badge/Skills%20Catalog-12%20Production%20Skills-purple.svg)](#-skills-catalog)
 
-> **A curated, production-grade monorepo of 10 modular AI Agent Skills & Plugins crafted by [@nchungdev](https://github.com/nchungdev).**  
+> **A curated, production-grade monorepo of 12 modular AI Agent Skills & Plugins crafted by [@nchungdev](https://github.com/nchungdev).**  
 > Built strictly on the open **Agent Skills Standard (`SKILL.md`)**, ready to install, distribute, and execute across any AI coding assistant or autonomous runtime: **Claude Code, Google Antigravity / Gemini CLI, OpenAI Codex, Cursor, Windsurf**, and custom agent frameworks.
 
 ---
@@ -22,9 +22,9 @@
 
 ---
 
-## 🏛️ Skills Catalog (10 Consolidated Skills)
+## 🏛️ Skills Catalog (12 Consolidated Skills)
 
-The catalog features **10 production-ready Agent Skills**, consolidated into a clean, non-overlapping suite:
+The catalog features **12 production-ready Agent Skills**, consolidated into a clean, non-overlapping suite:
 
 | # | Skill | Superpower & Description | Core Stack / Tooling |
 |:---:|---|---|---|
@@ -38,6 +38,8 @@ The catalog features **10 production-ready Agent Skills**, consolidated into a c
 | 8 | **`system-doctor`** | Autonomous system optimizer & SRE diagnostic engine (CleanMyMac X meets Site Reliability Engineering). Auto-detects device signatures in 0.1s (macOS, Linux Server/NAS, Workstation) to clean OS/developer caches, purge RAM, kill runaway CPU hogs, hunt port conflicts, inspect Docker crashloops, and execute 1-click auto-healing. | SRE Diagnostics, OS Cleaner, Docker Forensics, Inode/RAM |
 | 9 | **`media-advisor`** | Zero-API cinema & series recommendation concierge: Reads local Plex/Jellyfin SQLite DB directly in read-only mode to extract authentic watch history, in-progress items, personal ratings, and unwatched library gems. Integrates real-time theatrical releases, OTT streaming drops, and community buzz with anti-seeding sentiment verification. Renders recommendations as 2-column visual cards with local poster thumbnails. | SQLite Read-Only (`mode=ro`), Plex/Jellyfin DB, TMDb Trends, Anti-Seeding Filter |
 | 10 | **`film-oracle`** | Truth-seeking cinema auditor & honest film evaluation engine: Multi-source synthesis across Rotten Tomatoes, Metacritic, YouTube/Blog reviewers, and audience pulse to answer 7 critical questions for any film: Worth watching or skip, critic consensus, reviewer takeaways, audience reception, polarizing flaws, buzz lifecycle timing, and demographic matchmaking. | Multi-Source Scraping, RT/Metacritic Consensus, Reviewer Pulse, Lifecycle Timing |
+| 11 | **`project-bootstrap`** | Universal AI project scaffolding and cross-agent orchestrator: Generates tailored `AGENTS.md` conventions, scaffolds project-specific skills (`.agents/skills/`), and links them via zero-drift relative symlinks across Claude Code (`CLAUDE.md`), Gemini CLI (`GEMINI.md`), OpenAI Codex (`CODEX.md`), Cursor (`.cursorrules`), and Windsurf (`.windsurfrules`). | Repo Inspection, Single Source of Truth, Cross-Agent Symlinks, Python 3 Stdlib |
+| 12 | **`hardsub-extractor`** | Autonomous video hardsub extraction and OCR alignment engine: Uses FFmpeg memory streaming and Gemini Multimodal Vision API to extract high-accuracy Vietnamese subtitles with exact timecodes and exports clean .vi.OCR.srt files. | FFmpeg Memory Streaming, Gemini 3.5 Flash Lite Vision, Timecode Snapping, Spanning Deduplication |
 
 ---
 

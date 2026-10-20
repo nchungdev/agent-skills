@@ -4,7 +4,7 @@
     "name": "nchungdev",
     "url": "https://github.com/nchungdev"
   },
-  "description": "Universal suite of 10 production-grade AI Agent Skills: FFmpeg media processing, TMDb catalog & franchise taxonomy, high-performance media ingestion, multi-target cloud/NAS synchronization, AI subtitle translation, distributed infrastructure & homelab operations, multi-conversation progress orchestration, autonomous system optimization & SRE diagnostics, zero-API cinema & series recommendation concierge, and truth-seeking film evaluation & cinema auditor (Film Oracle).",
+  "description": "Universal suite of 12 production-grade AI Agent Skills: FFmpeg media processing, TMDb catalog & franchise taxonomy, high-performance media ingestion, multi-target cloud/NAS synchronization, AI subtitle translation, distributed infrastructure & homelab operations, multi-conversation progress orchestration, autonomous system optimization & SRE diagnostics, zero-API cinema & series recommendation concierge, truth-seeking film evaluation & cinema auditor (Film Oracle), universal project conventions & skills bootstrapper (Project Bootstrap), and hardsub OCR extraction & subtitle synchronization (Hardsub Extractor).",
   "plugins": [
     {
       "name": "ffmpeg-toolkit",
@@ -188,6 +188,45 @@
         "matchmaking",
         "ratings",
         "truth"
+      ]
+    },
+    {
+      "name": "project-bootstrap",
+      "displayName": "Project Conventions & Skills Bootstrapper",
+      "source": "./plugins/project-bootstrap",
+      "description": "Universal AI project scaffolding and cross-agent orchestrator: Generates tailored AGENTS.md conventions, scaffolds project-specific skills, and links them via relative symlinks across Claude Code, Gemini CLI, OpenAI Codex, Antigravity, Cursor, and Windsurf.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "conventions",
+        "skills",
+        "bootstrap",
+        "scaffold",
+        "agents",
+        "claude",
+        "gemini",
+        "codex",
+        "cursor",
+        "windsurf",
+        "symlinks",
+        "orchestration"
+      ]
+    },
+    {
+      "name": "hardsub-extractor",
+      "displayName": "Hardsub OCR & Subtitle Synchronizer",
+      "source": "./plugins/hardsub-extractor",
+      "description": "Autonomous video hardsub extraction and OCR alignment engine: Uses FFmpeg memory streaming and Gemini Multimodal Vision API to extract high-accuracy Vietnamese subtitles with exact timecodes and exports clean .vi.OCR.srt files.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "hardsub",
+        "ocr",
+        "subtitles",
+        "gemini-vision",
+        "ffmpeg",
+        "synchronization",
+        "srt"
       ]
     }
   ]
