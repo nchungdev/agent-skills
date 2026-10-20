@@ -770,11 +770,13 @@ def sync_project_state(config, cache, cache_path, outbox_path, force=False, ttl=
     hint = " (Chạy 'gh auth refresh -s project,read:project' để cấp quyền Project Board)" if scope_missing else ""
 
     if cached_items:
+        cache["board_snapshot"]["synced_at"] = time.time()
+        save_json(cache_path, cache)
         return (
             cached_items,
             False,
             "error_fallback",
-            f"⚠️ [FALLBACK] Không thể kết nối live Project{hint}. Dùng dữ liệu cache từ {datetime.fromtimestamp(synced_at).strftime('%H:%M:%S')}.",
+            f"⚠️ [FALLBACK] Không thể kết nối live Project{hint}. Dùng dữ liệu cache (TTL: {ttl}s).",
         )
 
     local_tasks = parse_local_specs(config["tasks_dir"], config["backlog_doc"])
