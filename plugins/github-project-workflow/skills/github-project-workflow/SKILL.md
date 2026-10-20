@@ -81,10 +81,10 @@ Nếu muốn cấu hình thủ công hoặc tùy biến thư mục:
 
 ```json
 {
-  "owner": "nchungdev",
-  "repo": "my-awesome-project",
-  "project_number": "5",
-  "project_id": "PVT_kwHOAsegYM4BnkpP",
+  "owner": "your-org-or-username",
+  "repo": "your-repo-name",
+  "project_number": "1",
+  "project_id": "PVT_kw...",
   "tasks_dir": "docs/tasks",
   "backlog_doc": "docs/BACKLOG.md",
   "cache_dir": ".local-artifacts"
@@ -160,4 +160,4 @@ Nếu muốn cấu hình thủ công hoặc tùy biến thư mục:
 
 - **Luôn kiểm tra `rate-limit` trước khi chạy batch**: Chạy `project_board.py rate-limit` nếu nghi ngờ mạng chập chờn hoặc vừa thực hiện nhiều tác vụ.
 - **Không ngần ngại khi outbox kích hoạt**: Nếu terminal báo `[RATE-LIMIT / SCOPE GUARD] Deferred GitHub Project update`, đừng lo lắng! File spec cục bộ đã được cập nhật chính xác trạng thái, Agent có thể tiếp tục công việc coding ngay mà không cần đợi.
-- **Quy chuẩn định danh task**: Nên dùng định dạng `<PREFIX>-<NUMBER>` (ví dụ `TNG-01`, `FEAT-42`, `CORE-101`) trong tiêu đề file markdown để script tự động nhận diện và sắp xếp khoa học.
+- **Quy chuẩn định danh task**: Nên dùng định dạng `<PREFIX>-<NUMBER>` (ví dụ `TASK-01`, `FEAT-42`, `CORE-101`, `PROJ-10`) trong tiêu đề file markdown để script tự động nhận diện và sắp xếp khoa học.

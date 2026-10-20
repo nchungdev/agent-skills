@@ -148,7 +148,7 @@ def resolve_config(args=None):
 
     # 5. Detect tasks_dir
     if not config["tasks_dir"]:
-        for d in ["docs/v1-tasks", "docs/tasks", "tasks", ".tasks"]:
+        for d in ["docs/tasks", "tasks", "specs", "docs/specs", ".tasks"]:
             if os.path.isdir(d):
                 config["tasks_dir"] = d
                 break
@@ -157,7 +157,7 @@ def resolve_config(args=None):
 
     # 6. Detect backlog_doc
     if not config["backlog_doc"]:
-        for doc in ["docs/V1-BACKLOG.md", "docs/BACKLOG.md", "BACKLOG.md"]:
+        for doc in ["docs/BACKLOG.md", "BACKLOG.md", "docs/ROADMAP.md", "ROADMAP.md"]:
             if os.path.isfile(doc):
                 config["backlog_doc"] = doc
                 break
@@ -1198,7 +1198,7 @@ def main():
 
     # move
     p_move = sub.add_parser("move", help="Move a task to a status column (Local-First + 1-pt GraphQL / Outbox)")
-    p_move.add_argument("task_id", help="Task ID, e.g. TNG-01 or FEAT-12")
+    p_move.add_argument("task_id", help="Task ID, e.g. TASK-01 or FEAT-12")
     p_move.add_argument("status", help="Target status: Backlog, Todo, In Progress, Done, Released")
     p_move.set_defaults(func=cmd_move)
 
