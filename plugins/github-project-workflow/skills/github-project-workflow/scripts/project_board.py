@@ -255,7 +255,85 @@ def parse_local_specs(tasks_dir, backlog_doc):
     return tasks
 
 
-def enqueue_outbox(entry, outbox_path):
+def get_rate_limit_info():
+    """Query GitHub API rate limit status without consuming quota."""
+    rc, out, _ = run_gh(["gh", "api", "rate_limit"], check=False)
+    if rc != 0:
+        return None
+    try:
+        res = json.loads(out).get("resources", {})
+        core = res.get("core", {})
+        gql = res.get("graphql", {})
+        return {
+            "core_remaining": core.get("remaining", 0),
+            "core_limit": core.get("limit", 5000),
+            "core_reset": core.get("reset", 0),
+            "gql_remaining": gql.get("remaining", 0),
+            "gql_limit": gql.get("limit", 5000),
+            "gql_reset": gql.get("reset", 0),
+        }
+    except Exception:
+        return None
+
+
+def spawn_auto_sync_daemon(config, target_reset_ts):
+    """Spawn a detached background process to automatically push queued tasks once rate limit recovers."""
+    cache_dir = config.get("cache_dir", ".local-artifacts")
+    pid_file = os.path.join(cache_dir, "auto_sync.pid")
+    log_file = os.path.join(cache_dir, "auto_sync.log")
+
+    # Check if an existing daemon is alive
+    if os.path.exists(pid_file):
+        try:
+            with open(pid_file, "r") as f:
+                old_pid = int(f.read().strip())
+            os.kill(old_pid, 0)
+            return old_pid
+        except (ProcessLookupError, ValueError):
+            pass
+        except PermissionError:
+            return None
+
+    os.makedirs(cache_dir, exist_ok=True)
+    cmd = [
+        sys.executable,
+        os.path.abspath(__file__),
+        "daemon",
+        "--until", str(int(target_reset_ts)),
+        "--cache-dir", cache_dir,
+    ]
+    if config.get("tasks_dir"):
+        cmd.extend(["--tasks-dir", config["tasks_dir"]])
+    if config.get("backlog_doc"):
+        cmd.extend(["--backlog-doc", config["backlog_doc"]])
+    if config.get("owner"):
+        cmd.extend(["--owner", config["owner"]])
+    if config.get("repo"):
+        cmd.extend(["--repo", config["repo"]])
+    if config.get("project_number"):
+        cmd.extend(["--project", str(config["project_number"])])
+    if config.get("project_id"):
+        cmd.extend(["--project-id", config["project_id"]])
+
+    try:
+        log_fp = open(log_file, "a", encoding="utf-8")
+        proc = subprocess.Popen(
+            cmd,
+            stdout=log_fp,
+            stderr=subprocess.STDOUT,
+            start_new_session=True,
+            close_fds=True,
+        )
+        with open(pid_file, "w") as f:
+            f.write(str(proc.pid))
+        return proc.pid
+    except Exception as e:
+        print(f"[WARN] Không thể khởi động background auto-sync daemon: {e}")
+        return None
+
+
+def enqueue_outbox(entry, config, outbox_path):
+    """Save an unexecuted mutation to the local outbox and schedule background auto-sync upon quota reset."""
     outbox = load_json(outbox_path, [])
     # Deduplicate by task_id + action
     outbox = [
@@ -266,7 +344,179 @@ def enqueue_outbox(entry, outbox_path):
     entry["queued_at"] = datetime.now(timezone.utc).isoformat()
     outbox.append(entry)
     save_json(outbox_path, outbox)
-    print(f"Queued in local outbox ({outbox_path}): {entry['action']} {entry['task_id']} -> {entry.get('status')}")
+
+    # Determine when rate limit resets
+    rl = get_rate_limit_info()
+    reset_ts = rl.get("gql_reset", 0) if rl else 0
+    if not reset_ts or reset_ts <= time.time():
+        reset_ts = time.time() + 300
+    target_ts = reset_ts + 5
+    wait_secs = max(5, int(target_ts - time.time()))
+    reset_str = datetime.fromtimestamp(reset_ts).strftime("%H:%M:%S")
+
+    print(f"📦 [LOCAL SAVED] Đã lưu task vào hàng đợi cục bộ ({outbox_path}): {entry['action']} {entry['task_id']} -> {entry.get('status')}")
+    pid = spawn_auto_sync_daemon(config, target_ts)
+    if pid:
+        print(f"🚀 [AUTO-SYNC DAEMON] Tiến trình ngầm (PID {pid}) đang chờ rate-limit reset lúc {reset_str} (còn ~{wait_secs}s) để tự động đẩy lên GitHub.")
+
+
+def flush_outbox_entries(config):
+    """Flush pending outbox entries to GitHub Project and remote repository."""
+    cache_path, outbox_path = get_cache_paths(config)
+    outbox = load_json(outbox_path, [])
+    if not outbox:
+        return 0
+
+    cache = load_json(cache_path, {})
+    remaining = []
+    project_id = config.get("project_id")
+    owner = config.get("owner")
+    repo = config.get("repo")
+    repo_slug = f"{owner}/{repo}" if owner and repo else None
+    flushed_count = 0
+
+    for entry in outbox:
+        try:
+            action = entry.get("action")
+            if action == "move":
+                task_id = entry["task_id"]
+                target_status = entry["status"]
+                status_field_id, status_options, _, _ = get_project_fields(config, cache, cache_path)
+                item_id = resolve_project_item_id(task_id, config, cache, cache_path)
+                if not item_id:
+                    raise RuntimeError(f"Missing item_id for {task_id}")
+                mutation = f"""
+                mutation {{
+                  updateProjectV2ItemFieldValue(input: {{
+                    projectId: "{project_id}", itemId: "{item_id}", fieldId: "{status_field_id}",
+                    value: {{ singleSelectOptionId: "{status_options[target_status]}" }}
+                  }}) {{ projectV2Item {{ id }} }}
+                }}
+                """
+                run_gh(["gh", "api", "graphql", "-f", f"query={mutation}"])
+                print(f"Flushed move: {task_id} -> {target_status}")
+                flushed_count += 1
+
+            elif action == "attach_issue":
+                task_id = entry["task_id"]
+                issue_url = entry["issue_url"]
+                phase_code = entry.get("phase", "P0")
+                board_status = entry["status"]
+
+                status_field_id, status_options, phase_field_id, phase_options = get_project_fields(config, cache, cache_path)
+                _, issue_json, _ = run_gh(["gh", "issue", "view", issue_url, "--json", "id,number"])
+                issue_data = json.loads(issue_json)
+                issue_node_id = issue_data["id"]
+                issue_num = issue_data.get("number")
+
+                add_q = f"""
+                mutation {{
+                  addProjectV2ItemById(input: {{ projectId: "{project_id}", contentId: "{issue_node_id}" }}) {{
+                    item {{ id }}
+                  }}
+                }}
+                """
+                _, add_out, _ = run_gh(["gh", "api", "graphql", "-f", f"query={add_q}"])
+                item_id = json.loads(add_out)["data"]["addProjectV2ItemById"]["item"]["id"]
+                cache.setdefault("items", {})[task_id] = {"item_id": item_id, "issue_number": issue_num}
+                save_json(cache_path, cache)
+
+                upd_mutations = [
+                    f"""setStatus: updateProjectV2ItemFieldValue(input: {{
+                        projectId: "{project_id}", itemId: "{item_id}", fieldId: "{status_field_id}",
+                        value: {{ singleSelectOptionId: "{status_options[board_status]}" }}
+                    }}) {{ projectV2Item {{ id }} }}"""
+                ]
+                if phase_field_id and phase_options and phase_code in phase_options:
+                    upd_mutations.append(
+                        f"""setPhase: updateProjectV2ItemFieldValue(input: {{
+                            projectId: "{project_id}", itemId: "{item_id}", fieldId: "{phase_field_id}",
+                            value: {{ singleSelectOptionId: "{phase_options[phase_code]}" }}
+                        }}) {{ projectV2Item {{ id }} }}"""
+                    )
+                upd_q = f"mutation {{ {' '.join(upd_mutations)} }}"
+                run_gh(["gh", "api", "graphql", "-f", f"query={upd_q}"])
+                print(f"Flushed attach_issue: {task_id} -> Project #{config.get('project_number')}")
+                flushed_count += 1
+
+            elif action == "push":
+                task_id = entry["task_id"]
+                spec_path = entry["spec_file"]
+                board_status = entry["status"]
+                with open(spec_path, "r", encoding="utf-8") as f:
+                    content = f.read().strip()
+                header = content.splitlines()[0].lstrip("# ").strip()
+                phase_match = re.search(r"^(?:Phase|Priority):\s*([^\n\r]+)", content, re.M | re.I)
+                phase_code = phase_match.group(1).split("—")[0].strip() if phase_match else "P0"
+
+                cmd = ["gh", "issue", "create", "--title", header, "--body", content]
+                if repo_slug:
+                    cmd.extend(["--repo", repo_slug])
+                if phase_code:
+                    cmd.extend(["--label", phase_code])
+                rc, issue_url, err = run_gh(cmd, check=False)
+                if rc != 0:
+                    raise RuntimeError(f"Could not create issue: {err}")
+
+                status_field_id, status_options, phase_field_id, phase_options = get_project_fields(config, cache, cache_path)
+                _, issue_json, _ = run_gh(["gh", "issue", "view", issue_url, "--json", "id,number"])
+                issue_data = json.loads(issue_json)
+                issue_node_id = issue_data["id"]
+                issue_num = issue_data.get("number")
+
+                add_q = f"""
+                mutation {{
+                  addProjectV2ItemById(input: {{ projectId: "{project_id}", contentId: "{issue_node_id}" }}) {{
+                    item {{ id }}
+                  }}
+                }}
+                """
+                _, add_out, _ = run_gh(["gh", "api", "graphql", "-f", f"query={add_q}"])
+                item_id = json.loads(add_out)["data"]["addProjectV2ItemById"]["item"]["id"]
+                cache.setdefault("items", {})[task_id] = {"item_id": item_id, "issue_number": issue_num}
+                save_json(cache_path, cache)
+
+                upd_mutations = [
+                    f"""setStatus: updateProjectV2ItemFieldValue(input: {{
+                        projectId: "{project_id}", itemId: "{item_id}", fieldId: "{status_field_id}",
+                        value: {{ singleSelectOptionId: "{status_options[board_status]}" }}
+                    }}) {{ projectV2Item {{ id }} }}"""
+                ]
+                if phase_field_id and phase_options and phase_code in phase_options:
+                    upd_mutations.append(
+                        f"""setPhase: updateProjectV2ItemFieldValue(input: {{
+                            projectId: "{project_id}", itemId: "{item_id}", fieldId: "{phase_field_id}",
+                            value: {{ singleSelectOptionId: "{phase_options[phase_code]}" }}
+                        }}) {{ projectV2Item {{ id }} }}"""
+                    )
+                upd_q = f"mutation {{ {' '.join(upd_mutations)} }}"
+                run_gh(["gh", "api", "graphql", "-f", f"query={upd_q}"])
+                print(f"Flushed push: {task_id} -> Issue created & attached to Project #{config.get('project_number')}")
+                flushed_count += 1
+            else:
+                remaining.append(entry)
+        except Exception as exc:
+            print(f"Still deferred ({entry.get('task_id')}): {str(exc).splitlines()[-1]}")
+            remaining.append(entry)
+
+    save_json(outbox_path, remaining)
+    return flushed_count
+
+
+def opportunistic_auto_sync(config):
+    """Automatically check and flush outbox if rate limits have recovered."""
+    cache_path, outbox_path = get_cache_paths(config)
+    if not os.path.exists(outbox_path):
+        return
+    outbox = load_json(outbox_path, [])
+    if not outbox:
+        return
+
+    rl = get_rate_limit_info()
+    if rl and rl.get("gql_remaining", 0) > 5 and rl.get("core_remaining", 0) > 5:
+        flushed = flush_outbox_entries(config)
+        if flushed > 0:
+            print(f"⚡ [AUTO-SYNC] Đã tự động đồng bộ {flushed} tác vụ từ outbox lên GitHub Project.")
 
 
 def get_project_fields(config, cache, cache_path):
@@ -390,6 +640,7 @@ def update_local_spec_status(task_id, board_status, tasks_dir):
 
 def cmd_list(args):
     config = resolve_config(args)
+    opportunistic_auto_sync(config)
     cache_path, outbox_path = get_cache_paths(config)
 
     if not args.remote:
@@ -455,6 +706,7 @@ def cmd_list(args):
 
 def cmd_move(args):
     config = resolve_config(args)
+    opportunistic_auto_sync(config)
     cache_path, outbox_path = get_cache_paths(config)
     task_id = args.task_id.upper()
     target_status = normalize_board_status(args.status)
@@ -493,11 +745,12 @@ def cmd_move(args):
         print(f"Moved {task_id} -> [{target_status}] on GitHub Project #{config.get('project_number')} (1 GraphQL point)")
     except Exception as exc:
         print(f"[RATE-LIMIT / SCOPE GUARD] Deferred GitHub Project update ({str(exc).splitlines()[-1]}).")
-        enqueue_outbox({"action": "move", "task_id": task_id, "status": target_status}, outbox_path)
+        enqueue_outbox({"action": "move", "task_id": task_id, "status": target_status}, config, outbox_path)
 
 
 def cmd_push(args):
     config = resolve_config(args)
+    opportunistic_auto_sync(config)
     cache_path, outbox_path = get_cache_paths(config)
     spec_path = args.spec_file
     if not os.path.exists(spec_path):
@@ -528,7 +781,7 @@ def cmd_push(args):
     rc, issue_url, err = run_gh(cmd, check=False)
     if rc != 0:
         print(f"[RATE-LIMIT GUARD] Could not create remote issue right now ({err.splitlines()[-1] if err else 'error'}).")
-        enqueue_outbox({"action": "push", "task_id": task_id, "spec_file": spec_path, "status": board_status}, outbox_path)
+        enqueue_outbox({"action": "push", "task_id": task_id, "spec_file": spec_path, "status": board_status}, config, outbox_path)
         return
 
     print(f"Created GitHub Issue for {task_id} -> {issue_url}")
@@ -584,48 +837,54 @@ def cmd_push(args):
                 "phase": phase_code,
                 "status": board_status,
             },
+            config,
             outbox_path,
         )
 
 
 def cmd_sync(args):
     config = resolve_config(args)
+    flushed = flush_outbox_entries(config)
     cache_path, outbox_path = get_cache_paths(config)
     outbox = load_json(outbox_path, [])
-    if not outbox:
+    if not outbox and flushed == 0:
         print("Outbox is empty — all local task statuses are in sync.")
-        return
+    elif not outbox:
+        print(f"All {flushed} pending outbox tasks successfully synced to GitHub Project!")
+    else:
+        print(f"Synced {flushed} task(s). {len(outbox)} task(s) remaining in outbox.")
 
-    cache = load_json(cache_path, {})
-    remaining = []
-    project_id = config.get("project_id")
 
-    for entry in outbox:
-        try:
-            if entry["action"] == "move":
-                task_id = entry["task_id"]
-                target_status = entry["status"]
-                status_field_id, status_options, _, _ = get_project_fields(config, cache, cache_path)
-                item_id = resolve_project_item_id(task_id, config, cache, cache_path)
-                if not item_id:
-                    raise RuntimeError("Missing item_id")
-                mutation = f"""
-                mutation {{
-                  updateProjectV2ItemFieldValue(input: {{
-                    projectId: "{project_id}", itemId: "{item_id}", fieldId: "{status_field_id}",
-                    value: {{ singleSelectOptionId: "{status_options[target_status]}" }}
-                  }}) {{ projectV2Item {{ id }} }}
-                }}
-                """
-                run_gh(["gh", "api", "graphql", "-f", f"query={mutation}"])
-                print(f"Flushed move: {task_id} -> {target_status}")
-            else:
-                remaining.append(entry)
-        except Exception as exc:
-            print(f"Still deferred ({entry.get('task_id')}): {str(exc).splitlines()[-1]}")
-            remaining.append(entry)
+def cmd_daemon(args):
+    """Background daemon that sleeps until rate limit reset timestamp, then auto-pushes outbox."""
+    config = resolve_config(args)
+    cache_path, outbox_path = get_cache_paths(config)
+    target_ts = getattr(args, "until", 0)
+    cache_dir = config.get("cache_dir", ".local-artifacts")
+    pid_file = os.path.join(cache_dir, "auto_sync.pid")
 
-    save_json(outbox_path, remaining)
+    try:
+        while time.time() < target_ts:
+            outbox = load_json(outbox_path, [])
+            if not outbox:
+                print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Outbox is empty. Daemon exiting cleanly.")
+                return
+            chunk = min(15, max(1, target_ts - time.time()))
+            time.sleep(chunk)
+
+        # Rate-limit window passed. Give GitHub API a 3-second buffer to update counters.
+        time.sleep(3)
+        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Rate-limit reset time reached. Flushing outbox...")
+        flushed = flush_outbox_entries(config)
+        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Finished auto-sync: {flushed} tasks synced.")
+    except Exception as e:
+        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Daemon error: {e}")
+    finally:
+        if os.path.exists(pid_file):
+            try:
+                os.remove(pid_file)
+            except Exception:
+                pass
 
 
 def cmd_rate_limit(args):
@@ -651,6 +910,7 @@ def cmd_rate_limit(args):
 def cmd_report(args):
     """Render a clean Markdown status report of the project, tasks, rate limits, and outbox."""
     config = resolve_config(args)
+    opportunistic_auto_sync(config)
     cache_path, outbox_path = get_cache_paths(config)
     tasks = parse_local_specs(config["tasks_dir"], config["backlog_doc"])
     outbox = load_json(outbox_path, [])
@@ -807,6 +1067,11 @@ def main():
     # report
     p_rep = sub.add_parser("report", help="Render Markdown status report of project, tasks, rate limits, and outbox")
     p_rep.set_defaults(func=cmd_report)
+
+    # daemon
+    p_daemon = sub.add_parser("daemon", help="Background daemon to auto-sync when rate limit resets")
+    p_daemon.add_argument("--until", type=float, required=True, help="Epoch timestamp to sleep until")
+    p_daemon.set_defaults(func=cmd_daemon)
 
     # init
     p_init = sub.add_parser("init", help="Initialize or generate .github/project.json config file")

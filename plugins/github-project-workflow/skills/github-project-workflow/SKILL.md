@@ -42,9 +42,11 @@ Kỹ năng quản lý vòng đời task, đặc tả kỹ thuật (spec-driven d
    - Loại bỏ hoàn toàn việc gọi `gh project field-list` và `gh project item-list --limit 150` ở mỗi lần đổi trạng thái task (tiết kiệm hàng trăm điểm GraphQL).
 3. **Single-Issue Targeted Lookup**:
    - Khi cần tìm Item ID của một task chưa cache, script chỉ tra cứu 1 issue cụ thể qua GraphQL (tốn **1 điểm** duy nhất thay vì quét toàn bộ 150 item).
-4. **Local-First & Outbox Queue (`move`, `push`, `sync`)**:
-   - Khi chuyển trạng thái task, file spec trên máy luôn được cập nhật `Status: <STATUS>` ngay lập tức.
-   - Nếu gặp lỗi mạng, mã `429 (Rate Limit)`, `403 (Abuse/Secondary Rate Limit)` hoặc chưa cấp đủ scope `project`, thao tác sẽ được đẩy an toàn vào **Local Outbox** (`project_board_outbox.json`) mà không làm gián đoạn luồng làm việc của Agent. Lệnh `sync` sẽ xả hàng đợi khi quota hồi phục.
+4. **Tự Động Lưu Local & Push Lại Sau Khi Hết Rate Limit (Auto-Save & Background Retry Daemon)**:
+   - Khi chuyển trạng thái task hoặc tạo issue, nếu gặp lỗi mạng, mã `429 (Rate Limit)` hoặc `403 (Abuse/Secondary Rate Limit)`:
+     - **Lưu cục bộ ngay lập tức**: Cập nhật file spec trên ổ cứng và ghi nhận thao tác vào `project_board_outbox.json` để tiến trình công việc của Agent không bao giờ bị nghẽn.
+     - **Tự động khởi chạy Daemon ngầm (`daemon`)**: Script tự động tra cứu mốc thời gian quota hồi phục (`reset_ts`) và kích hoạt một tiến trình nền detached (`project_board.py daemon --until <ts>`). Tiến trình này sẽ ngủ cho đến đúng thời điểm GitHub cấp lại quota, tự động thức dậy, đẩy toàn bộ thay đổi lên GitHub Project và thoát an toàn.
+     - **Đồng bộ cơ hội (Opportunistic Auto-Sync)**: Mỗi khi bất kỳ lệnh CLI nào (`list`, `move`, `push`, `report`) được thực thi sau khi quota đã hồi, script sẽ tự động xả sạch các task còn đọng trong outbox.
 5. **Tách Biệt REST & GraphQL**:
    - Lệnh `push` tạo issue qua REST (`gh issue create` — dùng hạn ngạch REST 5.000 req/giờ độc lập) trước khi gắn card vào Project qua GraphQL.
 
