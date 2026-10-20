@@ -3,9 +3,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Agent Skills Standard](https://img.shields.io/badge/Standard-Agent%20Skills-brightgreen.svg)](https://agentskills.org)
 [![Compatible With](https://img.shields.io/badge/Compatible%20With-Claude%20Code%20|%20Antigravity%20|%20Gemini%20|%20Codex%20|%20Cursor-orange.svg)](#-platform-compatibility)
-[![Total Skills](https://img.shields.io/badge/Skills%20Catalog-12%20Production%20Skills-purple.svg)](#-skills-catalog)
+[![Total Skills](https://img.shields.io/badge/Skills%20Catalog-13%20Production%20Skills-purple.svg)](#-skills-catalog)
 
-> **A curated, production-grade monorepo of 12 modular AI Agent Skills & Plugins crafted by [@nchungdev](https://github.com/nchungdev).**  
+> **A curated, production-grade monorepo of 13 modular AI Agent Skills & Plugins crafted by [@nchungdev](https://github.com/nchungdev).**  
 > Built strictly on the open **Agent Skills Standard (`SKILL.md`)**, ready to install, distribute, and execute across any AI coding assistant or autonomous runtime: **Claude Code, Google Antigravity / Gemini CLI, OpenAI Codex, Cursor, Windsurf**, and custom agent frameworks.
 
 ---
@@ -22,9 +22,9 @@
 
 ---
 
-## 🏛️ Skills Catalog (12 Consolidated Skills)
+## 🏛️ Skills Catalog (13 Consolidated Skills)
 
-The catalog features **12 production-ready Agent Skills**, consolidated into a clean, non-overlapping suite:
+The catalog features **13 production-ready Agent Skills**, consolidated into a clean, non-overlapping suite:
 
 | # | Skill | Superpower & Description | Core Stack / Tooling |
 |:---:|---|---|---|
@@ -40,6 +40,7 @@ The catalog features **12 production-ready Agent Skills**, consolidated into a c
 | 10 | **`film-oracle`** | Truth-seeking cinema auditor & honest film evaluation engine: Multi-source synthesis across Rotten Tomatoes, Metacritic, YouTube/Blog reviewers, and audience pulse to answer 7 critical questions for any film: Worth watching or skip, critic consensus, reviewer takeaways, audience reception, polarizing flaws, buzz lifecycle timing, and demographic matchmaking. | Multi-Source Scraping, RT/Metacritic Consensus, Reviewer Pulse, Lifecycle Timing |
 | 11 | **`project-bootstrap`** | Universal AI project scaffolding and cross-agent orchestrator: Generates tailored `AGENTS.md` conventions, scaffolds project-specific skills (`.agents/skills/`), and links them via zero-drift relative symlinks across Claude Code (`CLAUDE.md`), Gemini CLI (`GEMINI.md`), OpenAI Codex (`CODEX.md`), Cursor (`.cursorrules`), and Windsurf (`.windsurfrules`). | Repo Inspection, Single Source of Truth, Cross-Agent Symlinks, Python 3 Stdlib |
 | 12 | **`hardsub-extractor`** | Autonomous video hardsub extraction and OCR alignment engine: Uses FFmpeg memory streaming and Gemini Multimodal Vision API to extract high-accuracy Vietnamese subtitles with exact timecodes and exports clean .vi.OCR.srt files. | FFmpeg Memory Streaming, Gemini 3.5 Flash Lite Vision, Timecode Snapping, Spanning Deduplication |
+| 13 | **`github-project-workflow`** | Universal GitHub Project v2 lifecycle & task spec workflow engine with anti-rate-limit resilience: Zero-API local spec listing, persistent schema & item caching, 1-point targeted issue queries, offline outbox mutation queue, and unified Markdown status reporting. | GitHub Projects v2, GraphQL, REST Issues, Local-First Spec |
 
 ---
 
@@ -103,6 +104,7 @@ cd ~/.agent-skills
 /plugin marketplace add nchungdev/agent-skills
 
 # Install individual plugins as needed
+/plugin install github-project-workflow@nchungdev-skills
 /plugin install system-doctor@nchungdev-skills
 /plugin install tmdb-catalog@nchungdev-skills
 /plugin install media-downloader@nchungdev-skills
@@ -117,7 +119,7 @@ To attach specific skills directly to a standalone project:
 
 ```bash
 mkdir -p .agent/skills
-ln -s ~/.agent-skills/plugins/system-doctor/skills/system-doctor .agent/skills/
+ln -s ~/.agent-skills/plugins/github-project-workflow/skills/github-project-workflow .agent/skills/
 ```
 
 ---
@@ -127,9 +129,12 @@ ln -s ~/.agent-skills/plugins/system-doctor/skills/system-doctor .agent/skills/
 ```
 agent-skills/
 ├── .claude-plugin/
-│   └── marketplace.json            # Claude Code Marketplace Manifest (8 plugins)
+│   └── marketplace.json            # Claude Code Marketplace Manifest (13 plugins)
 ├── install.sh                      # Universal multi-agent installation script
 ├── plugins/
+│   ├── github-project-workflow/    # GitHub Project v2 lifecycle, spec workflow & rate-limit shield
+│   ├── project-bootstrap/          # Cross-agent project bootstrapper & AGENTS.md conventions
+│   ├── hardsub-extractor/          # Video hardsub OCR & subtitle synchronizer via Gemini Vision
 │   ├── ffmpeg-toolkit/             # Muxed sub extractor, VAD aligner, WebVTT converter
 │   ├── tmdb-catalog/               # TMDb lookup, cards, season matrix, franchise taxonomy
 │   ├── media-downloader/           # Ingestion: Aria2 RPC, TorBox, Prowlarr, census
@@ -137,7 +142,9 @@ agent-skills/
 │   ├── translate-subtitle/         # Two-stage AI translation & Subtitle Glossary Hub
 │   ├── distributed-infra/          # OMV 7 NAS, Docker, Tdarr cluster, Cloudflared tunnel
 │   ├── project-reporter/           # Multi-conversation orchestrator & ledger
-│   └── system-doctor/              # CleanMyMac + SRE Homelab diagnostic & auto-heal
+│   ├── system-doctor/              # CleanMyMac + SRE Homelab diagnostic & auto-heal
+│   ├── media-advisor/              # Zero-API cinema concierge & streaming recommendations
+│   └── film-oracle/                # Truth-seeking film auditor & cinema reviews
 └── README.md
 ```
 

@@ -4,7 +4,7 @@
     "name": "nchungdev",
     "url": "https://github.com/nchungdev"
   },
-  "description": "Universal suite of 12 production-grade AI Agent Skills: FFmpeg media processing, TMDb catalog & franchise taxonomy, high-performance media ingestion, multi-target cloud/NAS synchronization, AI subtitle translation, distributed infrastructure & homelab operations, multi-conversation progress orchestration, autonomous system optimization & SRE diagnostics, zero-API cinema & series recommendation concierge, truth-seeking film evaluation & cinema auditor (Film Oracle), universal project conventions & skills bootstrapper (Project Bootstrap), and hardsub OCR extraction & subtitle synchronization (Hardsub Extractor).",
+  "description": "Universal suite of 13 production-grade AI Agent Skills: GitHub Project v2 lifecycle & anti-rate-limit task workflow, FFmpeg media processing, TMDb catalog & franchise taxonomy, high-performance media ingestion, multi-target cloud/NAS synchronization, AI subtitle translation, distributed infrastructure & homelab operations, multi-conversation progress orchestration, autonomous system optimization & SRE diagnostics, zero-API cinema & series recommendation concierge, truth-seeking film evaluation & cinema auditor (Film Oracle), universal project conventions & skills bootstrapper (Project Bootstrap), and hardsub OCR extraction & subtitle synchronization (Hardsub Extractor).",
   "plugins": [
     {
       "name": "ffmpeg-toolkit",
@@ -227,6 +227,24 @@
         "ffmpeg",
         "synchronization",
         "srt"
+      ]
+    },
+    {
+      "name": "github-project-workflow",
+      "displayName": "GitHub Project Workflow & Rate-Limit Shield",
+      "source": "./plugins/github-project-workflow",
+      "description": "Universal GitHub Project v2 lifecycle and task spec workflow engine with anti-rate-limit resilience: Zero-API local spec listing, persistent schema & item caching, 1-point targeted issue queries, and offline outbox mutation queue.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "github",
+        "project",
+        "kanban",
+        "rate-limit",
+        "workflow",
+        "tasks",
+        "spec",
+        "graphql"
       ]
     }
   ]
